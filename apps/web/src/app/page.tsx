@@ -1,3 +1,4 @@
+import { CoachHeader } from "@/ui/components/coach-header";
 import { DashboardStats } from "@/ui/components/dashboard-stats";
 import { classes, tasks } from "@/modules/dashboard/demo-data";
 
@@ -5,16 +6,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#F3F5F1] text-[#22303A]">
       <div className="mx-auto min-h-screen max-w-md bg-[#F3F5F1] pb-28 shadow-sm">
-        <header className="flex items-center justify-between px-5 pt-7">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1F6F6B] text-xl text-white">✦</div>
-            <div>
-              <p className="text-sm font-bold">Parent Plus Coach</p>
-              <p className="text-xs text-[#5C6B73]">The Creative Room</p>
-            </div>
-          </div>
-          <div className="rounded-xl bg-white px-3 py-2 text-lg shadow-sm">☰</div>
-        </header>
+        <CoachHeader />
 
         <section className="px-5 pt-8">
           <h1 className="text-3xl font-extrabold tracking-tight">Good morning, Meera</h1>
