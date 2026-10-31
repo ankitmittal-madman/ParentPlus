@@ -41,3 +41,22 @@
 - TypeScript, ESLint and production build passed.
 - Mobile layout refinement remains open.
 - Checkpoint commit: see Git history for the navigation milestone.
+
+## M1 completion summary
+- Coach dashboard implemented with fictional demonstration data.
+- Five coach routes available and returning HTTP 200.
+- Reusable CoachHeader, DashboardStats and BottomNavigation components.
+- Six automated component tests passing.
+- TypeScript, ESLint and production build passing.
+- Mobile preview reviewed; Next.js indicator removed.
+- Safe-area spacing added to bottom navigation.
+- M1 milestone checkpoint: record Git commit after push.
+
+### Remaining issues
+- npm audit reports 16 moderate dependency findings.
+- Cloud Shell preview occasionally reports HTTP 503 on an auth-related request.
+- Mobile safe-area behavior needs physical-device verification.
+- Dashboard actions and placeholder screens are not functional yet.
+
+### Next milestone
+M2: Review user roles, authentication, database schema, consent and security before connecting real data.

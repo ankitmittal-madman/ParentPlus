@@ -18,7 +18,7 @@ Development branch: setup/parentplus-foundation
 | ID | Milestone | Deliverables | Exit criteria | Status |
 |---|---|---|---|---|
 | M0 | Development setup | Repository, Next.js, TypeScript, Tailwind, preview | App builds and preview works | Complete |
-| M1 | Frontend foundation | Components, design tokens, navigation, tests | Responsive preview and checks pass | In progress |
+| M1 | Frontend foundation | Components, design tokens, navigation, tests | Responsive preview and checks pass | Complete |
 | M2 | Authentication and data | Supabase, roles, core schema, consent, RLS | Access and security tests pass | Planned |
 | M3 | Classes and students | Batches, schedules, enrollment, student profiles | Core journeys pass end-to-end tests | Planned |
 | M4 | Attendance | Attendance capture and parent visibility | Attendance journey and security tests pass | Planned |

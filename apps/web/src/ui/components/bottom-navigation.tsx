@@ -17,7 +17,7 @@ export function BottomNavigation() {
   return (
     <nav
       aria-label="Main navigation"
-      className="fixed bottom-3 left-1/2 z-50 grid w-[calc(100%-24px)] max-w-[408px] -translate-x-1/2 grid-cols-5 rounded-3xl border border-[#E3E8E2] bg-white p-3 shadow-lg"
+      className="fixed bottom-[max(12px,env(safe-area-inset-bottom))] left-1/2 z-50 grid w-[calc(100%-24px)] max-w-[408px] -translate-x-1/2 grid-cols-5 rounded-3xl border border-[#E3E8E2] bg-white p-3 shadow-lg"
     >
       {items.map((item) => {
         const active = pathname === item.href;
