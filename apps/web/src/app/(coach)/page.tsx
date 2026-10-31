@@ -56,20 +56,7 @@ export default function Home() {
           </div>
         </section>
 
-        <nav aria-label="Main navigation" className="fixed bottom-3 left-1/2 grid w-[calc(100%-24px)] max-w-[408px] -translate-x-1/2 grid-cols-5 rounded-3xl border border-[#E3E8E2] bg-white p-3 shadow-lg">
-          {[
-            ["⌂", "Today"],
-            ["▦", "Schedule"],
-            ["+", "Post"],
-            ["♙", "Students"],
-            ["₹", "Fees"],
-          ].map(([symbol, label]) => (
-            <div key={label} className="flex flex-col items-center gap-1 text-[#5C6B73]">
-              <span className="text-xl font-bold">{symbol}</span>
-              <span className="text-[10px] font-semibold">{label}</span>
-            </div>
-          ))}
-        </nav>
+
       </div>
     </main>
   );
