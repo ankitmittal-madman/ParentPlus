@@ -2,6 +2,15 @@ name: ParentPlus GitLab Backup
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - '**'
+    tags:
+      - '**'
+
+concurrency:
+  group: parentplus-gitlab-backup
+  cancel-in-progress: false
 
 permissions:
   contents: read
