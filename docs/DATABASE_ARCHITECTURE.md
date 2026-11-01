@@ -137,3 +137,29 @@ Design only. No Supabase project, migrations or database tables created.
 - Record status transitions with timestamps and responsible actor.
 - Use explicit authorization checks for historical records.
 - Define retention, deletion and dispute policies before real-data use.
+
+## 17. Account lifecycle and deletion architecture
+
+Status: Confirmed architecture; retention and deletion procedures pending privacy review
+
+### Separate lifecycle operations
+- Account deactivation: disable account access.
+- Membership removal: revoke workspace-specific permissions.
+- Ownership transfer: assign responsibility to another authorized user.
+- Account deletion: process identity and personal-data removal.
+- Historical retention: preserve only records with a valid retention basis.
+
+### Database requirements
+- Do not cascade-delete operational history when membership ends.
+- Require safe ownership transfer before deleting an Owner.
+- Keep historical access separate from active enrollment permissions.
+- Track account and membership lifecycle events.
+- Define deletion and anonymization behavior before production use.
+
+### Open decisions
+- Retention periods for attendance, learning updates and media.
+- Guardian disputes and deletion requests.
+- Academy closure and historical record access.
+- Legal and privacy requirements for children's information.
+
+No SQL implementation approved yet.

@@ -199,3 +199,19 @@ Decision:
 
 Reason:
 Support a continuous view of a child's learning journey across academies.
+
+## DEC-017: Account lifecycle and historical data
+Status: Confirmed
+Scope: ParentPlus V1
+
+Proposed approach:
+- Account deactivation, membership removal and data deletion are separate operations.
+- A departing coach loses workspace access without automatically deleting historical teaching records.
+- Workspace ownership must be transferred before an Owner account can be deleted.
+- Guardian access revocation must not automatically destroy historical learning records.
+- Historical access remains subject to authorization, consent and retention requirements.
+- Account deletion requests require a controlled privacy workflow.
+- Retention periods, anonymization and deletion exceptions remain unresolved.
+
+Implementation status:
+Architecture proposal only. No database behavior changed.
