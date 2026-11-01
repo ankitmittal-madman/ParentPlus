@@ -1,0 +1,58 @@
+name: ParentPlus GitLab Backup
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout full Git history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Push branches and tags to GitLab
+        shell: bash
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GITLAB_MIRROR_URL: ${{ vars.GITLAB_MIRROR_URL }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "$GITLAB_TOKEN" ] || [ -z "$GITLAB_MIRROR_URL" ]; then
+            echo "Missing GitLab backup configuration"
+            exit 1
+          fi
+
+          git fetch --no-tags origin '+refs/heads/*:refs/remotes/origin/*'
+          git fetch origin '+refs/tags/*:refs/tags/*'
+          git remote set-head origin -d 2>/dev/null || true
+
+          export GIT_ASKPASS="$RUNNER_TEMP/gitlab-askpass.sh"
+
+          cat > "$GIT_ASKPASS" <<'SH'
+          #!/bin/sh
+          case "$1" in
+            *Username*) printf '%s\n' oauth2 ;;
+            *Password*) printf '%s\n' "$GITLAB_TOKEN" ;;
+            *) exit 1 ;;
+          esac
+          SH
+
+          chmod 700 "$GIT_ASKPASS"
+          trap 'rm -f "$GIT_ASKPASS"' EXIT
+          export GIT_TERMINAL_PROMPT=0
+
+          git remote add gitlab "$GITLAB_MIRROR_URL"
+
+          git -c credential.helper= push gitlab \
+            'refs/remotes/origin/*:refs/heads/*'
+          git -c credential.helper= push gitlab \
+            'refs/tags/*:refs/tags/*'
