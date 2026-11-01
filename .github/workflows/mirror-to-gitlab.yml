@@ -4,6 +4,7 @@
 # Retirement condition: None planned
 
 name: Backup Code to GitLab
+run-name: Backup Code to GitLab | ${{ github.ref_name }}
 
 on:
   workflow_dispatch:
