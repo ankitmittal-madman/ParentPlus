@@ -163,3 +163,154 @@ Status: Confirmed architecture; retention and deletion procedures pending privac
 - Legal and privacy requirements for children's information.
 
 No SQL implementation approved yet.
+
+## 18. Connection schema contract
+
+Status: Proposed implementation of DEC-005, DEC-009, DEC-010 and DEC-013
+
+### Connection requests
+- Support workspace-initiated invitations and guardian-initiated requests.
+- Initiator identity and receiving-party confirmation are separate.
+- Request states: pending, approved, rejected, expired, cancelled.
+- Skip does not change the pending state.
+- A request cannot activate a connection after expiry or rejection.
+- Invitation codes and QR codes identify a destination, not authorization.
+- Invitations may exist before a guardian has a ParentPlus account.
+- Existing child identity linking requires guardian authorization.
+- No unrestricted parent, child or private roster directory.
+
+### Workspace-child relationships
+- Store one relationship per workspace-child pair.
+- Relationship lifecycle is independent of class enrollment.
+- Relationships may become active, alumni, restricted or archived.
+- Historical relationships do not grant unrestricted access.
+- Reconnection must follow explicit authorization rules.
+
+### Connection events
+- Record initiating actor, confirming actor and relevant timestamps.
+- Record approval, rejection, cancellation and revocation events.
+- Preserve an auditable relationship history.
+- Do not store invitation secrets in plaintext.
+
+### Authorization boundaries
+- Only authorized workspace staff may initiate workspace invitations.
+- Only an authorized guardian may confirm child linking.
+- Guardian confirmation is a self-declaration in MVP.
+- Formal legal guardian verification remains deferred.
+- Connection approval does not automatically grant access to sensitive records.
+- Connection approval does not create enrollment.
+
+### Open implementation details
+- Invitation expiry duration and rate limits.
+- Secure token generation, hashing and redemption.
+- Unregistered-parent invitation flow.
+- Guardian disputes and multiple-guardian approval.
+- Reconnection after relationship restriction or revocation.
+- Exact RLS policies and post-enrollment access rules.
+
+No SQL implementation approved yet.
+
+## 19. Connection initiation and authorization contract
+
+Status: Proposed implementation of confirmed ParentPlus V1 decisions
+
+### Guardian-initiated request
+- Caller must be authenticated.
+- Caller must have an authorized guardian-child relationship.
+- Destination workspace must be identified through an allowed discovery or code flow.
+- Request starts as pending.
+- Authorized workspace staff confirms or rejects.
+- Guardian initiation does not grant workspace access automatically.
+
+### Workspace-initiated invitation
+- Caller must be an active, authorized workspace staff member.
+- Invitation may exist before the guardian has registered.
+- Invitation redemption requires authenticated guardian participation.
+- Guardian selects or creates the child identity under authorized rules.
+- Confirm records MVP guardian self-declaration.
+- Skip leaves the request pending.
+- Reject declines the request.
+- Invitation possession alone grants no child-data access.
+
+### Approval authorization
+- Only the receiving party may approve.
+- Initiator cannot approve their own request.
+- Expired, rejected and cancelled requests cannot activate connections.
+- Approval must resolve a valid child and guardian.
+- Approval and relationship creation must be atomic.
+- Approval must record an audit event.
+- Duplicate approval must not create duplicate relationships.
+- Enrollment is not created automatically.
+
+### Privacy boundaries
+- No unrestricted child, guardian or private roster directory.
+- No automatic child matching by name or phone.
+- Formal guardian verification remains deferred.
+- Sensitive data access requires separate authorization.
+- Historical relationship access follows DEC-015 through DEC-017.
+
+### Implementation dependencies
+- Secure invitation token and redemption design.
+- Request expiry and rate limits.
+- Controlled initiation and approval functions.
+- Effective privilege and RLS review.
+- Negative authorization and concurrency tests.
+
+No SQL functions approved yet.
+
+## 20. Guardian connection eligibility
+
+Status: Proposed MVP implementation of DEC-012 and DEC-013
+
+### Eligible guardian relationships
+- Provisional, self-declared guardians may initiate connection requests.
+- Active guardians may initiate and confirm connection requests.
+- Provisional guardians may confirm invitations through an explicit self-declaration.
+- Revoked guardians cannot initiate or confirm new connections.
+- Disputed guardians cannot initiate or confirm new connections.
+
+### Authorization safeguards
+- The authenticated caller must match the guardianship user ID.
+- The guardianship must reference the requested child.
+- A child ID alone never establishes guardian authorization.
+- Guardian self-declaration is not formal legal verification.
+- Connection approval does not automatically grant sensitive academy-data access.
+- Sensitive operations require separate authorization checks.
+- Record confirmation actor, request and timestamp.
+
+### Deferred decisions
+- Formal legal guardian verification workflow.
+- Multi-guardian approval requirements.
+- Guardian dispute resolution.
+- Verification evidence and document retention.
+- Detailed post-connection data-access policies.
+
+No SQL authorization functions approved yet.
+
+## 21. Pending connection uniqueness
+
+Status: Proposed implementation rule
+
+### Guardian-initiated requests
+- Only one pending request is allowed per guardian, child and workspace.
+- Repeated submissions using the same request ID are idempotent.
+- A new request ID must not create another pending request for the same relationship.
+- An existing valid pending request may be returned to the initiating guardian.
+- Expired pending requests must be transitioned before replacement.
+- Terminal requests remain in history for audit purposes.
+
+### Database enforcement
+- Use a partial unique index for pending guardian-initiated requests.
+- Do not use now() inside a partial index predicate.
+- Handle expiry through a controlled transactional operation.
+- Concurrent requests must not create duplicate pending relationships.
+- Different guardians may require separate requests and authorization.
+
+### Relationship safeguards
+- An active workspace-child relationship must not be duplicated.
+- Existing relationships require explicit reconnection rules.
+- A pending request never grants academy access.
+- Connection approval and enrollment remain separate.
+
+Implementation status:
+Design only. Database constraint and initiation function pending.
