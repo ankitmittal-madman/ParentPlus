@@ -1,4 +1,9 @@
-name: ParentPlus GitLab Backup
+# Description: Automatically copies GitHub branches and tags to GitLab after every push.
+# Lifecycle: Permanent
+# Owner: Engineering
+# Retirement condition: None planned
+
+name: Backup Code to GitLab
 
 on:
   workflow_dispatch:
