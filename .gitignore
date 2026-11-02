@@ -3,3 +3,6 @@
 # Python generated files
 __pycache__/
 *.pyc
+
+# Generated database test evidence
+/test-results/database/

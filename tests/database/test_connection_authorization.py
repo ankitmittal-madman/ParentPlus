@@ -5,6 +5,7 @@ Uses fictional test identities only.
 """
 
 import subprocess
+from tests.database.container_config import get_test_container
 import unittest
 import uuid
 
@@ -15,7 +16,7 @@ RAHUL = "22222222-2222-4222-8222-222222222222"
 def run_sql(sql):
     result = subprocess.run(
         [
-            "docker", "exec", "-i", "parentplus-pg-test",
+            "docker", "exec", "-i", get_test_container(),
             "psql", "-X", "-v", "ON_ERROR_STOP=1",
             "-U", "parentplus_test", "-d", "parentplus_test",
         ],

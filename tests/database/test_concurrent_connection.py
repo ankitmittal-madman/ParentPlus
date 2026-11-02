@@ -5,10 +5,11 @@ Uses fictional test users only.
 """
 
 import subprocess
+from tests.database.container_config import get_test_container
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 
-CONTAINER = "parentplus-pg-test"
+CONTAINER = get_test_container()
 MEERA = "11111111-1111-4111-8111-111111111111"
 RAHUL = "22222222-2222-4222-8222-222222222222"
 

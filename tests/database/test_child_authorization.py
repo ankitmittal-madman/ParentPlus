@@ -4,13 +4,14 @@ Requires disposable PostgreSQL database and migrations 001-007.
 """
 
 import subprocess
+from tests.database.container_config import get_test_container
 import unittest
 
 
 def run_sql(sql):
     result = subprocess.run(
         [
-            "docker", "exec", "-i", "parentplus-pg-test",
+            "docker", "exec", "-i", get_test_container(),
             "psql", "-X", "-A", "-t", "-q",
             "-v", "ON_ERROR_STOP=1",
             "-U", "parentplus_test",

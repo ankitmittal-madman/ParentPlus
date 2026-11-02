@@ -1,6 +1,7 @@
 """ParentPlus authorization regression tests."""
 
 import subprocess
+from tests.database.container_config import get_test_container
 import unittest
 
 MEERA = "11111111-1111-4111-8111-111111111111"
@@ -10,7 +11,7 @@ RAHUL = "22222222-2222-4222-8222-222222222222"
 def run_sql(sql):
     result = subprocess.run(
         [
-            "docker", "exec", "-i", "parentplus-pg-test",
+            "docker", "exec", "-i", get_test_container(),
             "psql", "-X", "-A", "-t", "-q",
             "-v", "ON_ERROR_STOP=1",
             "-U", "parentplus_test", "-d", "parentplus_test",
@@ -28,7 +29,7 @@ def run_sql(sql):
 def run_sql_with_notices(sql):
     result = subprocess.run(
         [
-            "docker", "exec", "-i", "parentplus-pg-test",
+            "docker", "exec", "-i", get_test_container(),
             "psql", "-X", "-A", "-t", "-q",
             "-v", "ON_ERROR_STOP=1",
             "-U", "parentplus_test", "-d", "parentplus_test",

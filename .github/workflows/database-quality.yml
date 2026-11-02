@@ -1,0 +1,43 @@
+name: ParentPlus Database Quality
+
+on:
+  push:
+    branches:
+      - setup/parentplus-foundation
+    paths:
+      - "supabase/migrations/**"
+      - "tests/database/**"
+      - "scripts/ci/**"
+      - ".github/workflows/database-quality.yml"
+  pull_request:
+    branches:
+      - main
+      - setup/parentplus-foundation
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  database:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify Python
+        run: python3 --version
+
+      - name: Run isolated database quality gate
+        run: bash scripts/ci/database-quality.sh
+
+      - name: Upload database test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: database-test-evidence
+          path: test-results/database/
+          if-no-files-found: error
+          retention-days: 14
