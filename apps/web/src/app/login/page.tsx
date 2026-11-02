@@ -1,28 +1,49 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
+import { requestEmailOtp } from "@/lib/auth/request-email-otp";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const submittingRef = useRef(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (submittingRef.current) return;
 
     const normalized = email.trim().toLowerCase();
 
-    if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)
-    ) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
       setError("Enter a valid email address.");
       setSubmitted(false);
       return;
     }
 
+    submittingRef.current = true;
+    setLoading(true);
     setError("");
-    setEmail(normalized);
-    setSubmitted(true);
+    setSubmitted(false);
+
+    try {
+      const result = await requestEmailOtp(normalized);
+
+      if (!result.success) {
+        setError(result.error ?? "Unable to send verification code.");
+        return;
+      }
+
+      setEmail(normalized);
+      setSubmitted(true);
+    } catch {
+      setError("Unable to send verification code. Please try again.");
+    } finally {
+      submittingRef.current = false;
+      setLoading(false);
+    }
   }
 
   return (
@@ -79,15 +100,16 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full rounded-xl bg-brand px-5 py-3 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            disabled={loading}
+            className="w-full rounded-xl bg-brand px-5 py-3 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Continue
+            {loading ? "Sending..." : "Continue"}
           </button>
         </form>
 
         {submitted && (
           <p role="status" className="mt-5 text-sm text-muted">
-            Email accepted. OTP delivery will be enabled in the next step.
+            Verification request accepted. Check your email for instructions.
           </p>
         )}
       </section>
