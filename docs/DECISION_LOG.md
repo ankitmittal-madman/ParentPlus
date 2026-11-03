@@ -1,5 +1,17 @@
 # ParentPlus Decision Log
 
+## Reading this history (reconciled 2026-11-03)
+
+Earlier entries and their implementation-status wording are retained as dated
+intent, not current execution/deployment facts. Later confirmed decisions take
+precedence over earlier pending lists: email-first OTP is confirmed by DEC-011.
+DEC-002's founder-run Cloud Shell workflow and DEC-004's checkpoint convention
+are historical; current [engineering standards](ENGINEERING_STANDARDS.md) and task
+approvals govern agent execution and Git actions. No new product/privacy decision
+is made by this annotation. Current implementation and evidence are indexed in
+[Build Progress](BUILD_PROGRESS.md), [Database Architecture](DATABASE_ARCHITECTURE.md)
+and [Quality Evidence](QUALITY_EVIDENCE.md). Local code does not prove deployment.
+
 ## DEC-001: Repository
 Use the existing ParentPlus GitHub repository.
 Reason: Preserve Git history and Superpowers installation.

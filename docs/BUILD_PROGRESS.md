@@ -2,17 +2,21 @@
 
 Updated: 2026-11-03. Current local state; historical results are identified separately.
 
-## Current checkpoint and scope
+## Checkpoint summary and milestone scope
 
-- Authorized branch: `feature/intelligent-quality-gate-v1`.
-- Baseline/local HEAD: `ac2b1f9af85b531142310fcd851a24c17390f4ae`.
-- Working tree: uncommitted Intelligent Quality Gate v1, independent-audit corrections and engineering operating-system documents. No new checkpoint commit exists.
-- Current engineering milestone: quality-gate reliability, requirements traceability and reusable delivery standards.
+- Quality-gate preparation baseline: `ac2b1f9af85b531142310fcd851a24c17390f4ae`.
+- Approved local implementation checkpoint: `5b068b995957414a47dd2f47e8b6eb4147958563`; it has not been published to GitHub in this work.
+- Shared-documentation foundation: drafted for review, including the prior communication standard. [Agent Handoff](AGENT_HANDOFF.md) owns branch, remote observations, working-tree state and detailed pending scope; inspect actual Git rather than treating this milestone summary as live status.
+- Engineering state: quality-gate reliability/operating standards are committed locally; shared-context documentation is under review. No product milestone is completed by this documentation task.
 - Approval boundary: present the complete reviewed scope/evidence before any commit. Push, merge, hosted changes, settings and deployment are separately unauthorized.
 
 See [the audit report](INTELLIGENT_QUALITY_GATE_AUDIT.md) for exact files, findings, evidence and gap classifications, and [the operating workflow](FEATURE_DELIVERY_WORKFLOW.md) for future feature work.
 
-## Implemented and locally verified
+## Recorded implementation capabilities
+
+The following results belong to the prior quality-gate audit, not a fresh execution
+for the current documentation draft. [Quality Evidence](QUALITY_EVIDENCE.md) owns
+the execution provenance, snapshot reconciliation and artefact availability.
 
 - Next.js coach demo and login UI with 24 component/auth-helper cases; TypeScript, lint and production build pass locally. OTP provider calls are mocked/disabled; this does not establish live sign-in.
 - Thirteen PostgreSQL migrations and synthetic local auth fixture; 39 unit security/authorization tests plus four standalone concurrency scenarios pass in the existing disposable network-isolated database gate, including cleanup.
@@ -25,9 +29,9 @@ See [the audit report](INTELLIGENT_QUALITY_GATE_AUDIT.md) for exact files, findi
 
 ## Prepared, not hosted-verified
 
-The orchestration and reusable workflows are local changes. All-branch/PR/merge-group event definitions, run-attempt artifact naming and receipt checks pass local syntax review but have not been exercised on GitHub. No branch-protection setting was inspected/changed or claimed active. Commit/push and a matching actual CI run require the founder's next approvals.
+The orchestration and reusable workflows are in local checkpoint 5b068b9, not yet published in this work. All-branch/PR/merge-group event definitions, run-attempt artifact naming and receipt checks pass local syntax review but have not been exercised on GitHub. No branch-protection setting was inspected/changed or claimed active. The local implementation commit was approved; push and a matching actual CI run remain separate next steps requiring authorization.
 
-The initial implementation report is historical and superseded by the audit report's evidence contract and counts. Final machine evidence for this audit is under `test-results/quality/audit/`; the snapshot fingerprint is recorded there rather than embedded in a source file.
+The initial implementation report is historical and superseded by the audit report's evidence contract and counts. Historical machine evidence is under the ignored local `test-results/quality/audit/` directory. Its fingerprint and portability limitations are indexed in QUALITY_EVIDENCE.md; those reports do not validate the new documentation snapshot.
 
 ## Product milestones and release gaps
 
@@ -39,10 +43,11 @@ No browser E2E suite, hosted Supabase integration, real signed-JWT authorization
 
 ## Next actions
 
-1. Founder reviews the audit, complete uncommitted file list and evidence, then decides whether to approve a local commit.
-2. After a separately approved push, inspect the actual hosted gate run and its commit/attempt/artifacts. Do not treat local validation as that run.
-3. The owner decides whether/when to require the final gate in branch protection; no settings changes are authorized here.
-4. Select the next product slice through the operating workflow, resolving its privacy and acceptance decisions before real-data or release claims.
+1. Review the shared-documentation foundation and its exact diff; obtain approval before committing this new scope.
+2. After a separately approved push, inspect actual GitHub branch tips and hosted CI evidence. Do not claim another assistant can see unpublished local work.
+3. Propose documentation-freshness/link checks and concurrency-aware automated writers as a separate scope; no such checker or sync service was added here.
+4. The owner decides whether/when to require the final gate in branch protection; no settings changes are authorized here.
+5. Select the next product slice through the operating workflow, resolving its privacy and acceptance decisions before real-data or release claims.
 
 ## Historical context retained
 

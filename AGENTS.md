@@ -1,5 +1,18 @@
 # ParentPlus — Codex instructions
 
+## Communication and reporting
+
+At the start of every task, read and follow
+`docs/CODEX_COMMUNICATION_STANDARD.md` alongside the existing engineering guidance.
+
+## Shared project context
+
+Before work, read `docs/PROJECT_CONTEXT.md` and `docs/AGENT_HANDOFF.md`.
+Use the context's ownership map and reading order. Verify and report the actual
+repository or supplied-snapshot state before editing; preserve existing work.
+Maintain the canonical documents through `docs/FEATURE_DELIVERY_WORKFLOW.md`.
+These references add no authorization or exemption from existing rules.
+
 ## Superpowers
 
 This repository includes Superpowers skills in `.agents/skills/`.

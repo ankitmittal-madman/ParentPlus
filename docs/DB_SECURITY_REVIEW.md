@@ -4,6 +4,16 @@ Status: Open
 Milestone: M2 Authentication and Data Foundation
 Migration: 20261101000100_identity_workspaces.sql
 
+## Evidence reconciliation — 2026-11-03
+
+The checklist and contract text below are retained as an open review. Historical
+“not implemented/tested” labels must not be read as absence of the local migrations
+and narrower scenario tests now indexed in [Quality Evidence](QUALITY_EVIDENCE.md)
+and [the independent audit](INTELLIGENT_QUALITY_GATE_AUDIT.md).
+A passing synthetic test does not close a broader lifecycle, privilege, real-JWT
+or production-security guarantee. No checkbox is automatically marked complete;
+review each claim against its exact evidence and unresolved product controls.
+
 ## 1. Workspace creation
 - [ ] Only authenticated users can request workspace creation.
 - [ ] Workspace and initial Owner membership are created atomically.

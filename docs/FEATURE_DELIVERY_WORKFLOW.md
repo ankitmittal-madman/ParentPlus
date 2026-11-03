@@ -1,6 +1,6 @@
 # ParentPlus Feature Delivery Workflow
 
-This is the reusable execution procedure for Codex. Follow [Engineering Standards](ENGINEERING_STANDARDS.md), `AGENTS.md`, relevant Superpowers skills and the task's permissions. Codex should perform the available safe work through completion, without asking the founder to run routine terminal commands. No scheduler or autonomous feature-building service is installed by this document.
+This is the reusable execution procedure for Codex and other repository-capable assistants using their actual supported tools. Follow [Engineering Standards](ENGINEERING_STANDARDS.md), `AGENTS.md`, relevant Superpowers skills and the task's permissions. Codex should perform the available safe work through completion, without asking the founder to run routine terminal commands. No scheduler or autonomous feature-building service is installed by this document.
 
 ```mermaid
 flowchart LR
@@ -16,7 +16,7 @@ flowchart LR
 
 ## 1. Establish the request and baseline
 
-Inspect branch, full HEAD and all existing tracked/untracked changes. Use the authorized branch and existing cloud checkout; preserve prior work. Read `AGENTS.md`, `docs/superpowers.md`, roadmap, decision log and build progress. State the intended outcome and material assumptions. Inspect connected repository/configuration evidence before asking for information already available.
+Inspect branch, full HEAD and all existing tracked/untracked changes. Use the authorized branch and existing cloud checkout; preserve prior work. Read the applicable agent entrypoint, [Project Context](PROJECT_CONTEXT.md), [Agent Handoff](AGENT_HANDOFF.md), `docs/superpowers.md` and the context map's task-relevant documents, including roadmap, decisions, build progress and quality evidence. State the intended outcome and material assumptions. Inspect connected repository/configuration evidence before asking for information already available.
 
 Resolve routine implementation choices autonomously within scope. Ask only for decisions that change product/privacy semantics, missing authorization or genuinely unavailable prerequisites; continue independent work while waiting. Current session restrictions override older checkpoint/terminal guidance.
 
@@ -95,6 +95,32 @@ Update build progress and the feature report with current capabilities, incomple
 - Exact requested next action: for example, approval to commit the reviewed local scope.
 
 Stop before committing unless approved after this presentation. An approved commit is then verified and recorded; push, hosted CI inspection, merge, repository settings, hosted migration and deployment remain separately authorized actions. Never claim hosted CI succeeded until a matching real run has been inspected.
+
+## Shared-document maintenance and concurrent writers
+
+The [context map](PROJECT_CONTEXT.md) identifies the single owner of each topic.
+Update verified progress after a meaningful slice, architecture/decisions when
+those boundaries change, [Quality Evidence](QUALITY_EVIDENCE.md) after checks, and
+[Agent Handoff](AGENT_HANDOFF.md) at the end of a meaningful session. Record why an
+owner document did not need a change instead of creating a parallel copy.
+
+Start with observed branch/HEAD, dirty scope, context availability and intended
+file ownership. Check expected file contents before patching; if another writer
+changed them, stop and reconcile rather than reset or overwrite. Use coordinated
+single-writer ownership for overlapping files and review the full final diff.
+These instructions and hash checks are not an atomic lock against unrelated
+writers. A locking/compare-and-write helper for automated maintenance needs a
+separate implementation and review; none is installed here.
+
+Record preparation baseline and observation date honestly. Do not embed an
+invented future commit or treat a handoff as live Git status. Existing artefacts
+can be missing, ignored or expired; document that limitation. Failed/unrun checks
+and uncommitted work remain explicit. Local results are not re-attested against
+new source merely to make a document appear current.
+
+Documentation-freshness/link CI checks are proposed separately. Until implemented,
+perform the available manual/local consistency checks and report their scope;
+do not describe comprehensive documentation governance as automatically enforced.
 
 ## Exception handling
 
