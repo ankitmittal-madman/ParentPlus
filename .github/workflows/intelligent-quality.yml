@@ -1,0 +1,150 @@
+name: ParentPlus Intelligent Quality
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, edited]
+  push:
+    branches: ['**']
+  merge_group:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: intelligent-quality-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  plan:
+    name: Validate registry and select tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      frontend: ${{ steps.select.outputs.frontend }}
+      database: ${{ steps.select.outputs.database }}
+    env:
+      NEXT_PUBLIC_ENABLE_LIVE_OTP: 'false'
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci
+        working-directory: apps/web
+      - name: Quality engine regression tests
+        run: python3 scripts/quality/quality_gate.py self-test
+      - name: Collect inventory, validate coverage and select suites
+        id: select
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          python3 scripts/quality/quality_gate.py plan --base "$BASE_SHA"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          plan = json.loads(Path('test-results/quality/quality-gate.json').read_text())
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              for suite in ('frontend', 'database'):
+                  output.write(f'{suite}={str(suite in plan["selected"]).lower()}\n')
+          PY
+      - name: Upload immutable selection plan
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-selection-${{ github.run_attempt }}
+          path: test-results/quality/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Write selection summary
+        if: always()
+        run: |
+          if test -f test-results/quality/summary.md; then
+            cat test-results/quality/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  frontend:
+    name: Selected frontend checks
+    needs: plan
+    if: needs.plan.outputs.frontend == 'true'
+    uses: ./.github/workflows/frontend-quality.yml
+
+  database:
+    name: Selected database security checks
+    needs: plan
+    if: needs.plan.outputs.database == 'true'
+    uses: ./.github/workflows/database-quality.yml
+
+  gate:
+    name: Intelligent Quality Gate
+    needs: [plan, frontend, database]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NEXT_PUBLIC_ENABLE_LIVE_OTP: 'false'
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci
+        working-directory: apps/web
+      - name: Download selection from this workflow run
+        uses: actions/download-artifact@v4
+        with:
+          name: quality-selection-${{ github.run_attempt }}
+          path: test-results/selection
+      - name: Download selected runtime evidence from this workflow run
+        uses: actions/download-artifact@v4
+        with:
+          pattern: '*-test-evidence-${{ github.run_attempt }}'
+          path: test-results/evidence
+      - name: Require job success and exact runtime evidence
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          PLAN_RESULT: ${{ needs.plan.result }}
+          FRONTEND_RESULT: ${{ needs.frontend.result }}
+          DATABASE_RESULT: ${{ needs.database.result }}
+        run: |
+          python3 scripts/quality/quality_gate.py verify \
+            --base "$BASE_SHA" \
+            --plan test-results/selection/quality-gate.json \
+            --reports test-results/evidence \
+            --job-result "quality=$PLAN_RESULT" \
+            --job-result "frontend=$FRONTEND_RESULT" \
+            --job-result "database=$DATABASE_RESULT"
+      - name: Upload final gate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: intelligent-quality-gate-${{ github.run_attempt }}
+          path: test-results/quality/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Write final summary
+        if: always()
+        run: |
+          if test -f test-results/quality/summary.md; then
+            cat test-results/quality/summary.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'Gate failed before evidence verification; inspect failed steps.' >> "$GITHUB_STEP_SUMMARY"
+          fi

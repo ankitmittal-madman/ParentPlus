@@ -1,0 +1,36 @@
+name: ParentPlus Database Quality
+
+# Automatic events are orchestrated by intelligent-quality.yml to avoid duplicate runs.
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  database:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify Python
+        run: python3 --version
+
+      - name: Run isolated database quality gate
+        run: bash scripts/ci/database-quality.sh
+
+      - name: Bind successful execution to source and report digests
+        run: python3 scripts/quality/quality_gate.py attest --suite database --reports test-results/database
+
+      - name: Upload database test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: database-test-evidence-${{ github.run_attempt }}
+          path: test-results/database/
+          if-no-files-found: error
+          retention-days: 14

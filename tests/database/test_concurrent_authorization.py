@@ -5,12 +5,13 @@ Uses fictional test identities and isolated database sessions.
 """
 
 import subprocess
+from tests.database.container_config import get_test_container
 import select
 import time
 import uuid
 import unittest
 
-CONTAINER = "parentplus-pg-test"
+CONTAINER = get_test_container()
 MEERA = "11111111-1111-4111-8111-111111111111"
 RAHUL = "22222222-2222-4222-8222-222222222222"
 
@@ -301,18 +302,11 @@ FROM changed;
 """)
             revoker.stdin.flush()
 
-            found = False
-            deadline = time.monotonic() + 5
-
-            while time.monotonic() < deadline:
-                ready, _, _ = select.select(
-                    [revoker.stdout], [], [], 0.5
-                )
-                if ready:
-                    line = revoker.stdout.readline().strip()
-                    if line == "REVOCATION_LOCKED:1":
-                        found = True
-                        break
+            found = wait_for_session_marker(
+                revoker,
+                "REVOCATION_LOCKED:1",
+                timeout=5,
+            )
 
             self.assertTrue(found, "Revocation lock not confirmed")
 
@@ -517,20 +511,13 @@ FROM changed;
 """)
             revoker.stdin.flush()
 
-            found = False
-            deadline = time.monotonic() + 5
+            found = wait_for_session_marker(
+                revoker,
+                "SUSPENSION_LOCKED:1",
+                timeout=5,
+            )
 
-            while time.monotonic() < deadline:
-                ready, _, _ = select.select(
-                    [revoker.stdout], [], [], 0.5
-                )
-                if ready:
-                    line = revoker.stdout.readline().strip()
-                    if line == "SUSPENSION_LOCKED:1":
-                        found = True
-                        break
-
-            self.assertTrue(found, "Revocation lock not confirmed")
+            self.assertTrue(found, "Suspension lock not confirmed")
 
             session_name = 'parentplus_race_' + uuid.uuid4().hex
 

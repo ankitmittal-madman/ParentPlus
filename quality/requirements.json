@@ -1,0 +1,1562 @@
+{
+  "version": 1,
+  "requirements": [
+    {
+      "id": "DB-APPROVALAUTHORIZATIONRACETESTS-TEST-APPROVAL-FIRST-GUARDIAN-REVOCATION",
+      "domain": "approval-authorization",
+      "description": "Approval first guardian revocation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "approval first guardian revocation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_approval_authorization_races.ApprovalAuthorizationRaceTests.test_approval_first_guardian_revocation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_approval_authorization_races.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-APPROVALAUTHORIZATIONRACETESTS-TEST-APPROVAL-FIRST-MEMBERSHIP-SUSPENSION",
+      "domain": "approval-authorization",
+      "description": "Approval first membership suspension.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "approval first membership suspension"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_approval_authorization_races.ApprovalAuthorizationRaceTests.test_approval_first_membership_suspension"
+        }
+      ],
+      "sources": [
+        "tests/database/test_approval_authorization_races.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-APPROVALAUTHORIZATIONRACETESTS-TEST-APPROVAL-FIRST-WORKSPACE-SUSPENSION",
+      "domain": "approval-authorization",
+      "description": "Approval first workspace suspension.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "approval first workspace suspension"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_approval_authorization_races.ApprovalAuthorizationRaceTests.test_approval_first_workspace_suspension"
+        }
+      ],
+      "sources": [
+        "tests/database/test_approval_authorization_races.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-APPROVALAUTHORIZATIONRACETESTS-TEST-GUARDIAN-REVOCATION-FIRST",
+      "domain": "approval-authorization",
+      "description": "Guardian revocation first.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "guardian revocation first"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_approval_authorization_races.ApprovalAuthorizationRaceTests.test_guardian_revocation_first"
+        }
+      ],
+      "sources": [
+        "tests/database/test_approval_authorization_races.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-APPROVALAUTHORIZATIONRACETESTS-TEST-MEMBERSHIP-SUSPENSION-FIRST",
+      "domain": "approval-authorization",
+      "description": "Membership suspension first.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "membership suspension first"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_approval_authorization_races.ApprovalAuthorizationRaceTests.test_membership_suspension_first"
+        }
+      ],
+      "sources": [
+        "tests/database/test_approval_authorization_races.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-APPROVALAUTHORIZATIONRACETESTS-TEST-WORKSPACE-SUSPENSION-FIRST",
+      "domain": "approval-authorization",
+      "description": "Workspace suspension first.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "workspace suspension first"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_approval_authorization_races.ApprovalAuthorizationRaceTests.test_workspace_suspension_first"
+        }
+      ],
+      "sources": [
+        "tests/database/test_approval_authorization_races.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-APPROVALSAFETYTESTS-TEST-APPROVED-RETRY-MISSING-RELATIONSHIP",
+      "domain": "approval-authorization",
+      "description": "Approved retry missing relationship.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "approved retry missing relationship"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_approval_safety.ApprovalSafetyTests.test_approved_retry_missing_relationship"
+        }
+      ],
+      "sources": [
+        "tests/database/test_approval_safety.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-APPROVALSAFETYTESTS-TEST-ARCHIVED-RELATIONSHIP",
+      "domain": "approval-authorization",
+      "description": "Archived relationship.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "archived relationship"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_approval_safety.ApprovalSafetyTests.test_archived_relationship"
+        }
+      ],
+      "sources": [
+        "tests/database/test_approval_safety.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-APPROVALSAFETYTESTS-TEST-EXISTING-ACTIVE-RELATIONSHIP",
+      "domain": "approval-authorization",
+      "description": "Existing active relationship.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "existing active relationship"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_approval_safety.ApprovalSafetyTests.test_existing_active_relationship"
+        }
+      ],
+      "sources": [
+        "tests/database/test_approval_safety.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-APPROVALSAFETYTESTS-TEST-EXPIRY-DURING-LOCK-WAIT",
+      "domain": "approval-authorization",
+      "description": "Expiry during lock wait.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "expiry during lock wait"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_approval_safety.ApprovalSafetyTests.test_expiry_during_lock_wait"
+        }
+      ],
+      "sources": [
+        "tests/database/test_approval_safety.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-APPROVALSAFETYTESTS-TEST-RESTRICTED-RELATIONSHIP",
+      "domain": "approval-authorization",
+      "description": "Restricted relationship.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "restricted relationship"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_approval_safety.ApprovalSafetyTests.test_restricted_relationship"
+        }
+      ],
+      "sources": [
+        "tests/database/test_approval_safety.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-AUTHORIZATIONTESTS-TEST-ANONYMOUS-WORKSPACE-EXECUTION-DENIED",
+      "domain": "workspace-authorization",
+      "description": "Anonymous workspace execution denied.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "anonymous workspace execution denied"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_authorization.AuthorizationTests.test_anonymous_workspace_execution_denied"
+        }
+      ],
+      "sources": [
+        "tests/database/test_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-AUTHORIZATIONTESTS-TEST-CROSS-WORKSPACE-ISOLATION",
+      "domain": "workspace-authorization",
+      "description": "Cross workspace isolation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "cross workspace isolation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_authorization.AuthorizationTests.test_cross_workspace_isolation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-AUTHORIZATIONTESTS-TEST-DIRECT-OWNER-MEMBERSHIP-INSERT-DENIED",
+      "domain": "workspace-authorization",
+      "description": "Direct owner membership insert denied.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "direct owner membership insert denied"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_authorization.AuthorizationTests.test_direct_owner_membership_insert_denied"
+        }
+      ],
+      "sources": [
+        "tests/database/test_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-AUTHORIZATIONTESTS-TEST-DIRECT-WORKSPACE-INSERT-DENIED",
+      "domain": "workspace-authorization",
+      "description": "Direct workspace insert denied.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "direct workspace insert denied"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_authorization.AuthorizationTests.test_direct_workspace_insert_denied"
+        }
+      ],
+      "sources": [
+        "tests/database/test_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-AUTHORIZATIONTESTS-TEST-OTHER-PROFILE-HIDDEN",
+      "domain": "workspace-authorization",
+      "description": "Other profile hidden.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "other profile hidden"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_authorization.AuthorizationTests.test_other_profile_hidden"
+        }
+      ],
+      "sources": [
+        "tests/database/test_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-AUTHORIZATIONTESTS-TEST-OTHER-PROFILE-UPDATE-BLOCKED",
+      "domain": "workspace-authorization",
+      "description": "Other profile update blocked.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "other profile update blocked"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_authorization.AuthorizationTests.test_other_profile_update_blocked"
+        }
+      ],
+      "sources": [
+        "tests/database/test_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-AUTHORIZATIONTESTS-TEST-OWN-PROFILE-UPDATE",
+      "domain": "workspace-authorization",
+      "description": "Own profile update.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "own profile update"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_authorization.AuthorizationTests.test_own_profile_update"
+        }
+      ],
+      "sources": [
+        "tests/database/test_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-AUTHORIZATIONTESTS-TEST-OWN-PROFILE-VISIBLE",
+      "domain": "workspace-authorization",
+      "description": "Own profile visible.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "own profile visible"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_authorization.AuthorizationTests.test_own_profile_visible"
+        }
+      ],
+      "sources": [
+        "tests/database/test_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-AUTHORIZATIONTESTS-TEST-SUSPENDED-MEMBERSHIP-ACCESS",
+      "domain": "workspace-authorization",
+      "description": "Suspended membership access.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "suspended membership access"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_authorization.AuthorizationTests.test_suspended_membership_access"
+        }
+      ],
+      "sources": [
+        "tests/database/test_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CHILDAUTHORIZATIONTESTS-TEST-ANONYMOUS-CHILD-CREATION-DENIED",
+      "domain": "guardian-child",
+      "description": "Anonymous child creation denied.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "anonymous child creation denied"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_anonymous_child_creation_denied"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CHILDAUTHORIZATIONTESTS-TEST-CHILD-CREATION-ATOMIC-FAILURE",
+      "domain": "guardian-child",
+      "description": "Child creation atomic failure.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "child creation atomic failure"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_child_creation_atomic_failure"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CHILDAUTHORIZATIONTESTS-TEST-CHILD-CREATION-IDEMPOTENCY",
+      "domain": "guardian-child",
+      "description": "Child creation idempotency.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "child creation idempotency"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_child_creation_idempotency"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CHILDAUTHORIZATIONTESTS-TEST-CHILD-REQUEST-CONFLICT",
+      "domain": "guardian-child",
+      "description": "Child request conflict.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "child request conflict"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_child_request_conflict"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CHILDAUTHORIZATIONTESTS-TEST-DIRECT-CHILD-INSERT-DENIED",
+      "domain": "guardian-child",
+      "description": "Direct child insert denied.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "direct child insert denied"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_direct_child_insert_denied"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CHILDAUTHORIZATIONTESTS-TEST-DIRECT-GUARDIANSHIP-INSERT-DENIED",
+      "domain": "guardian-child",
+      "description": "Direct guardianship insert denied.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "direct guardianship insert denied"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_direct_guardianship_insert_denied"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CONCURRENTAUTHORIZATIONTESTS-TEST-CONNECTION-FIRST-GUARDIAN-REVOCATION",
+      "domain": "connection-authorization",
+      "description": "Connection first guardian revocation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "connection first guardian revocation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_concurrent_authorization.ConcurrentAuthorizationTests.test_connection_first_guardian_revocation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_concurrent_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CONCURRENTAUTHORIZATIONTESTS-TEST-CONNECTION-FIRST-WORKSPACE-SUSPENSION",
+      "domain": "connection-authorization",
+      "description": "Connection first workspace suspension.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "connection first workspace suspension"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_concurrent_authorization.ConcurrentAuthorizationTests.test_connection_first_workspace_suspension"
+        }
+      ],
+      "sources": [
+        "tests/database/test_concurrent_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CONCURRENTAUTHORIZATIONTESTS-TEST-REVOCATION-COMMITS-BEFORE-AUTHORIZATION",
+      "domain": "connection-authorization",
+      "description": "Revocation commits before authorization.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "revocation commits before authorization"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_concurrent_authorization.ConcurrentAuthorizationTests.test_revocation_commits_before_authorization"
+        }
+      ],
+      "sources": [
+        "tests/database/test_concurrent_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CONCURRENTAUTHORIZATIONTESTS-TEST-SUSPENSION-COMMITS-BEFORE-AUTHORIZATION",
+      "domain": "connection-authorization",
+      "description": "Suspension commits before authorization.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "suspension commits before authorization"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_concurrent_authorization.ConcurrentAuthorizationTests.test_suspension_commits_before_authorization"
+        }
+      ],
+      "sources": [
+        "tests/database/test_concurrent_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CONNECTIONAUTHORIZATIONTESTS-TEST-ARCHIVED-WORKSPACE-REJECTED",
+      "domain": "connection-authorization",
+      "description": "Archived workspace rejected.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "archived workspace rejected"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_connection_authorization.ConnectionAuthorizationTests.test_archived_workspace_rejected"
+        }
+      ],
+      "sources": [
+        "tests/database/test_connection_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CONNECTIONAUTHORIZATIONTESTS-TEST-CONNECTION-IDEMPOTENT-RETRY",
+      "domain": "connection-authorization",
+      "description": "Connection idempotent retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "connection idempotent retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_connection_authorization.ConnectionAuthorizationTests.test_connection_idempotent_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_connection_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CONNECTIONAUTHORIZATIONTESTS-TEST-CONNECTION-REQUEST-ID-CONFLICT",
+      "domain": "connection-authorization",
+      "description": "Connection request id conflict.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "connection request id conflict"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_connection_authorization.ConnectionAuthorizationTests.test_connection_request_id_conflict"
+        }
+      ],
+      "sources": [
+        "tests/database/test_connection_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CONNECTIONAUTHORIZATIONTESTS-TEST-DISPUTED-GUARDIAN-REJECTED",
+      "domain": "connection-authorization",
+      "description": "Disputed guardian rejected.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "disputed guardian rejected"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_connection_authorization.ConnectionAuthorizationTests.test_disputed_guardian_rejected"
+        }
+      ],
+      "sources": [
+        "tests/database/test_connection_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CONNECTIONAUTHORIZATIONTESTS-TEST-EXPIRED-CONNECTION-REPLACEMENT",
+      "domain": "connection-authorization",
+      "description": "Expired connection replacement.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "expired connection replacement"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_connection_authorization.ConnectionAuthorizationTests.test_expired_connection_replacement"
+        }
+      ],
+      "sources": [
+        "tests/database/test_connection_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CONNECTIONAUTHORIZATIONTESTS-TEST-GUARDIAN-CONNECTION-CREATION",
+      "domain": "connection-authorization",
+      "description": "Guardian connection creation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "guardian connection creation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_connection_authorization.ConnectionAuthorizationTests.test_guardian_connection_creation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_connection_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CONNECTIONAUTHORIZATIONTESTS-TEST-REVOKED-GUARDIAN-REJECTED",
+      "domain": "connection-authorization",
+      "description": "Revoked guardian rejected.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "revoked guardian rejected"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_connection_authorization.ConnectionAuthorizationTests.test_revoked_guardian_rejected"
+        }
+      ],
+      "sources": [
+        "tests/database/test_connection_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CONNECTIONAUTHORIZATIONTESTS-TEST-SUSPENDED-WORKSPACE-REJECTED",
+      "domain": "connection-authorization",
+      "description": "Suspended workspace rejected.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "suspended workspace rejected"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_connection_authorization.ConnectionAuthorizationTests.test_suspended_workspace_rejected"
+        }
+      ],
+      "sources": [
+        "tests/database/test_connection_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CONNECTIONAUTHORIZATIONTESTS-TEST-UNRELATED-GUARDIAN-REJECTED",
+      "domain": "connection-authorization",
+      "description": "Unrelated guardian rejected.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "unrelated guardian rejected"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_connection_authorization.ConnectionAuthorizationTests.test_unrelated_guardian_rejected"
+        }
+      ],
+      "sources": [
+        "tests/database/test_connection_authorization.py",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "RACE-APPROVAL",
+      "domain": "concurrency",
+      "description": "Concurrent approval requests are idempotent and cleaned up.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "Concurrent approval requests are idempotent and cleaned up"
+      ],
+      "tests": [
+        {
+          "suite": "concurrency",
+          "ref": "tests/database/test_concurrent_approval.py"
+        }
+      ],
+      "sources": [
+        "tests/database/test_concurrent_approval.py",
+        "docs/DATABASE_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "RACE-CHILD",
+      "domain": "concurrency",
+      "description": "Concurrent child requests are idempotent and cleaned up.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "Concurrent child requests are idempotent and cleaned up"
+      ],
+      "tests": [
+        {
+          "suite": "concurrency",
+          "ref": "tests/database/test_concurrent_child.py"
+        }
+      ],
+      "sources": [
+        "tests/database/test_concurrent_child.py",
+        "docs/DATABASE_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "RACE-CONNECTION",
+      "domain": "concurrency",
+      "description": "Concurrent connection requests are idempotent and cleaned up.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "Concurrent connection requests are idempotent and cleaned up"
+      ],
+      "tests": [
+        {
+          "suite": "concurrency",
+          "ref": "tests/database/test_concurrent_connection.py"
+        }
+      ],
+      "sources": [
+        "tests/database/test_concurrent_connection.py",
+        "docs/DATABASE_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "RACE-WORKSPACE",
+      "domain": "concurrency",
+      "description": "Concurrent workspace requests are idempotent and cleaned up.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "Concurrent workspace requests are idempotent and cleaned up"
+      ],
+      "tests": [
+        {
+          "suite": "concurrency",
+          "ref": "tests/database/test_concurrent_workspace.py"
+        }
+      ],
+      "sources": [
+        "tests/database/test_concurrent_workspace.py",
+        "docs/DATABASE_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "FE-LOGINPAGE-PREVENTS-DUPLICATE-REQUESTS-WHILE-LOADING",
+      "domain": "authentication",
+      "description": "LoginPage > prevents duplicate requests while loading.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > prevents duplicate requests while loading"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > prevents duplicate requests while loading"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-LOGINPAGE-REJECTS-INVALID-EMAIL-WITHOUT-CALLING-OTP-SERVICE",
+      "domain": "authentication",
+      "description": "LoginPage > rejects invalid email without calling OTP service.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > rejects invalid email without calling OTP service"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > rejects invalid email without calling OTP service"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-LOGINPAGE-RENDERS-AN-ACCESSIBLE-EMAIL-FORM",
+      "domain": "authentication",
+      "description": "LoginPage > renders an accessible email form.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > renders an accessible email form"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > renders an accessible email form"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-LOGINPAGE-REQUESTS-OTP-WITH-NORMALIZED-EMAIL",
+      "domain": "authentication",
+      "description": "LoginPage > requests OTP with normalized email.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > requests OTP with normalized email"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > requests OTP with normalized email"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-LOGINPAGE-SHOWS-SERVICE-ERRORS-WITHOUT-CLAIMING-DELIVERY",
+      "domain": "authentication",
+      "description": "LoginPage > shows service errors without claiming delivery.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > shows service errors without claiming delivery"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > shows service errors without claiming delivery"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-REQUESTEMAILOTP-BLOCKS-OTP-DELIVERY-BY-DEFAULT",
+      "domain": "authentication",
+      "description": "RequestEmailOtp > blocks OTP delivery by default.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "requestEmailOtp > blocks OTP delivery by default"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/request-email-otp.test.ts::requestEmailOtp > blocks OTP delivery by default"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/request-email-otp.test.ts",
+        "apps/web/src/lib/auth/request-email-otp.ts"
+      ]
+    },
+    {
+      "id": "FE-REQUESTEMAILOTP-DOES-NOT-CALL-SUPABASE-WHEN-DELIVERY-IS-DISABLED",
+      "domain": "authentication",
+      "description": "RequestEmailOtp > does not call Supabase when delivery is disabled.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "requestEmailOtp > does not call Supabase when delivery is disabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/request-email-otp.test.ts::requestEmailOtp > does not call Supabase when delivery is disabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/request-email-otp.test.ts",
+        "apps/web/src/lib/auth/request-email-otp.ts"
+      ]
+    },
+    {
+      "id": "FE-REQUESTEMAILOTP-HANDLES-SUPABASE-ERRORS-WITHOUT-EXPOSING-DETAILS",
+      "domain": "authentication",
+      "description": "RequestEmailOtp > handles Supabase errors without exposing details.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "requestEmailOtp > handles Supabase errors without exposing details"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/request-email-otp.test.ts::requestEmailOtp > handles Supabase errors without exposing details"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/request-email-otp.test.ts",
+        "apps/web/src/lib/auth/request-email-otp.ts"
+      ]
+    },
+    {
+      "id": "FE-REQUESTEMAILOTP-HANDLES-UNEXPECTED-CLIENT-FAILURES",
+      "domain": "authentication",
+      "description": "RequestEmailOtp > handles unexpected client failures.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "requestEmailOtp > handles unexpected client failures"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/request-email-otp.test.ts::requestEmailOtp > handles unexpected client failures"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/request-email-otp.test.ts",
+        "apps/web/src/lib/auth/request-email-otp.ts"
+      ]
+    },
+    {
+      "id": "FE-REQUESTEMAILOTP-NORMALIZES-EMAIL-AND-PREVENTS-AUTOMATIC-SIGNUP",
+      "domain": "authentication",
+      "description": "RequestEmailOtp > normalizes email and prevents automatic signup.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "requestEmailOtp > normalizes email and prevents automatic signup"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/request-email-otp.test.ts::requestEmailOtp > normalizes email and prevents automatic signup"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/request-email-otp.test.ts",
+        "apps/web/src/lib/auth/request-email-otp.ts"
+      ]
+    },
+    {
+      "id": "FE-REQUESTEMAILOTP-REJECTS-INVALID-EMAIL-WITHOUT-CALLING-SUPABASE",
+      "domain": "authentication",
+      "description": "RequestEmailOtp > rejects invalid email without calling Supabase.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "requestEmailOtp > rejects invalid email without calling Supabase"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/request-email-otp.test.ts::requestEmailOtp > rejects invalid email without calling Supabase"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/request-email-otp.test.ts",
+        "apps/web/src/lib/auth/request-email-otp.ts"
+      ]
+    },
+    {
+      "id": "FE-VERIFYEMAILOTP-BLOCKS-VERIFICATION-WHEN-LIVE-OTP-IS-DISABLED",
+      "domain": "authentication",
+      "description": "VerifyEmailOtp > blocks verification when live OTP is disabled.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "verifyEmailOtp > blocks verification when live OTP is disabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/verify-email-otp.test.ts::verifyEmailOtp > blocks verification when live OTP is disabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/verify-email-otp.test.ts",
+        "apps/web/src/lib/auth/verify-email-otp.ts"
+      ]
+    },
+    {
+      "id": "FE-VERIFYEMAILOTP-HANDLES-UNEXPECTED-CLIENT-FAILURES",
+      "domain": "authentication",
+      "description": "VerifyEmailOtp > handles unexpected client failures.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "verifyEmailOtp > handles unexpected client failures"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/verify-email-otp.test.ts::verifyEmailOtp > handles unexpected client failures"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/verify-email-otp.test.ts",
+        "apps/web/src/lib/auth/verify-email-otp.ts"
+      ]
+    },
+    {
+      "id": "FE-VERIFYEMAILOTP-REJECTS-EXPIRED-OR-INCORRECT-OTP-RESPONSES",
+      "domain": "authentication",
+      "description": "VerifyEmailOtp > rejects expired or incorrect OTP responses.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "verifyEmailOtp > rejects expired or incorrect OTP responses"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/verify-email-otp.test.ts::verifyEmailOtp > rejects expired or incorrect OTP responses"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/verify-email-otp.test.ts",
+        "apps/web/src/lib/auth/verify-email-otp.ts"
+      ]
+    },
+    {
+      "id": "FE-VERIFYEMAILOTP-REJECTS-INVALID-OTP-FORMATS",
+      "domain": "authentication",
+      "description": "VerifyEmailOtp > rejects invalid OTP formats.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "verifyEmailOtp > rejects invalid OTP formats"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/verify-email-otp.test.ts::verifyEmailOtp > rejects invalid OTP formats"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/verify-email-otp.test.ts",
+        "apps/web/src/lib/auth/verify-email-otp.ts"
+      ]
+    },
+    {
+      "id": "FE-VERIFYEMAILOTP-REJECTS-INVALID-EMAIL-WITHOUT-CALLING-SUPABASE",
+      "domain": "authentication",
+      "description": "VerifyEmailOtp > rejects invalid email without calling Supabase.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "verifyEmailOtp > rejects invalid email without calling Supabase"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/verify-email-otp.test.ts::verifyEmailOtp > rejects invalid email without calling Supabase"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/verify-email-otp.test.ts",
+        "apps/web/src/lib/auth/verify-email-otp.ts"
+      ]
+    },
+    {
+      "id": "FE-VERIFYEMAILOTP-REJECTS-MISSING-SESSIONS",
+      "domain": "authentication",
+      "description": "VerifyEmailOtp > rejects missing sessions.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "verifyEmailOtp > rejects missing sessions"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/verify-email-otp.test.ts::verifyEmailOtp > rejects missing sessions"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/verify-email-otp.test.ts",
+        "apps/web/src/lib/auth/verify-email-otp.ts"
+      ]
+    },
+    {
+      "id": "FE-VERIFYEMAILOTP-VERIFIES-A-VALID-OTP-WHEN-EXPLICITLY-ENABLED",
+      "domain": "authentication",
+      "description": "VerifyEmailOtp > verifies a valid OTP when explicitly enabled.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "verifyEmailOtp > verifies a valid OTP when explicitly enabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/verify-email-otp.test.ts::verifyEmailOtp > verifies a valid OTP when explicitly enabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/verify-email-otp.test.ts",
+        "apps/web/src/lib/auth/verify-email-otp.ts"
+      ]
+    },
+    {
+      "id": "FE-BOTTOMNAVIGATION-HIGHLIGHTS-THE-CURRENT-ROUTE",
+      "domain": "coach-presentation",
+      "description": "BottomNavigation > highlights the current route.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "BottomNavigation > highlights the current route"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/ui/components/bottom-navigation.test.tsx::BottomNavigation > highlights the current route"
+        }
+      ],
+      "sources": [
+        "apps/web/src/ui/components/bottom-navigation.test.tsx",
+        "apps/web/src/ui/components/bottom-navigation.tsx"
+      ]
+    },
+    {
+      "id": "FE-BOTTOMNAVIGATION-RENDERS-ALL-FIVE-NAVIGATION-LINKS",
+      "domain": "coach-presentation",
+      "description": "BottomNavigation > renders all five navigation links.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "BottomNavigation > renders all five navigation links"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/ui/components/bottom-navigation.test.tsx::BottomNavigation > renders all five navigation links"
+        }
+      ],
+      "sources": [
+        "apps/web/src/ui/components/bottom-navigation.test.tsx",
+        "apps/web/src/ui/components/bottom-navigation.tsx"
+      ]
+    },
+    {
+      "id": "FE-COACHHEADER-DISPLAYS-THE-APPLICATION-AND-ACADEMY-NAMES",
+      "domain": "coach-presentation",
+      "description": "CoachHeader > displays the application and academy names.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "CoachHeader > displays the application and academy names"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/ui/components/coach-header.test.tsx::CoachHeader > displays the application and academy names"
+        }
+      ],
+      "sources": [
+        "apps/web/src/ui/components/coach-header.test.tsx",
+        "apps/web/src/ui/components/coach-header.tsx"
+      ]
+    },
+    {
+      "id": "FE-COACHHEADER-USES-A-SEMANTIC-HEADER-ELEMENT",
+      "domain": "coach-presentation",
+      "description": "CoachHeader > uses a semantic header element.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "CoachHeader > uses a semantic header element"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/ui/components/coach-header.test.tsx::CoachHeader > uses a semantic header element"
+        }
+      ],
+      "sources": [
+        "apps/web/src/ui/components/coach-header.test.tsx",
+        "apps/web/src/ui/components/coach-header.tsx"
+      ]
+    },
+    {
+      "id": "FE-DASHBOARDSTATS-RENDERS-ALL-THREE-SUMMARY-CARDS",
+      "domain": "coach-presentation",
+      "description": "DashboardStats > renders all three summary cards.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "DashboardStats > renders all three summary cards"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/ui/components/dashboard-stats.test.tsx::DashboardStats > renders all three summary cards"
+        }
+      ],
+      "sources": [
+        "apps/web/src/ui/components/dashboard-stats.test.tsx",
+        "apps/web/src/ui/components/dashboard-stats.tsx"
+      ]
+    },
+    {
+      "id": "FE-DASHBOARDSTATS-RENDERS-THE-EXPECTED-DEMONSTRATION-VALUES",
+      "domain": "coach-presentation",
+      "description": "DashboardStats > renders the expected demonstration values.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "DashboardStats > renders the expected demonstration values"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/ui/components/dashboard-stats.test.tsx::DashboardStats > renders the expected demonstration values"
+        }
+      ],
+      "sources": [
+        "apps/web/src/ui/components/dashboard-stats.test.tsx",
+        "apps/web/src/ui/components/dashboard-stats.tsx"
+      ]
+    },
+    {
+      "id": "AUTH-LIVE-OTP",
+      "domain": "authentication",
+      "description": "End-to-end email delivery, signed session validation and sign-in journey.",
+      "status": "planned",
+      "risk": "critical",
+      "coverage": "missing",
+      "scenarios": [
+        "End-to-end email delivery, signed session validation and sign-in journey"
+      ],
+      "tests": [],
+      "sources": [
+        "docs/DECISION_LOG.md"
+      ]
+    },
+    {
+      "id": "GUARDIAN-FORMAL-VERIFICATION",
+      "domain": "guardian-child",
+      "description": "Formal guardian verification and dispute resolution.",
+      "status": "deferred",
+      "risk": "critical",
+      "coverage": "missing",
+      "scenarios": [
+        "Formal guardian verification and dispute resolution"
+      ],
+      "tests": [],
+      "sources": [
+        "docs/DECISION_LOG.md"
+      ]
+    },
+    {
+      "id": "CONNECTION-COACH-INVITATION",
+      "domain": "connections",
+      "description": "Coach-initiated invitation, recipient confirmation, skip and reject journeys.",
+      "status": "planned",
+      "risk": "high",
+      "coverage": "missing",
+      "scenarios": [
+        "Coach-initiated invitation, recipient confirmation, skip and reject journeys"
+      ],
+      "tests": [],
+      "sources": [
+        "docs/DECISION_LOG.md"
+      ]
+    },
+    {
+      "id": "ENROLLMENT-LIFECYCLE",
+      "domain": "enrollment",
+      "description": "Enrollments remain separate from approved workspace-child connections.",
+      "status": "planned",
+      "risk": "high",
+      "coverage": "missing",
+      "scenarios": [
+        "Enrollments remain separate from approved workspace-child connections"
+      ],
+      "tests": [],
+      "sources": [
+        "docs/DATABASE_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "ATTENDANCE-AUTHORIZATION",
+      "domain": "attendance",
+      "description": "Attendance with guardian and workspace-specific authorization.",
+      "status": "planned",
+      "risk": "high",
+      "coverage": "missing",
+      "scenarios": [
+        "Attendance with guardian and workspace-specific authorization"
+      ],
+      "tests": [],
+      "sources": [
+        "docs/DEVELOPMENT_ROADMAP.md"
+      ]
+    },
+    {
+      "id": "DIARY-MEDIA-CONSENT",
+      "domain": "communication",
+      "description": "Private learning updates and media with purpose-specific consent.",
+      "status": "planned",
+      "risk": "critical",
+      "coverage": "missing",
+      "scenarios": [
+        "Private learning updates and media with purpose-specific consent"
+      ],
+      "tests": [],
+      "sources": [
+        "docs/DATABASE_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "ACCOUNT-RETENTION",
+      "domain": "identity",
+      "description": "Account deletion, ownership transfer and historical record retention.",
+      "status": "planned",
+      "risk": "critical",
+      "coverage": "missing",
+      "scenarios": [
+        "Account deletion, ownership transfer and historical record retention"
+      ],
+      "tests": [],
+      "sources": [
+        "docs/DECISION_LOG.md"
+      ]
+    },
+    {
+      "id": "GUARDIAN-HISTORY",
+      "domain": "learning-history",
+      "description": "Authorized guardian access to historical learning records.",
+      "status": "planned",
+      "risk": "high",
+      "coverage": "missing",
+      "scenarios": [
+        "Authorized guardian access to historical learning records"
+      ],
+      "tests": [],
+      "sources": [
+        "docs/DECISION_LOG.md"
+      ]
+    },
+    {
+      "id": "PHONE-OTP",
+      "domain": "authentication",
+      "description": "Phone OTP sign-in.",
+      "status": "deferred",
+      "risk": "high",
+      "coverage": "missing",
+      "scenarios": [
+        "Phone OTP sign-in"
+      ],
+      "tests": [],
+      "sources": [
+        "docs/DECISION_LOG.md"
+      ]
+    },
+    {
+      "id": "LEARNING-DELIVERY",
+      "domain": "courses",
+      "description": "Courses, lessons, batches, sessions and coach assignments.",
+      "status": "planned",
+      "risk": "medium",
+      "coverage": "missing",
+      "scenarios": [
+        "Courses, lessons, batches, sessions and coach assignments"
+      ],
+      "tests": [],
+      "sources": [
+        "docs/DECISION_LOG.md"
+      ]
+    }
+  ]
+}

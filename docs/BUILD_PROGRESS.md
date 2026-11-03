@@ -1,62 +1,54 @@
 # ParentPlus Build Progress
 
-## Current state
-- Current milestone: M1 Frontend foundation
-- Current branch: setup/parentplus-foundation
-- Latest verified remote checkpoint: ccd33c5
-- Latest completed step: 2.17 CoachHeader component tests
-- Working tree: contains uncommitted CoachHeader refactoring and tests
+Updated: 2026-11-03. Current local state; historical results are identified separately.
 
-## Completed
-- GitHub repository and development branch configured.
-- Next.js 16.4.3 application created.
-- Google Cloud Shell preview verified.
-- Dashboard demonstration screen implemented.
-- Dashboard demo data extracted.
-- DashboardStats component extracted.
-- Vitest, React Testing Library and jsdom configured.
-- DashboardStats tests passing.
-- CoachHeader component extracted.
-- CoachHeader tests passing.
-- Four automated tests passing.
-- TypeScript, ESLint and production build passing at Step 2.16.
+## Checkpoint summary and milestone scope
 
-## Next
-1. Create and maintain roadmap tracking documents.
-2. Add shared design tokens and reusable navigation.
-3. Verify mobile layout and accessibility.
-4. Run all quality checks.
-5. Create and push M1 milestone checkpoint.
+- Quality-gate preparation baseline: `ac2b1f9af85b531142310fcd851a24c17390f4ae`.
+- Approved local implementation checkpoint: `5b068b995957414a47dd2f47e8b6eb4147958563`; it has not been published to GitHub in this work.
+- Shared-documentation foundation: drafted for review, including the prior communication standard. [Agent Handoff](AGENT_HANDOFF.md) owns branch, remote observations, working-tree state and detailed pending scope; inspect actual Git rather than treating this milestone summary as live status.
+- Engineering state: quality-gate reliability/operating standards are committed locally; shared-context documentation is under review. No product milestone is completed by this documentation task.
+- Approval boundary: present the complete reviewed scope/evidence before any commit. Push, merge, hosted changes, settings and deployment are separately unauthorized.
 
-## Known issues
-- npm audit reports 16 moderate findings involving development dependencies.
-- Cloud Shell storage should be monitored.
-- GitHub main branch has not received development changes.
+See [the audit report](INTELLIGENT_QUALITY_GATE_AUDIT.md) for exact files, findings, evidence and gap classifications, and [the operating workflow](FEATURE_DELIVERY_WORKFLOW.md) for future feature work.
 
-## Navigation milestone verified
-- Five coach routes available: Today, Schedule, Post, Students, Fees.
-- All five routes returned HTTP 200.
-- Bottom navigation supports active-tab highlighting.
-- Six automated tests passing.
-- TypeScript, ESLint and production build passed.
-- Mobile layout refinement remains open.
-- Checkpoint commit: see Git history for the navigation milestone.
+## Recorded implementation capabilities
 
-## M1 completion summary
-- Coach dashboard implemented with fictional demonstration data.
-- Five coach routes available and returning HTTP 200.
-- Reusable CoachHeader, DashboardStats and BottomNavigation components.
-- Six automated component tests passing.
-- TypeScript, ESLint and production build passing.
-- Mobile preview reviewed; Next.js indicator removed.
-- Safe-area spacing added to bottom navigation.
-- M1 milestone checkpoint: record Git commit after push.
+The following results belong to the prior quality-gate audit, not a fresh execution
+for the current documentation draft. [Quality Evidence](QUALITY_EVIDENCE.md) owns
+the execution provenance, snapshot reconciliation and artefact availability.
 
-### Remaining issues
-- npm audit reports 16 moderate dependency findings.
-- Cloud Shell preview occasionally reports HTTP 503 on an auth-related request.
-- Mobile safe-area behavior needs physical-device verification.
-- Dashboard actions and placeholder screens are not functional yet.
+- Next.js coach demo and login UI with 24 component/auth-helper cases; TypeScript, lint and production build pass locally. OTP provider calls are mocked/disabled; this does not establish live sign-in.
+- Thirteen PostgreSQL migrations and synthetic local auth fixture; 39 unit security/authorization tests plus four standalone concurrency scenarios pass in the existing disposable network-isolated database gate, including cleanup.
+- Quality registry maps all 67 application/database cases exactly. Ten planned/deferred product gaps remain uncovered and visible.
+- Quality engine has 49 behavioral regression tests after the independent audit; strict self-test rejects zero, skipped and expected-failure outcomes.
+- Deterministic selection, segment-aware patterns, conservative security/unknown rules, recursive test collection, validated standalone entrypoints and exact-case evidence validation.
+- Source fingerprints and run/attempt/report-bound receipts prevent accidental reuse across source snapshots or CI attempts. Local caller declarations remain a process trust boundary.
+- Independent reviewer reproduced original defects, checked the corrections and reran all 49 engine tests. No remaining confirmed Important/Critical code finding was reported in the corrected scope.
+- Engineering standards and feature-delivery instructions are routed from AGENTS.md, preserving Superpowers and application Next.js guidance. These are agent operating instructions, not a background autonomous service.
 
-### Next milestone
-M2: Review user roles, authentication, database schema, consent and security before connecting real data.
+## Prepared, not hosted-verified
+
+The orchestration and reusable workflows are in local checkpoint 5b068b9, not yet published in this work. All-branch/PR/merge-group event definitions, run-attempt artifact naming and receipt checks pass local syntax review but have not been exercised on GitHub. No branch-protection setting was inspected/changed or claimed active. The local implementation commit was approved; push and a matching actual CI run remain separate next steps requiring authorization.
+
+The initial implementation report is historical and superseded by the audit report's evidence contract and counts. Historical machine evidence is under the ignored local `test-results/quality/audit/` directory. Its fingerprint and portability limitations are indexed in QUALITY_EVIDENCE.md; those reports do not validate the new documentation snapshot.
+
+## Product milestones and release gaps
+
+M0/M1 frontend foundation remain the historical completed baseline. M2 has local auth helpers and database foundations; the full authentication/data product milestone is incomplete. Database connection/approval contracts exist locally, but M3 classes/students/enrollment journeys are not established as complete. M4 attendance, M5 private diary/media and later milestones remain unimplemented/partial per the roadmap.
+
+All ten registry gaps are acceptable for this synthetic-data engineering-tooling milestone. Live OTP, invitation journeys, enrollment, attendance, private media/consent, account lifecycle/retention, guardian history and learning delivery block release of the corresponding real product behavior. Formal verification method/timing needs a future decision, while sensitive access, disputes and revocation cannot be waived by self-declaration. Phone OTP remains deferred for the email-first scope.
+
+No browser E2E suite, hosted Supabase integration, real signed-JWT authorization, physical-device verification, real family data or production readiness is claimed. The older npm audit count of 16 moderate findings and Cloud Shell preview/storage notes are historical; dependency audit and production/provider issues were not re-verified by this audit.
+
+## Next actions
+
+1. Review the shared-documentation foundation and its exact diff; obtain approval before committing this new scope.
+2. After a separately approved push, inspect actual GitHub branch tips and hosted CI evidence. Do not claim another assistant can see unpublished local work.
+3. Propose documentation-freshness/link checks and concurrency-aware automated writers as a separate scope; no such checker or sync service was added here.
+4. The owner decides whether/when to require the final gate in branch protection; no settings changes are authorized here.
+5. Select the next product slice through the operating workflow, resolving its privacy and acceptance decisions before real-data or release claims.
+
+## Historical context retained
+
+Earlier progress notes tracked branch `setup/parentplus-foundation`, checkpoint `ccd33c5`, four then six frontend tests and the M1 navigation milestone. Those reflect earlier local/Cloud Shell work and are not the current branch, test inventory or checkpoint. The Git history and original implementation report retain that chronology; current capabilities and limitations above take precedence.

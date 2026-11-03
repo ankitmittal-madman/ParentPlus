@@ -1,0 +1,127 @@
+name: ParentPlus Frontend Quality
+
+run-name: Frontend Quality | ${{ github.ref_name }}
+
+# Automatic events are orchestrated by intelligent-quality.yml to avoid duplicate runs.
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    name: Frontend Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    defaults:
+      run:
+        working-directory: apps/web
+
+    env:
+      NEXT_PUBLIC_ENABLE_LIVE_OTP: "false"
+      NEXT_TELEMETRY_DISABLED: "1"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript validation
+        run: npm run typecheck
+
+      - name: ESLint validation
+        run: npm run lint
+
+      - name: Run automated tests
+        run: |
+          mkdir -p test-results
+          npm test -- --reporter=default --reporter=junit --outputFile.junit=test-results/vitest-junit.xml
+
+      - name: Validate JUnit test evidence
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PYVALIDATE'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+          report = Path("test-results/vitest-junit.xml")
+
+          if not report.is_file() or report.stat().st_size == 0:
+              raise SystemExit("FAIL: JUnit report missing or empty")
+
+          root = ET.parse(report).getroot()
+
+          if root.tag == "testsuite":
+              suites = [root]
+          elif root.tag == "testsuites":
+              suites = root.findall("testsuite")
+          else:
+              raise SystemExit("FAIL: Invalid JUnit root")
+
+          if not suites:
+              raise SystemExit("FAIL: No test suites")
+
+          cases = sum(len(s.findall("testcase")) for s in suites)
+          tests = sum(int(s.get("tests", 0)) for s in suites)
+          failures = sum(int(s.get("failures", 0)) for s in suites)
+          errors = sum(int(s.get("errors", 0)) for s in suites)
+          skipped = sum(int(s.get("skipped", 0)) for s in suites)
+
+          print("Tests:", tests)
+          print("Test cases:", cases)
+          print("Failures:", failures)
+          print("Errors:", errors)
+          print("Skipped:", skipped)
+
+          if tests < 24 or cases != tests:
+              raise SystemExit("FAIL: Missing or inconsistent tests")
+
+          if failures or errors or skipped:
+              raise SystemExit("FAIL: Tests failed or were skipped")
+
+          print("PASS: JUnit evidence validated")
+          PYVALIDATE
+
+      - name: Production build
+        run: npm run build
+
+      - name: Bind successful execution to source and report digests
+        run: python3 ../../scripts/quality/quality_gate.py attest --suite frontend --reports test-results
+
+      - name: Upload test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-test-evidence-${{ github.run_attempt }}
+          path: apps/web/test-results/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Write workflow summary
+        if: always()
+        working-directory: apps/web
+        run: |
+          {
+            echo "## ParentPlus Frontend Quality"
+            echo ""
+            echo "Commit: $GITHUB_SHA"
+            echo ""
+            echo "Workflow: $GITHUB_WORKFLOW"
+            echo ""
+            echo "Run: $GITHUB_RUN_ID"
+            echo ""
+            echo "Review the individual steps above for test and build evidence."
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -4,6 +4,25 @@ Status: Draft for founder review
 Milestone: M2 Authentication and Data Foundation
 Reference decisions: DEC-005 through DEC-010
 
+## Implementation reconciliation — 2026-11-03
+
+This document retains the original design contracts and historical status labels.
+Statements below such as “no migrations/functions implemented” describe their
+entry's preparation state; they are not current claims about this checkout.
+Exact executable definitions are owned by [the SQL migrations](../supabase/migrations/).
+
+| Area | Local repository evidence | What is not established |
+| --- | --- | --- |
+| Profiles, workspaces, memberships, onboarding and initial RLS | Migrations 001–004 (full filenames in the migration directory) and database authorisation tests | A complete staff-management, ownership-transfer or hosted-access product |
+| Children, guardianships and controlled child creation/idempotency | Migrations 005–007 and child authorisation/concurrency tests | Formal legal guardian verification or unrestricted record access |
+| Connection requests, workspace-child relationships, events, request/approval functions and constraints | Migrations 008–013 and connection/approval/security race tests | Complete coach-invitation, enrollment, sensitive learning-data or production journeys |
+| Courses, classes, attendance, diary/media, historical access and full account lifecycle | Intended domains/contracts below | Implemented or release-ready behavior merely because a table/concept is described |
+
+[Quality Evidence](QUALITY_EVIDENCE.md) owns actual verification provenance;
+[Build Progress](BUILD_PROGRESS.md) owns milestone status. This reconciliation does
+not approve hosted SQL, close security review or change any applied migration.
+All future contracts and open privacy decisions below remain subject to review.
+
 ## 1. Architecture objective
 Support independent coaches and academies through one shared platform.
 Allow one coach to belong to multiple workspaces.

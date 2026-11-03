@@ -1,10 +1,11 @@
 """Concurrent child creation test for disposable ParentPlus PostgreSQL."""
 
 import subprocess
+from tests.database.container_config import get_test_container
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 
-CONTAINER = "parentplus-pg-test"
+CONTAINER = get_test_container()
 USER_ID = "11111111-1111-4111-8111-111111111111"
 CHILD_NAME = "Riya Concurrent Test"
 
