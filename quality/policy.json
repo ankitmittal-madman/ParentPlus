@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "always": [
+    "quality"
+  ],
+  "unknown": [
+    "frontend",
+    "database"
+  ],
+  "rules": [
+    {
+      "name": "authentication and shared application libraries",
+      "patterns": [
+        "apps/web/src/lib/**",
+        "apps/web/src/app/login/**",
+        "**/*auth*",
+        "**/*middleware*",
+        "**/proxy.ts"
+      ],
+      "suites": [
+        "frontend",
+        "database"
+      ]
+    },
+    {
+      "name": "frontend components, routes and assets",
+      "patterns": [
+        "apps/web/src/ui/**",
+        "apps/web/src/app/(coach)/**",
+        "apps/web/src/modules/dashboard/**",
+        "apps/web/src/app/globals.css",
+        "apps/web/src/app/layout.tsx",
+        "apps/web/src/app/favicon.ico",
+        "apps/web/src/test/**",
+        "apps/web/public/**",
+        "apps/web/*.ts",
+        "apps/web/*.mts",
+        "apps/web/*.mjs"
+      ],
+      "suites": [
+        "frontend"
+      ]
+    },
+    {
+      "name": "database migrations, RLS, workspaces, guardians and connections",
+      "patterns": [
+        "supabase/**",
+        "tests/database/**"
+      ],
+      "suites": [
+        "database"
+      ]
+    },
+    {
+      "name": "CI, quality configuration and engine",
+      "patterns": [
+        ".github/**",
+        "scripts/**",
+        "quality/**",
+        "tests/quality/**",
+        "AGENTS.md",
+        "**/AGENTS.md",
+        ".agents/**"
+      ],
+      "suites": [
+        "frontend",
+        "database"
+      ]
+    },
+    {
+      "name": "shared dependencies and lockfiles",
+      "patterns": [
+        "**/package.json",
+        "**/package-lock.json",
+        "package.json",
+        "package-lock.json",
+        "**/requirements*.txt",
+        "requirements*.txt",
+        "**/pyproject.toml",
+        "pyproject.toml",
+        "**/*lock*"
+      ],
+      "suites": [
+        "frontend",
+        "database"
+      ]
+    },
+    {
+      "name": "documentation only",
+      "patterns": [
+        "docs/**",
+        "README.md",
+        "apps/web/README.md"
+      ],
+      "suites": []
+    }
+  ]
+}

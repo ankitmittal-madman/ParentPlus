@@ -2,14 +2,9 @@ name: ParentPlus Frontend Quality
 
 run-name: Frontend Quality | ${{ github.ref_name }}
 
+# Automatic events are orchestrated by intelligent-quality.yml to avoid duplicate runs.
 on:
-  push:
-    branches:
-      - setup/parentplus-foundation
-  pull_request:
-    branches:
-      - main
-      - setup/parentplus-foundation
+  workflow_call:
   workflow_dispatch:
 
 permissions:
@@ -100,17 +95,20 @@ jobs:
           print("PASS: JUnit evidence validated")
           PYVALIDATE
 
+      - name: Production build
+        run: npm run build
+
+      - name: Bind successful execution to source and report digests
+        run: python3 ../../scripts/quality/quality_gate.py attest --suite frontend --reports test-results
+
       - name: Upload test evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: frontend-test-evidence
+          name: frontend-test-evidence-${{ github.run_attempt }}
           path: apps/web/test-results/
           if-no-files-found: error
           retention-days: 14
-
-      - name: Production build
-        run: npm run build
 
       - name: Write workflow summary
         if: always()

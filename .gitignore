@@ -6,3 +6,8 @@ __pycache__/
 
 # Generated database test evidence
 /test-results/database/
+
+# Generated intelligent quality-gate evidence
+/test-results/quality/
+/test-results/evidence/
+/test-results/selection/

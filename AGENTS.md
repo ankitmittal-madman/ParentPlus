@@ -20,3 +20,23 @@ work.
 
 Installation details, examples, source revision, and update instructions are in
 `docs/superpowers.md`.
+
+## Engineering operating system
+
+Before feature work, audits or quality-gate changes, read
+`docs/ENGINEERING_STANDARDS.md` and follow
+`docs/FEATURE_DELIVERY_WORKFLOW.md`. Update `docs/BUILD_PROGRESS.md` when verified
+capabilities or milestone status changes. Keep requirements and executable test
+references in `quality/requirements.json` truthful and current.
+
+Use independent review and deterministic evidence; do not equate mocked/local
+checks with real-provider, hosted CI or production validation. Preserve the
+existing Superpowers and application-specific Next.js instructions.
+
+Present the complete reviewed change scope, evidence and remaining risks before
+requesting approval to commit. Do not commit until that approval is given.
+Commit approval does not authorize push, merge, deployment, hosted migrations,
+production access, repository-setting changes or paid services. Current task
+instructions and existing explicit authorization take precedence over historical
+roadmap checkpoint guidance. Use the existing isolated cloud checkout; do not
+create a worktree unless explicitly requested.
