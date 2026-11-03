@@ -152,3 +152,49 @@ During the course/batch full regression, the login success focus assertion faile
 The draft migration adds a private assignment operation for active owners/admins and active same-workspace coaches, with row locks and a duplicate-safe unique assignment. App access, assignment removal, auditing, real scheduling UI, end-to-end verification and independently reviewed release readiness remain open. Consult fresh evidence for the exact test results and Git status.
 
 The coach-assignment review identified missing concurrency coverage. New deterministic cases exercise coach suspension in both transaction orders and simultaneous duplicate assignments. Other manager/workspace revocation and batch lifecycle races remain release gaps; inspect the current gate evidence. No app access or hosted database change was performed.
+
+## Private coach removal — 2026-11-03
+
+A new local draft migration adds private owner/admin removal of a coach assignment, preserving existing sessions while preventing later scheduling writes by the unassigned coach. Assignment and removal acquire the same transaction-scoped advisory lock to serialize conflicting operations, including an absent assignment row. The operation has no app-role grant and no UI or audit trail. Review current isolated test evidence and obtain independent security review before any exposure; no hosted database changes were made.
+
+### Coach assignment replay correction
+
+Independent review identified and local tests reproduced stale add/remove retries undoing later opposite actions. The private draft now requires actor-scoped request IDs and durable payload-bound receipts; unversioned private assignment is removed. Matching historical retries do not repeat the mutation, and conflicting request reuse is rejected. The receipt table retains referenced membership/batch records via foreign keys: retention/deletion decisions and additional concurrent conflict/revocation tests are release gaps. Review fresh gate evidence and independent review; no app access or hosted migration was enabled.
+
+### Private class journey and conflicting requests
+
+A synthetic local database integration case chains private course and batch creation, India workspace configuration, coach assignment, one local-time session and coach removal; it checks retained past session and denial after a delayed old assignment retry. Separate two-transaction cases cover simultaneous request-ID reuse with changed action or batch. Consult fresh gate results. This is not an app E2E journey or hosted integration. UI, visibility rules, audit, retention and performance review remain open.
+
+The private class journey also has a separate-transaction local test covering committed course, batch, assignment, session, removal and delayed replay. It remains a database-only synthetic test; no browser, app-role or hosted integration is established.
+
+## Practice class-setup screen — 2026-11-03
+
+The example schedule includes an in-memory practice-only course/batch preview with explicit unsaved messaging, validation, stale-preview clearing and no network or storage use. This is not a real class creation journey or authorization implementation. Browser, component and gate evidence must be checked for the current snapshot. Real API exposure, persistence, coach selection, permissions, independent review and actual browser-to-database integration remain release blockers.
+
+An independent review of the practice form identified that a single invalid field incorrectly marked both fields invalid. The test reproduced the issue and the component now marks only the affected field. The browser case also checks no non-read request or browser-storage change occurs during the preview; inspect fresh evidence. Full accessibility and real-integration review remain outstanding.
+
+## Local authenticated course wrapper — 2026-11-03
+
+A local draft migration grants the authenticated database role access to one narrow course-creation security-definer wrapper, delegating to the private active-workspace/owner-admin check and request idempotency. It grants no course-table access and accepts no actor ID. Synthetic role/claim tests are not signed-JWT/PostgREST evidence. The draft is not deployed: migration owner and grants, audit/retention, rate limiting, full app integration, real provider verification and independent security review remain required before hosted use. Consult current evidence for actual tests.
+
+The authenticated course draft's local checks include attempted anonymous invocation even with a synthetic claimed ID, attempted direct table insertion, role and status denial, owner/admin retries and deterministic workspace/member suspension and duplicate-request races. Local tests do not validate signed JWTs, PostgREST, hosted function ownership or production settings; these and audit/retention remain release blockers. Inspect the source-bound gate for current results.
+
+## Local authenticated batch wrapper — 2026-11-03
+
+A draft migration adds authenticated-role execution of a narrowly scoped batch-creation wrapper. It delegates to active owner/admin and same-workspace course checks and grants no direct table or private-function access. Tests use synthetic roles/claims; signed JWT/PostgREST, deployed owner and grants, audit/retention, rate limits and actual app integration remain release blockers. Review current source-bound test evidence and independent findings before exposure.
+
+## Local atomic course and batch setup draft — 2026-11-03
+
+A new local authenticated-role security-definer operation creates a course and first batch in one transaction using a separate actor/request receipt. A review identified and the design avoids adoption of partial standalone records with the same caller request ID. A controlled trigger test checks rollback after the batch insert fails and verifies an identical retry. Direct table and anonymous access remain denied. Receipt foreign keys retain associated records; review deletion/retention before exposure. Signed JWT/PostgREST, hosted ownership/privileges, audit, rate limits and application/browser integration remain release blockers. Inspect current gate evidence; no hosted migration was performed.
+
+## Class setup server boundary — 2026-11-03
+
+A server action draft validates workspace/request IDs and names, fails closed unless PARENTPLUS_ENABLE_CLASS_SETUP is exactly true, asks the Supabase server client for the current user and calls the local atomic class-setup RPC with sanitized output. It is not connected to the practice UI and no hosted provider is used by tests. Mocked identity/RPC cases do not prove signed JWTs, deployed owner/grants, rate limits, audit, real workspace selection, request-ID lifecycle or end-to-end functionality. Check fresh gate and independent review before integration.
+
+Independent review found that an app environment flag cannot disable a direct database RPC. The local draft combined RPC now has a separate private database control that defaults off and is locked throughout each call; app roles cannot access it. The shared control also gates the separate course/batch creation wrappers; it does not gate unrelated operations. The future UI must bind uncertain retries to the original authenticated actor/workspace; actor-scoped receipts alone can duplicate a request after account switching. That retry UX, safe control operations, signed JWT verification, deployment review and app integration remain unfinished.
+
+The course and batch draft migrations remain private during partial reconstruction; only the later atomic-setup migration grants authenticated execution after installing the shared default-off database guard. The local initialization script checks effective anon/authenticated execute rights immediately after each earlier migration. This does not establish safe hosted migration ownership or signed-JWT behavior; the server flag remains action-specific, and actor-bound retry UX is still required.
+
+An independent review found that creating security-definer functions and revoking default PUBLIC execution in separate autocommitted statements could expose an ungated function briefly during a partial rollout. Draft migrations 016 and 017 now create and revoke within a single DO statement; 018 does the same for the combined wrapper. Local reconstruction checks post-migration privileges. This source-level correction still requires review under the actual hosted migration tool and ownership model before deployment. The app flag gates only the action; the database control independently gates these three draft creation RPCs. Actor-switch retry UX remains open.
+
+The draft server action now requires an expected actor ID and rejects a mismatch with the authenticated user before calling the RPC. The expected ID is not used as authorization and is not passed to the database. This does not implement a retry UI or preserve the original actor/workspace across navigation; those remain release blockers.

@@ -78,3 +78,17 @@ A private local initial time-zone configuration operation checks active owner/ad
 The India-first scheduling continuation adds local private owner/admin course and batch creation with workspace isolation and retry checks. These operations are not accessible to app users; assignment, reads, UI integration, race coverage and independent security review remain open.
 
 The local draft adds a private coach-to-batch assignment operation with active-workspace and role checks. This does not expose scheduling to app users or complete assignment management, audit, user journeys or security review.
+
+A private local coach-removal operation is being verified against repeat requests, workspace isolation and concurrent session/assignment operations. Application access, audit and complete class-management journeys remain unfinished.
+
+Independent review identified a stale assignment/removal retry flaw. A local request-receipt design is being verified to prevent earlier retries from undoing later actions. Its receipt retention and deletion behaviour needs review before application use.
+
+The schedule screen has a practice-only in-memory course/batch setup preview, clearly marked as unsaved. It is not a real or persistent class-creation journey; the actual app-facing operations and authorization remain unfinished.
+
+A local-only draft adds an authenticated course-creation database wrapper with workspace-manager checks; it does not yet connect the practice screen or establish hosted authentication, audit, release readiness or a full class-creation journey.
+
+A local draft authenticated batch-creation wrapper complements the course wrapper, retaining workspace-manager and same-workspace course checks. This is not yet connected to the app or verified against a hosted provider.
+
+A local authenticated-role draft can create a course and first batch atomically using a separate request receipt. It is not connected to the app or deployed; hosted identity/ownership, audit/retention, rate limits and full integration remain open.
+
+An off-by-default server action draft prepares validated atomic class setup through a provider client. The practice screen remains unconnected; real provider, workspace selection, retry UX, rate limits and app E2E are unfinished.

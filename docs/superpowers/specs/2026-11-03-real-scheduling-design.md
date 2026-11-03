@@ -57,3 +57,25 @@ Private, invoker-rights local operations may create courses and batches for acti
 ## Private coach assignment
 
 The local draft permits an active workspace owner/admin to assign an active coach membership to a batch in the same active workspace. The actor comes from auth.uid(); workspace, actor, batch and target coach rows are locked within the transaction. Identical repeated assignments succeed without creating duplicates. Reject missing/cross-workspace/inactive/non-coach targets and unauthorized actors. No application role can execute the operation or access the table. Assignment removal, audit, real application integration and independent security review remain open.
+
+## Private coach assignment removal
+
+A private operation lets an active owner or admin remove a coach assignment from a same-workspace batch, including an idempotent retry. Removal does not delete courses, batches or existing sessions; new session writes by the unassigned coach must fail. Serialize add/remove on the same workspace/batch/membership key, including when the assignment row does not yet exist. The operations remain inaccessible to app roles; audit, assignment management UI and independent security review remain required.
+
+### Delayed request safety
+
+Independent review found that simple idempotent add/remove operations could replay stale intent: an old add could restore access after removal and an old removal could erase a new assignment. The private draft uses actor-scoped request IDs with durable, payload-bound receipts, and removes the older unversioned assignment signature. Matching retries return without repeating the change; a reused ID with a different action or target is rejected. The receipt table's foreign keys retain linked membership/batch records, so deletion and retention policy must be designed before exposure. Review concurrent changed-payload retries and remaining revocation orderings before release.
+
+## Local authenticated course creation draft
+
+A narrowly scoped local draft exposes course creation to the authenticated database role through a security-definer wrapper with a fixed empty search path. It accepts no actor ID; the existing private operation derives auth.uid(), checks active workspace and active owner/admin membership and uses a payload-bound request ID. Anonymous execution and direct course table access stay denied. The migration is not permission to deploy: owner privileges, real signed JWTs, rate limiting, audit/retention, application integration, concurrency and independent security review must be verified before any hosted use. This does not establish schedule visibility or grant coach/guardian access.
+
+## Local authenticated batch creation draft
+
+A narrow local security-definer wrapper delegates batch creation to the existing private operation. It derives actor identity from the database session, checks active owner/admin membership and requires the course to belong to that workspace. The request ID is bound to actor and payload; no direct table access or anonymous execution is granted. It does not make app screens, reads, assignments or real authentication operational. Hosted ownership, signed JWTs, audit/retention, rate limiting, complete integration and independent review remain release requirements.
+
+## Local atomic course-and-batch creation draft
+
+A narrow local authenticated-role operation may create a course and its first batch in one transaction, using a single actor-bound request ID and the existing workspace-manager checks. If either name is invalid or the batch step fails, no new course or batch may remain. Repeating identical input returns the existing IDs; changing either name with the same request must fail without mutating the original records. App roles receive no direct table or private-function privileges. This is a local draft, not deployment approval: independently review owner/privileges, signed JWTs, atomicity, concurrent retry/revocation, audit, retention and rate limits before hosted integration.
+
+Independent review identified that using standalone course/batch request IDs directly could adopt previously created partial state. The atomic draft must use a separate payload-bound receipt and generate its own underlying creation keys; it must not adopt standalone records with the same caller request ID. The receipt retains references to its created records, making retention/deletion policy an explicit pre-release concern.

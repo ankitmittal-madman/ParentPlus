@@ -61,7 +61,7 @@ mapfile -t MIGRATIONS < <(
     -type f -name '*.sql' | sort
 )
 
-if [ "${#MIGRATIONS[@]}" -ne 14 ]; then
+if [ "${#MIGRATIONS[@]}" -ne 18 ]; then
   echo "STOP: Unexpected migration count"
   exit 1
 fi
@@ -82,6 +82,22 @@ for FILE in "${MIGRATIONS[@]}"; do
     psql -X -q -v ON_ERROR_STOP=1 \
     -U "$USER" -d "$DB" \
     < "$FILE"
+
+  # A partial local reconstruction must never expose the ungated drafts.
+  case "$(basename "$FILE")" in
+    20261103001600_authenticated_course_draft.sql) SIGNATURE='public.create_course(uuid,text,uuid)' ;;
+    20261103001700_authenticated_batch_draft.sql) SIGNATURE='public.create_batch(uuid,uuid,text,uuid)' ;;
+    *) SIGNATURE='' ;;
+  esac
+  if [ -n "$SIGNATURE" ]; then
+    PARTIAL_ACCESS=$(docker exec "$CONTAINER" psql -X -A -t -q -v ON_ERROR_STOP=1 \
+      -U "$USER" -d "$DB" -c "SELECT has_function_privilege('authenticated', '$SIGNATURE', 'EXECUTE') OR has_function_privilege('anon', '$SIGNATURE', 'EXECUTE');")
+    if [ "$PARTIAL_ACCESS" != "f" ]; then
+      echo "STOP: Ungated draft operation exposed during partial migration: $SIGNATURE"
+      exit 1
+    fi
+    echo "PASS: Partial migration keeps draft operation private"
+  fi
 done
 
 echo "=== VERIFY DATABASE BASELINE ==="
@@ -96,10 +112,10 @@ BASELINE=$(docker exec "$CONTAINER" \
     (SELECT count(*) FROM public.workspaces) || ':' ||
     (SELECT count(*) FROM public.children);")
 
-if [ "$BASELINE" != "3:3:12:0:0" ]; then
+if [ "$BASELINE" != "3:3:15:0:0" ]; then
   echo "STOP: Unexpected database baseline: $BASELINE"
   exit 1
 fi
 
 echo "PASS: Database initialized successfully"
-echo "PASS: All 14 migrations applied"
+echo "PASS: All 18 migrations applied"

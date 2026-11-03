@@ -1,3 +1,5 @@
+import ClassSetupPreview from "./class-setup-preview";
+
 const exampleSessions = [
   { course: "Clay Basics", batch: "Clay Juniors", time: "Example Monday, 5:00 PM" },
   { course: "Colour and Painting", batch: "Colour Explorers", time: "Example Wednesday, 4:00 PM" },
@@ -11,6 +13,7 @@ export default function Page() {
       <p className="mt-3 text-sm leading-6 text-[#5C6B73]">
         Example data only — these are not real classes or bookings.
       </p>
+      <ClassSetupPreview />
       <section aria-labelledby="example-sessions" className="mt-8">
         <h2 id="example-sessions" className="text-lg font-bold">Example sessions</h2>
         <ul aria-label="Example sessions" className="mt-4 space-y-4">

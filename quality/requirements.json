@@ -1241,6 +1241,1601 @@
       ]
     },
     {
+      "id": "DB-COACH-REMOVAL-REVOKES-FUTURE-ACCESS-AND-RETRIES",
+      "domain": "coach-assignment-removal",
+      "description": "Private coach removal revokes future access and retries.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private coach removal revokes future access and retries"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_coach_removal_revokes_future_access_and_retries"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-REMOVAL-REJECTS-UNAUTHORIZED-ACTOR",
+      "domain": "coach-assignment-removal",
+      "description": "Private coach removal rejects unauthorized actor.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private coach removal rejects unauthorized actor"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_coach_removal_rejects_unauthorized_actor"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-REMOVAL-REJECTS-CROSS-WORKSPACE-BATCH",
+      "domain": "coach-assignment-removal",
+      "description": "Private coach removal rejects cross workspace batch.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private coach removal rejects cross workspace batch"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_coach_removal_rejects_cross_workspace_batch"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-REMOVAL-CANNOT-BE-EXECUTED-BY-APP-ROLES",
+      "domain": "coach-assignment-removal",
+      "description": "Private coach removal cannot be executed by app roles.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private coach removal cannot be executed by app roles"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_coach_removal_cannot_be_executed_by_app_roles"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-REMOVAL-RACE-COACH-REMOVAL-BEFORE-SESSION-WRITE",
+      "domain": "coach-assignment-removal",
+      "description": "Coach removal before session write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "coach removal before session write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_coach_removal_before_session_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-REMOVAL-RACE-COACH-REMOVAL-AFTER-SESSION-WRITE",
+      "domain": "coach-assignment-removal",
+      "description": "Coach removal after session write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "coach removal after session write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_coach_removal_after_session_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-REMOVAL-RACE-COACH-REMOVAL-BEFORE-REASSIGNMENT",
+      "domain": "coach-assignment-removal",
+      "description": "Coach removal before reassignment.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "coach removal before reassignment"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_coach_removal_before_reassignment"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-REMOVAL-RACE-COACH-REMOVAL-AFTER-REASSIGNMENT",
+      "domain": "coach-assignment-removal",
+      "description": "Coach removal after reassignment.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "coach removal after reassignment"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_coach_removal_after_reassignment"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-REQUEST-OLD-ASSIGNMENT-RETRY-DOES-NOT-RESTORE-REMOVED-COACH",
+      "domain": "coach-assignment-replay-safety",
+      "description": "Old assignment retry does not restore removed coach.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "old assignment retry does not restore removed coach"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_old_assignment_retry_does_not_restore_removed_coach"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-REQUEST-OLD-REMOVAL-RETRY-DOES-NOT-REMOVE-REASSIGNED-COACH",
+      "domain": "coach-assignment-replay-safety",
+      "description": "Old removal retry does not remove reassigned coach.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "old removal retry does not remove reassigned coach"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_old_removal_retry_does_not_remove_reassigned_coach"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-REQUEST-COACH-REQUEST-ID-CANNOT-CHANGE-ACTION-BATCH-OR-MEMBER",
+      "domain": "coach-assignment-replay-safety",
+      "description": "Coach request id cannot change action batch or member.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "coach request id cannot change action batch or member"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_coach_request_id_cannot_change_action_batch_or_member"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-REQUEST-COACH-REQUEST-REPLAY-DENIED-AFTER-MANAGER-SUSPENSION-AND-RECEIPTS-ARE-PRIVATE",
+      "domain": "coach-assignment-replay-safety",
+      "description": "Coach request replay denied after manager suspension and receipts are private.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "coach request replay denied after manager suspension and receipts are private"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_coach_request_replay_denied_after_manager_suspension_and_receipts_are_private"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-JOURNEY-PRIVATE-CLASS-JOURNEY-ASSIGNMENT-SESSION-AND-REMOVAL",
+      "domain": "class-management-integration",
+      "description": "Private class journey assignment session and removal.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private class journey assignment session and removal"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_class_journey_assignment_session_and_removal"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-JOURNEY-CONCURRENT-REQUEST-ID-WITH-CHANGED-ACTION-IS-REJECTED",
+      "domain": "class-management-integration",
+      "description": "Concurrent request id with changed action is rejected.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "concurrent request id with changed action is rejected"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_concurrent_request_id_with_changed_action_is_rejected"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-JOURNEY-CONCURRENT-REQUEST-ID-WITH-CHANGED-BATCH-IS-REJECTED",
+      "domain": "class-management-integration",
+      "description": "Concurrent request id with changed batch is rejected.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "concurrent request id with changed batch is rejected"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_concurrent_request_id_with_changed_batch_is_rejected"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-JOURNEY-PERSISTS-ACROSS-TRANSACTIONS",
+      "domain": "class-management-integration",
+      "description": "Private class journey persists across separate database transactions.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private class journey persists across separate database transactions"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_private_class_journey_persists_across_transactions"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql",
+        "supabase/migrations/20261103001500_private_coach_removal.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-PREVIEW-01",
+      "domain": "class-setup-preview",
+      "description": "SchedulePage > requires both practice names without showing a preview.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "SchedulePage > requires both practice names without showing a preview"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/page.test.tsx::SchedulePage > requires both practice names without showing a preview"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/page.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-setup-preview.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-PREVIEW-02",
+      "domain": "class-setup-preview",
+      "description": "SchedulePage > shows a clearly unsaved preview of trimmed names.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "SchedulePage > shows a clearly unsaved preview of trimmed names"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/page.test.tsx::SchedulePage > shows a clearly unsaved preview of trimmed names"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/page.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-setup-preview.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-PREVIEW-03",
+      "domain": "class-setup-preview",
+      "description": "SchedulePage > removes an outdated preview when a name changes.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "SchedulePage > removes an outdated preview when a name changes"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/page.test.tsx::SchedulePage > removes an outdated preview when a name changes"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/page.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-setup-preview.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-PREVIEW-04",
+      "domain": "class-setup-preview",
+      "description": "SchedulePage > rejects a practice name beyond the length limit.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "SchedulePage > rejects a practice name beyond the length limit"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/page.test.tsx::SchedulePage > rejects a practice name beyond the length limit"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/page.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-setup-preview.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-PREVIEW-05",
+      "domain": "class-setup-preview",
+      "description": "SchedulePage > marks only the missing practice name invalid.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "SchedulePage > marks only the missing practice name invalid"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/page.test.tsx::SchedulePage > marks only the missing practice name invalid"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/page.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-setup-preview.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "DB-AUTH-COURSE-CREATION-OWNER-AND-ADMIN-RETRY",
+      "domain": "authenticated-course-creation",
+      "description": "Authenticated course creation owner and admin retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated course creation owner and admin retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_authenticated_course_creation_owner_and_admin_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001600_authenticated_course_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-COURSE-CREATION-REJECTS-UNAPPROVED-ROLES-AND-SUSPENSIONS",
+      "domain": "authenticated-course-creation",
+      "description": "Authenticated course creation rejects unapproved roles and suspensions.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated course creation rejects unapproved roles and suspensions"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_authenticated_course_creation_rejects_unapproved_roles_and_suspensions"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001600_authenticated_course_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-COURSE-CREATION-REJECTS-BAD-INPUT-AND-CHANGED-RETRY",
+      "domain": "authenticated-course-creation",
+      "description": "Authenticated course creation rejects bad input and changed retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated course creation rejects bad input and changed retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_authenticated_course_creation_rejects_bad_input_and_changed_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001600_authenticated_course_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-COURSE-CREATION-DOES-NOT-GRANT-TABLE-OR-ANONYMOUS-ACCESS",
+      "domain": "authenticated-course-creation",
+      "description": "Authenticated course creation does not grant table or anonymous access.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated course creation does not grant table or anonymous access"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_authenticated_course_creation_does_not_grant_table_or_anonymous_access"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001600_authenticated_course_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-COURSE-WRAPPER-METADATA-AND-PRIVATE-HELPER-DENIAL",
+      "domain": "authenticated-course-creation",
+      "description": "Authenticated course wrapper metadata and private helper denial.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated course wrapper metadata and private helper denial"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_authenticated_course_wrapper_metadata_and_private_helper_denial"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001600_authenticated_course_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-COURSE-CREATION-REJECTS-MISSING-IDENTITY",
+      "domain": "authenticated-course-creation",
+      "description": "Authenticated course creation rejects missing identity.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated course creation rejects missing identity"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_authenticated_course_creation_rejects_missing_identity"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001600_authenticated_course_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-COURSE-WORKSPACE-SUSPENDED-BEFORE-WRITE",
+      "domain": "authenticated-course-creation",
+      "description": "Authenticated course workspace suspended before write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated course workspace suspended before write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_authenticated_course_workspace_suspended_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001600_authenticated_course_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-COURSE-WORKSPACE-SUSPENDED-AFTER-WRITE",
+      "domain": "authenticated-course-creation",
+      "description": "Authenticated course workspace suspended after write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated course workspace suspended after write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_authenticated_course_workspace_suspended_after_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001600_authenticated_course_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-COURSE-MANAGER-SUSPENDED-BEFORE-WRITE",
+      "domain": "authenticated-course-creation",
+      "description": "Authenticated course manager suspended before write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated course manager suspended before write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_authenticated_course_manager_suspended_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001600_authenticated_course_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-COURSE-MANAGER-SUSPENDED-AFTER-WRITE",
+      "domain": "authenticated-course-creation",
+      "description": "Authenticated course manager suspended after write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated course manager suspended after write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_authenticated_course_manager_suspended_after_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001600_authenticated_course_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-COURSE-CONCURRENT-IDENTICAL-RETRY",
+      "domain": "authenticated-course-creation",
+      "description": "Authenticated course concurrent identical retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated course concurrent identical retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_authenticated_course_concurrent_identical_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001600_authenticated_course_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-COURSE-CONCURRENT-CHANGED-RETRY",
+      "domain": "authenticated-course-creation",
+      "description": "Authenticated course concurrent changed retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated course concurrent changed retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_authenticated_course_concurrent_changed_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001600_authenticated_course_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-BATCH-CREATION-OWNER-ADMIN-AND-RETRY",
+      "domain": "authenticated-batch-creation",
+      "description": "Authenticated batch creation owner admin and retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated batch creation owner admin and retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_authenticated_batch_creation_owner_admin_and_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001700_authenticated_batch_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-BATCH-REJECTS-UNAUTHORIZED-MISSING-OR-SUSPENDED-ACTOR",
+      "domain": "authenticated-batch-creation",
+      "description": "Authenticated batch rejects unauthorized missing or suspended actor.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated batch rejects unauthorized missing or suspended actor"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_authenticated_batch_rejects_unauthorized_missing_or_suspended_actor"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001700_authenticated_batch_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-BATCH-REJECTS-CROSS-WORKSPACE-COURSE-AND-CHANGED-RETRY",
+      "domain": "authenticated-batch-creation",
+      "description": "Authenticated batch rejects cross workspace course and changed retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated batch rejects cross workspace course and changed retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_authenticated_batch_rejects_cross_workspace_course_and_changed_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001700_authenticated_batch_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-BATCH-DENIES-ANON-DIRECT-TABLE-AND-PRIVATE-ACCESS",
+      "domain": "authenticated-batch-creation",
+      "description": "Authenticated batch denies anon direct table and private access.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated batch denies anon direct table and private access"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_authenticated_batch_denies_anon_direct_table_and_private_access"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001700_authenticated_batch_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-BATCH-WRAPPER-SECURITY-METADATA",
+      "domain": "authenticated-batch-creation",
+      "description": "Authenticated batch wrapper security metadata.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated batch wrapper security metadata"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_authenticated_batch_wrapper_security_metadata"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001700_authenticated_batch_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-BATCH-WORKSPACE-SUSPENDED-BEFORE-WRITE",
+      "domain": "authenticated-batch-creation",
+      "description": "Authenticated batch workspace suspended before write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated batch workspace suspended before write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_authenticated_batch_workspace_suspended_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001700_authenticated_batch_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-BATCH-WORKSPACE-SUSPENDED-AFTER-WRITE",
+      "domain": "authenticated-batch-creation",
+      "description": "Authenticated batch workspace suspended after write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated batch workspace suspended after write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_authenticated_batch_workspace_suspended_after_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001700_authenticated_batch_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-BATCH-MANAGER-SUSPENDED-BEFORE-WRITE",
+      "domain": "authenticated-batch-creation",
+      "description": "Authenticated batch manager suspended before write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated batch manager suspended before write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_authenticated_batch_manager_suspended_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001700_authenticated_batch_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-BATCH-MANAGER-SUSPENDED-AFTER-WRITE",
+      "domain": "authenticated-batch-creation",
+      "description": "Authenticated batch manager suspended after write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated batch manager suspended after write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_authenticated_batch_manager_suspended_after_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001700_authenticated_batch_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-BATCH-COURSE-DELETED-BEFORE-WRITE",
+      "domain": "authenticated-batch-creation",
+      "description": "Authenticated batch course deleted before write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated batch course deleted before write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_authenticated_batch_course_deleted_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001700_authenticated_batch_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-BATCH-COURSE-DELETED-AFTER-WRITE",
+      "domain": "authenticated-batch-creation",
+      "description": "Authenticated batch course deleted after write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated batch course deleted after write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_authenticated_batch_course_deleted_after_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001700_authenticated_batch_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-BATCH-CONCURRENT-IDENTICAL-RETRY",
+      "domain": "authenticated-batch-creation",
+      "description": "Authenticated batch concurrent identical retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated batch concurrent identical retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_authenticated_batch_concurrent_identical_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001700_authenticated_batch_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-AUTH-BATCH-CONCURRENT-CHANGED-RETRY",
+      "domain": "authenticated-batch-creation",
+      "description": "Authenticated batch concurrent changed retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated batch concurrent changed retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_authenticated_batch_concurrent_changed_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001700_authenticated_batch_draft.sql",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-ATOMIC-CLASS-SETUP-CREATES-BOTH-AND-RETRIES-FOR-OWNER-AND-ADMIN",
+      "domain": "atomic-class-setup",
+      "description": "Atomic class setup creates both and retries for owner and admin.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic class setup creates both and retries for owner and admin"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_atomic_class_setup_creates_both_and_retries_for_owner_and_admin"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-ATOMIC-CLASS-SETUP-ROLLS-BACK-WHEN-BATCH-INVALID",
+      "domain": "atomic-class-setup",
+      "description": "Atomic class setup rolls back when batch invalid.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic class setup rolls back when batch invalid"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_atomic_class_setup_rolls_back_when_batch_invalid"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-ATOMIC-CLASS-SETUP-REJECTS-CHANGED-RETRY-WITHOUT-MUTATION",
+      "domain": "atomic-class-setup",
+      "description": "Atomic class setup rejects changed retry without mutation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic class setup rejects changed retry without mutation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_atomic_class_setup_rejects_changed_retry_without_mutation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-ATOMIC-CLASS-SETUP-REJECTS-COACH-AND-MISSING-IDENTITY",
+      "domain": "atomic-class-setup",
+      "description": "Atomic class setup rejects coach and missing identity.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic class setup rejects coach and missing identity"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_atomic_class_setup_rejects_coach_and_missing_identity"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-ATOMIC-CLASS-SETUP-DENIES-ANON-AND-DIRECT-ACCESS",
+      "domain": "atomic-class-setup",
+      "description": "Atomic class setup denies anon and direct access.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic class setup denies anon and direct access"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_atomic_class_setup_denies_anon_and_direct_access"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-ATOMIC-CLASS-SETUP-DOES-NOT-ADOPT-STANDALONE-REQUEST-IDS",
+      "domain": "atomic-class-setup",
+      "description": "Atomic class setup does not adopt standalone request ids.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic class setup does not adopt standalone request ids"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_atomic_class_setup_does_not_adopt_standalone_request_ids"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-ATOMIC-CLASS-SETUP-WRAPPER-AND-RECEIPT-ARE-PRIVATE-BY-DEFAULT",
+      "domain": "atomic-class-setup",
+      "description": "Atomic class setup wrapper and receipt are private by default.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic class setup wrapper and receipt are private by default"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_atomic_class_setup_wrapper_and_receipt_are_private_by_default"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-ATOMIC-CLASS-SETUP-ROLLS-BACK-ACTUAL-BATCH-INSERT-FAILURE-AND-RETRIES",
+      "domain": "atomic-class-setup",
+      "description": "Atomic class setup rolls back actual batch insert failure and retries.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic class setup rolls back actual batch insert failure and retries"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_atomic_class_setup_rolls_back_actual_batch_insert_failure_and_retries"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-ATOMIC-SETUP-WORKSPACE-SUSPENDED-BEFORE-WRITE",
+      "domain": "atomic-class-setup",
+      "description": "Atomic setup workspace suspended before write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic setup workspace suspended before write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_atomic_setup_workspace_suspended_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-ATOMIC-SETUP-WORKSPACE-SUSPENDED-AFTER-WRITE",
+      "domain": "atomic-class-setup",
+      "description": "Atomic setup workspace suspended after write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic setup workspace suspended after write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_atomic_setup_workspace_suspended_after_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-ATOMIC-SETUP-MANAGER-SUSPENDED-BEFORE-WRITE",
+      "domain": "atomic-class-setup",
+      "description": "Atomic setup manager suspended before write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic setup manager suspended before write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_atomic_setup_manager_suspended_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-ATOMIC-SETUP-MANAGER-SUSPENDED-AFTER-WRITE",
+      "domain": "atomic-class-setup",
+      "description": "Atomic setup manager suspended after write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic setup manager suspended after write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_atomic_setup_manager_suspended_after_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-ATOMIC-SETUP-CONCURRENT-IDENTICAL-RETRY",
+      "domain": "atomic-class-setup",
+      "description": "Atomic setup concurrent identical retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic setup concurrent identical retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_atomic_setup_concurrent_identical_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-ATOMIC-SETUP-CONCURRENT-CHANGED-RETRY",
+      "domain": "atomic-class-setup",
+      "description": "Atomic setup concurrent changed retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic setup concurrent changed retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_atomic_setup_concurrent_changed_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-SERVER-09",
+      "domain": "class-setup-server-boundary",
+      "description": "createClassSetup > rejects a retry when the signed-in account has changed.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "createClassSetup > rejects a retry when the signed-in account has changed"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > rejects a retry when the signed-in account has changed"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/create-class-setup.test.ts",
+        "apps/web/src/lib/scheduling/create-class-setup.ts",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-SERVER-10",
+      "domain": "class-setup-server-boundary",
+      "description": "createClassSetup > rejects a missing or malformed expected actor before contacting the provider.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "createClassSetup > rejects a missing or malformed expected actor before contacting the provider"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > rejects a missing or malformed expected actor before contacting the provider"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/create-class-setup.test.ts",
+        "apps/web/src/lib/scheduling/create-class-setup.ts",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-SERVER-01",
+      "domain": "class-setup-server-boundary",
+      "description": "createClassSetup > fails closed without constructing a client when disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "createClassSetup > fails closed without constructing a client when disabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > fails closed without constructing a client when disabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/create-class-setup.test.ts",
+        "apps/web/src/lib/scheduling/create-class-setup.ts",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-SERVER-02",
+      "domain": "class-setup-server-boundary",
+      "description": "createClassSetup > rejects malformed IDs and names before constructing a client.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "createClassSetup > rejects malformed IDs and names before constructing a client"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > rejects malformed IDs and names before constructing a client"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/create-class-setup.test.ts",
+        "apps/web/src/lib/scheduling/create-class-setup.ts",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-SERVER-03",
+      "domain": "class-setup-server-boundary",
+      "description": "createClassSetup > rejects a missing user without calling the RPC.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "createClassSetup > rejects a missing user without calling the RPC"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > rejects a missing user without calling the RPC"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/create-class-setup.test.ts",
+        "apps/web/src/lib/scheduling/create-class-setup.ts",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-SERVER-04",
+      "domain": "class-setup-server-boundary",
+      "description": "createClassSetup > rejects a provider identity error without calling the RPC.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "createClassSetup > rejects a provider identity error without calling the RPC"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > rejects a provider identity error without calling the RPC"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/create-class-setup.test.ts",
+        "apps/web/src/lib/scheduling/create-class-setup.ts",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-SERVER-05",
+      "domain": "class-setup-server-boundary",
+      "description": "createClassSetup > sends normalized values and the original retry ID to the atomic RPC.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "createClassSetup > sends normalized values and the original retry ID to the atomic RPC"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > sends normalized values and the original retry ID to the atomic RPC"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/create-class-setup.test.ts",
+        "apps/web/src/lib/scheduling/create-class-setup.ts",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-SERVER-06",
+      "domain": "class-setup-server-boundary",
+      "description": "createClassSetup > redacts RPC errors.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "createClassSetup > redacts RPC errors"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > redacts RPC errors"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/create-class-setup.test.ts",
+        "apps/web/src/lib/scheduling/create-class-setup.ts",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-SERVER-07",
+      "domain": "class-setup-server-boundary",
+      "description": "createClassSetup > redacts thrown client errors.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "createClassSetup > redacts thrown client errors"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > redacts thrown client errors"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/create-class-setup.test.ts",
+        "apps/web/src/lib/scheduling/create-class-setup.ts",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-SERVER-08",
+      "domain": "class-setup-server-boundary",
+      "description": "createClassSetup > does not claim success for malformed RPC results.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "createClassSetup > does not claim success for malformed RPC results"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > does not claim success for malformed RPC results"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/create-class-setup.test.ts",
+        "apps/web/src/lib/scheduling/create-class-setup.ts",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-GATE-ATOMIC-CLASS-SETUP-DATABASE-SWITCH-DENIES-AUTHENTICATED-MANAGER",
+      "domain": "atomic-class-setup-gate",
+      "description": "Atomic class setup database switch denies authenticated manager.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic class setup database switch denies authenticated manager"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_atomic_class_setup_database_switch_denies_authenticated_manager"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-GATE-ATOMIC-CLASS-SETUP-DATABASE-SWITCH-IS-PRIVATE-AND-DISABLED-BY-DEFAULT",
+      "domain": "atomic-class-setup-gate",
+      "description": "Atomic class setup database switch is private and disabled by default.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic class setup database switch is private and disabled by default"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_atomic_class_setup_database_switch_is_private_and_disabled_by_default"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-GATE-ATOMIC-SETUP-DATABASE-DISABLED-BEFORE-WRITE",
+      "domain": "atomic-class-setup-gate",
+      "description": "Atomic setup database disabled before write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic setup database disabled before write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_atomic_setup_database_disabled_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "DB-ATOMIC-SETUP-GATE-ATOMIC-SETUP-DATABASE-DISABLED-AFTER-WRITE",
+      "domain": "atomic-class-setup-gate",
+      "description": "Atomic setup database disabled after write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "atomic setup database disabled after write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_atomic_setup_database_disabled_after_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
       "id": "DB-AUTHORIZATIONTESTS-TEST-ANONYMOUS-WORKSPACE-EXECUTION-DENIED",
       "domain": "workspace-authorization",
       "description": "Anonymous workspace execution denied.",

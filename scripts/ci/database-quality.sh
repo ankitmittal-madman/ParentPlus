@@ -38,7 +38,10 @@ cleanup() {
     (SELECT count(*) FROM public.courses) +
     (SELECT count(*) FROM public.batches) +
     (SELECT count(*) FROM public.batch_coach_assignments) +
-    (SELECT count(*) FROM public.schedule_sessions);" \
+    (SELECT count(*) FROM public.schedule_sessions) +
+    (SELECT count(*) FROM public.batch_coach_mutation_requests) +
+    (SELECT count(*) FROM public.class_setup_requests) +
+    (SELECT count(*) FROM public.class_setup_controls WHERE enabled);" \
         > "$EVIDENCE/cleanup-count.txt" \
         2> "$EVIDENCE/cleanup-error.txt"; then
 

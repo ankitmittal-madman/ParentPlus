@@ -13,6 +13,7 @@ class SchedulingAuthorizationRaceTests(unittest.TestCase):
         self.workspace, self.membership, self.course, self.batch, request = (str(uuid.uuid4()) for _ in range(5))
         query(f"""
 BEGIN;
+UPDATE public.class_setup_controls SET enabled=true WHERE id=true;
 INSERT INTO public.workspaces (id, name, type, created_by, creation_request_id)
 VALUES ('{self.workspace}', 'Race academy', 'academy', '{MEERA}', '{request}');
 INSERT INTO public.workspace_memberships (id, workspace_id, user_id, role, status)
@@ -28,12 +29,15 @@ COMMIT;
     def tearDown(self):
         query(f"""
 BEGIN;
+DELETE FROM public.class_setup_requests WHERE workspace_id = '{self.workspace}';
+DELETE FROM public.batch_coach_mutation_requests WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.schedule_sessions WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.batch_coach_assignments WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.batches WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.courses WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.workspace_memberships WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.workspaces WHERE id = '{self.workspace}';
+UPDATE public.class_setup_controls SET enabled=false WHERE id=true;
 COMMIT;
 """)
 
@@ -250,7 +254,7 @@ VALUES ('{self.workspace}', '{manager}', 'owner', 'active');
 """)
         first_name, second_name = 'assign_first_' + uuid.uuid4().hex, 'assign_second_' + uuid.uuid4().hex
         first, second = start_psql_session(), start_psql_session()
-        assign = f"SELECT public.assign_private_batch_coach('{self.workspace}', '{self.batch}', '{self.membership}');\n"
+        assign = f"SELECT public.assign_private_batch_coach('{self.workspace}', '{self.batch}', '{self.membership}', 'e1000000-0000-4000-8000-000000000001');\n"
         suspend = f"UPDATE public.workspace_memberships SET status='suspended' WHERE id='{self.membership}';\n"
         try:
             for process, name in ((first, first_name), (second, second_name)):
@@ -291,3 +295,404 @@ VALUES ('{self.workspace}', '{manager}', 'owner', 'active');
 
     def test_simultaneous_duplicate_coach_assignments(self):
         self.run_coach_assignment_race('duplicate')
+
+    def run_coach_removal_race(self, other, removal_first):
+        manager = '22222222-2222-4222-8222-222222222222'
+        request = str(uuid.uuid4())
+        query(f"INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('{self.workspace}', '{manager}', 'owner', 'active');")
+        first_name, second_name = 'remove_first_' + uuid.uuid4().hex, 'remove_second_' + uuid.uuid4().hex
+        first, second = start_psql_session(), start_psql_session()
+        remove = f"SELECT set_config('request.jwt.claim.sub', '{manager}', true); SELECT public.remove_private_batch_coach('{self.workspace}', '{self.batch}', '{self.membership}', 'e2000000-0000-4000-8000-000000000002');\n"
+        if other == 'session':
+            action = f"SELECT set_config('request.jwt.claim.sub', '{MEERA}', true); SELECT public.create_private_session('{self.workspace}', '{self.batch}', '2026-11-03 11:30+00', '2026-11-03 12:30+00', '{request}');\n"
+        else:
+            action = f"SELECT set_config('request.jwt.claim.sub', '{manager}', true); SELECT public.assign_private_batch_coach('{self.workspace}', '{self.batch}', '{self.membership}', 'e1000000-0000-4000-8000-000000000001');\n"
+        try:
+            first.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name', '{first_name}', false);\n")
+            first.stdin.write(remove if removal_first else action)
+            first.stdin.write("SELECT 'FIRST_LOCKED';\n")
+            first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_LOCKED'))
+            second.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name', '{second_name}', false);\n")
+            second.stdin.write(action if removal_first else remove)
+            second.stdin.write("COMMIT; SELECT 'SECOND_COMMITTED';\n")
+            second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name, first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n")
+            first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_COMMITTED'))
+            if other == 'session' and removal_first:
+                second.stdin.close()
+                second.stdin = None
+                _, errors = second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode, 0)
+                self.assertIn('Schedule access denied', errors)
+            else:
+                self.assertTrue(wait_for_session_marker(second, 'SECOND_COMMITTED'))
+            expected_assignment = '1' if other == 'assign' and removal_first else '0'
+            expected_session = '1' if other == 'session' and not removal_first else '0'
+            self.assertEqual(query(f"SELECT count(*) FROM public.batch_coach_assignments WHERE workspace_id='{self.workspace}' AND batch_id='{self.batch}' AND membership_id='{self.membership}';"), expected_assignment)
+            self.assertEqual(query(f"SELECT count(*) FROM public.schedule_sessions WHERE creation_request_id='{request}';"), expected_session)
+        finally:
+            close_psql_session(second)
+            close_psql_session(first)
+
+    def test_coach_removal_before_session_write(self):
+        self.run_coach_removal_race('session', True)
+
+    def test_coach_removal_after_session_write(self):
+        self.run_coach_removal_race('session', False)
+
+    def test_coach_removal_before_reassignment(self):
+        self.run_coach_removal_race('assign', True)
+
+    def test_coach_removal_after_reassignment(self):
+        self.run_coach_removal_race('assign', False)
+
+    def run_conflicting_coach_request_race(self, conflict):
+        manager = '22222222-2222-4222-8222-222222222222'
+        request = str(uuid.uuid4())
+        other_batch = str(uuid.uuid4())
+        query(f"""
+INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('{self.workspace}', '{manager}', 'owner', 'active');
+INSERT INTO public.batches (id,workspace_id,course_id,name) VALUES ('{other_batch}','{self.workspace}','{self.course}','Other');
+""")
+        first_name, second_name = 'conflict_first_' + uuid.uuid4().hex, 'conflict_second_' + uuid.uuid4().hex
+        first, second = start_psql_session(), start_psql_session()
+        first_call = f"SELECT public.assign_private_batch_coach('{self.workspace}','{self.batch}','{self.membership}','{request}');\n"
+        second_call = (f"SELECT public.remove_private_batch_coach('{self.workspace}','{self.batch}','{self.membership}','{request}');\n" if conflict == 'action' else f"SELECT public.assign_private_batch_coach('{self.workspace}','{other_batch}','{self.membership}','{request}');\n")
+        try:
+            for process, name in ((first, first_name), (second, second_name)):
+                process.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false); SELECT set_config('request.jwt.claim.sub','{manager}',true);\n")
+            first.stdin.write(first_call + "SELECT 'FIRST_LOCKED';\n")
+            first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_LOCKED'))
+            second.stdin.write(second_call + "COMMIT;\n")
+            second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name, first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n")
+            first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_COMMITTED'))
+            second.stdin.close()
+            second.stdin = None
+            _, errors = second.communicate(timeout=15)
+            self.assertNotEqual(second.returncode, 0)
+            self.assertIn('request conflicts', errors)
+            self.assertEqual(query(f"SELECT (SELECT count(*) FROM public.batch_coach_mutation_requests WHERE actor_id='{manager}' AND request_id='{request}') || ':' || (SELECT count(*) FROM public.batch_coach_assignments WHERE workspace_id='{self.workspace}' AND batch_id='{self.batch}') || ':' || (SELECT count(*) FROM public.batch_coach_assignments WHERE workspace_id='{self.workspace}' AND batch_id='{other_batch}');"), '1:1:0')
+        finally:
+            close_psql_session(second)
+            close_psql_session(first)
+
+    def test_concurrent_request_id_with_changed_action_is_rejected(self):
+        self.run_conflicting_coach_request_race('action')
+
+    def test_concurrent_request_id_with_changed_batch_is_rejected(self):
+        self.run_conflicting_coach_request_race('batch')
+
+    def test_private_class_journey_persists_across_transactions(self):
+        from tests.database.test_concurrent_authorization import extract_labeled_id
+        manager = '22222222-2222-4222-8222-222222222222'
+        query(f"INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('{self.workspace}','{manager}','owner','active');")
+        course_request, batch_request, assign_request, session_request, remove_request = (str(uuid.uuid4()) for _ in range(5))
+        course = extract_labeled_id(query(f"""
+BEGIN; SELECT set_config('request.jwt.claim.sub','{manager}',true);
+SELECT 'ID:' || public.create_private_course('{self.workspace}','Dance','{course_request}')::text; COMMIT;
+"""), 'ID:')
+        batch = extract_labeled_id(query(f"""
+BEGIN; SELECT set_config('request.jwt.claim.sub','{manager}',true);
+SELECT 'ID:' || public.create_private_batch('{self.workspace}','{course}','Beginners','{batch_request}')::text; COMMIT;
+"""), 'ID:')
+        query(f"""
+BEGIN; SELECT set_config('request.jwt.claim.sub','{manager}',true);
+SELECT public.configure_private_workspace_zone('{self.workspace}','Asia/Kolkata');
+SELECT public.assign_private_batch_coach('{self.workspace}','{batch}','{self.membership}','{assign_request}'); COMMIT;
+""")
+        session = extract_labeled_id(query(f"""
+BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true);
+SELECT 'ID:' || public.create_private_local_session('{self.workspace}','{batch}','2026-11-03 17:00',60,'{session_request}')::text; COMMIT;
+"""), 'ID:')
+        query(f"""
+BEGIN; SELECT set_config('request.jwt.claim.sub','{manager}',true);
+SELECT public.remove_private_batch_coach('{self.workspace}','{batch}','{self.membership}','{remove_request}'); COMMIT;
+BEGIN; SELECT set_config('request.jwt.claim.sub','{manager}',true);
+SELECT public.assign_private_batch_coach('{self.workspace}','{batch}','{self.membership}','{assign_request}'); COMMIT;
+""")
+        query(f"""
+BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true);
+DO $$ BEGIN BEGIN PERFORM public.create_private_local_session('{self.workspace}','{batch}','2026-11-10 17:00',60,gen_random_uuid()); RAISE EXCEPTION 'removed coach retained access'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$; COMMIT;
+""")
+        out = query(f"SELECT (SELECT count(*) FROM public.schedule_sessions WHERE id='{session}' AND starts_at='2026-11-03 11:30+00') || ':' || (SELECT count(*) FROM public.batch_coach_assignments WHERE workspace_id='{self.workspace}' AND batch_id='{batch}');")
+        self.assertEqual(out, '1:0')
+
+    def run_authenticated_course_permission_race(self, target, revocation_first):
+        manager = '22222222-2222-4222-8222-222222222222'
+        request = str(uuid.uuid4())
+        query(f"INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('{self.workspace}', '{manager}', 'owner', 'active');")
+        update = (f"UPDATE public.workspaces SET status='suspended' WHERE id='{self.workspace}';\n" if target == 'workspace' else f"UPDATE public.workspace_memberships SET status='suspended' WHERE workspace_id='{self.workspace}' AND user_id='{manager}';\n")
+        create = f"SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{manager}',true); SELECT public.create_course('{self.workspace}','Dance','{request}');\n"
+        first_name, second_name = 'course_first_' + uuid.uuid4().hex, 'course_second_' + uuid.uuid4().hex
+        first, second = start_psql_session(), start_psql_session()
+        try:
+            first.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{first_name}',false);\n")
+            first.stdin.write(update if revocation_first else create)
+            first.stdin.write("SELECT 'FIRST_LOCKED';\n")
+            first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_LOCKED'))
+            second.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{second_name}',false);\n")
+            second.stdin.write(create if revocation_first else update)
+            second.stdin.write("COMMIT; SELECT 'SECOND_COMMITTED';\n")
+            second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name, first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n")
+            first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_COMMITTED'))
+            if revocation_first:
+                second.stdin.close(); second.stdin = None
+                _, errors = second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode, 0)
+                self.assertIn('Workspace access denied', errors)
+            else:
+                self.assertTrue(wait_for_session_marker(second, 'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT count(*) FROM public.courses WHERE workspace_id='{self.workspace}' AND creation_request_id='{request}';"), '0' if revocation_first else '1')
+        finally:
+            close_psql_session(second); close_psql_session(first)
+
+    def run_authenticated_course_retry_race(self, changed):
+        manager = '22222222-2222-4222-8222-222222222222'
+        request = str(uuid.uuid4())
+        query(f"INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('{self.workspace}', '{manager}', 'owner', 'active');")
+        first_name, second_name = 'course_retry_first_' + uuid.uuid4().hex, 'course_retry_second_' + uuid.uuid4().hex
+        first, second = start_psql_session(), start_psql_session()
+        try:
+            for process, name in ((first, first_name), (second, second_name)):
+                process.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false); SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{manager}',true);\n")
+            first.stdin.write(f"SELECT public.create_course('{self.workspace}','Dance','{request}'); SELECT 'FIRST_LOCKED';\n")
+            first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_LOCKED'))
+            second.stdin.write(f"SELECT 'RESULT:' || public.create_course('{self.workspace}','{'Painting' if changed else 'Dance'}','{request}')::text; COMMIT; SELECT 'SECOND_COMMITTED';\n")
+            second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name, first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_COMMITTED'))
+            if changed:
+                second.stdin.close(); second.stdin = None
+                _, errors = second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode, 0)
+                self.assertIn('Course request conflicts', errors)
+            else:
+                course_id = query(f"SELECT id FROM public.courses WHERE workspace_id='{self.workspace}' AND creation_request_id='{request}';")
+                self.assertTrue(wait_for_session_marker(second, 'RESULT:' + course_id))
+                self.assertTrue(wait_for_session_marker(second, 'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT count(*) FROM public.courses WHERE workspace_id='{self.workspace}' AND creation_request_id='{request}' AND name='Dance';"), '1')
+        finally:
+            close_psql_session(second); close_psql_session(first)
+
+    def test_authenticated_course_workspace_suspended_before_write(self):
+        self.run_authenticated_course_permission_race('workspace', True)
+
+    def test_authenticated_course_workspace_suspended_after_write(self):
+        self.run_authenticated_course_permission_race('workspace', False)
+
+    def test_authenticated_course_manager_suspended_before_write(self):
+        self.run_authenticated_course_permission_race('membership', True)
+
+    def test_authenticated_course_manager_suspended_after_write(self):
+        self.run_authenticated_course_permission_race('membership', False)
+
+    def test_authenticated_course_concurrent_identical_retry(self):
+        self.run_authenticated_course_retry_race(False)
+
+    def test_authenticated_course_concurrent_changed_retry(self):
+        self.run_authenticated_course_retry_race(True)
+
+    def run_authenticated_batch_permission_race(self, target, change_first):
+        manager = '22222222-2222-4222-8222-222222222222'
+        request = str(uuid.uuid4())
+        course = self.course if target != 'course' else str(uuid.uuid4())
+        query(f"INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('{self.workspace}', '{manager}', 'owner', 'active');")
+        if target == 'course':
+            query(f"INSERT INTO public.courses (id,workspace_id,name) VALUES ('{course}','{self.workspace}','Temporary');")
+        change = {
+            'workspace': f"UPDATE public.workspaces SET status='suspended' WHERE id='{self.workspace}';\n",
+            'membership': f"UPDATE public.workspace_memberships SET status='suspended' WHERE workspace_id='{self.workspace}' AND user_id='{manager}';\n",
+            'course': f"DELETE FROM public.courses WHERE id='{course}';\n",
+        }[target]
+        create = f"SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{manager}',true); SELECT public.create_batch('{self.workspace}','{course}','Beginners','{request}');\n"
+        first_name, second_name = 'batch_first_' + uuid.uuid4().hex, 'batch_second_' + uuid.uuid4().hex
+        first, second = start_psql_session(), start_psql_session()
+        try:
+            first.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{first_name}',false);\n")
+            first.stdin.write(change if change_first else create)
+            first.stdin.write("SELECT 'FIRST_LOCKED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_LOCKED'))
+            second.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{second_name}',false);\n")
+            second.stdin.write(create if change_first else change)
+            second.stdin.write("COMMIT; SELECT 'SECOND_COMMITTED';\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name, first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_COMMITTED'))
+            if change_first or target == 'course':
+                second.stdin.close(); second.stdin = None
+                _, errors = second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode, 0)
+                self.assertIn(('Invalid batch details' if target == 'course' else 'Workspace access denied') if change_first else 'foreign key constraint', errors)
+            else:
+                self.assertTrue(wait_for_session_marker(second, 'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT count(*) FROM public.batches WHERE workspace_id='{self.workspace}' AND creation_request_id='{request}';"), '0' if change_first else '1')
+        finally:
+            close_psql_session(second); close_psql_session(first)
+
+    def run_authenticated_batch_retry_race(self, changed):
+        manager = '22222222-2222-4222-8222-222222222222'
+        request = str(uuid.uuid4())
+        query(f"INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('{self.workspace}', '{manager}', 'owner', 'active');")
+        first_name, second_name = 'batch_retry_first_' + uuid.uuid4().hex, 'batch_retry_second_' + uuid.uuid4().hex
+        first, second = start_psql_session(), start_psql_session()
+        try:
+            for process, name in ((first, first_name), (second, second_name)):
+                process.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false); SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{manager}',true);\n")
+            first.stdin.write(f"SELECT public.create_batch('{self.workspace}','{self.course}','Beginners','{request}'); SELECT 'FIRST_LOCKED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_LOCKED'))
+            second.stdin.write(f"SELECT 'RESULT:' || public.create_batch('{self.workspace}','{self.course}','{'Advanced' if changed else 'Beginners'}','{request}')::text; COMMIT; SELECT 'SECOND_COMMITTED';\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name, first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_COMMITTED'))
+            if changed:
+                second.stdin.close(); second.stdin = None
+                _, errors = second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode, 0)
+                self.assertIn('Batch request conflicts', errors)
+            else:
+                batch_id = query(f"SELECT id FROM public.batches WHERE workspace_id='{self.workspace}' AND creation_request_id='{request}';")
+                self.assertTrue(wait_for_session_marker(second, 'RESULT:' + batch_id))
+                self.assertTrue(wait_for_session_marker(second, 'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT count(*) FROM public.batches WHERE workspace_id='{self.workspace}' AND creation_request_id='{request}' AND name='Beginners';"), '1')
+        finally:
+            close_psql_session(second); close_psql_session(first)
+
+    def test_authenticated_batch_workspace_suspended_before_write(self):
+        self.run_authenticated_batch_permission_race('workspace', True)
+
+    def test_authenticated_batch_workspace_suspended_after_write(self):
+        self.run_authenticated_batch_permission_race('workspace', False)
+
+    def test_authenticated_batch_manager_suspended_before_write(self):
+        self.run_authenticated_batch_permission_race('membership', True)
+
+    def test_authenticated_batch_manager_suspended_after_write(self):
+        self.run_authenticated_batch_permission_race('membership', False)
+
+    def test_authenticated_batch_course_deleted_before_write(self):
+        self.run_authenticated_batch_permission_race('course', True)
+
+    def test_authenticated_batch_course_deleted_after_write(self):
+        self.run_authenticated_batch_permission_race('course', False)
+
+    def test_authenticated_batch_concurrent_identical_retry(self):
+        self.run_authenticated_batch_retry_race(False)
+
+    def test_authenticated_batch_concurrent_changed_retry(self):
+        self.run_authenticated_batch_retry_race(True)
+
+    def run_atomic_setup_permission_race(self, target, revocation_first):
+        manager = '22222222-2222-4222-8222-222222222222'
+        request = str(uuid.uuid4())
+        query(f"INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('{self.workspace}','{manager}','owner','active');")
+        revoke = (f"UPDATE public.workspaces SET status='suspended' WHERE id='{self.workspace}';\n" if target == 'workspace' else f"UPDATE public.workspace_memberships SET status='suspended' WHERE workspace_id='{self.workspace}' AND user_id='{manager}';\n")
+        create = f"SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{manager}',true); SELECT * FROM public.create_course_and_batch('{self.workspace}','Dance','Beginners','{request}');\n"
+        first_name,second_name='setup_first_'+uuid.uuid4().hex,'setup_second_'+uuid.uuid4().hex
+        first,second=start_psql_session(),start_psql_session()
+        try:
+            first.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{first_name}',false);\n")
+            first.stdin.write(revoke if revocation_first else create); first.stdin.write("SELECT 'FIRST_LOCKED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_LOCKED'))
+            second.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{second_name}',false);\n")
+            second.stdin.write(create if revocation_first else revoke); second.stdin.write("COMMIT; SELECT 'SECOND_COMMITTED';\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name,first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_COMMITTED'))
+            if revocation_first:
+                second.stdin.close(); second.stdin=None
+                _,errors=second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode,0); self.assertIn('Workspace access denied',errors)
+            else:
+                self.assertTrue(wait_for_session_marker(second,'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT (SELECT count(*) FROM public.class_setup_requests WHERE actor_id='{manager}' AND request_id='{request}') || ':' || (SELECT count(*) FROM public.courses WHERE workspace_id='{self.workspace}' AND name='Dance') || ':' || (SELECT count(*) FROM public.batches WHERE workspace_id='{self.workspace}' AND name='Beginners');"), '0:0:0' if revocation_first else '1:1:1')
+        finally:
+            close_psql_session(second); close_psql_session(first)
+
+    def run_atomic_setup_retry_race(self, changed):
+        manager='22222222-2222-4222-8222-222222222222'; request=str(uuid.uuid4())
+        query(f"INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('{self.workspace}','{manager}','owner','active');")
+        first_name,second_name='setup_retry_first_'+uuid.uuid4().hex,'setup_retry_second_'+uuid.uuid4().hex
+        first,second=start_psql_session(),start_psql_session()
+        try:
+            for process,name in ((first,first_name),(second,second_name)):
+                process.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false); SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{manager}',true);\n")
+            first.stdin.write(f"SELECT * FROM public.create_course_and_batch('{self.workspace}','Dance','Beginners','{request}'); SELECT 'FIRST_LOCKED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_LOCKED'))
+            second.stdin.write(f"SELECT 'RESULT:' || course_id::text || ':' || batch_id::text FROM public.create_course_and_batch('{self.workspace}','Dance','{'Advanced' if changed else 'Beginners'}','{request}'); COMMIT; SELECT 'SECOND_COMMITTED';\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name,first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_COMMITTED'))
+            if changed:
+                second.stdin.close(); second.stdin=None
+                _,errors=second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode,0); self.assertIn('Class setup request conflicts',errors)
+            else:
+                ids=query(f"SELECT course_id::text || ':' || batch_id::text FROM public.class_setup_requests WHERE actor_id='{manager}' AND request_id='{request}';")
+                self.assertTrue(wait_for_session_marker(second,'RESULT:'+ids)); self.assertTrue(wait_for_session_marker(second,'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT (SELECT count(*) FROM public.class_setup_requests WHERE actor_id='{manager}' AND request_id='{request}') || ':' || (SELECT count(*) FROM public.courses WHERE workspace_id='{self.workspace}' AND name='Dance') || ':' || (SELECT count(*) FROM public.batches WHERE workspace_id='{self.workspace}' AND name='Beginners');"),'1:1:1')
+        finally:
+            close_psql_session(second); close_psql_session(first)
+
+    def test_atomic_setup_workspace_suspended_before_write(self):
+        self.run_atomic_setup_permission_race('workspace',True)
+
+    def test_atomic_setup_workspace_suspended_after_write(self):
+        self.run_atomic_setup_permission_race('workspace',False)
+
+    def test_atomic_setup_manager_suspended_before_write(self):
+        self.run_atomic_setup_permission_race('membership',True)
+
+    def test_atomic_setup_manager_suspended_after_write(self):
+        self.run_atomic_setup_permission_race('membership',False)
+
+    def test_atomic_setup_concurrent_identical_retry(self):
+        self.run_atomic_setup_retry_race(False)
+
+    def test_atomic_setup_concurrent_changed_retry(self):
+        self.run_atomic_setup_retry_race(True)
+
+    def run_atomic_setup_switch_race(self, disable_first):
+        manager='22222222-2222-4222-8222-222222222222'; request=str(uuid.uuid4())
+        query(f"INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('{self.workspace}','{manager}','owner','active');")
+        first_name,second_name='gate_first_'+uuid.uuid4().hex,'gate_second_'+uuid.uuid4().hex
+        first,second=start_psql_session(),start_psql_session()
+        disable="UPDATE public.class_setup_controls SET enabled=false WHERE id=true;\n"
+        create=f"SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{manager}',true); SELECT * FROM public.create_course_and_batch('{self.workspace}','Dance','Beginners','{request}');\n"
+        try:
+            first.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{first_name}',false);\n")
+            first.stdin.write(disable if disable_first else create); first.stdin.write("SELECT 'FIRST_LOCKED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_LOCKED'))
+            second.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{second_name}',false);\n")
+            second.stdin.write(create if disable_first else disable); second.stdin.write("COMMIT; SELECT 'SECOND_COMMITTED';\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name,first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_COMMITTED'))
+            if disable_first:
+                second.stdin.close(); second.stdin=None
+                _,errors=second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode,0); self.assertIn('Class setup unavailable',errors)
+            else:
+                self.assertTrue(wait_for_session_marker(second,'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT count(*) FROM public.class_setup_requests WHERE actor_id='{manager}' AND request_id='{request}';"), '0' if disable_first else '1')
+            self.assertEqual(query('SELECT enabled FROM public.class_setup_controls WHERE id=true;'), 'f')
+        finally:
+            close_psql_session(second); close_psql_session(first)
+
+    def test_atomic_setup_database_disabled_before_write(self):
+        self.run_atomic_setup_switch_race(True)
+
+    def test_atomic_setup_database_disabled_after_write(self):
+        self.run_atomic_setup_switch_race(False)

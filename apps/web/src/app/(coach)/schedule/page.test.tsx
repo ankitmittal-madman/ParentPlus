@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import SchedulePage from "./page";
 
@@ -16,4 +16,54 @@ describe("SchedulePage", () => {
     expect(within(list).getByText("Clay Juniors")).toBeInTheDocument();
     expect(within(list).getByText("Example Monday, 5:00 PM")).toBeInTheDocument();
   });
+
+  it("requires both practice names without showing a preview", () => {
+    render(<SchedulePage />);
+    fireEvent.change(screen.getByLabelText("Course name"), { target: { value: "  " } });
+    fireEvent.click(screen.getByRole("button", { name: "Preview class setup" }));
+    expect(screen.getByRole("alert")).toHaveTextContent(/enter both/i);
+    expect(screen.getByLabelText("Course name")).toHaveAccessibleDescription("Enter both a course name and a batch name.");
+    expect(screen.getByLabelText("Batch name")).toHaveAttribute("aria-invalid", "true");
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+
+  it("shows a clearly unsaved preview of trimmed names", () => {
+    render(<SchedulePage />);
+    fireEvent.change(screen.getByLabelText("Course name"), { target: { value: " Dance " } });
+    fireEvent.change(screen.getByLabelText("Batch name"), { target: { value: " Beginners " } });
+    fireEvent.click(screen.getByRole("button", { name: "Preview class setup" }));
+    expect(screen.getByRole("status")).toHaveTextContent("Dance");
+    expect(screen.getByRole("status")).toHaveTextContent("Beginners");
+    expect(screen.getByRole("status")).toHaveTextContent(/not saved/i);
+  });
+
+  it("removes an outdated preview when a name changes", () => {
+    render(<SchedulePage />);
+    fireEvent.change(screen.getByLabelText("Course name"), { target: { value: "Dance" } });
+    fireEvent.change(screen.getByLabelText("Batch name"), { target: { value: "Beginners" } });
+    fireEvent.click(screen.getByRole("button", { name: "Preview class setup" }));
+    expect(screen.getByRole("status")).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("Batch name"), { target: { value: "Advanced" } });
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+
+
+  it("rejects a practice name beyond the length limit", () => {
+    render(<SchedulePage />);
+    fireEvent.change(screen.getByLabelText("Course name"), { target: { value: "A".repeat(121) } });
+    fireEvent.change(screen.getByLabelText("Batch name"), { target: { value: "Beginners" } });
+    fireEvent.click(screen.getByRole("button", { name: "Preview class setup" }));
+    expect(screen.getByRole("alert")).toHaveTextContent(/120 characters/i);
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+
+
+  it("marks only the missing practice name invalid", () => {
+    render(<SchedulePage />);
+    fireEvent.change(screen.getByLabelText("Course name"), { target: { value: "Dance" } });
+    fireEvent.click(screen.getByRole("button", { name: "Preview class setup" }));
+    expect(screen.getByLabelText("Course name")).not.toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByLabelText("Batch name")).toHaveAttribute("aria-invalid", "true");
+  });
+
 });
