@@ -4,6 +4,7 @@ import importlib.util
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -290,7 +291,9 @@ class GateTests(unittest.TestCase):
         for suite, names in [('frontend',['vitest-junit.xml']), ('database',['unittest-junit.xml','concurrency-junit.xml','cleanup-count.txt'])]:
             if suite in plan['selected']:
                 receipt={'version':1, 'suite':suite, 'commit':plan['commit'],
-                    'source_fingerprint':plan['source_fingerprint'], 'run_id':'local','run_attempt':'local',
+                    'source_fingerprint':plan['source_fingerprint'],
+                    'run_id':os.environ.get('GITHUB_RUN_ID','local'),
+                    'run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT','local'),
                     'reports':{name:hashlib.sha256((directory/name).read_bytes()).hexdigest() for name in names if (directory/name).exists()}}
                 (directory/(suite+'-receipt.json')).write_text(json.dumps(receipt))
 
