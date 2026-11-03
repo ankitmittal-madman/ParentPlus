@@ -60,3 +60,21 @@ The current uncommitted browser suite covers two disabled-OTP login scenarios; f
 ## Historical context retained
 
 Earlier progress notes tracked branch `setup/parentplus-foundation`, checkpoint `ccd33c5`, four then six frontend tests and the M1 navigation milestone. Those reflect earlier local/Cloud Shell work and are not the current branch, test inventory or checkpoint. The Git history and original implementation report retain that chronology; current capabilities and limitations above take precedence.
+
+The local recurrence calculator now identifies the date, time, zone and type of a daylight-saving conflict for future user guidance. This remains an unintegrated calculation component; the schedule screen, permissions and persistence do not yet use it.
+
+A local draft database migration adds inaccessible-by-default course, batch and assignment tables with same-workspace foreign keys. Application-facing operations, role/status enforcement, real scheduling and hosted deployment remain incomplete and require security review.
+
+A private local scheduling authorization helper checks active workspace, membership, role, batch and coach assignment while holding transaction-scoped locks. It is not exposed to app roles or connected to a write operation; race verification and security review remain outstanding.
+
+The private scheduling helper has six local tests covering both transaction orderings for workspace suspension, membership suspension and assignment removal. They use a synthetic batch update; real scheduling writes and independent security review remain outstanding.
+
+A private local-only one-off session persistence foundation validates authorization, UTC duration and retry identity. It is inaccessible to app roles and does not yet implement workspace-time-zone enforcement, recurring classes or a user-facing scheduling journey.
+
+A private local wrapper derives one-off session time from the workspace zone and rejects ambiguous or nonexistent local times. Zone configuration, selection of repeated-time occurrences, integration and exposure remain unfinished; performance and timezone database consistency require review.
+
+A private local initial time-zone configuration operation checks active owner/admin membership and rejects subsequent zone changes pending a safe policy. It is not yet exposed to application users; audit, UX and independent security review remain open.
+
+The India-first scheduling continuation adds local private owner/admin course and batch creation with workspace isolation and retry checks. These operations are not accessible to app users; assignment, reads, UI integration, race coverage and independent security review remain open.
+
+The local draft adds a private coach-to-batch assignment operation with active-workspace and role checks. This does not expose scheduling to app users or complete assignment management, audit, user journeys or security review.

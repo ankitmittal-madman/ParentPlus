@@ -81,4 +81,22 @@ describe("expandSchedule", () => {
     expect(result[0].endsAt).toBe("+010000-01-01T00:00:00Z");
   });
 
+  it("identifies the later occurrence affected by a daylight-saving gap", () => {
+    try {
+      expandSchedule({ ...oneOff, startDate: "2026-03-01", startTime: "02:30", timeZone: "America/New_York", recurrence: { kind: "weekly", untilDate: "2026-03-08" } });
+      throw new Error("Expected a clock-change error");
+    } catch (error) {
+      expect(error).toMatchObject({ kind: "nonexistent", localDate: "2026-03-08", localTime: "02:30", timeZone: "America/New_York" });
+    }
+  });
+
+  it("identifies an ambiguous half-hour clock change", () => {
+    try {
+      expandSchedule({ ...oneOff, startDate: "2026-04-05", startTime: "01:45", timeZone: "Australia/Lord_Howe" });
+      throw new Error("Expected a clock-change error");
+    } catch (error) {
+      expect(error).toMatchObject({ kind: "ambiguous", localDate: "2026-04-05", localTime: "01:45", timeZone: "Australia/Lord_Howe" });
+    }
+  });
+
 });

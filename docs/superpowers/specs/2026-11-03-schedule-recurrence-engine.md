@@ -10,3 +10,6 @@ The future backend must independently enforce authorization, assignment, idempot
 
 ## Tests
 Verify one-off and inclusive weekly cases, UTC conversion, offset changes, daylight-saving gaps and overlaps, invalid fields, duration/bounds, and the occurrence limit. No hosted provider or real family data is involved. Requirements must map exact collected tests; run the full local gate and independent review.
+
+## Clock-change problem details
+When a local time is ambiguous or nonexistent, return a structured error identifying the affected local date, local time, workspace time zone and whether the time is ambiguous or nonexistent. This enables a future screen to request a correction for the affected occurrence. Do not silently choose an offset or shift a nonexistent time. These details do not implement the screen or persistence.

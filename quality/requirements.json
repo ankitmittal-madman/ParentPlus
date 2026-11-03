@@ -233,6 +233,1014 @@
       ]
     },
     {
+      "id": "DB-SCHEDULING-FOUNDATION-VALID-SAME-WORKSPACE-BATCH-AND-ASSIGNMENT",
+      "domain": "scheduling-foundation",
+      "description": "Valid same workspace batch and assignment.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "valid same workspace batch and assignment"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_valid_same_workspace_batch_and_assignment"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SCHEDULING-FOUNDATION-CROSS-WORKSPACE-COURSE-IS-REJECTED",
+      "domain": "scheduling-foundation",
+      "description": "Cross workspace course is rejected.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "cross workspace course is rejected"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_cross_workspace_course_is_rejected"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SCHEDULING-FOUNDATION-CROSS-WORKSPACE-MEMBERSHIP-IS-REJECTED",
+      "domain": "scheduling-foundation",
+      "description": "Cross workspace membership is rejected.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "cross workspace membership is rejected"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_cross_workspace_membership_is_rejected"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SCHEDULING-FOUNDATION-APPLICATION-ROLES-CANNOT-READ-OR-WRITE-TABLES",
+      "domain": "scheduling-foundation",
+      "description": "Application roles cannot read or write tables.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "application roles cannot read or write tables"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_application_roles_cannot_read_or_write_tables"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SCHEDULING-FOUNDATION-RLS-IS-ENABLED-WITHOUT-PERMISSIVE-POLICIES",
+      "domain": "scheduling-foundation",
+      "description": "Rls is enabled without permissive policies.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "rls is enabled without permissive policies"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_rls_is_enabled_without_permissive_policies"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SCHEDULE-AUTH-ALLOWS-ACTIVE-OWNER-ADMIN-AND-ASSIGNED-COACH",
+      "domain": "scheduling-authorization",
+      "description": "Schedule helper allows active owner admin and assigned coach.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "schedule helper allows active owner admin and assigned coach"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_schedule_helper_allows_active_owner_admin_and_assigned_coach"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SCHEDULE-AUTH-REJECTS-UNASSIGNED-INACTIVE-CROSS-WORKSPACE-AND-ANONYMOUS",
+      "domain": "scheduling-authorization",
+      "description": "Schedule helper rejects unassigned inactive cross workspace and anonymous.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "schedule helper rejects unassigned inactive cross workspace and anonymous"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_schedule_helper_rejects_unassigned_inactive_cross_workspace_and_anonymous"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SCHEDULE-AUTH-IS-NOT-EXECUTABLE-BY-APPLICATION-ROLES",
+      "domain": "scheduling-authorization",
+      "description": "Schedule helper is not executable by application roles.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "schedule helper is not executable by application roles"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_schedule_helper_is_not_executable_by_application_roles"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SCHEDULING-RACE-WORKSPACE-BEFORE",
+      "domain": "scheduling-authorization",
+      "description": "Workspace revoked before simulated schedule write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "workspace revoked before simulated schedule write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_workspace_revoked_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SCHEDULING-RACE-WORKSPACE-AFTER",
+      "domain": "scheduling-authorization",
+      "description": "Workspace revoked after simulated schedule write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "workspace revoked after simulated schedule write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_workspace_revoked_after_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SCHEDULING-RACE-MEMBERSHIP-BEFORE",
+      "domain": "scheduling-authorization",
+      "description": "Membership revoked before simulated schedule write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "membership revoked before simulated schedule write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_membership_revoked_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SCHEDULING-RACE-MEMBERSHIP-AFTER",
+      "domain": "scheduling-authorization",
+      "description": "Membership revoked after simulated schedule write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "membership revoked after simulated schedule write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_membership_revoked_after_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SCHEDULING-RACE-ASSIGNMENT-BEFORE",
+      "domain": "scheduling-authorization",
+      "description": "Assignment revoked before simulated schedule write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "assignment revoked before simulated schedule write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_assignment_revoked_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SCHEDULING-RACE-ASSIGNMENT-AFTER",
+      "domain": "scheduling-authorization",
+      "description": "Assignment revoked after simulated schedule write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "assignment revoked after simulated schedule write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_assignment_revoked_after_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-PRIVATE-SESSION-WRITE-CREATES-AND-RETRIES-SAME-REQUEST",
+      "domain": "scheduling-session-foundation",
+      "description": "Private session write creates and retries same request.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private session write creates and retries same request"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_session_write_creates_and_retries_same_request"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-PRIVATE-SESSION-WRITE-REJECTS-CHANGED-RETRY",
+      "domain": "scheduling-session-foundation",
+      "description": "Private session write rejects changed retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private session write rejects changed retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_session_write_rejects_changed_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-PRIVATE-SESSION-WRITE-REJECTS-UNAUTHORIZED-AND-INVALID-TIME",
+      "domain": "scheduling-session-foundation",
+      "description": "Private session write rejects unauthorized and invalid time.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private session write rejects unauthorized and invalid time"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_session_write_rejects_unauthorized_and_invalid_time"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-PRIVATE-SESSION-TABLE-AND-WRITE-ARE-CLOSED-TO-APP-ROLES",
+      "domain": "scheduling-session-foundation",
+      "description": "Private session table and write are closed to app roles.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private session table and write are closed to app roles"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_session_table_and_write_are_closed_to_app_roles"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SESSION-WRITE-RACE-SESSION-WORKSPACE-REVOKED-BEFORE-WRITE",
+      "domain": "scheduling-session-concurrency",
+      "description": "Session workspace revoked before write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "session workspace revoked before write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_session_workspace_revoked_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SESSION-WRITE-RACE-SESSION-WORKSPACE-REVOKED-AFTER-WRITE",
+      "domain": "scheduling-session-concurrency",
+      "description": "Session workspace revoked after write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "session workspace revoked after write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_session_workspace_revoked_after_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SESSION-WRITE-RACE-SESSION-MEMBERSHIP-REVOKED-BEFORE-WRITE",
+      "domain": "scheduling-session-concurrency",
+      "description": "Session membership revoked before write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "session membership revoked before write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_session_membership_revoked_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SESSION-WRITE-RACE-SESSION-MEMBERSHIP-REVOKED-AFTER-WRITE",
+      "domain": "scheduling-session-concurrency",
+      "description": "Session membership revoked after write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "session membership revoked after write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_session_membership_revoked_after_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SESSION-WRITE-RACE-SESSION-ASSIGNMENT-REVOKED-BEFORE-WRITE",
+      "domain": "scheduling-session-concurrency",
+      "description": "Session assignment revoked before write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "session assignment revoked before write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_session_assignment_revoked_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SESSION-WRITE-RACE-SESSION-ASSIGNMENT-REVOKED-AFTER-WRITE",
+      "domain": "scheduling-session-concurrency",
+      "description": "Session assignment revoked after write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "session assignment revoked after write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_session_assignment_revoked_after_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SESSION-WRITE-RACE-SIMULTANEOUS-IDENTICAL-SESSION-RETRIES",
+      "domain": "scheduling-session-concurrency",
+      "description": "Simultaneous identical session retries.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "simultaneous identical session retries"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_simultaneous_identical_session_retries"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-SESSION-WRITE-RACE-SIMULTANEOUS-CHANGED-SESSION-RETRY",
+      "domain": "scheduling-session-concurrency",
+      "description": "Simultaneous changed session retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "simultaneous changed session retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_simultaneous_changed_session_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-LOCAL-TIME-USES-WORKSPACE-ZONE",
+      "domain": "scheduling-local-time",
+      "description": "Workspace local session uses workspace zone.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "workspace local session uses workspace zone"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_workspace_local_session_uses_workspace_zone"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-LOCAL-TIME-REJECTS-NEW-YORK-GAP-AND-FOLD",
+      "domain": "scheduling-local-time",
+      "description": "Workspace local session rejects new york gap and fold.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "workspace local session rejects new york gap and fold"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_workspace_local_session_rejects_new_york_gap_and_fold"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-LOCAL-TIME-REJECTS-HALF-HOUR-GAP-AND-FOLD",
+      "domain": "scheduling-local-time",
+      "description": "Workspace local session rejects half hour gap and fold.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "workspace local session rejects half hour gap and fold"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_workspace_local_session_rejects_half_hour_gap_and_fold"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-LOCAL-TIME-REJECTS-MISSING-AND-INVALID-ZONE",
+      "domain": "scheduling-local-time",
+      "description": "Workspace local session rejects missing and invalid zone.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "workspace local session rejects missing and invalid zone"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_workspace_local_session_rejects_missing_and_invalid_zone"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-LOCAL-TIME-IS-PRIVATE",
+      "domain": "scheduling-local-time",
+      "description": "Workspace local session is private.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "workspace local session is private"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_workspace_local_session_is_private"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-ZONE-SETUP-ALLOWS-ACTIVE-OWNER-AND-ADMIN-WITH-SAME-RETRY",
+      "domain": "scheduling-zone-configuration",
+      "description": "Private zone setup allows active owner and admin with same retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private zone setup allows active owner and admin with same retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_zone_setup_allows_active_owner_and_admin_with_same_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-ZONE-SETUP-REJECTS-UNAUTHORIZED-ACTORS",
+      "domain": "scheduling-zone-configuration",
+      "description": "Private zone setup rejects unauthorized actors.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private zone setup rejects unauthorized actors"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_zone_setup_rejects_unauthorized_actors"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-ZONE-SETUP-REJECTS-INVALID-AND-CHANGED-ZONE",
+      "domain": "scheduling-zone-configuration",
+      "description": "Private zone setup rejects invalid and changed zone.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private zone setup rejects invalid and changed zone"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_zone_setup_rejects_invalid_and_changed_zone"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-ZONE-SETUP-CANNOT-BE-EXECUTED-BY-APP-ROLES",
+      "domain": "scheduling-zone-configuration",
+      "description": "Private zone setup cannot be executed by app roles.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private zone setup cannot be executed by app roles"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_zone_setup_cannot_be_executed_by_app_roles"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-ZONE-SETUP-RACE-ZONE-SETUP-COMMITS-BEFORE-LOCAL-SESSION",
+      "domain": "scheduling-zone-configuration",
+      "description": "Zone setup commits before local session.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "zone setup commits before local session"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_zone_setup_commits_before_local_session"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-ZONE-SETUP-RACE-ZONE-CHANGE-REJECTED-AFTER-LOCAL-SESSION",
+      "domain": "scheduling-zone-configuration",
+      "description": "Zone change rejected after local session.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "zone change rejected after local session"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_zone_change_rejected_after_local_session"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-COURSE-BATCH-CREATE-AND-RETRY",
+      "domain": "course-batch-setup",
+      "description": "Private course and batch create and retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private course and batch create and retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_course_and_batch_create_and_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-COURSE-BATCH-REJECT-CHANGED-RETRIES-AND-CROSS-WORKSPACE",
+      "domain": "course-batch-setup",
+      "description": "Private course and batch reject changed retries and cross workspace.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private course and batch reject changed retries and cross workspace"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_course_and_batch_reject_changed_retries_and_cross_workspace"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-COURSE-BATCH-REJECT-INVALID-OR-UNAUTHORIZED-INPUT",
+      "domain": "course-batch-setup",
+      "description": "Private course and batch reject invalid or unauthorized input.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private course and batch reject invalid or unauthorized input"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_course_and_batch_reject_invalid_or_unauthorized_input"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-COURSE-BATCH-OPERATIONS-ARE-NOT-PUBLIC",
+      "domain": "course-batch-setup",
+      "description": "Private course and batch operations are not public.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private course and batch operations are not public"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_course_and_batch_operations_are_not_public"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-ASSIGN-AND-RETRY",
+      "domain": "coach-assignment",
+      "description": "Private coach assignment and retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private coach assignment and retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_coach_assignment_and_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-ASSIGN-REJECTS-INVALID-TARGET-AND-CROSS-WORKSPACE",
+      "domain": "coach-assignment",
+      "description": "Private coach assignment rejects invalid target and cross workspace.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private coach assignment rejects invalid target and cross workspace"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_coach_assignment_rejects_invalid_target_and_cross_workspace"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-ASSIGN-REJECTS-UNAUTHORIZED-ACTOR",
+      "domain": "coach-assignment",
+      "description": "Private coach assignment rejects unauthorized actor.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private coach assignment rejects unauthorized actor"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_coach_assignment_rejects_unauthorized_actor"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-ASSIGN-CANNOT-BE-EXECUTED-BY-APP-ROLES",
+      "domain": "coach-assignment",
+      "description": "Private coach assignment cannot be executed by app roles.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private coach assignment cannot be executed by app roles"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_private_coach_assignment_cannot_be_executed_by_app_roles"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-ASSIGN-RACE-COACH-SUSPENDED-BEFORE-ASSIGNMENT",
+      "domain": "coach-assignment",
+      "description": "Coach suspended before assignment.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "coach suspended before assignment"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_coach_suspended_before_assignment"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-ASSIGN-RACE-COACH-SUSPENDED-AFTER-ASSIGNMENT",
+      "domain": "coach-assignment",
+      "description": "Coach suspended after assignment.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "coach suspended after assignment"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_coach_suspended_after_assignment"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
+      "id": "DB-COACH-ASSIGN-RACE-SIMULTANEOUS-DUPLICATE-COACH-ASSIGNMENTS",
+      "domain": "coach-assignment",
+      "description": "Simultaneous duplicate coach assignments.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "simultaneous duplicate coach assignments"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_simultaneous_duplicate_coach_assignments"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261103001400_scheduling_foundation.sql"
+      ]
+    },
+    {
       "id": "DB-AUTHORIZATIONTESTS-TEST-ANONYMOUS-WORKSPACE-EXECUTION-DENIED",
       "domain": "workspace-authorization",
       "description": "Anonymous workspace execution denied.",
@@ -1782,6 +2790,48 @@
         {
           "suite": "frontend",
           "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > returns a valid extended ISO instant when the end crosses year 9999"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-17",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > identifies the later occurrence affected by a daylight-saving gap.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > identifies the later occurrence affected by a daylight-saving gap"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > identifies the later occurrence affected by a daylight-saving gap"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-18",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > identifies an ambiguous half-hour clock change.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > identifies an ambiguous half-hour clock change"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > identifies an ambiguous half-hour clock change"
         }
       ],
       "sources": [

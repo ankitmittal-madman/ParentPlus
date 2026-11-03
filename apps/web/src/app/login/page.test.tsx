@@ -153,7 +153,7 @@ describe("LoginPage", () => {
     fireEvent.click(screen.getByRole("button", { name: "Continue" }));
     fireEvent.change(await screen.findByLabelText("Verification code"), { target: { value: "123456" } });
     fireEvent.click(screen.getByRole("button", { name: "Verify code" }));
-    expect(await screen.findByText("Signed in.")).toHaveFocus();
+    await waitFor(() => expect(screen.getByText("Signed in.")).toHaveFocus());
     expect(mocks.verifyEmailOtp).toHaveBeenCalledWith("test@example.com", "123456");
   });
 

@@ -106,3 +106,49 @@ intention alone. Do not keep adding parallel handoff documents.
 If an agent cannot read Git or the cited artefacts, it must state that limitation
 and use a supplied snapshot explicitly. Conflicting branches are distinct states;
 they are not automatically synchronized by sharing this filename.
+
+## Clock-change error details — 2026-11-03
+
+The local recurrence calculator reports the specific date, local time, time zone and whether a clock-change conflict is ambiguous or nonexistent. It still rejects the conflict rather than selecting a time. This does not implement the user resolution journey or real scheduling. Inspect current Git status and fresh evidence; earlier descriptions of uncommitted work above are historical snapshots.
+
+## Scheduling database foundation — 2026-11-03
+
+A local draft migration adds courses, batches and batch-to-membership assignments, enforcing same-workspace references and denying app-role table access. This is not an authorization implementation: future operations must check active workspace, active membership, role and assignment, including concurrent revocation, before any access is granted. Schedule visibility, sessions, editing, real-provider integration and hosted migration are not implemented. See the scheduling data foundation plan and fresh local test evidence. No hosted resources were modified.
+
+## Private scheduling authorization helper — 2026-11-03
+
+The draft migration contains a private, invoker-rights helper that derives the actor from `auth.uid()`, checks active workspace and membership, batch ownership and coach assignment, and locks relevant rows to transaction end. It has no app-role execution grant and no write operation calls it yet. Standalone calls cannot authorize a later transaction; future trusted mutations must call it and write within the same transaction. Revocation race tests for this helper, full write operations, and independent security review remain required before any exposure or hosted migration.
+
+## Scheduling authorization race coverage — 2026-11-03
+
+Six synthetic local database tests cover workspace suspension, membership suspension and assignment deletion before and after a test-only transaction invokes the private helper and changes a batch. They observe actual PostgreSQL blocking and check whether the synthetic change commits. These tests exercise the helper contract, not a real schedule-writing operation. Independently reviewed application operations, additional race and failure cases, and hosted verification remain required.
+
+## Private single-session write — 2026-11-03
+
+The local draft contains a private UTC-only single-session write with same-transaction authorization and actor/request idempotency. App roles cannot execute it or read its table. It is not ready for app integration: server-authoritative workspace time zones and DST, actual-write revocation and duplicate races, recurring/edit operations, read visibility and independent security review remain open. No hosted migration was performed. Refer to fresh local test evidence for the current snapshot.
+
+## Actual session-write race coverage — 2026-11-03
+
+Eight local concurrency cases exercise the private session write against workspace suspension, membership suspension and assignment deletion in both orderings, and simultaneous identical and changed retries. Inspect the latest test evidence for results. These cases do not expose the operation, replace independent security review, or complete server-side workspace time-zone validation, recurrence, editing or a user journey.
+
+## Private workspace time-zone wrapper — 2026-11-03
+
+The local draft adds a private server-side operation that reads a configured workspace time zone under the authorization transaction, rejects ambiguous/nonexistent minute-precision local times, and calls the private UTC session write. The bounded 2000–2100 implementation searches offsets at second precision, which requires performance review before exposure. PostgreSQL/JavaScript timezone database consistency, zone configuration, an ambiguity-resolution UI, repeat/edit behavior, real-user flows and independent security review remain open; no application access or hosted migration is enabled. Consult the latest test evidence for actual execution results.
+
+## Private initial workspace zone configuration — 2026-11-03
+
+A local private invoker function permits an active owner/admin to set a PostgreSQL-recognized workspace time zone once or retry the same zone. Coaches and app roles cannot call it; changing an established zone is rejected as a temporary engineering safeguard pending existing-session and recurrence semantics. The configuration and session operations lock the workspace for transaction consistency. Review current race-test evidence; user-facing setup, audit, safe future zone changes, resolution UX, performance review and independent security review remain outstanding.
+
+## India-first private course and batch setup — 2026-11-03
+
+The founder requested prioritising Indian parents and proportionate time-zone work. The local draft adds private owner/admin course and batch creation with workspace/membership checks, same-workspace references and request retry identity. It does not expose an application API or implement coach assignment, data reads or user-facing class setup. Actual-write duplicate and permission-revocation races, complete authorization cases, independent security review and end-to-end testing remain before exposure. Existing time-zone safeguards were retained.
+
+## Login focus test timing — 2026-11-03
+
+During the course/batch full regression, the login success focus assertion failed after the success text appeared with focus still on the body. The focused case passed on retry; React applies the focus in an effect. The test now waits for the same focus requirement rather than assuming text appearance and the effect are simultaneous. A deliberate temporary removal of the focus action caused the revised case to fail; after restoring application code the case passed. This establishes that the assertion still detects absent focus, not that every possible intermittent cause is excluded. Consult fresh full-gate evidence.
+
+## Private coach assignment — 2026-11-03
+
+The draft migration adds a private assignment operation for active owners/admins and active same-workspace coaches, with row locks and a duplicate-safe unique assignment. App access, assignment removal, auditing, real scheduling UI, end-to-end verification and independently reviewed release readiness remain open. Consult fresh evidence for the exact test results and Git status.
+
+The coach-assignment review identified missing concurrency coverage. New deterministic cases exercise coach suspension in both transaction orders and simultaneous duplicate assignments. Other manager/workspace revocation and batch lifecycle races remain release gaps; inspect the current gate evidence. No app access or hosted database change was performed.

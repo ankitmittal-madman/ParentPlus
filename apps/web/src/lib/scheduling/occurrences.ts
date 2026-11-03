@@ -11,6 +11,18 @@ export type ScheduleRule = {
 type Occurrence = { localDate: string; startsAt: string; endsAt: string };
 const MAX_OCCURRENCES = 104;
 
+export class ScheduleTimeError extends RangeError {
+  constructor(
+    readonly kind: "ambiguous" | "nonexistent",
+    readonly localDate: string,
+    readonly localTime: string,
+    readonly timeZone: string,
+  ) {
+    super("The local time is ambiguous or nonexistent; choose another time.");
+    this.name = "ScheduleTimeError";
+  }
+}
+
 function parseDate(value: string): Temporal.PlainDate {
   if (typeof value !== "string" || !/^(?!0000)\d{4}-\d{2}-\d{2}$/.test(value)) {
     throw new RangeError("Enter a valid calendar date.");
@@ -52,10 +64,17 @@ export function expandSchedule(rule: ScheduleRule): Occurrence[] {
       throw new RangeError("The schedule exceeds the local occurrence limit.");
     }
     let instant: Temporal.Instant;
+    const localDateTime = date.toPlainDateTime(localTime);
     try {
-      instant = date.toPlainDateTime(localTime).toZonedDateTime(rule.timeZone, { disambiguation: "reject" }).toInstant();
-    } catch {
-      throw new RangeError("The local time is ambiguous or nonexistent; choose another time.");
+      instant = localDateTime.toZonedDateTime(rule.timeZone, { disambiguation: "reject" }).toInstant();
+    } catch (error) {
+      if (!(error instanceof RangeError)) throw error;
+      const earlier = localDateTime.toZonedDateTime(rule.timeZone, { disambiguation: "earlier" });
+      const later = localDateTime.toZonedDateTime(rule.timeZone, { disambiguation: "later" });
+      if (earlier.epochNanoseconds === later.epochNanoseconds) throw error;
+      const kind = earlier.toPlainDateTime().equals(localDateTime) && later.toPlainDateTime().equals(localDateTime)
+        ? "ambiguous" : "nonexistent";
+      throw new ScheduleTimeError(kind, date.toString(), rule.startTime, rule.timeZone);
     }
     occurrences.push({
       localDate: date.toString(),
