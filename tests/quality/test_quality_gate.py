@@ -288,7 +288,7 @@ class GateTests(unittest.TestCase):
 
     def write_receipt_fixture(self, directory, plan):
         plan.setdefault('source_fingerprint','f'*64)
-        for suite, names in [('frontend',['vitest-junit.xml']), ('database',['unittest-junit.xml','concurrency-junit.xml','cleanup-count.txt'])]:
+        for suite, names in [('frontend',['vitest-junit.xml','playwright-junit.xml']), ('database',['unittest-junit.xml','concurrency-junit.xml','cleanup-count.txt'])]:
             if suite in plan['selected']:
                 receipt={'version':1, 'suite':suite, 'commit':plan['commit'],
                     'source_fingerprint':plan['source_fingerprint'],
@@ -462,11 +462,47 @@ class GateTests(unittest.TestCase):
                 with self.assertRaises(gate.GateError):
                     gate.verify_evidence(plan, Path(d), results, 'a'*40)
 
+    def write_browser_fixture(self, directory):
+        (directory/'playwright-junit.xml').write_text('<testsuites tests="3" failures="0" errors="0" skipped="0"><testsuite tests="2" failures="0" errors="0" skipped="0"><testcase classname="login.spec.ts" name="rejects an invalid email in the browser" time="0.1"/><testcase classname="login.spec.ts" name="does not claim email delivery when live OTP is disabled" time="0.1"/></testsuite><testsuite tests="1" failures="0" errors="0" skipped="0"><testcase classname="schedule.spec.ts" name="shows a clearly labelled example schedule" time="0.1"/></testsuite></testsuites>')
+
+    def test_browser_evidence_rejects_skips_missing_cases_and_tampering(self):
+        for mutation in ['missing', 'skipped', 'wrong_case', 'digest']:
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as d:
+                directory = Path(d)
+                plan = {'version': 1, 'commit': 'a'*40, 'selected': {'quality': [], 'frontend': []},
+                        'expected': {'frontend': ['apps/web/src/a.test.ts::A > works']}}
+                (directory/'vitest-junit.xml').write_text('<testsuites><testsuite tests="1" failures="0" errors="0" skipped="0"><testcase classname="src/a.test.ts" name="A &gt; works" time="0.1"/></testsuite></testsuites>')
+                self.write_browser_fixture(directory)
+                self.write_receipt_fixture(directory, plan)
+                report = directory/'playwright-junit.xml'
+                if mutation == 'missing':
+                    report.unlink()
+                elif mutation == 'skipped':
+                    report.write_text(report.read_text().replace('skipped="0"', 'skipped="1"'))
+                elif mutation == 'wrong_case':
+                    report.write_text(report.read_text().replace('rejects an invalid email in the browser', 'different case'))
+                else:
+                    report.write_text(report.read_text().replace('time="0.1"', 'time="0.2"', 1))
+                if mutation in {'skipped', 'wrong_case'}:
+                    self.write_receipt_fixture(directory, plan)
+                with self.assertRaises(gate.GateError):
+                    gate.verify_evidence(plan, directory, {'quality': 'success', 'frontend': 'success'}, 'a'*40)
+
+    def test_frontend_requires_browser_evidence(self):
+        with tempfile.TemporaryDirectory() as d:
+            plan = {'version': 1, 'commit': 'a'*40, 'selected': {'quality': [], 'frontend': []},
+                    'expected': {'frontend': ['apps/web/src/a.test.ts::A > works']}}
+            Path(d, 'vitest-junit.xml').write_text('<testsuites><testsuite tests="1" failures="0" errors="0" skipped="0"><testcase classname="src/a.test.ts" name="A &gt; works" time="0.1"/></testsuite></testsuites>')
+            self.write_receipt_fixture(Path(d), plan)
+            with self.assertRaises(gate.GateError):
+                gate.verify_evidence(plan, Path(d), {'quality': 'success', 'frontend': 'success'}, 'a'*40)
+
     def test_frontend_evidence_identity_normalization(self):
         with tempfile.TemporaryDirectory() as d:
             plan = {'version':1,'commit':'a'*40,'selected':{'quality':[], 'frontend':[]},
                     'expected':{'frontend':['apps/web/src/a.test.ts::A > works']}}
             Path(d, 'vitest-junit.xml').write_text('<testsuites><testsuite tests="1" failures="0" errors="0" skipped="0"><testcase classname="src/a.test.ts" name="A &gt; works" time="0.1"/></testsuite></testsuites>')
+            self.write_browser_fixture(Path(d))
             self.write_receipt_fixture(Path(d), plan)
             gate.verify_evidence(plan, Path(d), {'quality':'success','frontend':'success'}, 'a'*40)
 

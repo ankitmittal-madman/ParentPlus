@@ -33,13 +33,21 @@ The orchestration and reusable workflows are in local checkpoint 5b068b9, not ye
 
 The initial implementation report is historical and superseded by the audit report's evidence contract and counts. Historical machine evidence is under the ignored local `test-results/quality/audit/` directory. Its fingerprint and portability limitations are indexed in QUALITY_EVIDENCE.md; those reports do not validate the new documentation snapshot.
 
+## Current local email verification slice
+
+A reconstructed, uncommitted login screen slice adds code entry with error accessibility, duplicate submission guards and keyboard focus after successful mocked verification. The local UI offers current-session sign-out and provider-checked session restoration with mocked test responses; it does not establish live OTP, real-provider cross-tab delivery, session-aware navigation or a verified real-provider integration. Local mocked-event checks exercise stale-result and account-change handling. Product requirements and test scope are described in [the local spec](superpowers/specs/2026-11-03-email-otp-screen.md); see [Quality Evidence](QUALITY_EVIDENCE.md) and current local evidence for verified results. M2 remains incomplete.
+
+## Synthetic coach schedule preview
+
+An uncommitted M3 presentation slice shows clearly labelled example courses, batches and session times. A local recurrence utility calculates one-off and weekly instants with explicit time zones and daylight-saving rejection. Neither slice uses child data or implements persistent scheduling, permissions or enrollment. The [schedule spec](superpowers/specs/2026-11-03-schedule-preview.md) records the scope; actual M3 journeys and their security checks remain planned.
+
 ## Product milestones and release gaps
 
 M0/M1 frontend foundation remain the historical completed baseline. M2 has local auth helpers and database foundations; the full authentication/data product milestone is incomplete. Database connection/approval contracts exist locally, but M3 classes/students/enrollment journeys are not established as complete. M4 attendance, M5 private diary/media and later milestones remain unimplemented/partial per the roadmap.
 
 All ten registry gaps are acceptable for this synthetic-data engineering-tooling milestone. Live OTP, invitation journeys, enrollment, attendance, private media/consent, account lifecycle/retention, guardian history and learning delivery block release of the corresponding real product behavior. Formal verification method/timing needs a future decision, while sensitive access, disputes and revocation cannot be waived by self-declaration. Phone OTP remains deferred for the email-first scope.
 
-No browser E2E suite, hosted Supabase integration, real signed-JWT authorization, physical-device verification, real family data or production readiness is claimed. The older npm audit count of 16 moderate findings and Cloud Shell preview/storage notes are historical; dependency audit and production/provider issues were not re-verified by this audit.
+The current uncommitted browser suite covers two disabled-OTP login scenarios; full browser journeys, hosted Supabase integration, real signed-JWT authorization, physical-device verification, real family data and production readiness remain unverified. The older npm audit count of 16 moderate findings and Cloud Shell preview/storage notes are historical; dependency audit and production/provider issues were not re-verified by this audit.
 
 ## Next actions
 

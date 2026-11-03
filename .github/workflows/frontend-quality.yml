@@ -86,7 +86,7 @@ jobs:
           print("Errors:", errors)
           print("Skipped:", skipped)
 
-          if tests < 24 or cases != tests:
+          if tests < 64 or cases != tests:
               raise SystemExit("FAIL: Missing or inconsistent tests")
 
           if failures or errors or skipped:
@@ -97,6 +97,12 @@ jobs:
 
       - name: Production build
         run: npm run build
+
+      - name: Install browser for end-to-end tests
+        run: npx playwright install --with-deps chromium
+
+      - name: Run browser end-to-end tests with live OTP disabled
+        run: npm run test:e2e
 
       - name: Bind successful execution to source and report digests
         run: python3 ../../scripts/quality/quality_gate.py attest --suite frontend --reports test-results

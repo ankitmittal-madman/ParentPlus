@@ -6,6 +6,44 @@ Prepared: 2026-11-03, against local baseline
 that a future reader's HEAD still equals this baseline. Find the commit containing
 this handoff and inspect current Git state before acting.
 
+## Scheduling recurrence foundation — 2026-11-03
+
+The uncommitted local recurrence utility expands one-off or explicitly bounded weekly sessions into UTC instants in a supplied workspace time zone. It rejects ambiguous or nonexistent local times; duration is elapsed minutes. It has resource guards and is not wired to persistent data, UI scheduling, backend authorization or real-provider services. Extended ISO years can occur at the date boundary and consumers must handle or reject them. See [the recurrence spec](superpowers/specs/2026-11-03-schedule-recurrence-engine.md), the current local gate and independent review. Real scheduling remains incomplete.
+
+## Session resume and scheduling decisions — 2026-11-03
+
+The founder confirmed that owners, admins and authorised coaches may manage sessions, and scheduling should support both weekly recurrence and one-off sessions; see DEC-018. DEC-019 confirms assigned-batch coach scope, single or future occurrence edits by user choice, and workspace time zone with user resolution for ambiguous/nonexistent local times. Visibility, overlap, deletion, cancellation and retention policies remain to be designed as needed. The schedule display remains a synthetic preview and is not a real scheduling implementation.
+
+The current local authentication slice also rechecks session state on window focus or return to a visible page when live authentication is enabled. The behavior is tested using simulated events and provider responses; it does not establish continuous background expiry checking, live provider revocation or backend authorization. See [the session resume spec](superpowers/specs/2026-11-03-session-resume-check.md), the latest review and current quality evidence before any checkpoint.
+
+## Session-change safety continuation — 2026-11-03
+
+The local login slice subscribes to provider authentication-change hints when live authentication is enabled, defers user revalidation until after the callback, invalidates stale requests and clears old identity input on account changes. A failed sign-out enters an uncertain state and requires a fresh session check before another sign-out action. The subscription is not established when live authentication is disabled. Focused tests use synthetic events and deferred promises; they do not prove real cross-tab event delivery, remote revocation or timely expiry. The independent reviewer identified account-switch and stale-email races; both were corrected and rechecked. See [the session-change spec](superpowers/specs/2026-11-03-session-change-safety.md) and current local gate evidence.
+
+Real scheduling remains a separate M3 slice. Founder input was requested on which roles can edit schedules and whether recurring and one-off sessions are in scope; do not invent answers. The schedule screen remains clearly labelled synthetic examples only.
+
+## Synthetic schedule preview — 2026-11-03
+
+The current local M3 presentation slice replaces the schedule placeholder with a read-only, clearly labelled synthetic example of course, batch and session time. A local Chromium case also checks the example label and representative session. It does not establish real scheduling, enrollment, attendance or access control. The [schedule spec](superpowers/specs/2026-11-03-schedule-preview.md) records the boundaries and tests. The previous session-restoration work remains in the same uncommitted scope; cross-tab updates and expiry handling are not completed by this schedule preview. Inspect current status, quality evidence and independent review before checkpoint.
+
+## Session restoration continuation — 2026-11-03
+
+The local uncommitted login slice now checks the current user with the provider SDK when live authentication is enabled. It shows a signed-in view only after a provider-confirmed user, shows sign-in for a missing session, and shows an unavailable/retry state for other errors. Disabled mode makes no provider call. A reviewer identified that provider identity does not prove email verification; the UI now uses neutral signed-in wording. Session expiry, cross-tab synchronization, real provider behavior and server-side access authorization remain unverified release gaps. See [the session spec](superpowers/specs/2026-11-03-session-restoration.md), the current gate evidence and independent review before checkpoint.
+
+## Local sign-out continuation — 2026-11-03
+
+The uncommitted sign-in slice now includes an explicit current-session sign-out action after successful verification. The login form returns only after a successful provider response; on failure the view reports uncertain status without claiming the session remains active. The helper is guarded by the disabled-by-default live flag and requests local scope. These are local mocked-provider behaviors, not proof of live sign-out, session restoration, cross-tab handling or protected access. See [the sign-out spec](superpowers/specs/2026-11-03-local-signout.md), current quality evidence and review before checkpoint. No hosted provider or real user data was used.
+
+## Browser test continuation — 2026-11-03
+
+This working tree adds two local Chromium login checks with live OTP disabled and a mandatory browser step before the existing frontend CI receipt. The tests cover invalid email and the disabled-provider response; live sign-in, session handling and hosted CI for this new step remain unverified. Browser tests run against a local server and intercept external page requests; this is not a general server-side network sandbox. [The browser spec](superpowers/specs/2026-11-03-login-browser-tests.md) records scope and limitations. Inspect current Git status, quality evidence and independent review before a checkpoint.
+
+## Current local continuation — 2026-11-03
+
+The historical snapshot below predates the merged `main` checkpoint `ff41e3b`. This continuation is on `feature/intelligent-quality-gate-v1` at baseline `7ad48fe`; the working tree contains the reconstructed email-code form, scenario mappings, tests and documentation. Earlier uncommitted work from a disconnected environment was unavailable and was recreated, not recovered. Inspect Git for exact current status before acting.
+
+The slice is described in [the spec](superpowers/specs/2026-11-03-email-otp-screen.md). The existing helper remains disabled by default and no hosted service is used. Session-aware continuation and sign-out, real OTP delivery, provider template compatibility, account-enumeration assessment and browser E2E remain open before live sign-in. A fresh independent review identified focus handling, session continuation and provider limitations; the focus regression was reproduced and addressed. Check the current local quality evidence and review status before a Git checkpoint. No product, database or privacy decision has changed.
+
 ## Recorded state and visibility
 
 - Latest local checkpoint: 5b068b9, the quality-gate and engineering-operating-system commit.

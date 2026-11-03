@@ -227,3 +227,25 @@ Proposed approach:
 
 Implementation status:
 Architecture proposal only. No database behavior changed.
+
+## DEC-018: Schedule management and recurrence
+Status: Confirmed by founder
+Date: 2026-11-03
+Scope: ParentPlus class scheduling
+
+- Workspace owners, admins and authorised coaches may create and edit sessions.
+- Support both recurring weekly classes and one-off sessions.
+- Authorisation is workspace-scoped; this decision does not grant access to children or another workspace.
+
+Implementation note: Define the exact coach assignment and permission checks, recurrence boundaries, timezone and daylight-saving behaviour in the scheduling design and verify them before real use. This decision does not establish that scheduling is implemented or deployed.
+
+## DEC-019: Schedule assignment, recurring edits and time zone
+Status: Confirmed by founder
+Date: 2026-11-03
+Scope: ParentPlus class scheduling
+
+- Coaches may manage only batches assigned to them.
+- A recurring-class edit may apply to one occurrence or all future occurrences, according to the user's choice.
+- Use the workspace time zone; ask the user to resolve ambiguous or nonexistent local times caused by a daylight-saving transition.
+
+These choices do not approve hosted changes, define every retention/visibility rule or establish that scheduling is implemented.

@@ -23,6 +23,15 @@ Use an established current step identifier only when repository context or the
 founder supplies one. Otherwise use a plain descriptive title. Do not borrow a
 step number, branch, commit or milestone from an old sample.
 
+## Founder development updates
+
+For substantive development updates, clearly name the outcome and next action.
+Explain the purpose, why it matters and a concrete ParentPlus use case. Include
+an accessible PM mental model and a relevant Technical Appendix for unfamiliar
+terms. Use a compact verification table where useful; distinguish verified
+results from plans and limitations. Keep routine replies proportionate and never
+invent scenarios or results.
+
 ## Explain the work as a conversation
 
 Explain the problem, what changed, why we need it and what it means for ParentPlus.

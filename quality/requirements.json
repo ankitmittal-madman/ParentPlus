@@ -905,6 +905,891 @@
       ]
     },
     {
+      "id": "FE-LOGINPAGE-VERIFIES-THE-REQUESTED-EMAIL-CODE-AND-REPORTS-SUCCESS",
+      "domain": "authentication",
+      "description": "LoginPage > verifies the requested email code and reports success.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > verifies the requested email code and reports success"],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > verifies the requested email code and reports success"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-LOGINPAGE-ASSOCIATES-REJECTED-CODE-ERRORS-WITH-THE-CODE-FIELD",
+      "domain": "authentication",
+      "description": "LoginPage > associates rejected code errors with the code field.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > associates rejected code errors with the code field"],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > associates rejected code errors with the code field"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-LOGINPAGE-CLEARS-THE-REQUESTED-CODE-WHEN-THE-EMAIL-CHANGES",
+      "domain": "authentication",
+      "description": "LoginPage > clears the requested code when the email changes.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > clears the requested code when the email changes"],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > clears the requested code when the email changes"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-LOGINPAGE-PREVENTS-DUPLICATE-VERIFICATION-AND-EMAIL-CHANGES-WHILE-VERIFYING",
+      "domain": "authentication",
+      "description": "LoginPage > prevents duplicate verification and email changes while verifying.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > prevents duplicate verification and email changes while verifying"],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > prevents duplicate verification and email changes while verifying"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-LOGINPAGE-RETURNS-TO-EMAIL-ENTRY-ONLY-AFTER-SUCCESSFUL-SIGN-OUT",
+      "domain": "authentication",
+      "description": "LoginPage > returns to email entry only after successful sign-out.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > returns to email entry only after successful sign-out"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > returns to email entry only after successful sign-out"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-LOGINPAGE-DOES-NOT-CLAIM-A-VERIFIED-SESSION-WHEN-SIGN-OUT-FAILS",
+      "domain": "authentication",
+      "description": "LoginPage > does not claim a verified session when sign-out fails.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > does not claim a verified session when sign-out fails"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > does not claim a verified session when sign-out fails"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-LOGINPAGE-PREVENTS-DUPLICATE-SIGN-OUT-WHILE-PENDING",
+      "domain": "authentication",
+      "description": "LoginPage > prevents duplicate sign-out while pending.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > prevents duplicate sign-out while pending"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > prevents duplicate sign-out while pending"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-SIGNOUT-DOES-NOT-CALL-THE-PROVIDER-WHEN-LIVE-AUTHENTICATION-IS-DISABLED",
+      "domain": "authentication",
+      "description": "signOut > does not call the provider when live authentication is disabled.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["signOut > does not call the provider when live authentication is disabled"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/lib/auth/sign-out.test.ts::signOut > does not call the provider when live authentication is disabled"}],
+      "sources": ["apps/web/src/lib/auth/sign-out.test.ts", "apps/web/src/lib/auth/sign-out.ts"]
+    },
+    {
+      "id": "FE-SIGNOUT-SIGNS-OUT-ONLY-THE-CURRENT-LOCAL-SESSION",
+      "domain": "authentication",
+      "description": "signOut > signs out only the current local session.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["signOut > signs out only the current local session"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/lib/auth/sign-out.test.ts::signOut > signs out only the current local session"}],
+      "sources": ["apps/web/src/lib/auth/sign-out.test.ts", "apps/web/src/lib/auth/sign-out.ts"]
+    },
+    {
+      "id": "FE-SIGNOUT-DOES-NOT-EXPOSE-PROVIDER-ERROR-DETAILS",
+      "domain": "authentication",
+      "description": "signOut > does not expose provider error details.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["signOut > does not expose provider error details"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/lib/auth/sign-out.test.ts::signOut > does not expose provider error details"}],
+      "sources": ["apps/web/src/lib/auth/sign-out.test.ts", "apps/web/src/lib/auth/sign-out.ts"]
+    },
+    {
+      "id": "FE-SIGNOUT-HANDLES-UNEXPECTED-PROVIDER-FAILURES",
+      "domain": "authentication",
+      "description": "signOut > handles unexpected provider failures.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["signOut > handles unexpected provider failures"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/lib/auth/sign-out.test.ts::signOut > handles unexpected provider failures"}],
+      "sources": ["apps/web/src/lib/auth/sign-out.test.ts", "apps/web/src/lib/auth/sign-out.ts"]
+    },
+    {
+      "id": "FE-SIGNOUT-REPORTS-UNCERTAINTY-WHEN-SDK-CLEARS-LOCAL-STATE-BEFORE-PROVIDER-ERROR",
+      "domain": "authentication",
+      "description": "signOut > reports uncertainty when the SDK clears local state before a provider error.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["signOut > reports uncertainty when the SDK clears local state before a provider error"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/lib/auth/sign-out.test.ts::signOut > reports uncertainty when the SDK clears local state before a provider error"}],
+      "sources": ["apps/web/src/lib/auth/sign-out.test.ts", "apps/web/src/lib/auth/sign-out.ts"]
+    },
+    {
+      "id": "FE-SESSION-STATUS-DISABLED",
+      "domain": "authentication",
+      "description": "getSessionStatus > does not contact the provider when live authentication is disabled.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["getSessionStatus > does not contact the provider when live authentication is disabled"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/lib/auth/session-status.test.ts::getSessionStatus > does not contact the provider when live authentication is disabled"}],
+      "sources": ["apps/web/src/lib/auth/session-status.test.ts", "apps/web/src/lib/auth/session-status.ts"]
+    },
+    {
+      "id": "FE-SESSION-STATUS-VERIFIED",
+      "domain": "authentication",
+      "description": "getSessionStatus > accepts a user confirmed by the provider.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["getSessionStatus > accepts a user confirmed by the provider"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/lib/auth/session-status.test.ts::getSessionStatus > accepts a user confirmed by the provider"}],
+      "sources": ["apps/web/src/lib/auth/session-status.test.ts", "apps/web/src/lib/auth/session-status.ts"]
+    },
+    {
+      "id": "FE-SESSION-STATUS-MISSING",
+      "domain": "authentication",
+      "description": "getSessionStatus > treats a missing session as signed out.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["getSessionStatus > treats a missing session as signed out"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/lib/auth/session-status.test.ts::getSessionStatus > treats a missing session as signed out"}],
+      "sources": ["apps/web/src/lib/auth/session-status.test.ts", "apps/web/src/lib/auth/session-status.ts"]
+    },
+    {
+      "id": "FE-SESSION-STATUS-PROVIDER-ERROR",
+      "domain": "authentication",
+      "description": "getSessionStatus > treats provider errors as unavailable without exposing details.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["getSessionStatus > treats provider errors as unavailable without exposing details"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/lib/auth/session-status.test.ts::getSessionStatus > treats provider errors as unavailable without exposing details"}],
+      "sources": ["apps/web/src/lib/auth/session-status.test.ts", "apps/web/src/lib/auth/session-status.ts"]
+    },
+    {
+      "id": "FE-SESSION-STATUS-INVALID-USER",
+      "domain": "authentication",
+      "description": "getSessionStatus > rejects a provider response without a valid user.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["getSessionStatus > rejects a provider response without a valid user"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/lib/auth/session-status.test.ts::getSessionStatus > rejects a provider response without a valid user"}],
+      "sources": ["apps/web/src/lib/auth/session-status.test.ts", "apps/web/src/lib/auth/session-status.ts"]
+    },
+    {
+      "id": "FE-SESSION-STATUS-UNEXPECTED",
+      "domain": "authentication",
+      "description": "getSessionStatus > treats unexpected failures as unavailable.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["getSessionStatus > treats unexpected failures as unavailable"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/lib/auth/session-status.test.ts::getSessionStatus > treats unexpected failures as unavailable"}],
+      "sources": ["apps/web/src/lib/auth/session-status.test.ts", "apps/web/src/lib/auth/session-status.ts"]
+    },
+    {
+      "id": "FE-LOGINPAGE-RESTORES-VERIFIED-VIEW",
+      "domain": "authentication",
+      "description": "LoginPage > restores the verified view for a provider-confirmed user.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > restores the verified view for a provider-confirmed user"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > restores the verified view for a provider-confirmed user"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-LOGINPAGE-BLOCKS-WHILE-CHECKING",
+      "domain": "authentication",
+      "description": "LoginPage > blocks sign-in while the session status is being checked.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > blocks sign-in while the session status is being checked"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > blocks sign-in while the session status is being checked"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-LOGINPAGE-RETRIES-FAILED-CHECK",
+      "domain": "authentication",
+      "description": "LoginPage > shows an unavailable state and retries a failed session check.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > shows an unavailable state and retries a failed session check"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > shows an unavailable state and retries a failed session check"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-SCHEDULE-PREVIEW-EXAMPLE-DATA",
+      "domain": "schedule-preview",
+      "description": "SchedulePage > identifies the schedule as example data.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": ["SchedulePage > identifies the schedule as example data"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/(coach)/schedule/page.test.tsx::SchedulePage > identifies the schedule as example data"}],
+      "sources": ["apps/web/src/app/(coach)/schedule/page.test.tsx", "apps/web/src/app/(coach)/schedule/page.tsx"]
+    },
+    {
+      "id": "FE-SCHEDULE-PREVIEW-EXAMPLE-SESSIONS",
+      "domain": "schedule-preview",
+      "description": "SchedulePage > shows example course, batch and session time in a labelled list.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": ["SchedulePage > shows example course, batch and session time in a labelled list"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/(coach)/schedule/page.test.tsx::SchedulePage > shows example course, batch and session time in a labelled list"}],
+      "sources": ["apps/web/src/app/(coach)/schedule/page.test.tsx", "apps/web/src/app/(coach)/schedule/page.tsx"]
+    },
+    {
+      "id": "FE-AUTH-EVENT-STALE-CHECK",
+      "domain": "authentication",
+      "description": "LoginPage > ignores a stale session check after a later auth change.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > ignores a stale session check after a later auth change"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > ignores a stale session check after a later auth change"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-AUTH-EVENT-STALE-VERIFICATION",
+      "domain": "authentication",
+      "description": "LoginPage > does not apply a stale verification result after an auth change.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > does not apply a stale verification result after an auth change"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > does not apply a stale verification result after an auth change"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-AUTH-EVENT-SIGNOUT-UNCERTAIN",
+      "domain": "authentication",
+      "description": "LoginPage > preserves sign-out uncertainty when an auth event occurs during a failed sign-out.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > preserves sign-out uncertainty when an auth event occurs during a failed sign-out"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > preserves sign-out uncertainty when an auth event occurs during a failed sign-out"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-AUTH-EVENT-UNMOUNT",
+      "domain": "authentication",
+      "description": "LoginPage > unsubscribes and ignores a pending session result after unmount.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > unsubscribes and ignores a pending session result after unmount"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > unsubscribes and ignores a pending session result after unmount"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-AUTH-EVENT-OWN-VERIFY",
+      "domain": "authentication",
+      "description": "LoginPage > rechecks the provider after an auth event during successful verification.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > rechecks the provider after an auth event during successful verification"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > rechecks the provider after an auth event during successful verification"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-AUTH-EVENT-SUBSCRIBE-ERROR",
+      "domain": "authentication",
+      "description": "LoginPage > fails closed and retries when the auth subscription cannot start.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > fails closed and retries when the auth subscription cannot start"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > fails closed and retries when the auth subscription cannot start"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-AUTH-EVENT-SIGNOUT-PRIOR-EMAIL",
+      "domain": "authentication",
+      "description": "LoginPage > clears the prior email when sign-out emits an event before completing.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > clears the prior email when sign-out emits an event before completing"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > clears the prior email when sign-out emits an event before completing"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-AUTH-EVENT-ACCOUNT-SWITCH",
+      "domain": "authentication",
+      "description": "LoginPage > requires a fresh session check after an account change during failed sign-out.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > requires a fresh session check after an account change during failed sign-out"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > requires a fresh session check after an account change during failed sign-out"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-AUTH-EVENT-STALE-CODE-REQUEST",
+      "domain": "authentication",
+      "description": "LoginPage > ignores a stale code request after an account change.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > ignores a stale code request after an account change"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > ignores a stale code request after an account change"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-AUTH-EVENT-REFRESH-EMAIL",
+      "domain": "authentication",
+      "description": "LoginPage > preserves email entry across a token refresh notification.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > preserves email entry across a token refresh notification"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > preserves email entry across a token refresh notification"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-AUTH-OBSERVER-DISABLED",
+      "domain": "authentication",
+      "description": "observeSessionChanges > does not subscribe when live authentication is disabled.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["observeSessionChanges > does not subscribe when live authentication is disabled"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/lib/auth/session-observer.test.ts::observeSessionChanges > does not subscribe when live authentication is disabled"}],
+      "sources": ["apps/web/src/lib/auth/session-observer.test.ts", "apps/web/src/lib/auth/session-observer.ts"]
+    },
+    {
+      "id": "FE-AUTH-OBSERVER-EVENTS",
+      "domain": "authentication",
+      "description": "observeSessionChanges > ignores the initial event and reports later auth changes.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["observeSessionChanges > ignores the initial event and reports later auth changes"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/lib/auth/session-observer.test.ts::observeSessionChanges > ignores the initial event and reports later auth changes"}],
+      "sources": ["apps/web/src/lib/auth/session-observer.test.ts", "apps/web/src/lib/auth/session-observer.ts"]
+    },
+    {
+      "id": "FE-AUTH-OBSERVER-UNSUBSCRIBE",
+      "domain": "authentication",
+      "description": "observeSessionChanges > unsubscribes from provider notifications.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["observeSessionChanges > unsubscribes from provider notifications"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/lib/auth/session-observer.test.ts::observeSessionChanges > unsubscribes from provider notifications"}],
+      "sources": ["apps/web/src/lib/auth/session-observer.test.ts", "apps/web/src/lib/auth/session-observer.ts"]
+    },
+    {
+      "id": "FE-SESSION-RECHECK-ON-RETURN",
+      "domain": "authentication",
+      "description": "LoginPage > rechecks a signed-in session when the user returns to the tab.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > rechecks a signed-in session when the user returns to the tab"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > rechecks a signed-in session when the user returns to the tab"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-SESSION-NO-RECHECK-WHEN-DISABLED",
+      "domain": "authentication",
+      "description": "LoginPage > does not recheck a session on focus when live authentication is disabled.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > does not recheck a session on focus when live authentication is disabled"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > does not recheck a session on focus when live authentication is disabled"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-SESSION-RETURN-PRESERVES-CODE",
+      "domain": "authentication",
+      "description": "LoginPage > preserves a code being entered when the user returns from email.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > preserves a code being entered when the user returns from email"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > preserves a code being entered when the user returns from email"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-SESSION-RETURN-PRESERVES-REQUEST",
+      "domain": "authentication",
+      "description": "LoginPage > preserves an in-flight code request when the user returns to the tab.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > preserves an in-flight code request when the user returns to the tab"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > preserves an in-flight code request when the user returns to the tab"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-RESUME-SIGNED-IN-CLEARS-CODE",
+      "domain": "authentication",
+      "description": "LoginPage > clears a pending code when resume revalidation finds a signed-in session.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > clears a pending code when resume revalidation finds a signed-in session"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > clears a pending code when resume revalidation finds a signed-in session"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-RESUME-SIGNOUT-UNCERTAIN",
+      "domain": "authentication",
+      "description": "LoginPage > keeps sign-out uncertain when focus occurs before a failed sign-out.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > keeps sign-out uncertain when focus occurs before a failed sign-out"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > keeps sign-out uncertain when focus occurs before a failed sign-out"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-RESUME-ERROR-RETRY",
+      "domain": "authentication",
+      "description": "LoginPage > blocks an entered code on resume errors and restores it after retry.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > blocks an entered code on resume errors and restores it after retry"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > blocks an entered code on resume errors and restores it after retry"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-RESUME-STALE-AUTH",
+      "domain": "authentication",
+      "description": "LoginPage > ignores an old resume result after a newer auth event.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > ignores an old resume result after a newer auth event"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > ignores an old resume result after a newer auth event"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-RESUME-AFTER-VERIFICATION",
+      "domain": "authentication",
+      "description": "LoginPage > rechecks after a verification completes while the tab is returning.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > rechecks after a verification completes while the tab is returning"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > rechecks after a verification completes while the tab is returning"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-RESUME-COALESCES",
+      "domain": "authentication",
+      "description": "LoginPage > coalesces focus and visibility rechecks before they start.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > coalesces focus and visibility rechecks before they start"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > coalesces focus and visibility rechecks before they start"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-RESUME-INVALIDATES-INFLIGHT",
+      "domain": "authentication",
+      "description": "LoginPage > ignores an in-flight session result when the user returns during the check.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": ["LoginPage > ignores an in-flight session result when the user returns during the check"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > ignores an in-flight session result when the user returns during the check"}],
+      "sources": ["apps/web/src/app/login/page.test.tsx", "apps/web/src/app/login/page.tsx"]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-01",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > converts a one-off workspace time to UTC.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > converts a one-off workspace time to UTC"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > converts a one-off workspace time to UTC"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-02",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > expands weekly sessions through an inclusive end date.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > expands weekly sessions through an inclusive end date"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > expands weekly sessions through an inclusive end date"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-03",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > keeps local weekly time across an offset change.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > keeps local weekly time across an offset change"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > keeps local weekly time across an offset change"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-04",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > rejects a nonexistent daylight-saving time.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > rejects a nonexistent daylight-saving time"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > rejects a nonexistent daylight-saving time"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-05",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > rejects an ambiguous daylight-saving time.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > rejects an ambiguous daylight-saving time"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > rejects an ambiguous daylight-saving time"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-06",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > rejects invalid dates times and time zones.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > rejects invalid dates times and time zones"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > rejects invalid dates times and time zones"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-07",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > rejects invalid durations.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > rejects invalid durations"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > rejects invalid durations"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-08",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > rejects a weekly end date before the start.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > rejects a weekly end date before the start"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > rejects a weekly end date before the start"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-09",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > rejects weekly expansion beyond the local safety limit.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > rejects weekly expansion beyond the local safety limit"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > rejects weekly expansion beyond the local safety limit"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-10",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > does not add a weekly session beyond the end date.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > does not add a weekly session beyond the end date"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > does not add a weekly session beyond the end date"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-11",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > accepts exactly the local occurrence limit.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > accepts exactly the local occurrence limit"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > accepts exactly the local occurrence limit"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-12",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > rejects a later weekly occurrence in a daylight-saving gap.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > rejects a later weekly occurrence in a daylight-saving gap"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > rejects a later weekly occurrence in a daylight-saving gap"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-13",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > rejects a half-hour daylight-saving gap.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > rejects a half-hour daylight-saving gap"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > rejects a half-hour daylight-saving gap"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-14",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > calculates duration as elapsed time across a daylight-saving change.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > calculates duration as elapsed time across a daylight-saving change"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > calculates duration as elapsed time across a daylight-saving change"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-15",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > rejects the first occurrence beyond the local limit.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > rejects the first occurrence beyond the local limit"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > rejects the first occurrence beyond the local limit"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
+      "id": "FE-SCHEDULE-RECURRENCE-16",
+      "domain": "schedule-recurrence",
+      "description": "expandSchedule > returns a valid extended ISO instant when the end crosses year 9999.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expandSchedule > returns a valid extended ISO instant when the end crosses year 9999"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/occurrences.test.ts::expandSchedule > returns a valid extended ISO instant when the end crosses year 9999"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/occurrences.test.ts",
+        "apps/web/src/lib/scheduling/occurrences.ts"
+      ]
+    },
+    {
       "id": "FE-LOGINPAGE-PREVENTS-DUPLICATE-REQUESTS-WHILE-LOADING",
       "domain": "authentication",
       "description": "LoginPage > prevents duplicate requests while loading.",
