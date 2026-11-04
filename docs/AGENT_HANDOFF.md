@@ -258,3 +258,7 @@ Independent review identified that an internally corrupted archive could referen
 ## Private archived-class discovery draft — 2026-11-04
 
 A local private lookup lists a page of the active manager's own archived class setup snapshots, checks course/batch consistency and shares the actor/workspace transition lock. Page size is bounded to 1–50; ordering is by UUID, not chronology. Pages are separate snapshots, so an item created behind a cursor may require a restart/rescan; an empty page is not a global absence proof. This is inaccessible to app roles and does not implement UI, privacy/retention policy, signed-JWT/provider verification or complete recovery. Inspect fresh evidence and independent review. No hosted migration was performed.
+
+## Next-class and archive-discovery permission races — 2026-11-04
+
+Added local deterministic tests for workspace suspension, membership suspension and database-control disablement before and after both next-class advancement and archive discovery. Each checks a real blocking relationship and committed outcome; inspect fresh evidence and independent review. The app-facing recovery design is recorded in the server boundary spec and remains unimplemented; no hosted resources were changed.

@@ -2995,6 +2995,270 @@
       ]
     },
     {
+      "id": "DB-CLASS-PERMISSION-RACE-01",
+      "domain": "class-setup-permission-races",
+      "description": "test next class workspace suspended before advance.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class workspace suspended before advance"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_next_class_workspace_suspended_before_advance"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-PERMISSION-RACE-02",
+      "domain": "class-setup-permission-races",
+      "description": "test next class workspace suspended after advance.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class workspace suspended after advance"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_next_class_workspace_suspended_after_advance"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-PERMISSION-RACE-03",
+      "domain": "class-setup-permission-races",
+      "description": "test next class membership suspended before advance.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class membership suspended before advance"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_next_class_membership_suspended_before_advance"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-PERMISSION-RACE-04",
+      "domain": "class-setup-permission-races",
+      "description": "test next class membership suspended after advance.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class membership suspended after advance"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_next_class_membership_suspended_after_advance"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-PERMISSION-RACE-05",
+      "domain": "class-setup-permission-races",
+      "description": "test next class control disabled before advance.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class control disabled before advance"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_next_class_control_disabled_before_advance"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-PERMISSION-RACE-06",
+      "domain": "class-setup-permission-races",
+      "description": "test next class control disabled after advance.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class control disabled after advance"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_next_class_control_disabled_after_advance"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-PERMISSION-RACE-07",
+      "domain": "class-setup-permission-races",
+      "description": "test archive discovery workspace suspended before read.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archive discovery workspace suspended before read"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_archive_discovery_workspace_suspended_before_read"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-PERMISSION-RACE-08",
+      "domain": "class-setup-permission-races",
+      "description": "test archive discovery workspace suspended after read.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archive discovery workspace suspended after read"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_archive_discovery_workspace_suspended_after_read"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-PERMISSION-RACE-09",
+      "domain": "class-setup-permission-races",
+      "description": "test archive discovery membership suspended before read.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archive discovery membership suspended before read"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_archive_discovery_membership_suspended_before_read"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-PERMISSION-RACE-10",
+      "domain": "class-setup-permission-races",
+      "description": "test archive discovery membership suspended after read.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archive discovery membership suspended after read"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_archive_discovery_membership_suspended_after_read"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-PERMISSION-RACE-11",
+      "domain": "class-setup-permission-races",
+      "description": "test archive discovery control disabled before read.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archive discovery control disabled before read"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_archive_discovery_control_disabled_before_read"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-PERMISSION-RACE-12",
+      "domain": "class-setup-permission-races",
+      "description": "test archive discovery control disabled after read.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archive discovery control disabled after read"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_archive_discovery_control_disabled_after_read"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
       "id": "DB-CLASS-RESERVATION-01",
       "domain": "class-setup-reservation-private",
       "description": "test class setup reservation returns same id for matching retry.",

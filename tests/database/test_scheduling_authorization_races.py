@@ -1020,3 +1020,66 @@ DO $$ BEGIN BEGIN PERFORM public.create_private_local_session('{self.workspace}'
 
     def test_advance_waits_for_archived_discovery(self):
         self.run_archived_discovery_advance_race(False)
+
+    def run_next_or_discovery_permission_race(self, operation, target, revoke_first):
+        query(f"UPDATE public.workspace_memberships SET role='owner' WHERE id='{self.membership}';")
+        output=query(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT 'INTENT:' || public.reserve_private_class_setup('{self.workspace}','Dance','Beginners'); COMMIT;")
+        prior=next(line.removeprefix('INTENT:') for line in output.splitlines() if line.startswith('INTENT:'))
+        query(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT * FROM public.complete_private_class_setup('{self.workspace}','{prior}'); SELECT public.acknowledge_private_class_setup('{self.workspace}','{prior}'); COMMIT;")
+        token=str(uuid.uuid4())
+        if operation=='discovery':
+            query(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT public.advance_private_class_setup('{self.workspace}','{prior}','{token}','Art','Morning'); COMMIT;")
+        change={
+            'workspace': f"UPDATE public.workspaces SET status='suspended' WHERE id='{self.workspace}';\n",
+            'membership': f"UPDATE public.workspace_memberships SET status='suspended' WHERE id='{self.membership}';\n",
+            'control': "UPDATE public.class_setup_controls SET enabled=false WHERE id=true;\n",
+        }[target]
+        call=(f"SELECT public.advance_private_class_setup('{self.workspace}','{prior}','{token}','Art','Morning');\n" if operation=='advance' else f"SELECT 'COUNT:' || count(*) FROM public.list_private_archived_class_setups('{self.workspace}',NULL,50);\n")
+        first_name,second_name='access_first_'+uuid.uuid4().hex,'access_second_'+uuid.uuid4().hex
+        first,second=start_psql_session(),start_psql_session()
+        try:
+            for proc,name in ((first,first_name),(second,second_name)):
+                proc.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false); SELECT set_config('request.jwt.claim.sub','{MEERA}',true);\n")
+            first.stdin.write(change if revoke_first else call);first.stdin.write("SELECT 'FIRST_LOCKED';\n");first.stdin.flush()
+            if not revoke_first and operation=='discovery': self.assertTrue(wait_for_session_marker(first,'COUNT:1'))
+            self.assertTrue(wait_for_session_marker(first,'FIRST_LOCKED'))
+            second.stdin.write(call if revoke_first else change);second.stdin.write("COMMIT; SELECT 'SECOND_COMMITTED';\n");second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name,first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n");first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_COMMITTED'))
+            if revoke_first:
+                second.stdin.close();second.stdin=None
+                _,errors=second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode,0)
+                self.assertIn('Class setup unavailable' if target=='control' else 'Workspace access denied',errors)
+            else:
+                self.assertTrue(wait_for_session_marker(second,'SECOND_COMMITTED'))
+            expected='0' if operation=='advance' and revoke_first else '1'
+            self.assertEqual(query(f"SELECT count(*) FROM public.class_setup_next_requests WHERE workspace_id='{self.workspace}' AND request_id='{token}';"),expected)
+        finally:
+            close_psql_session(second);close_psql_session(first)
+
+    def test_next_class_workspace_suspended_before_advance(self):
+        self.run_next_or_discovery_permission_race('advance','workspace',True)
+    def test_next_class_workspace_suspended_after_advance(self):
+        self.run_next_or_discovery_permission_race('advance','workspace',False)
+    def test_next_class_membership_suspended_before_advance(self):
+        self.run_next_or_discovery_permission_race('advance','membership',True)
+    def test_next_class_membership_suspended_after_advance(self):
+        self.run_next_or_discovery_permission_race('advance','membership',False)
+    def test_next_class_control_disabled_before_advance(self):
+        self.run_next_or_discovery_permission_race('advance','control',True)
+    def test_next_class_control_disabled_after_advance(self):
+        self.run_next_or_discovery_permission_race('advance','control',False)
+    def test_archive_discovery_workspace_suspended_before_read(self):
+        self.run_next_or_discovery_permission_race('discovery','workspace',True)
+    def test_archive_discovery_workspace_suspended_after_read(self):
+        self.run_next_or_discovery_permission_race('discovery','workspace',False)
+    def test_archive_discovery_membership_suspended_before_read(self):
+        self.run_next_or_discovery_permission_race('discovery','membership',True)
+    def test_archive_discovery_membership_suspended_after_read(self):
+        self.run_next_or_discovery_permission_race('discovery','membership',False)
+    def test_archive_discovery_control_disabled_before_read(self):
+        self.run_next_or_discovery_permission_race('discovery','control',True)
+    def test_archive_discovery_control_disabled_after_read(self):
+        self.run_next_or_discovery_permission_race('discovery','control',False)
