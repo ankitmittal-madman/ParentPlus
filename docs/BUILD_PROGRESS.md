@@ -110,3 +110,5 @@ A private local recovery-status draft distinguishes pending, completed and unkno
 A local migration now restricts the three legacy direct creation functions from app roles. The real class setup journey remains unavailable while reviewed reservation wrappers and recovery are built. Provider mocks do not verify actual access.
 
 The old class setup server action now returns unavailable and does not call the legacy RPC, even if its app flag is enabled. Real class setup remains unfinished.
+
+A local private acknowledgement draft records acknowledgement of a completed reservation without releasing the slot. Starting a subsequent class, recovery UX and app access remain unfinished.

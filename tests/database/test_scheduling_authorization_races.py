@@ -806,3 +806,24 @@ DO $$ BEGIN BEGIN PERFORM public.create_private_local_session('{self.workspace}'
             self.assertIn('STATUS:pending',status.splitlines())
         finally:
             close_psql_session(first)
+
+    def test_class_setup_acknowledgement_waits_for_completion(self):
+        query(f"UPDATE public.workspace_memberships SET role='owner' WHERE id='{self.membership}';")
+        output=query(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT 'INTENT:' || public.reserve_private_class_setup('{self.workspace}','Dance','Beginners'); COMMIT;")
+        intent=next(line.removeprefix('INTENT:') for line in output.splitlines() if line.startswith('INTENT:'))
+        first_name,second_name='ack_create_'+uuid.uuid4().hex,'ack_wait_'+uuid.uuid4().hex
+        first,second=start_psql_session(),start_psql_session()
+        try:
+            for proc,name in ((first,first_name),(second,second_name)):
+                proc.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false); SELECT set_config('request.jwt.claim.sub','{MEERA}',true);\n")
+            first.stdin.write(f"SELECT * FROM public.complete_private_class_setup('{self.workspace}','{intent}'); SELECT 'FIRST_LOCKED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_LOCKED'))
+            second.stdin.write(f"SELECT 'ACK:' || public.acknowledge_private_class_setup('{self.workspace}','{intent}'); COMMIT; SELECT 'SECOND_COMMITTED';\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name,first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_COMMITTED'))
+            self.assertTrue(wait_for_session_marker(second,'ACK:true'))
+            self.assertTrue(wait_for_session_marker(second,'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT acknowledged AND completed_course_id IS NOT NULL FROM public.class_setup_intents WHERE id='{intent}';"),'t')
+        finally:
+            close_psql_session(second); close_psql_session(first)

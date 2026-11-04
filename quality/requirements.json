@@ -2113,6 +2113,132 @@
       ]
     },
     {
+      "id": "DB-CLASS-ACK-06",
+      "domain": "class-setup-ack-private",
+      "description": "test class setup acknowledgement denies suspension and disabled control.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup acknowledgement denies suspension and disabled control"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_acknowledgement_denies_suspension_and_disabled_control"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002300_private_class_setup_acknowledgement.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ACK-01",
+      "domain": "class-setup-ack-private",
+      "description": "test class setup acknowledgement is idempotent and retains receipt.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup acknowledgement is idempotent and retains receipt"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_acknowledgement_is_idempotent_and_retains_receipt"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002300_private_class_setup_acknowledgement.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ACK-02",
+      "domain": "class-setup-ack-private",
+      "description": "test class setup acknowledgement rejects pending and wrong actor.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup acknowledgement rejects pending and wrong actor"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_acknowledgement_rejects_pending_and_wrong_actor"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002300_private_class_setup_acknowledgement.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ACK-03",
+      "domain": "class-setup-ack-private",
+      "description": "test class setup acknowledgement does not release slot.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup acknowledgement does not release slot"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_acknowledgement_does_not_release_slot"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002300_private_class_setup_acknowledgement.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ACK-04",
+      "domain": "class-setup-ack-private",
+      "description": "test class setup acknowledgement is private.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup acknowledgement is private"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_acknowledgement_is_private"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002300_private_class_setup_acknowledgement.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ACK-05",
+      "domain": "class-setup-ack-private",
+      "description": "test class setup acknowledgement waits for completion.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup acknowledgement waits for completion"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_class_setup_acknowledgement_waits_for_completion"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002300_private_class_setup_acknowledgement.sql"
+      ]
+    },
+    {
       "id": "DB-CLASS-RESERVATION-01",
       "domain": "class-setup-reservation-private",
       "description": "test class setup reservation returns same id for matching retry.",

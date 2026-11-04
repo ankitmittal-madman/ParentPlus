@@ -230,3 +230,7 @@ Draft migration 022 revokes app-role execution on all three legacy course/batch 
 ## Old class setup server action disabled — 2026-11-04
 
 The server action still validates inputs and identity when its flag is enabled, but returns unavailable without invoking the legacy unreserved RPC. This is an additional application-side safeguard, not an operational class setup journey. Three old mock-RPC behavior tests were replaced by tests asserting that no RPC is invoked; existing input, identity, account-change and error-redaction checks remain. Database restriction, reservation access, status recovery, acknowledgement, real provider and UI work still need the documented review before exposure.
+
+## Private acknowledgement draft — 2026-11-04
+
+A local, app-inaccessible acknowledgement primitive locks the caller's completed intent, checks current manager access and the default-off database control, rejects pending/other-actor intents, and is idempotent. Acknowledgement deliberately retains the unique reservation slot and result; it cannot yet start another class. The status function still reports completed without exposing the acknowledgement bit. A safe slot-release/new-request protocol, recovery after permission changes, full race and hosted/provider verification, and app/UI integration remain open. This is not a complete class-setup journey and no hosted migration was performed.

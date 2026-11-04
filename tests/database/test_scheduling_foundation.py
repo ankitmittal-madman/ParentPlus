@@ -897,3 +897,61 @@ END $$;
 RESET ROLE; SELECT (SELECT count(*) FROM public.courses WHERE name='Dance') || ':' || (SELECT count(*) FROM public.batches); ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-1], '0:0')
+
+    def test_class_setup_acknowledgement_is_idempotent_and_retains_receipt(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE saved_intent AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT count(*) FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent));
+SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent));
+SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent));
+SELECT (SELECT acknowledged FROM public.class_setup_intents WHERE id=(SELECT id FROM saved_intent)) AND (SELECT count(*) FROM public.class_setup_intents)=1;
+ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-4:], ['1','t','t','t'])
+
+    def test_class_setup_acknowledgement_rejects_pending_and_wrong_actor(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner';
+INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('a0000000-0000-4000-8000-000000000001','22222222-2222-4222-8222-222222222222','admin','active');
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE saved_intent AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+DO $$ BEGIN BEGIN PERFORM public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent)); RAISE EXCEPTION 'pending accepted'; EXCEPTION WHEN object_not_in_prerequisite_state THEN NULL; END; END $$;
+SELECT count(*) FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent));
+SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
+DO $$ BEGIN BEGIN PERFORM public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent)); RAISE EXCEPTION 'other actor accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+SELECT NOT acknowledged FROM public.class_setup_intents WHERE id=(SELECT id FROM saved_intent); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], 't')
+
+    def test_class_setup_acknowledgement_does_not_release_slot(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE saved_intent AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT count(*) FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent));
+SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent));
+SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners')=(SELECT id FROM saved_intent);
+DO $$ BEGIN BEGIN PERFORM public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Advanced'); RAISE EXCEPTION 'slot released'; EXCEPTION WHEN unique_violation THEN NULL; END; END $$;
+SELECT count(*) FROM public.courses WHERE name='Dance'; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-2:], ['t','1'])
+
+    def test_class_setup_acknowledgement_is_private(self):
+        out=run_sql("SELECT NOT has_function_privilege('authenticated','public.acknowledge_private_class_setup(uuid,uuid)','EXECUTE') AND NOT has_function_privilege('anon','public.acknowledge_private_class_setup(uuid,uuid)','EXECUTE');")
+        self.assertEqual(out,'t')
+
+    def test_class_setup_acknowledgement_denies_suspension_and_disabled_control(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE saved_intent AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT count(*) FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent));
+UPDATE public.workspace_memberships SET status='suspended' WHERE id='b0000000-0000-4000-8000-000000000001';
+DO $$ BEGIN BEGIN PERFORM public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent)); RAISE EXCEPTION 'suspended accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+UPDATE public.workspace_memberships SET status='active' WHERE id='b0000000-0000-4000-8000-000000000001'; UPDATE public.class_setup_controls SET enabled=false WHERE id=true;
+DO $$ BEGIN BEGIN PERFORM public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent)); RAISE EXCEPTION 'disabled accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+SELECT NOT acknowledged FROM public.class_setup_intents WHERE id=(SELECT id FROM saved_intent); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], 't')
