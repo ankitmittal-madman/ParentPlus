@@ -783,3 +783,59 @@ DO $$ BEGIN BEGIN PERFORM public.reserve_private_class_setup('a0000000-0000-4000
 SELECT count(*) FROM public.class_setup_intents; ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-1], '2')
+
+    def test_reserved_setup_completion_retries_return_same_records(self):
+        out = run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE saved_intent AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+CREATE TEMP TABLE first_result AS SELECT * FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent));
+SELECT (SELECT course_id FROM first_result) = (SELECT course_id FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent)));
+SELECT (SELECT count(*) FROM public.courses WHERE name='Dance') || ':' || (SELECT count(*) FROM public.batches WHERE name='Beginners') || ':' || (SELECT count(*) FROM public.class_setup_intents WHERE id=(SELECT id FROM saved_intent) AND completed_course_id IS NOT NULL); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-2:], ['t', '1:1:1'])
+
+    def test_reserved_setup_completion_rejects_wrong_actor_and_unknown_id(self):
+        out = run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner';
+INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('a0000000-0000-4000-8000-000000000001','22222222-2222-4222-8222-222222222222','admin','active');
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE saved_intent AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
+DO $$ BEGIN BEGIN PERFORM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent)); RAISE EXCEPTION 'cross actor accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+DO $$ BEGIN BEGIN PERFORM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',gen_random_uuid()); RAISE EXCEPTION 'missing intent accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+SELECT count(*) FROM public.courses WHERE name='Dance'; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], '0')
+
+    def test_reserved_setup_completion_rolls_back_batch_failure(self):
+        out = run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE saved_intent AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+CREATE FUNCTION public.test_reject_reserved_batch() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'synthetic batch failure'; END $$;
+CREATE TRIGGER test_reject_reserved_batch BEFORE INSERT ON public.batches FOR EACH ROW EXECUTE FUNCTION public.test_reject_reserved_batch();
+DO $$ BEGIN BEGIN PERFORM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent)); RAISE EXCEPTION USING ERRCODE='P0002', MESSAGE='expected failure missing'; EXCEPTION WHEN raise_exception THEN IF SQLERRM <> 'synthetic batch failure' THEN RAISE; END IF; END; END $$;
+SELECT (SELECT count(*) FROM public.courses WHERE name='Dance') || ':' || (SELECT count(*) FROM public.class_setup_requests WHERE request_id=(SELECT id FROM saved_intent)) || ':' || (SELECT count(*) FROM public.class_setup_intents WHERE completed_course_id IS NOT NULL);
+DROP TRIGGER test_reject_reserved_batch ON public.batches;
+SELECT count(*) FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent)); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-2:], ['0:0:0', '1'])
+
+    def test_reserved_setup_completion_is_inaccessible_to_app_roles(self):
+        out = run_sql("""
+SELECT NOT has_function_privilege('authenticated','public.complete_private_class_setup(uuid,uuid)','EXECUTE') AND NOT has_function_privilege('anon','public.complete_private_class_setup(uuid,uuid)','EXECUTE');
+""")
+        self.assertEqual(out, 't')
+
+    def test_reserved_completion_does_not_adopt_separate_atomic_receipt(self):
+        out = run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE saved_intent AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+CREATE TEMP TABLE separate_result AS SELECT * FROM public.create_course_and_batch('a0000000-0000-4000-8000-000000000001','Dance','Beginners',(SELECT id FROM saved_intent));
+SELECT (SELECT course_id FROM separate_result) <> (SELECT course_id FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent)));
+SELECT (SELECT count(*) FROM public.courses WHERE name='Dance') || ':' || (SELECT count(*) FROM public.batches WHERE name='Beginners'); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-2:], ['t','2:2'])

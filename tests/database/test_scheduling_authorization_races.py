@@ -730,3 +730,28 @@ DO $$ BEGIN BEGIN PERFORM public.create_private_local_session('{self.workspace}'
 
     def test_class_setup_reservation_concurrent_changed_requests(self):
         self.run_reservation_race(True)
+
+    def test_reserved_setup_concurrent_completion_returns_same_records(self):
+        query(f"UPDATE public.workspace_memberships SET role='owner' WHERE id='{self.membership}';")
+        intent_output=query(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT 'INTENT:' || public.reserve_private_class_setup('{self.workspace}','Dance','Beginners'); COMMIT;")
+        intent=next(line.removeprefix('INTENT:') for line in intent_output.splitlines() if line.startswith('INTENT:'))
+        first_name, second_name='complete_first_'+uuid.uuid4().hex,'complete_second_'+uuid.uuid4().hex
+        first, second=start_psql_session(),start_psql_session()
+        try:
+            for process,name in ((first,first_name),(second,second_name)):
+                process.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false); SELECT set_config('request.jwt.claim.sub','{MEERA}',true);\n")
+            first.stdin.write(f"SELECT 'RESULT:' || course_id || ':' || batch_id FROM public.complete_private_class_setup('{self.workspace}','{intent}'); SELECT 'FIRST_LOCKED';\n"); first.stdin.flush()
+            ready = wait_for_session_marker(first,'FIRST_LOCKED')
+            if not ready and first.poll() is not None:
+                self.fail(first.stderr.read())
+            self.assertTrue(ready)
+            second.stdin.write(f"SELECT 'RESULT:' || course_id || ':' || batch_id FROM public.complete_private_class_setup('{self.workspace}','{intent}'); COMMIT; SELECT 'SECOND_COMMITTED';\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name,first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_COMMITTED'))
+            ids=query(f"SELECT completed_course_id || ':' || completed_batch_id FROM public.class_setup_intents WHERE id='{intent}';")
+            self.assertTrue(wait_for_session_marker(second,'RESULT:'+ids))
+            self.assertTrue(wait_for_session_marker(second,'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT (SELECT count(*) FROM public.courses WHERE workspace_id='{self.workspace}' AND name='Dance') || ':' || (SELECT count(*) FROM public.batches WHERE workspace_id='{self.workspace}' AND name='Beginners') || ':' || (SELECT count(*) FROM public.class_setup_intents WHERE id='{intent}' AND completed_course_id IS NOT NULL);"),'1:1:1')
+        finally:
+            close_psql_session(second); close_psql_session(first)

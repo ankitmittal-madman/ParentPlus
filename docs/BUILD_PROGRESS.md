@@ -100,3 +100,5 @@ A server-only, default-off lookup for active manager workspaces is under develop
 The class setup screen remains disconnected while durable retry and shared-device privacy are designed. A browser-storage prototype was removed after review identified cross-tab and data exposure risks.
 
 A private local reservation primitive is under development. It is inaccessible to app roles and does not yet implement the complete reservation, creation and acknowledgement journey. Class setup remains incomplete and disabled by default.
+
+A local private completion draft can atomically attach created course and batch IDs to a reservation. Status recovery, acknowledgement and the user journey are not implemented; the separate authenticated creation endpoint still bypasses reservations. The feature is not release-ready.

@@ -1840,6 +1840,132 @@
       ]
     },
     {
+      "id": "DB-CLASS-COMPLETION-01",
+      "domain": "class-setup-completion-private",
+      "description": "test reserved setup completion retries return same records.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test reserved setup completion retries return same records"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_reserved_setup_completion_retries_return_same_records"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002000_private_class_setup_completion.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-COMPLETION-02",
+      "domain": "class-setup-completion-private",
+      "description": "test reserved setup completion rejects wrong actor and unknown id.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test reserved setup completion rejects wrong actor and unknown id"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_reserved_setup_completion_rejects_wrong_actor_and_unknown_id"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002000_private_class_setup_completion.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-COMPLETION-03",
+      "domain": "class-setup-completion-private",
+      "description": "test reserved setup completion rolls back batch failure.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test reserved setup completion rolls back batch failure"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_reserved_setup_completion_rolls_back_batch_failure"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002000_private_class_setup_completion.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-COMPLETION-04",
+      "domain": "class-setup-completion-private",
+      "description": "test reserved setup completion is inaccessible to app roles.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test reserved setup completion is inaccessible to app roles"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_reserved_setup_completion_is_inaccessible_to_app_roles"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002000_private_class_setup_completion.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-COMPLETION-05",
+      "domain": "class-setup-completion-private",
+      "description": "test reserved completion does not adopt separate atomic receipt.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test reserved completion does not adopt separate atomic receipt"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_reserved_completion_does_not_adopt_separate_atomic_receipt"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002000_private_class_setup_completion.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-COMPLETION-06",
+      "domain": "class-setup-completion-private",
+      "description": "test reserved setup concurrent completion returns same records.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test reserved setup concurrent completion returns same records"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_reserved_setup_concurrent_completion_returns_same_records"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002000_private_class_setup_completion.sql"
+      ]
+    },
+    {
       "id": "DB-CLASS-RESERVATION-01",
       "domain": "class-setup-reservation-private",
       "description": "test class setup reservation returns same id for matching retry.",
