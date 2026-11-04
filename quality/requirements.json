@@ -2134,6 +2134,132 @@
       ]
     },
     {
+      "id": "DB-CLASS-ACK-07",
+      "domain": "class-setup-ack-private",
+      "description": "test ack workspace suspended before acknowledgement.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test ack workspace suspended before acknowledgement"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_ack_workspace_suspended_before_acknowledgement"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002300_private_class_setup_acknowledgement.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ACK-08",
+      "domain": "class-setup-ack-private",
+      "description": "test ack workspace suspended after acknowledgement.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test ack workspace suspended after acknowledgement"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_ack_workspace_suspended_after_acknowledgement"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002300_private_class_setup_acknowledgement.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ACK-09",
+      "domain": "class-setup-ack-private",
+      "description": "test ack membership suspended before acknowledgement.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test ack membership suspended before acknowledgement"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_ack_membership_suspended_before_acknowledgement"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002300_private_class_setup_acknowledgement.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ACK-10",
+      "domain": "class-setup-ack-private",
+      "description": "test ack membership suspended after acknowledgement.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test ack membership suspended after acknowledgement"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_ack_membership_suspended_after_acknowledgement"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002300_private_class_setup_acknowledgement.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ACK-11",
+      "domain": "class-setup-ack-private",
+      "description": "test ack control disabled before acknowledgement.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test ack control disabled before acknowledgement"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_ack_control_disabled_before_acknowledgement"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002300_private_class_setup_acknowledgement.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ACK-12",
+      "domain": "class-setup-ack-private",
+      "description": "test ack control disabled after acknowledgement.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test ack control disabled after acknowledgement"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_ack_control_disabled_after_acknowledgement"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002300_private_class_setup_acknowledgement.sql"
+      ]
+    },
+    {
       "id": "DB-CLASS-ACK-01",
       "domain": "class-setup-ack-private",
       "description": "test class setup acknowledgement is idempotent and retains receipt.",

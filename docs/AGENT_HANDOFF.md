@@ -234,3 +234,7 @@ The server action still validates inputs and identity when its flag is enabled, 
 ## Private acknowledgement draft — 2026-11-04
 
 A local, app-inaccessible acknowledgement primitive locks the caller's completed intent, checks current manager access and the default-off database control, rejects pending/other-actor intents, and is idempotent. Acknowledgement deliberately retains the unique reservation slot and result; it cannot yet start another class. The status function still reports completed without exposing the acknowledgement bit. A safe slot-release/new-request protocol, recovery after permission changes, full race and hosted/provider verification, and app/UI integration remain open. This is not a complete class-setup journey and no hosted migration was performed.
+
+## Acknowledgement permission-race coverage — 2026-11-04
+
+Local tests exercise acknowledgement against workspace suspension, membership suspension and database-control disablement in both transaction orders, using observed PostgreSQL blocking and checking the committed acknowledgement marker. Inspect fresh gate evidence. A next-class transition is not implemented: independent review identified a delayed legacy request race, requiring a common actor/workspace serialization point and a durable request identity that binds previous intent and payload. Safe retention, lost-token recovery, app access and real-provider testing remain open.

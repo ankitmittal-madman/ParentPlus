@@ -827,3 +827,55 @@ DO $$ BEGIN BEGIN PERFORM public.create_private_local_session('{self.workspace}'
             self.assertEqual(query(f"SELECT acknowledged AND completed_course_id IS NOT NULL FROM public.class_setup_intents WHERE id='{intent}';"),'t')
         finally:
             close_psql_session(second); close_psql_session(first)
+
+    def run_ack_permission_race(self, target, revoke_first):
+        query(f"UPDATE public.workspace_memberships SET role='owner' WHERE id='{self.membership}';")
+        output=query(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT 'INTENT:' || public.reserve_private_class_setup('{self.workspace}','Dance','Beginners'); COMMIT;")
+        intent=next(line.removeprefix('INTENT:') for line in output.splitlines() if line.startswith('INTENT:'))
+        query(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT * FROM public.complete_private_class_setup('{self.workspace}','{intent}'); COMMIT;")
+        changes={
+            'workspace': f"UPDATE public.workspaces SET status='suspended' WHERE id='{self.workspace}';\n",
+            'membership': f"UPDATE public.workspace_memberships SET status='suspended' WHERE id='{self.membership}';\n",
+            'control': "UPDATE public.class_setup_controls SET enabled=false WHERE id=true;\n",
+        }
+        revoke=changes[target]
+        acknowledge=f"SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT public.acknowledge_private_class_setup('{self.workspace}','{intent}');\n"
+        first_name,second_name='ack_first_'+uuid.uuid4().hex,'ack_second_'+uuid.uuid4().hex
+        first,second=start_psql_session(),start_psql_session()
+        try:
+            first.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{first_name}',false);\n")
+            first.stdin.write(revoke if revoke_first else acknowledge); first.stdin.write("SELECT 'FIRST_LOCKED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_LOCKED'))
+            second.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{second_name}',false);\n")
+            second.stdin.write(acknowledge if revoke_first else revoke); second.stdin.write("COMMIT; SELECT 'SECOND_COMMITTED';\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name,first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_COMMITTED'))
+            if revoke_first:
+                second.stdin.close(); second.stdin=None
+                _,errors=second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode,0)
+                self.assertIn('Class setup unavailable' if target=='control' else 'Workspace access denied',errors)
+            else:
+                self.assertTrue(wait_for_session_marker(second,'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT acknowledged FROM public.class_setup_intents WHERE id='{intent}';"),'f' if revoke_first else 't')
+        finally:
+            close_psql_session(second); close_psql_session(first)
+
+    def test_ack_workspace_suspended_before_acknowledgement(self):
+        self.run_ack_permission_race('workspace',True)
+
+    def test_ack_workspace_suspended_after_acknowledgement(self):
+        self.run_ack_permission_race('workspace',False)
+
+    def test_ack_membership_suspended_before_acknowledgement(self):
+        self.run_ack_permission_race('membership',True)
+
+    def test_ack_membership_suspended_after_acknowledgement(self):
+        self.run_ack_permission_race('membership',False)
+
+    def test_ack_control_disabled_before_acknowledgement(self):
+        self.run_ack_permission_race('control',True)
+
+    def test_ack_control_disabled_after_acknowledgement(self):
+        self.run_ack_permission_race('control',False)
