@@ -3,10 +3,12 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { observeSessionChanges } from "@/lib/auth/session-observer";
 import { runChildCreation } from "@/lib/parent/child-creation-journey";
+import { clearRecoveryMarker, readRecoveryMarker, writeRecoveryMarker, type RecoveryMarker } from "@/lib/parent/child-creation-recovery";
 import { CHILD_CREATION_CONFIRMED, CHILD_PROFILES_CHANGED } from "@/lib/parent/events";
 
 type Current = { intentId: string; childId: string; name: string; acknowledged: boolean; priorIntentId: string | null; requestId: string };
 type Recovery = { actor: string; operation: "begin" | "ack"; priorIntentId: string | null; requestId: string | null; displayName: string | null };
+const markerFor = (r: Recovery): RecoveryMarker => ({ version: 1, actor: r.actor, operation: r.operation, priorIntentId: r.priorIntentId, requestId: r.requestId });
 const sameId = (left: string | null, right: string | null) => (left?.toLowerCase() ?? null) === (right?.toLowerCase() ?? null);
 
 export default function ChildCreationPanel() {
@@ -40,6 +42,12 @@ export default function ChildCreationPanel() {
     const visible = () => { if (document.visibilityState === "visible") invalidate(); };
     try {
       if (process.env.NEXT_PUBLIC_ENABLE_LIVE_OTP !== "true") throw new Error("Session observation disabled");
+      const stored = readRecoveryMarker();
+      if (stored.state === "unavailable") throw new Error("Recovery storage unavailable");
+      if (stored.state === "present") {
+        requiredRecovery.current = { ...stored.marker, displayName: null };
+        queueMicrotask(() => { if (active) { setRecoveryLocked(true); setNotice("An earlier request needs checking. Sign in to the original account and check its status."); } });
+      }
       unsubscribe = observeSessionChanges(invalidate);
       window.addEventListener("focus", invalidate);
       document.addEventListener("visibilitychange", visible);
@@ -57,8 +65,15 @@ export default function ChildCreationPanel() {
     if (monitor !== "ready" || inFlight.current) return;
     inFlight.current = true; setBusy(true); setNotice(""); setActor(""); setChecked(false); setCurrent(null); setAdding(false); setName(""); setRetryReady(false);
     const currentGeneration = ++generation.current;
-    const required = requiredRecovery.current;
+    let required = requiredRecovery.current;
     try {
+      const stored = readRecoveryMarker();
+      if (stored.state === "unavailable" || (required && (stored.state !== "present" || !writeRecoveryMarker(markerFor(required))))) {
+        setNotice("Recovery information is unavailable. Do not start another request."); return;
+      }
+      if (!required && stored.state === "present") {
+        required = { ...stored.marker, displayName: null }; requiredRecovery.current = required; setRecoveryLocked(true);
+      }
       const result = await runChildCreation(required ? { operation: "status", expectedActorId: required.actor } : { operation: "status" });
       if (currentGeneration !== generation.current) return;
       if (!result.ok || result.operation !== "status" || (required && result.actorId.toLowerCase() !== required.actor.toLowerCase())) {
@@ -69,7 +84,8 @@ export default function ChildCreationPanel() {
           ? sameId(result.current.requestId, required.requestId) && sameId(result.current.priorIntentId, required.priorIntentId)
           : sameId(result.current.intentId, required.priorIntentId) && result.current.acknowledged);
         if (resolved) {
-          if (required.operation === "begin") window.dispatchEvent(new Event(CHILD_CREATION_CONFIRMED));
+          if (!clearRecoveryMarker(markerFor(required))) { setNotice("Unable to complete recovery. Check the status again."); return; }
+          window.dispatchEvent(new Event(CHILD_CREATION_CONFIRMED));
           requiredRecovery.current = null; setRecoveryLocked(false);
         } else {
           setActor(result.actorId);
@@ -97,6 +113,12 @@ export default function ChildCreationPanel() {
       catch { setNotice("Unable to start the request. Please try again."); return; }
     }
     const scope: Recovery = { actor, operation, priorIntentId, requestId, displayName: operation === "begin" ? cleanName : null };
+    const stored = readRecoveryMarker();
+    if ((!retry && stored.state !== "none") || (retry && stored.state !== "present") || !writeRecoveryMarker(markerFor(scope))) {
+      setChecked(false); setAdding(false); setName(""); setRecoveryLocked(true);
+      if (stored.state === "present") requiredRecovery.current = { ...stored.marker, displayName: null };
+      setNotice("Recovery information is unavailable or another request is unresolved. Check its status before continuing."); return;
+    }
     writeContext.current = scope; inFlight.current = true; setBusy(true); setRetryReady(false); setNotice("");
     const currentGeneration = ++generation.current;
     if (operation === "begin") window.dispatchEvent(new Event(CHILD_PROFILES_CHANGED));
@@ -114,7 +136,8 @@ export default function ChildCreationPanel() {
           || (result.operation === "begin" && (confirmation.current.childId !== result.current.childId || confirmation.current.name !== result.current.name
             || !sameId(confirmation.current.requestId, requestId) || !sameId(confirmation.current.priorIntentId, priorIntentId)))
           || (operation === "ack" && (!confirmation.current.acknowledged || confirmation.current.childId !== current?.childId || confirmation.current.name !== current.name))) throw new Error("unconfirmed");
-      if (operation === "begin") window.dispatchEvent(new Event(CHILD_CREATION_CONFIRMED));
+      if (!clearRecoveryMarker(markerFor(scope))) throw new Error("recovery marker not cleared");
+      window.dispatchEvent(new Event(CHILD_CREATION_CONFIRMED));
       requiredRecovery.current = null; setRecoveryLocked(false); setChecked(true); setCurrent(confirmation.current); setAdding(false); setName("");
     } catch {
       if (currentGeneration === generation.current) {

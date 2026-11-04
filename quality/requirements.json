@@ -10467,6 +10467,336 @@
         "apps/web/src/app/parent/children/page.tsx",
         "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
       ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-CHILDCREATIONRECOVERY-01",
+      "domain": "parent-child-creation-journey",
+      "description": "childCreationRecovery > reports no recovery marker in a fresh tab.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "childCreationRecovery > reports no recovery marker in a fresh tab"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-recovery.test.ts::childCreationRecovery > reports no recovery marker in a fresh tab"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-recovery.test.ts",
+        "apps/web/src/lib/parent/child-creation-recovery.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-CHILDCREATIONRECOVERY-02",
+      "domain": "parent-child-creation-journey",
+      "description": "childCreationRecovery > stores and reads only the validated request reference.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "childCreationRecovery > stores and reads only the validated request reference"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-recovery.test.ts::childCreationRecovery > stores and reads only the validated request reference"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-recovery.test.ts",
+        "apps/web/src/lib/parent/child-creation-recovery.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-CHILDCREATIONRECOVERY-03",
+      "domain": "parent-child-creation-journey",
+      "description": "childCreationRecovery > does not overwrite an unresolved different request.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "childCreationRecovery > does not overwrite an unresolved different request"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-recovery.test.ts::childCreationRecovery > does not overwrite an unresolved different request"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-recovery.test.ts",
+        "apps/web/src/lib/parent/child-creation-recovery.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-CHILDCREATIONRECOVERY-04",
+      "domain": "parent-child-creation-journey",
+      "description": "childCreationRecovery > permits reusing the exact existing marker.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "childCreationRecovery > permits reusing the exact existing marker"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-recovery.test.ts::childCreationRecovery > permits reusing the exact existing marker"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-recovery.test.ts",
+        "apps/web/src/lib/parent/child-creation-recovery.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-CHILDCREATIONRECOVERY-05",
+      "domain": "parent-child-creation-journey",
+      "description": "childCreationRecovery > rejects malformed, unexpected or unsupported stored data.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "childCreationRecovery > rejects malformed, unexpected or unsupported stored data"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-recovery.test.ts::childCreationRecovery > rejects malformed, unexpected or unsupported stored data"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-recovery.test.ts",
+        "apps/web/src/lib/parent/child-creation-recovery.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-CHILDCREATIONRECOVERY-06",
+      "domain": "parent-child-creation-journey",
+      "description": "childCreationRecovery > clears only the exact confirmed marker.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "childCreationRecovery > clears only the exact confirmed marker"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-recovery.test.ts::childCreationRecovery > clears only the exact confirmed marker"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-recovery.test.ts",
+        "apps/web/src/lib/parent/child-creation-recovery.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-CHILDCREATIONRECOVERY-07",
+      "domain": "parent-child-creation-journey",
+      "description": "childCreationRecovery > accepts acknowledgement markers with a valid intent.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "childCreationRecovery > accepts acknowledgement markers with a valid intent"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-recovery.test.ts::childCreationRecovery > accepts acknowledgement markers with a valid intent"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-recovery.test.ts",
+        "apps/web/src/lib/parent/child-creation-recovery.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-CHILDCREATIONRECOVERY-08",
+      "domain": "parent-child-creation-journey",
+      "description": "childCreationRecovery > fails closed when storage cannot be read or written.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "childCreationRecovery > fails closed when storage cannot be read or written"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-recovery.test.ts::childCreationRecovery > fails closed when storage cannot be read or written"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-recovery.test.ts",
+        "apps/web/src/lib/parent/child-creation-recovery.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-CHILDCREATIONRECOVERY-09",
+      "domain": "parent-child-creation-journey",
+      "description": "childCreationRecovery > does not report successful removal when storage cannot remove.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "childCreationRecovery > does not report successful removal when storage cannot remove"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-recovery.test.ts::childCreationRecovery > does not report successful removal when storage cannot remove"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-recovery.test.ts",
+        "apps/web/src/lib/parent/child-creation-recovery.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-PARENTCHILDPANELS-01",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > recovers an uncertain request after remount without storing the child name.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > recovers an uncertain request after remount without storing the child name"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > recovers an uncertain request after remount without storing the child name"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-PARENTCHILDPANELS-02",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > does not submit a profile if recovery storage cannot be written.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > does not submit a profile if recovery storage cannot be written"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > does not submit a profile if recovery storage cannot be written"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-PARENTCHILDPANELS-03",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > keeps the list and new requests blocked when restored status is empty.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > keeps the list and new requests blocked when restored status is empty"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > keeps the list and new requests blocked when restored status is empty"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-PARENTCHILDPANELS-04",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > keeps recovery locked if confirmation cannot remove the marker.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > keeps recovery locked if confirmation cannot remove the marker"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > keeps recovery locked if confirmation cannot remove the marker"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-PARENTCHILDPANELS-05",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > fails closed on invalid stored recovery data.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > fails closed on invalid stored recovery data"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > fails closed on invalid stored recovery data"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-FLAG-01",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > blocks the read-only list when creation is disabled after an unresolved request.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > blocks the read-only list when creation is disabled after an unresolved request"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > blocks the read-only list when creation is disabled after an unresolved request"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
     }
   ]
 }

@@ -13,6 +13,7 @@ const current = { intentId: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", childId: "bb
 
 describe("ParentChildPanels", () => {
   beforeEach(() => {
+    sessionStorage.clear();
     vi.resetAllMocks(); vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
     vi.spyOn(globalThis.crypto, "randomUUID").mockReturnValue(request);
     mocks.observe.mockReturnValue(() => {}); mocks.list.mockResolvedValue({ ok: true, children: [] });
@@ -93,6 +94,74 @@ describe("ParentChildPanels", () => {
     act(() => listeners.forEach((listener) => listener("SIGNED_OUT")));
     expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
     expect(screen.getByText(/profile request remains unresolved/i)).toBeInTheDocument();
+  });
+
+  it("recovers an uncertain request after remount without storing the child name", async () => {
+    mocks.run.mockReset();
+    mocks.run.mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: null })
+      .mockResolvedValueOnce({ ok: false, error: "unavailable" });
+    const view = render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.change(await screen.findByLabelText("Child name"), { target: { value: "Asha" } });
+    fireEvent.click(screen.getByRole("button", { name: "Create profile" }));
+    await screen.findByText(/unable to confirm the profile/i);
+    expect(sessionStorage.getItem("parentplus.child-creation-recovery.v1")).not.toContain("Asha");
+    view.unmount();
+    mocks.run.mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    expect(await screen.findByRole("button", { name: "Load profiles" })).toBeDisabled();
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    expect(await screen.findByRole("button", { name: "Confirm result" })).toBeInTheDocument();
+    expect(mocks.run).toHaveBeenLastCalledWith({ operation: "status", expectedActorId: actor });
+    expect(sessionStorage.length).toBe(0);
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeEnabled();
+  });
+
+  it("does not submit a profile if recovery storage cannot be written", async () => {
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.change(await screen.findByLabelText("Child name"), { target: { value: "Asha" } });
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => { throw new Error("blocked"); });
+    fireEvent.click(screen.getByRole("button", { name: "Create profile" }));
+    expect(await screen.findByText(/recovery information is unavailable/i)).toBeInTheDocument();
+    expect(mocks.run).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the list and new requests blocked when restored status is empty", async () => {
+    sessionStorage.setItem("parentplus.child-creation-recovery.v1", JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: null, requestId: request }));
+    mocks.run.mockReset(); mocks.run.mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: null });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    expect(await screen.findByRole("button", { name: "Load profiles" })).toBeDisabled();
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    expect(await screen.findByText(/do not start another/i)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Retry same request" })).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Child name")).not.toBeInTheDocument();
+  });
+
+  it("keeps recovery locked if confirmation cannot remove the marker", async () => {
+    sessionStorage.setItem("parentplus.child-creation-recovery.v1", JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: null, requestId: request }));
+    mocks.run.mockReset(); mocks.run.mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current });
+    vi.spyOn(Storage.prototype, "removeItem").mockImplementation(() => { throw new Error("blocked"); });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    expect(await screen.findByText(/unable to complete recovery/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+    expect(screen.queryByText("Profile: Asha")).not.toBeInTheDocument();
+  });
+
+  it("fails closed on invalid stored recovery data", async () => {
+    sessionStorage.setItem("parentplus.child-creation-recovery.v1", "invalid");
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    expect(await screen.findByText(/session monitoring is unavailable/i)).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "Load profiles" })).toBeDisabled();
+    expect(mocks.run).not.toHaveBeenCalled();
+  });
+
+  it("blocks the read-only list when creation is disabled after an unresolved request", async () => {
+    sessionStorage.setItem("parentplus.child-creation-recovery.v1", JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: null, requestId: request }));
+    render(<CreatedChildrenPanel />);
+    expect(await screen.findByRole("button", { name: "Load profiles" })).toBeDisabled();
+    expect(mocks.list).not.toHaveBeenCalled();
   });
 
 });

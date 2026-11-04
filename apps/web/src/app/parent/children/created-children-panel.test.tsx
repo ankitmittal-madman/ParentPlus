@@ -9,6 +9,7 @@ const child = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
 
 describe("CreatedChildrenPanel", () => {
   beforeEach(() => {
+    sessionStorage.clear();
     vi.resetAllMocks(); vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
     mocks.observe.mockReturnValue(() => {});
     mocks.list.mockResolvedValue({ ok: true, children: [{ id: child, name: "Asha" }] });

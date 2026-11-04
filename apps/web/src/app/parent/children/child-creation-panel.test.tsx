@@ -13,6 +13,7 @@ const current = { intentId: intent, childId: child, name: "Asha", acknowledged: 
 
 describe("ChildCreationPanel", () => {
   beforeEach(() => {
+    sessionStorage.clear();
     vi.resetAllMocks(); vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
     mocks.observe.mockReturnValue(() => {});
     vi.spyOn(globalThis.crypto, "randomUUID").mockReturnValue(request);
