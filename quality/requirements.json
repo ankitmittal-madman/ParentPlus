@@ -2848,6 +2848,153 @@
       ]
     },
     {
+      "id": "DB-CLASS-DISCOVERY-07",
+      "domain": "class-setup-discovery-private",
+      "description": "Snapshot paging can miss later inserts behind the cursor; a new sweep finds them.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "archive discovery requires rescan after insertion behind cursor"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_archived_discovery_requires_rescan_when_new_id_sorts_before_cursor"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-DISCOVERY-01",
+      "domain": "class-setup-discovery-private",
+      "description": "test archived class discovery pages only own records.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archived class discovery pages only own records"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_archived_class_discovery_pages_only_own_records"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-DISCOVERY-02",
+      "domain": "class-setup-discovery-private",
+      "description": "test archived class discovery hides other manager and denies apps.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archived class discovery hides other manager and denies apps"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_archived_class_discovery_hides_other_manager_and_denies_apps"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-DISCOVERY-03",
+      "domain": "class-setup-discovery-private",
+      "description": "test archived class discovery rejects invalid limits and unauthorized.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archived class discovery rejects invalid limits and unauthorized"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_archived_class_discovery_rejects_invalid_limits_and_unauthorized"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-DISCOVERY-04",
+      "domain": "class-setup-discovery-private",
+      "description": "test archived class discovery rejects mismatched batch.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archived class discovery rejects mismatched batch"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_archived_class_discovery_rejects_mismatched_batch"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-DISCOVERY-05",
+      "domain": "class-setup-discovery-private",
+      "description": "test archived discovery waits for advance.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archived discovery waits for advance"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_archived_discovery_waits_for_advance"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-DISCOVERY-06",
+      "domain": "class-setup-discovery-private",
+      "description": "test advance waits for archived discovery.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test advance waits for archived discovery"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_advance_waits_for_archived_discovery"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002700_private_archived_class_discovery.sql"
+      ]
+    },
+    {
       "id": "DB-CLASS-RESERVATION-01",
       "domain": "class-setup-reservation-private",
       "description": "test class setup reservation returns same id for matching retry.",

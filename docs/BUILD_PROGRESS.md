@@ -118,3 +118,5 @@ A private local next-class transition draft uses retained history and payload-bo
 A private local recovery draft can return current reservation and next-request details to the same authorised actor. It does not recover an older archived result or complete app-facing class setup.
 
 A private local lookup can retrieve a known archived class setup for the same authorised manager. Discovering a lost identifier and the end-to-end application journey remain unfinished.
+
+A private local archive-discovery draft adds bounded, UUID-ordered pages for the same authorised manager. Pages are snapshots, not chronological or guaranteed complete across concurrent changes; application integration remains unfinished.

@@ -1161,3 +1161,70 @@ DO $$ BEGIN BEGIN PERFORM public.recover_private_archived_class_setup('a0000000-
 SELECT 'denied'; ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-1],'denied')
+
+    def test_archived_class_discovery_pages_only_own_records(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE first_intent AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT * FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM first_intent)); SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM first_intent));
+CREATE TEMP TABLE second_intent AS SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM first_intent),'e6000000-0000-4000-8000-000000000001','Art','Morning') AS id;
+SELECT * FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM second_intent)); SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM second_intent));
+SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM second_intent),'e6000000-0000-4000-8000-000000000002','Yoga','Evening');
+CREATE TEMP TABLE page1 AS SELECT * FROM public.list_private_archived_class_setups('a0000000-0000-4000-8000-000000000001',NULL,1);
+CREATE TEMP TABLE page2 AS SELECT * FROM public.list_private_archived_class_setups('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM page1),1);
+SELECT (SELECT count(*) FROM page1)=1 AND (SELECT count(*) FROM page2)=1 AND (SELECT intent_id FROM page1)<>(SELECT intent_id FROM page2) AND (SELECT count(*) FROM public.list_private_archived_class_setups('a0000000-0000-4000-8000-000000000001',NULL,50))=2 AND (SELECT count(*) FROM public.list_private_archived_class_setups('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM page2),1))=0; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1],'t')
+
+    def test_archived_class_discovery_hides_other_manager_and_denies_apps(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner';
+INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('a0000000-0000-4000-8000-000000000001','22222222-2222-4222-8222-222222222222','admin','active');
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE prior AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT * FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior)); SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000001','Art','Morning');
+SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
+SELECT count(*) FROM public.list_private_archived_class_setups('a0000000-0000-4000-8000-000000000001',NULL,50);
+SELECT NOT has_function_privilege('authenticated','public.list_private_archived_class_setups(uuid,uuid,integer)','EXECUTE') AND NOT has_function_privilege('anon','public.list_private_archived_class_setups(uuid,uuid,integer)','EXECUTE'); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-2:],['0','t'])
+
+    def test_archived_class_discovery_rejects_invalid_limits_and_unauthorized(self):
+        out=run_sql(SETUP + """
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+DO $$ BEGIN BEGIN PERFORM public.list_private_archived_class_setups('a0000000-0000-4000-8000-000000000001',NULL,1); RAISE EXCEPTION 'coach accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+DO $$ BEGIN BEGIN PERFORM public.list_private_archived_class_setups('a0000000-0000-4000-8000-000000000001',NULL,0); RAISE EXCEPTION 'zero accepted'; EXCEPTION WHEN invalid_parameter_value THEN NULL; END;
+ BEGIN PERFORM public.list_private_archived_class_setups('a0000000-0000-4000-8000-000000000001',NULL,51); RAISE EXCEPTION 'large accepted'; EXCEPTION WHEN invalid_parameter_value THEN NULL; END;
+ BEGIN PERFORM public.list_private_archived_class_setups('a0000000-0000-4000-8000-000000000001',NULL,NULL); RAISE EXCEPTION 'null accepted'; EXCEPTION WHEN invalid_parameter_value THEN NULL; END; END $$;
+UPDATE public.class_setup_controls SET enabled=false WHERE id=true;
+DO $$ BEGIN BEGIN PERFORM public.list_private_archived_class_setups('a0000000-0000-4000-8000-000000000001',NULL,1); RAISE EXCEPTION 'disabled accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+SELECT 'denied'; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1],'denied')
+
+    def test_archived_class_discovery_rejects_mismatched_batch(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001'; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE prior AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT * FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior)); SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000001','Art','Morning');
+INSERT INTO public.batches (id,workspace_id,course_id,name) VALUES ('d0000000-0000-4000-8000-000000000001','a0000000-0000-4000-8000-000000000001','c0000000-0000-4000-8000-000000000001','Unrelated');
+UPDATE public.class_setup_intent_history SET completed_batch_id='d0000000-0000-4000-8000-000000000001' WHERE id=(SELECT id FROM prior);
+DO $$ BEGIN BEGIN PERFORM public.list_private_archived_class_setups('a0000000-0000-4000-8000-000000000001',NULL,50); RAISE EXCEPTION 'mismatch accepted'; EXCEPTION WHEN object_not_in_prerequisite_state THEN NULL; END; END $$;
+SELECT 'denied'; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1],'denied')
+
+    def test_archived_discovery_requires_rescan_when_new_id_sorts_before_cursor(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001'; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+INSERT INTO public.batches (id,workspace_id,course_id,name) VALUES ('d0000000-0000-4000-8000-000000000001','a0000000-0000-4000-8000-000000000001','c0000000-0000-4000-8000-000000000001','Morning');
+INSERT INTO public.class_setup_intent_history (id,actor_id,workspace_id,course_name,batch_name,completed_course_id,completed_batch_id,acknowledged) VALUES ('f0000000-0000-4000-8000-000000000002','11111111-1111-4111-8111-111111111111','a0000000-0000-4000-8000-000000000001','Music','Morning','c0000000-0000-4000-8000-000000000001','d0000000-0000-4000-8000-000000000001',true);
+CREATE TEMP TABLE page1 AS SELECT * FROM public.list_private_archived_class_setups('a0000000-0000-4000-8000-000000000001',NULL,1);
+INSERT INTO public.class_setup_intent_history (id,actor_id,workspace_id,course_name,batch_name,completed_course_id,completed_batch_id,acknowledged) VALUES ('f0000000-0000-4000-8000-000000000001','11111111-1111-4111-8111-111111111111','a0000000-0000-4000-8000-000000000001','Music','Morning','c0000000-0000-4000-8000-000000000001','d0000000-0000-4000-8000-000000000001',true);
+SELECT (SELECT count(*) FROM public.list_private_archived_class_setups('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM page1),50)) || ':' || (SELECT count(*) FROM public.list_private_archived_class_setups('a0000000-0000-4000-8000-000000000001',NULL,50)); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1],'0:2')
