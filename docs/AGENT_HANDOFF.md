@@ -226,3 +226,7 @@ A local-only, app-inaccessible status function checks active manager/workspace a
 ## Direct creation access restriction — 2026-11-04
 
 Draft migration 022 revokes app-role execution on all three legacy course/batch creation entrypoints. A separate test executes each as an authenticated manager with the control enabled and expects denial. Historical wrapper behavior tests temporarily grant execution only in disposable test fixtures; their successful calls do not describe current application permissions. Frontend action unit tests mock the provider and do not establish live access; the existing server action will fail against the restricted database and remains disconnected. Reservation APIs, status and completion are still private, so no class setup UI is enabled. Verify effective hosted ownership/role memberships and migration rollout before any future deployment.
+
+## Old class setup server action disabled — 2026-11-04
+
+The server action still validates inputs and identity when its flag is enabled, but returns unavailable without invoking the legacy unreserved RPC. This is an additional application-side safeguard, not an operational class setup journey. Three old mock-RPC behavior tests were replaced by tests asserting that no RPC is invoked; existing input, identity, account-change and error-redaction checks remain. Database restriction, reservation access, status recovery, acknowledgement, real provider and UI work still need the documented review before exposure.

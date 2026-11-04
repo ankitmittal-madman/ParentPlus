@@ -2975,7 +2975,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-09",
       "domain": "class-setup-server-boundary",
-      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > rejects a retry when the signed-in account has changed.",
+      "description": "Mocked identity behavior; legacy RPC is disabled: createClassSetup > rejects a retry when the signed-in account has changed.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2997,7 +2997,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-10",
       "domain": "class-setup-server-boundary",
-      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > rejects a missing or malformed expected actor before contacting the provider.",
+      "description": "Mocked identity behavior; legacy RPC is disabled: createClassSetup > rejects a missing or malformed expected actor before contacting the provider.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3151,7 +3151,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-01",
       "domain": "class-setup-server-boundary",
-      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > fails closed without constructing a client when disabled.",
+      "description": "Mocked identity behavior; legacy RPC is disabled: createClassSetup > fails closed without constructing a client when disabled.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3173,7 +3173,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-02",
       "domain": "class-setup-server-boundary",
-      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > rejects malformed IDs and names before constructing a client.",
+      "description": "Mocked identity behavior; legacy RPC is disabled: createClassSetup > rejects malformed IDs and names before constructing a client.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3195,7 +3195,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-03",
       "domain": "class-setup-server-boundary",
-      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > rejects a missing user without calling the RPC.",
+      "description": "Mocked identity behavior; legacy RPC is disabled: createClassSetup > rejects a missing user without calling the RPC.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3217,7 +3217,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-04",
       "domain": "class-setup-server-boundary",
-      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > rejects a provider identity error without calling the RPC.",
+      "description": "Mocked identity behavior; legacy RPC is disabled: createClassSetup > rejects a provider identity error without calling the RPC.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3239,17 +3239,17 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-05",
       "domain": "class-setup-server-boundary",
-      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > sends normalized values and the original retry ID to the atomic RPC.",
+      "description": "Mocked identity behavior; legacy RPC is disabled: createClassSetup > does not call the old RPC after identity verification.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
       "scenarios": [
-        "createClassSetup > sends normalized values and the original retry ID to the atomic RPC"
+        "createClassSetup > does not call the old RPC after identity verification"
       ],
       "tests": [
         {
           "suite": "frontend",
-          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > sends normalized values and the original retry ID to the atomic RPC"
+          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > does not call the old RPC after identity verification"
         }
       ],
       "sources": [
@@ -3261,17 +3261,17 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-06",
       "domain": "class-setup-server-boundary",
-      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > redacts RPC errors.",
+      "description": "Mocked identity behavior; legacy RPC is disabled: createClassSetup > does not invoke the old RPC even if it would expose an error.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
       "scenarios": [
-        "createClassSetup > redacts RPC errors"
+        "createClassSetup > does not invoke the old RPC even if it would expose an error"
       ],
       "tests": [
         {
           "suite": "frontend",
-          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > redacts RPC errors"
+          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > does not invoke the old RPC even if it would expose an error"
         }
       ],
       "sources": [
@@ -3283,7 +3283,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-07",
       "domain": "class-setup-server-boundary",
-      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > redacts thrown client errors.",
+      "description": "Mocked identity behavior; legacy RPC is disabled: createClassSetup > redacts thrown client errors.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3305,17 +3305,17 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-08",
       "domain": "class-setup-server-boundary",
-      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > does not claim success for malformed RPC results.",
+      "description": "Mocked identity behavior; legacy RPC is disabled: createClassSetup > does not use mocked RPC results to claim success.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
       "scenarios": [
-        "createClassSetup > does not claim success for malformed RPC results"
+        "createClassSetup > does not use mocked RPC results to claim success"
       ],
       "tests": [
         {
           "suite": "frontend",
-          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > does not claim success for malformed RPC results"
+          "ref": "apps/web/src/lib/scheduling/create-class-setup.test.ts::createClassSetup > does not use mocked RPC results to claim success"
         }
       ],
       "sources": [

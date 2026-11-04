@@ -56,14 +56,16 @@ describe("createClassSetup", () => {
     expect(mocks.createClient).not.toHaveBeenCalled();
   });
 
-  it("sends normalized values and the original retry ID to the atomic RPC", async () => {
-    expect(await createClassSetup({ ...input, actorId: "untrusted-actor" })).toEqual({ ok: true, courseId: ids.course_id, batchId: ids.batch_id });
-    expect(mocks.rpc).toHaveBeenCalledWith("create_course_and_batch", { p_workspace_id: input.workspaceId, p_request_id: input.requestId, p_course_name: "Dance", p_batch_name: "Beginners" });
+  it("does not call the old RPC after identity verification", async () => {
+    expect(await createClassSetup({ ...input, actorId: "untrusted-actor" })).toEqual({ ok: false, error: "Class setup is not available." });
+    expect(mocks.getUser).toHaveBeenCalled();
+    expect(mocks.rpc).not.toHaveBeenCalled();
   });
 
-  it("redacts RPC errors", async () => {
+  it("does not invoke the old RPC even if it would expose an error", async () => {
     mocks.rpc.mockResolvedValue({ data: null, error: { message: "private database detail" } });
-    expect(await createClassSetup(input)).toEqual({ ok: false, error: "Unable to complete class setup." });
+    expect(await createClassSetup(input)).toEqual({ ok: false, error: "Class setup is not available." });
+    expect(mocks.rpc).not.toHaveBeenCalled();
   });
 
   it("redacts thrown client errors", async () => {
@@ -71,10 +73,8 @@ describe("createClassSetup", () => {
     expect(await createClassSetup(input)).toEqual({ ok: false, error: "Unable to complete class setup." });
   });
 
-  it("does not claim success for malformed RPC results", async () => {
-    for (const data of [null, [], [ids, ids], [{ course_id: "invalid", batch_id: ids.batch_id }]]) {
-      mocks.rpc.mockResolvedValue({ data, error: null });
-      expect(await createClassSetup(input)).toEqual({ ok: false, error: "Unable to complete class setup." });
-    }
+  it("does not use mocked RPC results to claim success", async () => {
+    expect(await createClassSetup(input)).toEqual({ ok: false, error: "Class setup is not available." });
+    expect(mocks.rpc).not.toHaveBeenCalled();
   });
 });
