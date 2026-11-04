@@ -4922,6 +4922,446 @@
       ]
     },
     {
+      "id": "FE-CLASS-RECOVERY-PANEL-01",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > loads authorised academies only after a deliberate request.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > loads authorised academies only after a deliberate request"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > loads authorised academies only after a deliberate request"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-02",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > shows a selected academy's pending recovery without creating a class.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > shows a selected academy's pending recovery without creating a class"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > shows a selected academy's pending recovery without creating a class"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-03",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > does not describe unknown as a failed or absent setup.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > does not describe unknown as a failed or absent setup"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > does not describe unknown as a failed or absent setup"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-04",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > ignores an earlier academy response after selection changes.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > ignores an earlier academy response after selection changes"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > ignores an earlier academy response after selection changes"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-05",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > clears displayed details on an authentication change.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > clears displayed details on an authentication change"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > clears displayed details on an authentication change"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-06",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > fails closed if session observation cannot be installed.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > fails closed if session observation cannot be installed"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > fails closed if session observation cannot be installed"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-07",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > fails closed when live session observation is disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > fails closed when live session observation is disabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > fails closed when live session observation is disabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-08",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > shows a safe empty state when no academy is eligible.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > shows a safe empty state when no academy is eligible"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > shows a safe empty state when no academy is eligible"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-09",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > clears sensitive details when the page regains focus.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > clears sensitive details when the page regains focus"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > clears sensitive details when the page regains focus"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-10",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > ignores a pending academy list after an authentication change.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > ignores a pending academy list after an authentication change"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > ignores a pending academy list after an authentication change"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-11",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > ignores pending recovery after an authentication change.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > ignores pending recovery after an authentication change"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > ignores pending recovery after an authentication change"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-12",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > does not send a workspace outside the returned list.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > does not send a workspace outside the returned list"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > does not send a workspace outside the returned list"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-13",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > does not reveal provider error details.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > does not reveal provider error details"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > does not reveal provider error details"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-14",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > prevents duplicate loads and unsubscribes on unmount.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > prevents duplicate loads and unsubscribes on unmount"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > prevents duplicate loads and unsubscribes on unmount"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-15",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > clears displayed details when the page becomes visible.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > clears displayed details when the page becomes visible"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > clears displayed details when the page becomes visible"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-16",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > distinguishes an acknowledged completion.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > distinguishes an acknowledged completion"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > distinguishes an acknowledged completion"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-17",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > ignores a late session callback after unmount.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > ignores a late session callback after unmount"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > ignores a late session callback after unmount"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-18",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryPanel > shows completed state without assuming it was acknowledged.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryPanel > shows completed state without assuming it was acknowledged"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > shows completed state without assuming it was acknowledged"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-19",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryGate > checks the server flag after establishing a request and stays hidden by default.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryGate > checks the server flag after establishing a request and stays hidden by default"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-gate.test.tsx::ClassRecoveryGate > checks the server flag after establishing a request and stays hidden by default"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-gate.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-gate.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-PANEL-20",
+      "domain": "class-recovery-panel",
+      "description": "ClassRecoveryGate > only exposes the read-only panel when explicitly enabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ClassRecoveryGate > only exposes the read-only panel when explicitly enabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-gate.test.tsx::ClassRecoveryGate > only exposes the read-only panel when explicitly enabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-recovery-gate.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-gate.tsx",
+        "apps/web/src/app/(coach)/schedule/page.tsx"
+      ]
+    },
+    {
       "id": "FE-CLASS-SETUP-SERVER-01",
       "domain": "class-setup-server-boundary",
       "description": "Mocked identity behavior; legacy RPC is disabled: createClassSetup > fails closed without constructing a client when disabled.",

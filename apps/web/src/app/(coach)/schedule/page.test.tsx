@@ -1,6 +1,8 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import SchedulePage from "./page";
+
+vi.mock("./class-recovery-gate", () => ({ default: () => null }));
 
 describe("SchedulePage", () => {
   it("identifies the schedule as example data", () => {

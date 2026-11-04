@@ -10,6 +10,7 @@ test("shows a clearly labelled example schedule", async ({ page }) => {
   page.on("request", (request) => { if (request.method() !== "GET" && request.method() !== "HEAD") writes.push(request.url()); });
   await page.goto("/schedule");
   await expect(page.getByRole("heading", { name: "Schedule", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Check class setup" })).toHaveCount(0);
   await expect(page.getByText(/example data.*not real classes/i)).toBeVisible();
   const sessions = page.getByRole("list", { name: "Example sessions" });
   await expect(sessions.getByText("Clay Basics")).toBeVisible();
