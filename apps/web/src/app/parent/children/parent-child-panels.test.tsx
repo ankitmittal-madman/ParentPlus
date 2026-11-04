@@ -152,7 +152,7 @@ describe("ParentChildPanels", () => {
   it("fails closed on invalid stored recovery data", async () => {
     sessionStorage.setItem("parentplus.child-creation-recovery.v1", "invalid");
     render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
-    expect(await screen.findByText(/session monitoring is unavailable/i)).toBeInTheDocument();
+    expect(await screen.findByText(/saved request information is unavailable/i)).toBeInTheDocument();
     expect(await screen.findByRole("button", { name: "Load profiles" })).toBeDisabled();
     expect(mocks.run).not.toHaveBeenCalled();
   });
@@ -246,6 +246,19 @@ describe("ParentChildPanels", () => {
     expect(sessionStorage.getItem(key)).not.toBeNull();
     expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
     expect(screen.queryByText("Result confirmed")).not.toBeInTheDocument();
+  });
+
+  it("explains unavailable browser storage without sending requests or exposing profiles", async () => {
+    vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => { throw new Error("blocked"); });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    expect(await screen.findByText(/saved request information is unavailable/i)).toHaveTextContent(/browser storage/i);
+    expect(await screen.findByRole("button", { name: "Load profiles" })).toBeDisabled();
+    expect(screen.getByText(/list cannot be loaded until browser storage can be checked/i)).toBeInTheDocument();
+    fireEvent.focus(window);
+    expect(screen.getByText(/list cannot be loaded until browser storage can be checked/i)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Check creation status" })).not.toBeInTheDocument();
+    expect(mocks.run).not.toHaveBeenCalled();
+    expect(mocks.list).not.toHaveBeenCalled();
   });
 
 });

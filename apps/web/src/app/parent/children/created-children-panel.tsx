@@ -6,6 +6,8 @@ import { listCreatedChildren } from "@/lib/parent/list-created-children";
 import { readRecoveryMarker } from "@/lib/parent/child-creation-recovery";
 import { CHILD_CREATION_CONFIRMED, CHILD_PROFILES_CHANGED } from "@/lib/parent/events";
 
+const storageNotice = "The list cannot be loaded until browser storage can be checked. Check browser settings and reload; saved information may also be invalid. Do not clear saved data while a request may be pending.";
+
 type Children = { id: string; name: string }[];
 
 export default function CreatedChildrenPanel() {
@@ -25,21 +27,22 @@ export default function CreatedChildrenPanel() {
       if (!active) return;
       generation.current += 1; busy.current = false;
       setChildren(null); setLoading(false);
-      setNotice(creationPendingRef.current ? "A profile request remains unresolved. The list will be available after recovery is completed." : "Your session may have changed. Load profiles again to continue.");
+      setNotice(creationPendingRef.current ? (readRecoveryMarker().state === "unavailable" ? storageNotice : "A profile request remains unresolved. The list will be available after recovery is completed.") : "Your session may have changed. Load profiles again to continue.");
     };
     const visible = () => { if (document.visibilityState === "visible") invalidate(); };
-    const clearForCreation = (pending: boolean) => {
+    const clearForCreation = (pending: boolean, unavailable = false) => {
       if (!active) return;
       creationPendingRef.current = pending; setCreationPending(pending);
       generation.current += 1; busy.current = false;
       setChildren(null); setLoading(false);
-      setNotice(pending ? "A profile request remains unresolved. The list will be available after recovery is completed." : "The profile list may have changed. Load profiles again to refresh.");
+      setNotice(unavailable ? storageNotice : pending ? "A profile request remains unresolved. The list will be available after recovery is completed." : "The profile list may have changed. Load profiles again to refresh.");
     };
     const profileChanged = () => clearForCreation(true);
-    const profileConfirmed = () => clearForCreation(readRecoveryMarker().state !== "none");
+    const profileConfirmed = () => { const state = readRecoveryMarker().state; clearForCreation(state !== "none", state === "unavailable"); };
     try {
       if (process.env.NEXT_PUBLIC_ENABLE_LIVE_OTP !== "true") throw new Error("Session observation disabled");
-      if (readRecoveryMarker().state !== "none") clearForCreation(true);
+      const stored = readRecoveryMarker();
+      if (stored.state !== "none") clearForCreation(true, stored.state === "unavailable");
       unsubscribe = observeSessionChanges(invalidate);
       window.addEventListener("focus", invalidate);
       window.addEventListener(CHILD_PROFILES_CHANGED, profileChanged);
@@ -59,9 +62,10 @@ export default function CreatedChildrenPanel() {
 
   async function load() {
     if (monitor !== "ready" || busy.current || creationPendingRef.current) return;
-    if (readRecoveryMarker().state !== "none") {
+    const stored = readRecoveryMarker();
+    if (stored.state !== "none") {
       creationPendingRef.current = true; setCreationPending(true); setChildren(null);
-      setNotice("A profile request remains unresolved. The list will be available after recovery is completed."); return;
+      setNotice(stored.state === "unavailable" ? storageNotice : "A profile request remains unresolved. The list will be available after recovery is completed."); return;
     }
     busy.current = true; setLoading(true); setChildren(null); setNotice("");
     const current = ++generation.current;

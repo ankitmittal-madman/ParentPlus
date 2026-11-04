@@ -10907,6 +10907,29 @@
         "apps/web/src/app/parent/children/child-creation-panel.tsx",
         "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
       ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-STORAGE-MESSAGE-01",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > explains unavailable browser storage without sending requests or exposing profiles.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > explains unavailable browser storage without sending requests or exposing profiles"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > explains unavailable browser storage without sending requests or exposing profiles"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
     }
   ]
 }

@@ -1,6 +1,10 @@
 # ParentPlus Build Progress
 
 
+## Child-profile recovery guidance — 2026-11-04
+
+When browser storage is blocked or contains invalid recovery information, the default-off profile panels now explain why they cannot continue and warn against clearing saved data while a request may be pending. This improves guidance only; it does not resolve an invalid marker or provide cross-tab and identity-loss recovery.
+
 ## Child confirmation recovery draft — 2026-11-04
 
 An interrupted acknowledgement can now be explicitly retried after same-tab reload when the original account and exact unacknowledged intent are confirmed. The list remains locked until a fresh status verifies acknowledgement. A temporary storage-write failure no longer leaves the form permanently locked after storage and status checks recover. This remains a default-off local draft; identity-loss, cross-device and live-provider recovery are not resolved.

@@ -12,7 +12,7 @@ const markerFor = (r: Recovery): RecoveryMarker => ({ version: 1, actor: r.actor
 const sameId = (left: string | null, right: string | null) => (left?.toLowerCase() ?? null) === (right?.toLowerCase() ?? null);
 
 export default function ChildCreationPanel() {
-  const [monitor, setMonitor] = useState<"checking" | "ready" | "unavailable">("checking");
+  const [monitor, setMonitor] = useState<"checking" | "ready" | "unavailable" | "storage-unavailable">("checking");
   const [actor, setActor] = useState("");
   const [checked, setChecked] = useState(false);
   const [current, setCurrent] = useState<Current | null>(null);
@@ -44,7 +44,10 @@ export default function ChildCreationPanel() {
     try {
       if (process.env.NEXT_PUBLIC_ENABLE_LIVE_OTP !== "true") throw new Error("Session observation disabled");
       const stored = readRecoveryMarker();
-      if (stored.state === "unavailable") throw new Error("Recovery storage unavailable");
+      if (stored.state === "unavailable") {
+        queueMicrotask(() => { if (active) setMonitor("storage-unavailable"); });
+        return () => { active = false; generation.current += 1; };
+      }
       if (stored.state === "present") {
         requiredRecovery.current = { ...stored.marker, displayName: null };
         queueMicrotask(() => { if (active) { setRecoveryLocked(true); setNotice("An earlier request needs checking. Sign in to the original account and check its status."); } });
@@ -166,6 +169,7 @@ export default function ChildCreationPanel() {
     <p className="mt-2 text-sm">This records a provisional relationship. It does not verify guardianship or connect to an academy.</p>
     {monitor === "checking" && <p role="status">Checking session monitoring…</p>}
     {monitor === "unavailable" && <p role="alert">Session monitoring is unavailable. Profiles cannot be created.</p>}
+    {monitor === "storage-unavailable" && <p role="alert">Saved request information is unavailable. Check browser storage settings and reload. Do not clear saved data while a request may be pending.</p>}
     {monitor === "ready" && <>
       <button type="button" disabled={busy} onClick={checkStatus} className="mt-4 rounded-lg bg-[#1F6F6B] px-4 py-2 font-semibold text-white disabled:opacity-50">Check creation status</button>
       {busy && <p role="status">Checking…</p>}
