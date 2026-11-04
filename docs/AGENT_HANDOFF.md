@@ -1,6 +1,11 @@
 # ParentPlus — Agent Handoff
 
 
+## Email code paste — 2026-11-04
+
+The local sign-in helper removes whitespace from a pasted verification code before checking for exactly six digits. This is a usability improvement based on an assumed common sign-in scenario; actual frequency is not measured. The provider remains disabled by default. Mocked-provider tests do not establish live delivery, provider verification, expiry or full sign-in.
+
+
 ## Prioritisation update — 2026-11-04
 
 The founder requested prioritising frequently encountered scenarios and placing delayed class-setup recovery in the backlog. No usage data establishes a numerical occurrence probability; prioritisation is an assumption pending evidence. The class-setup write controls remain disabled, and delayed requests, identity recovery and unavailable-manager escalation continue to block that feature's release. The local email sign-in screen now labels the existing retry action “Request another code” after an accepted request and keeps code entry available after a failed retry, without claiming delivery; provider delivery, rate limits and real sign-in remain unverified.

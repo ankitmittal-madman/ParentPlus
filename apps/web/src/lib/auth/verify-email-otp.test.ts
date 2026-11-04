@@ -69,6 +69,14 @@ describe("verifyEmailOtp", () => {
     });
   });
 
+  it("accepts a pasted six-digit code with surrounding or internal spaces", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
+    mocks.verifyOtp.mockResolvedValue({ data: { user: { id: "test-user" }, session: { access_token: "mock-token" } }, error: null });
+    const result = await verifyEmailOtp("parent@example.com", " 123 456 ");
+    expect(result.success).toBe(true);
+    expect(mocks.verifyOtp).toHaveBeenCalledWith({ email: "parent@example.com", token: "123456", type: "email" });
+  });
+
   it("rejects expired or incorrect OTP responses", async () => {
     vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
 

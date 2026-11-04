@@ -8129,6 +8129,27 @@
         "apps/web/src/app/login/page.tsx",
         "apps/web/src/app/login/page.test.tsx"
       ]
+    },
+    {
+      "id": "FE-LOGIN-OTP-PASTE-01",
+      "domain": "email-login-verification",
+      "description": "verifyEmailOtp > accepts a pasted six-digit code with surrounding or internal spaces.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "verifyEmailOtp > accepts a pasted six-digit code with surrounding or internal spaces"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/verify-email-otp.test.ts::verifyEmailOtp > accepts a pasted six-digit code with surrounding or internal spaces"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/verify-email-otp.ts",
+        "apps/web/src/lib/auth/verify-email-otp.test.ts"
+      ]
     }
   ]
 }
