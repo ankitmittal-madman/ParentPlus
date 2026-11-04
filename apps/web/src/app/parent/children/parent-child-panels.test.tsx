@@ -164,4 +164,88 @@ describe("ParentChildPanels", () => {
     expect(mocks.list).not.toHaveBeenCalled();
   });
 
+  it("allows a fresh attempt after a storage write failure is resolved and status is checked", async () => {
+    mocks.run.mockReset();
+    mocks.run.mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: null })
+      .mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: null });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.change(await screen.findByLabelText("Child name"), { target: { value: "Asha" } });
+    const storage = vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => { throw new Error("blocked"); });
+    fireEvent.click(screen.getByRole("button", { name: "Create profile" }));
+    expect(await screen.findByText(/recovery information is unavailable/i)).toBeInTheDocument();
+    expect(mocks.run).toHaveBeenCalledTimes(1);
+    storage.mockRestore();
+    fireEvent.click(screen.getByRole("button", { name: "Check creation status" }));
+    expect(await screen.findByLabelText("Child name")).toBeInTheDocument();
+    expect(mocks.run).toHaveBeenCalledTimes(2);
+  });
+
+  it("retries the same unacknowledged intent after reload and unlocks only after confirmation", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "ack", priorIntentId: current.intentId, requestId: null }));
+    mocks.run.mockReset();
+    mocks.run.mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current })
+      .mockResolvedValueOnce({ ok: true, operation: "ack" })
+      .mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: { ...current, acknowledged: true } });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    const retry = await screen.findByRole("button", { name: "Retry confirmation" });
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+    fireEvent.click(retry);
+    expect(await screen.findByText("Result confirmed")).toBeInTheDocument();
+    expect(mocks.run).toHaveBeenNthCalledWith(2, { operation: "ack", expectedActorId: actor, intentId: current.intentId });
+    expect(sessionStorage.getItem(key)).toBeNull();
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeEnabled();
+  });
+
+  it("does not offer confirmation retry for a different actor or intent", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "ack", priorIntentId: current.intentId, requestId: null }));
+    mocks.run.mockReset().mockResolvedValueOnce({ ok: true, operation: "status", actorId: "22222222-2222-4222-8222-222222222222", current })
+      .mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: { ...current, intentId: "cccccccc-cccc-4ccc-8ccc-cccccccccccc" } });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    await screen.findByText(/sign in to the original account/i);
+    expect(screen.queryByRole("button", { name: "Retry confirmation" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Check creation status" }));
+    await screen.findByText(/do not start another/i);
+    expect(screen.queryByRole("button", { name: "Retry confirmation" })).not.toBeInTheDocument();
+    expect(mocks.run).toHaveBeenCalledTimes(2);
+    expect(sessionStorage.getItem(key)).not.toBeNull();
+  });
+
+  it("keeps the marker and list locked when a confirmation retry fails", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "ack", priorIntentId: current.intentId, requestId: null }));
+    mocks.run.mockReset().mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current })
+      .mockResolvedValueOnce({ ok: false, error: "unavailable" });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Retry confirmation" }));
+    await screen.findByText(/unable to confirm the profile/i);
+    expect(sessionStorage.getItem(key)).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+    expect(screen.queryByText("Result confirmed")).not.toBeInTheDocument();
+  });
+
+  it("ignores an acknowledgement response after a session change", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "ack", priorIntentId: current.intentId, requestId: null }));
+    const listeners: ((event: string) => void)[] = [];
+    mocks.observe.mockImplementation((callback) => { listeners.push(callback); return () => {}; });
+    let finish!: (value: unknown) => void;
+    mocks.run.mockReset().mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current })
+      .mockReturnValueOnce(new Promise((resolve) => { finish = resolve; }));
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Retry confirmation" }));
+    act(() => listeners.forEach((listener) => listener("SIGNED_OUT")));
+    await act(async () => finish({ ok: true, operation: "ack" }));
+    expect(mocks.run).toHaveBeenCalledTimes(2);
+    expect(sessionStorage.getItem(key)).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+    expect(screen.queryByText("Result confirmed")).not.toBeInTheDocument();
+  });
+
 });

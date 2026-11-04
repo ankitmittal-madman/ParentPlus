@@ -10797,6 +10797,116 @@
         "apps/web/src/app/parent/children/created-children-panel.tsx",
         "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
       ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-RETRY-01",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > allows a fresh attempt after a storage write failure is resolved and status is checked.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > allows a fresh attempt after a storage write failure is resolved and status is checked"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > allows a fresh attempt after a storage write failure is resolved and status is checked"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-RETRY-02",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > retries the same unacknowledged intent after reload and unlocks only after confirmation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > retries the same unacknowledged intent after reload and unlocks only after confirmation"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > retries the same unacknowledged intent after reload and unlocks only after confirmation"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-RETRY-03",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > does not offer confirmation retry for a different actor or intent.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > does not offer confirmation retry for a different actor or intent"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > does not offer confirmation retry for a different actor or intent"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-RETRY-04",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > keeps the marker and list locked when a confirmation retry fails.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > keeps the marker and list locked when a confirmation retry fails"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > keeps the marker and list locked when a confirmation retry fails"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-RECOVERY-RETRY-05",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > ignores an acknowledgement response after a session change.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > ignores an acknowledgement response after a session change"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > ignores an acknowledgement response after a session change"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
     }
   ]
 }

@@ -1,6 +1,10 @@
 # ParentPlus Build Progress
 
 
+## Child confirmation recovery draft — 2026-11-04
+
+An interrupted acknowledgement can now be explicitly retried after same-tab reload when the original account and exact unacknowledged intent are confirmed. The list remains locked until a fresh status verifies acknowledgement. A temporary storage-write failure no longer leaves the form permanently locked after storage and status checks recover. This remains a default-off local draft; identity-loss, cross-device and live-provider recovery are not resolved.
+
 ## Same-tab child-creation recovery draft — 2026-11-04
 
 A default-off local change records a tab-scoped request reference before child creation or acknowledgement. The profile list remains blocked during an unresolved request; an exact server-confirmed result can unlock it after a same-tab reload. The marker contains identifiers, not the child name. This is local simulated coverage, not real-provider verification. Storage deletion or tab closure, different accounts and devices, empty status after a crash, and historical receipts remain unresolved release blockers. See the [journey spec](superpowers/specs/2026-11-04-child-creation-journey.md).
