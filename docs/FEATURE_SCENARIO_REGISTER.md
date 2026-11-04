@@ -26,6 +26,10 @@ The founder asked to focus on frequently encountered scenarios and backlog delay
 
 A separate, default-off email account-creation choice is now drafted. Local tests use mocked provider responses. Existing sign-in still disables automatic signup. The client-side flags are not provider access controls; real signup, abuse protection and the full onboarding journey remain unverified and must stay disabled until reviewed. See [the signup spec](superpowers/specs/2026-11-04-explicit-email-signup.md).
 
+## Local parent profile-list draft — 2026-11-04
+
+A default-off local page can list profiles created by the signed-in account, provided its own provisional or active relationship remains. It is a subset, not a complete list of linked children or evidence of legal guardianship. Security, real-provider and revocation limitations are recorded in [the parent profile spec](superpowers/specs/2026-11-04-parent-created-child-list.md).
+
 ## 1. Features with code or foundation
 
 | ID | Feature / real use | What exists | Covered scenarios and evidence | Missing or not established | Complete E2E? |

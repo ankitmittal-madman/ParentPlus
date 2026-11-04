@@ -1,6 +1,11 @@
 # ParentPlus — Agent Handoff
 
 
+## Parent-created profiles — 2026-11-04
+
+A local, default-off read-only draft lets a signed-in parent request a bounded list of profiles they created, restricted to their own provisional or active guardianship. This is not all linked children or proof of legal guardianship. The UI clears names on observed session/focus changes; already visible names may remain after remote revocation until an invalidation event. Real-provider, signed-JWT, browser cache and immediate revocation checks remain release blockers. See [the parent profile spec](superpowers/specs/2026-11-04-parent-created-child-list.md).
+
+
 ## Explicit email account creation draft — 2026-11-04
 
 A separate opt-in sign-up choice is drafted behind a default-off client flag and the existing live OTP flag; ordinary sign-in still prevents automatic signup. Client flags do not restrict direct provider calls. Keep provider-side signup disabled until approved and reviewed. Real provider signup, abuse controls, confirmation, account recovery, identity/session integration and the end-to-end onboarding journey remain unverified. See [the signup spec](superpowers/specs/2026-11-04-explicit-email-signup.md).

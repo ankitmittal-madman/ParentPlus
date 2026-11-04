@@ -67,7 +67,8 @@ BEGIN
     (SELECT count(*) FROM (VALUES ('anon'),('authenticated')) r(role_name)
       CROSS JOIN (VALUES ('public.create_course(uuid,text,uuid)'),('public.create_batch(uuid,uuid,text,uuid)'),('public.create_course_and_batch(uuid,text,text,uuid)')) f(signature)
       WHERE has_function_privilege(r.role_name, f.signature, 'EXECUTE')) +
-    (SELECT count(*) FROM public.class_setup_controls WHERE enabled)
+    (SELECT count(*) FROM public.class_setup_controls WHERE enabled) +
+    (SELECT count(*) FROM public.parent_child_read_controls WHERE enabled)
   INTO v_remaining;
 
   IF v_remaining <> 0 THEN

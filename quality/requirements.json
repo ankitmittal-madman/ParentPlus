@@ -8411,6 +8411,600 @@
         "apps/web/src/app/login/page.tsx",
         "docs/superpowers/specs/2026-11-04-explicit-email-signup.md"
       ]
+    },
+    {
+      "id": "DB-PARENT-CREATED-CHILDREN-01",
+      "domain": "parent-created-child-list",
+      "description": "test created child list is default off and private.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test created child list is default off and private"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_created_child_list_is_default_off_and_private"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003200_parent_created_child_read.sql",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "DB-PARENT-CREATED-CHILDREN-02",
+      "domain": "parent-created-child-list",
+      "description": "test created child list filters ownership and guardian status.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test created child list filters ownership and guardian status"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_created_child_list_filters_ownership_and_guardian_status"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003200_parent_created_child_read.sql",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "DB-PARENT-CREATED-CHILDREN-03",
+      "domain": "parent-created-child-list",
+      "description": "test created child list rejects missing identity.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test created child list rejects missing identity"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_created_child_list_rejects_missing_identity"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003200_parent_created_child_read.sql",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "DB-PARENT-CREATED-CHILDREN-04",
+      "domain": "parent-created-child-list",
+      "description": "test created child list refuses silent truncation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test created child list refuses silent truncation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_created_child_list_refuses_silent_truncation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003200_parent_created_child_read.sql",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "DB-PARENT-CREATED-CHILDREN-05",
+      "domain": "parent-created-child-list",
+      "description": "test created child read after guardian revocation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test created child read after guardian revocation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_created_child_read_after_guardian_revocation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003200_parent_created_child_read.sql",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "DB-PARENT-CREATED-CHILDREN-06",
+      "domain": "parent-created-child-list",
+      "description": "test created child read before guardian revocation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test created child read before guardian revocation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_created_child_read_before_guardian_revocation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003200_parent_created_child_read.sql",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "DB-PARENT-CREATED-CHILDREN-07",
+      "domain": "parent-created-child-list",
+      "description": "test created child read after control disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test created child read after control disabled"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_created_child_read_after_control_disabled"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003200_parent_created_child_read.sql",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "DB-PARENT-CREATED-CHILDREN-08",
+      "domain": "parent-created-child-list",
+      "description": "test created child read before control disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test created child read before control disabled"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_created_child_read_before_control_disabled"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003200_parent_created_child_read.sql",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-ACTION-01",
+      "domain": "parent-created-child-list",
+      "description": "listCreatedChildren > fails closed before provider access when disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "listCreatedChildren > fails closed before provider access when disabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/list-created-children.test.ts::listCreatedChildren > fails closed before provider access when disabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/list-created-children.test.ts",
+        "apps/web/src/lib/parent/list-created-children.ts",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-ACTION-02",
+      "domain": "parent-created-child-list",
+      "description": "listCreatedChildren > requires a verified user before reading.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "listCreatedChildren > requires a verified user before reading"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/list-created-children.test.ts::listCreatedChildren > requires a verified user before reading"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/list-created-children.test.ts",
+        "apps/web/src/lib/parent/list-created-children.ts",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-ACTION-03",
+      "domain": "parent-created-child-list",
+      "description": "listCreatedChildren > returns only validated child identifiers and names.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "listCreatedChildren > returns only validated child identifiers and names"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/list-created-children.test.ts::listCreatedChildren > returns only validated child identifiers and names"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/list-created-children.test.ts",
+        "apps/web/src/lib/parent/list-created-children.ts",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-ACTION-04",
+      "domain": "parent-created-child-list",
+      "description": "listCreatedChildren > accepts names up to 120 Unicode characters.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "listCreatedChildren > accepts names up to 120 Unicode characters"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/list-created-children.test.ts::listCreatedChildren > accepts names up to 120 Unicode characters"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/list-created-children.test.ts",
+        "apps/web/src/lib/parent/list-created-children.ts",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-ACTION-05",
+      "domain": "parent-created-child-list",
+      "description": "listCreatedChildren > accepts an empty list.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "listCreatedChildren > accepts an empty list"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/list-created-children.test.ts::listCreatedChildren > accepts an empty list"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/list-created-children.test.ts",
+        "apps/web/src/lib/parent/list-created-children.ts",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-ACTION-06",
+      "domain": "parent-created-child-list",
+      "description": "listCreatedChildren > rejects malformed or duplicate provider rows.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "listCreatedChildren > rejects malformed or duplicate provider rows"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/list-created-children.test.ts::listCreatedChildren > rejects malformed or duplicate provider rows"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/list-created-children.test.ts",
+        "apps/web/src/lib/parent/list-created-children.ts",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-ACTION-07",
+      "domain": "parent-created-child-list",
+      "description": "listCreatedChildren > redacts provider errors and rejects excessive results.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "listCreatedChildren > redacts provider errors and rejects excessive results"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/list-created-children.test.ts::listCreatedChildren > redacts provider errors and rejects excessive results"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/list-created-children.test.ts",
+        "apps/web/src/lib/parent/list-created-children.ts",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-PANEL-01",
+      "domain": "parent-created-child-list",
+      "description": "CreatedChildrenPanel > loads profiles only on request and explains the limited scope.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "CreatedChildrenPanel > loads profiles only on request and explains the limited scope"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/created-children-panel.test.tsx::CreatedChildrenPanel > loads profiles only on request and explains the limited scope"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/created-children-panel.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-PANEL-02",
+      "domain": "parent-created-child-list",
+      "description": "CreatedChildrenPanel > shows an honest empty state.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "CreatedChildrenPanel > shows an honest empty state"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/created-children-panel.test.tsx::CreatedChildrenPanel > shows an honest empty state"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/created-children-panel.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-PANEL-03",
+      "domain": "parent-created-child-list",
+      "description": "CreatedChildrenPanel > fails closed if session monitoring is unavailable.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "CreatedChildrenPanel > fails closed if session monitoring is unavailable"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/created-children-panel.test.tsx::CreatedChildrenPanel > fails closed if session monitoring is unavailable"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/created-children-panel.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-PANEL-04",
+      "domain": "parent-created-child-list",
+      "description": "CreatedChildrenPanel > clears details on authentication changes.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "CreatedChildrenPanel > clears details on authentication changes"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/created-children-panel.test.tsx::CreatedChildrenPanel > clears details on authentication changes"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/created-children-panel.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-PANEL-05",
+      "domain": "parent-created-child-list",
+      "description": "CreatedChildrenPanel > ignores a delayed response after an account change.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "CreatedChildrenPanel > ignores a delayed response after an account change"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/created-children-panel.test.tsx::CreatedChildrenPanel > ignores a delayed response after an account change"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/created-children-panel.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-PANEL-06",
+      "domain": "parent-created-child-list",
+      "description": "CreatedChildrenPanel > clears details on return to the page and redacts errors.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "CreatedChildrenPanel > clears details on return to the page and redacts errors"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/created-children-panel.test.tsx::CreatedChildrenPanel > clears details on return to the page and redacts errors"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/created-children-panel.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-PANEL-07",
+      "domain": "parent-created-child-list",
+      "description": "CreatedChildrenPanel > fails closed when session observation throws.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "CreatedChildrenPanel > fails closed when session observation throws"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/created-children-panel.test.tsx::CreatedChildrenPanel > fails closed when session observation throws"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/created-children-panel.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-PANEL-08",
+      "domain": "parent-created-child-list",
+      "description": "CreatedChildrenPanel > clears details when the page becomes visible.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "CreatedChildrenPanel > clears details when the page becomes visible"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/created-children-panel.test.tsx::CreatedChildrenPanel > clears details when the page becomes visible"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/created-children-panel.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-PANEL-09",
+      "domain": "parent-created-child-list",
+      "description": "CreatedChildrenPanel > prevents duplicate loads and unsubscribes on unmount.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "CreatedChildrenPanel > prevents duplicate loads and unsubscribes on unmount"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/created-children-panel.test.tsx::CreatedChildrenPanel > prevents duplicate loads and unsubscribes on unmount"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/created-children-panel.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-PANEL-10",
+      "domain": "parent-created-child-list",
+      "description": "CreatedChildrenPanel > ignores a late session callback and response after unmount.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "CreatedChildrenPanel > ignores a late session callback and response after unmount"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/created-children-panel.test.tsx::CreatedChildrenPanel > ignores a late session callback and response after unmount"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/created-children-panel.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-PAGE-01",
+      "domain": "parent-created-child-list",
+      "description": "ParentChildrenPage > uses request-time configuration and hides the panel by default.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildrenPage > uses request-time configuration and hides the panel by default"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/page.test.tsx::ParentChildrenPage > uses request-time configuration and hides the panel by default"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/page.test.tsx",
+        "apps/web/src/app/parent/children/page.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-CREATED-CHILDREN-PAGE-02",
+      "domain": "parent-created-child-list",
+      "description": "ParentChildrenPage > exposes the read-only panel only when explicitly enabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildrenPage > exposes the read-only panel only when explicitly enabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/page.test.tsx::ParentChildrenPage > exposes the read-only panel only when explicitly enabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/page.test.tsx",
+        "apps/web/src/app/parent/children/page.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
     }
   ]
 }
