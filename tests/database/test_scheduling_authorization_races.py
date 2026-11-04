@@ -1086,7 +1086,7 @@ DO $$ BEGIN BEGIN PERFORM public.create_private_local_session('{self.workspace}'
 
     def run_app_completion_membership_race(self, revoke_first):
         query(f"UPDATE public.workspace_memberships SET role='owner' WHERE id='{self.membership}';")
-        output=query(f"BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT 'INTENT:' || public.app_reserve_class_setup('{self.workspace}','Dance','Beginners'); COMMIT;")
+        output=query(f"BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT 'INTENT:' || intent_id FROM public.app_begin_class_setup('{self.workspace}','Dance','Beginners'); COMMIT;")
         intent=next(line.removeprefix('INTENT:') for line in output.splitlines() if line.startswith('INTENT:'))
         first_name,second_name='app_first_'+uuid.uuid4().hex,'app_second_'+uuid.uuid4().hex
         first,second=start_psql_session(),start_psql_session()
@@ -1115,3 +1115,30 @@ DO $$ BEGIN BEGIN PERFORM public.create_private_local_session('{self.workspace}'
         self.run_app_completion_membership_race(True)
     def test_app_completion_commits_before_membership_suspension(self):
         self.run_app_completion_membership_race(False)
+
+    def run_app_begin_race(self, changed):
+        query(f"UPDATE public.workspace_memberships SET role='owner' WHERE id='{self.membership}';")
+        first_name,second_name='begin_first_'+uuid.uuid4().hex,'begin_second_'+uuid.uuid4().hex
+        first,second=start_psql_session(),start_psql_session()
+        try:
+            for proc,name in ((first,first_name),(second,second_name)):
+                proc.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false); SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{MEERA}',true);\n")
+            first.stdin.write(f"SELECT 'RESULT:' || disposition || ':' || state FROM public.app_begin_class_setup('{self.workspace}','Dance','Beginners'); SELECT 'FIRST_LOCKED';\n");first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'RESULT:created:pending'));self.assertTrue(wait_for_session_marker(first,'FIRST_LOCKED'))
+            name='Advanced' if changed else 'Beginners'
+            second.stdin.write(f"SELECT 'RESULT:' || disposition || ':' || state FROM public.app_begin_class_setup('{self.workspace}','Dance','{name}'); COMMIT; SELECT 'SECOND_COMMITTED';\n");second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name,first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n");first.stdin.flush();self.assertTrue(wait_for_session_marker(first,'FIRST_COMMITTED'))
+            if changed:
+                second.stdin.close();second.stdin=None
+                _,errors=second.communicate(timeout=15);self.assertNotEqual(second.returncode,0);self.assertIn('Resolve the existing class setup first',errors)
+            else:
+                self.assertTrue(wait_for_session_marker(second,'RESULT:existing:pending'));self.assertTrue(wait_for_session_marker(second,'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT count(*) FROM public.class_setup_intents WHERE workspace_id='{self.workspace}';"),'1')
+        finally:
+            close_psql_session(second);close_psql_session(first)
+
+    def test_app_begin_concurrent_matching_request_reports_existing(self):
+        self.run_app_begin_race(False)
+    def test_app_begin_concurrent_changed_request_conflicts(self):
+        self.run_app_begin_race(True)

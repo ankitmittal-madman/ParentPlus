@@ -6,7 +6,8 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const isId = (value: unknown): value is string => typeof value === "string" && UUID.test(value);
 type Result =
   | { ok: false; error: string }
-  | { ok: true; operation: "reserve" | "advance"; intentId: string }
+  | { ok: true; operation: "reserve"; intentId: string; disposition: "created" | "existing"; state: "pending" | "completed" | "acknowledged" }
+  | { ok: true; operation: "advance"; intentId: string }
   | { ok: true; operation: "complete"; courseId: string; batchId: string }
   | { ok: true; operation: "acknowledge" };
 
@@ -32,10 +33,17 @@ export async function runClassSetupOperation(input: unknown): Promise<Result> {
     const actorId = identity.user?.id;
     if (identityError || !isId(actorId)) return { ok: false, error: "Please sign in to continue." };
     if (actorId.toLowerCase() !== expectedActorId.toLowerCase()) return { ok: false, error: "Your account has changed. Sign in to the original account before continuing." };
-    if (operation === "reserve" || operation === "advance") {
-      const { data, error } = operation === "reserve"
-        ? await client.rpc("app_reserve_class_setup", { p_workspace_id: workspaceId, p_course_name: courseName, p_batch_name: batchName })
-        : await client.rpc("app_advance_class_setup", { p_workspace_id: workspaceId, p_prior_intent_id: value.priorIntentId, p_request_id: value.requestId, p_course_name: courseName, p_batch_name: batchName });
+    if (operation === "reserve") {
+      const { data, error } = await client.rpc("app_begin_class_setup", { p_workspace_id: workspaceId, p_course_name: courseName, p_batch_name: batchName });
+      if (error || !Array.isArray(data) || data.length !== 1 || !data[0] || typeof data[0] !== "object" || Array.isArray(data[0])) return uncertain;
+      const row = data[0] as Record<string, unknown>;
+      if (!isId(row.intent_id) || (row.disposition !== "created" && row.disposition !== "existing")
+          || (row.state !== "pending" && row.state !== "completed" && row.state !== "acknowledged")
+          || (row.disposition === "created" && row.state !== "pending")) return uncertain;
+      return { ok: true, operation, intentId: row.intent_id, disposition: row.disposition, state: row.state };
+    }
+    if (operation === "advance") {
+      const { data, error } = await client.rpc("app_advance_class_setup", { p_workspace_id: workspaceId, p_prior_intent_id: value.priorIntentId, p_request_id: value.requestId, p_course_name: courseName, p_batch_name: batchName });
       return !error && isId(data) ? { ok: true, operation, intentId: data } : uncertain;
     }
     if (operation === "acknowledge") {

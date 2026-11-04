@@ -1,5 +1,12 @@
 # ParentPlus — Agent Handoff
 
+
+## Current class setup continuation — 2026-11-04
+
+Local draft migration 030 introduces an authenticated begin operation that distinguishes a newly created reservation from an existing pending, completed or acknowledged reservation, under the existing actor/workspace lock. The ambiguous older app reservation wrapper is revoked in that migration. Its TypeScript operation bridge validates the returned classification. This is groundwork, not a released class-creation journey; the class recovery screen remains read-only and setup controls remain disabled by default.
+
+An independent review found that interrupted writes could lose the original actor and workspace on reload or navigation, allowing a different account to start a duplicate; it also identified an unsafe same-session retry path after an unknown result. Proposed write controls were removed from the screen. Durable, identity-bound recovery and explicit retry reconciliation, real-provider/browser testing, hosted migration and deployment verification remain release blockers. No hosted services were changed. Inspect current Git state and fresh evidence before relying on a checkpoint.
+
 Prepared: 2026-11-03, against local baseline
 `5b068b995957414a47dd2f47e8b6eb4147958563` on
 `feature/intelligent-quality-gate-v1`. This is a preparation snapshot, not a claim

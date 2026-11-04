@@ -39,8 +39,18 @@ describe("runClassSetupOperation", () => {
     expect(mocks.rpc).not.toHaveBeenCalled();
   });
   it("reserves normalized names without sending a caller-supplied actor", async () => {
-    expect(await runClassSetupOperation({...base,operation:"reserve",courseName:" Art ",batchName:" Morning ",actorId:"untrusted"})).toEqual({ok:true,operation:"reserve",intentId:intent});
-    expect(mocks.rpc).toHaveBeenCalledWith("app_reserve_class_setup",{p_workspace_id:workspace,p_course_name:"Art",p_batch_name:"Morning"});
+    mocks.rpc.mockResolvedValue({data:[{intent_id:intent,disposition:"created",state:"pending"}],error:null});
+    expect(await runClassSetupOperation({...base,operation:"reserve",courseName:" Art ",batchName:" Morning ",actorId:"untrusted"})).toEqual({ok:true,operation:"reserve",intentId:intent,disposition:"created",state:"pending"});
+    expect(mocks.rpc).toHaveBeenCalledWith("app_begin_class_setup",{p_workspace_id:workspace,p_course_name:"Art",p_batch_name:"Morning"});
+  });
+  it("returns existing reservation status without completing it", async () => {
+    mocks.rpc.mockResolvedValue({data:[{intent_id:intent,disposition:"existing",state:"completed"}],error:null});
+    expect(await runClassSetupOperation({...base,operation:"reserve",courseName:"Art",batchName:"Morning"})).toEqual({ok:true,operation:"reserve",intentId:intent,disposition:"existing",state:"completed"});
+    expect(mocks.rpc).toHaveBeenCalledTimes(1);
+  });
+  it("rejects contradictory new reservation status", async () => {
+    mocks.rpc.mockResolvedValue({data:[{intent_id:intent,disposition:"created",state:"completed"}],error:null});
+    expect(await runClassSetupOperation({...base,operation:"reserve",courseName:"Art",batchName:"Morning"})).toEqual({ok:false,error:"Unable to confirm class setup. Check its status before retrying."});
   });
   it("completes a reservation and validates returned identifiers", async () => {
     mocks.rpc.mockResolvedValue({data:[{course_id:course,batch_id:batch}],error:null});

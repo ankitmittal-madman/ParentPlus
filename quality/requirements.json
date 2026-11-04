@@ -3423,7 +3423,8 @@
       ],
       "sources": [
         "tests/database/test_scheduling_foundation.py",
-        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql",
+        "supabase/migrations/20261104003000_authenticated_begin_class_setup.sql"
       ]
     },
     {
@@ -4808,7 +4809,8 @@
       "sources": [
         "apps/web/src/lib/scheduling/class-setup-operations.ts",
         "apps/web/src/lib/scheduling/class-setup-operations.test.ts",
-        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql",
+        "supabase/migrations/20261104003000_authenticated_begin_class_setup.sql"
       ]
     },
     {
@@ -7872,6 +7874,155 @@
       "tests": [],
       "sources": [
         "docs/DECISION_LOG.md"
+      ]
+    },
+    {
+      "id": "DB-CLASS-BEGIN-01",
+      "domain": "class-setup-authenticated-begin",
+      "description": "test app begin class distinguishes created pending and completed.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app begin class distinguishes created pending and completed"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_app_begin_class_distinguishes_created_pending_and_completed"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104003000_authenticated_begin_class_setup.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-BEGIN-02",
+      "domain": "class-setup-authenticated-begin",
+      "description": "test app begin class rejects changed names and unauthorized.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app begin class rejects changed names and unauthorized"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_app_begin_class_rejects_changed_names_and_unauthorized"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104003000_authenticated_begin_class_setup.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-BEGIN-03",
+      "domain": "class-setup-authenticated-begin",
+      "description": "test app begin class privileges and private state.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app begin class privileges and private state"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_app_begin_class_privileges_and_private_state"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104003000_authenticated_begin_class_setup.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-BEGIN-04",
+      "domain": "class-setup-authenticated-begin",
+      "description": "test app begin concurrent matching request reports existing.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app begin concurrent matching request reports existing"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_app_begin_concurrent_matching_request_reports_existing"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104003000_authenticated_begin_class_setup.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-BEGIN-05",
+      "domain": "class-setup-authenticated-begin",
+      "description": "test app begin concurrent changed request conflicts.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app begin concurrent changed request conflicts"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_app_begin_concurrent_changed_request_conflicts"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104003000_authenticated_begin_class_setup.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-BEGIN-01",
+      "domain": "class-setup-authenticated-begin",
+      "description": "runClassSetupOperation > returns existing reservation status without completing it.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runClassSetupOperation > returns existing reservation status without completing it"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/class-setup-operations.test.ts::runClassSetupOperation > returns existing reservation status without completing it"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/class-setup-operations.ts",
+        "apps/web/src/lib/scheduling/class-setup-operations.test.ts",
+        "supabase/migrations/20261104003000_authenticated_begin_class_setup.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-BEGIN-02",
+      "domain": "class-setup-authenticated-begin",
+      "description": "runClassSetupOperation > rejects contradictory new reservation status.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runClassSetupOperation > rejects contradictory new reservation status"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/class-setup-operations.test.ts::runClassSetupOperation > rejects contradictory new reservation status"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/class-setup-operations.ts",
+        "apps/web/src/lib/scheduling/class-setup-operations.test.ts",
+        "supabase/migrations/20261104003000_authenticated_begin_class_setup.sql"
       ]
     }
   ]
