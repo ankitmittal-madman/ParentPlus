@@ -9005,6 +9005,94 @@
         "apps/web/src/app/parent/children/page.tsx",
         "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
       ]
+    },
+    {
+      "id": "FE-PARENT-PROFILES-NAV-01",
+      "domain": "parent-profile-navigation",
+      "description": "LoginPage > offers the parent profiles link only after a confirmed session.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > offers the parent profiles link only after a confirmed session"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > offers the parent profiles link only after a confirmed session"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.tsx",
+        "apps/web/src/app/login/page.test.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-PROFILES-NAV-02",
+      "domain": "parent-profile-navigation",
+      "description": "LoginPage > links a confirmed signed-in user to parent profiles and removes the link on sign-out.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > links a confirmed signed-in user to parent profiles and removes the link on sign-out"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > links a confirmed signed-in user to parent profiles and removes the link on sign-out"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.tsx",
+        "apps/web/src/app/login/page.test.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-PROFILES-NAV-03",
+      "domain": "parent-profile-navigation",
+      "description": "LoginPage > hides the parent profiles link while sign-out is in progress.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > hides the parent profiles link while sign-out is in progress"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > hides the parent profiles link while sign-out is in progress"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.tsx",
+        "apps/web/src/app/login/page.test.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
+    },
+    {
+      "id": "FE-PARENT-PROFILES-NAV-04",
+      "domain": "parent-profile-navigation",
+      "description": "LoginPage > hides the parent profiles link when the interface is disabled.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > hides the parent profiles link when the interface is disabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > hides the parent profiles link when the interface is disabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.tsx",
+        "apps/web/src/app/login/page.test.tsx",
+        "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
+      ]
     }
   ]
 }

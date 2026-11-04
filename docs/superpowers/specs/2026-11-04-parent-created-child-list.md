@@ -13,3 +13,7 @@ This is local groundwork, not a released parent journey. Already displayed names
 ## Tests
 
 Synthetic local database cases cover disabled and anonymous access, caller ownership and guardian status, exact 100/101 bounds, private privileges, and both orderings of guardian revocation and control disablement against reads. Mocked server and component cases cover projection, malformed responses, missing identity, display, empty results, errors, session changes, stale responses and unmount. These do not prove real provider, browser-cache, or live revocation behaviour.
+
+## Signed-in navigation
+
+When the default-off public navigation flag is enabled, a confirmed signed-in view offers a link to this page; it is hidden while sign-out is in progress and when the session is unavailable. The public flag controls visibility only and is not an authorization control. It is embedded at build time; the server and database controls are separate and must be coordinated. A previously built link may remain visible if the server control is later disabled. Navigation does not itself authorise child data: the server action and database recheck identity and their default-off controls. Next.js prefetch is disabled on the link. If the server flag is off, the destination explains that profiles are unavailable. Real-provider, browser-navigation, cache and live revocation behaviour remain unverified.

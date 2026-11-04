@@ -132,6 +132,49 @@ describe("LoginPage", () => {
     expect(mocks.requestEmailOtp).toHaveBeenLastCalledWith("parent@example.com", "sign-up");
   });
 
+  it("hides the parent profiles link when the interface is disabled", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_PARENT_PROFILE_LINK", "false");
+    mocks.getSessionStatus.mockResolvedValue({ state: "signed-in" });
+    render(<LoginPage />);
+    expect(await screen.findByRole("button", { name: "Sign out" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "View profiles you created" })).not.toBeInTheDocument();
+  });
+
+  it("offers the parent profiles link only after a confirmed session", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_PARENT_PROFILE_LINK", "true");
+    mocks.getSessionStatus.mockResolvedValue({ state: "signed-out" });
+    render(<LoginPage />);
+    expect(await screen.findByLabelText("Email address")).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "View profiles you created" })).not.toBeInTheDocument();
+  });
+
+  it("links a confirmed signed-in user to parent profiles and removes the link on sign-out", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_PARENT_PROFILE_LINK", "true");
+    mocks.getSessionStatus.mockResolvedValue({ state: "signed-in" });
+    mocks.signOut.mockResolvedValue({ success: true, error: null });
+    render(<LoginPage />);
+    expect(await screen.findByRole("link", { name: "View profiles you created" })).toHaveAttribute("href", "/parent/children");
+    fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    expect(await screen.findByLabelText("Email address")).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "View profiles you created" })).not.toBeInTheDocument();
+  });
+
+  it("hides the parent profiles link while sign-out is in progress", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_PARENT_PROFILE_LINK", "true");
+    mocks.getSessionStatus.mockResolvedValue({ state: "signed-in" });
+    let finish!: (result: { success: boolean; error: null }) => void;
+    mocks.signOut.mockReturnValue(new Promise((resolve) => { finish = resolve; }));
+    render(<LoginPage />);
+    await screen.findByRole("link", { name: "View profiles you created" });
+    fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    expect(screen.queryByRole("link", { name: "View profiles you created" })).not.toBeInTheDocument();
+    await act(async () => finish({ success: true, error: null }));
+  });
+
   it("rejects invalid email without calling OTP service", async () => {
     render(<LoginPage />);
 

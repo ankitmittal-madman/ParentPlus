@@ -1,6 +1,11 @@
 # ParentPlus — Agent Handoff
 
 
+## Parent profile navigation — 2026-11-04
+
+When its separate public navigation flag is explicitly enabled, the local signed-in screen links to the existing read-only parent-created profiles page, without prefetch. The navigation flag defaults off and is not an authorization control. The link is hidden when signed out and during sign-out. The destination, server action and database retain their separate default-off and identity controls; when disabled, the page says profiles are unavailable. Simulated-session checks do not prove real-provider navigation, authorization or immediate revocation. See [the parent profile spec](superpowers/specs/2026-11-04-parent-created-child-list.md).
+
+
 ## Parent-created profiles — 2026-11-04
 
 A local, default-off read-only draft lets a signed-in parent request a bounded list of profiles they created, restricted to their own provisional or active guardianship. This is not all linked children or proof of legal guardianship. The UI clears names on observed session/focus changes; already visible names may remain after remote revocation until an invalidation event. Real-provider, signed-JWT, browser cache and immediate revocation checks remain release blockers. See [the parent profile spec](superpowers/specs/2026-11-04-parent-created-child-list.md).

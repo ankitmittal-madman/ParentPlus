@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import Link from "next/link";
 import { requestEmailOtp } from "@/lib/auth/request-email-otp";
 import { verifyEmailOtp } from "@/lib/auth/verify-email-otp";
 import { signOut } from "@/lib/auth/sign-out";
@@ -414,6 +415,7 @@ export default function LoginPage() {
           <div className="mt-5 space-y-3">
             {!signOutError && !signingOut && <p ref={successRef} tabIndex={-1} role="status" className="text-sm text-muted">Signed in.</p>}
             {signOutError && <p role="alert" className="text-sm text-red-700">{signOutError}</p>}
+            {!signingOut && process.env.NEXT_PUBLIC_ENABLE_PARENT_PROFILE_LINK === "true" && <Link href="/parent/children" prefetch={false} className="block text-sm font-semibold text-brand underline">View profiles you created</Link>}
             <button type="button" onClick={handleSignOut} disabled={signingOut} className="w-full rounded-xl bg-brand px-5 py-3 font-semibold text-white disabled:opacity-60">
               {signingOut ? "Signing out..." : "Sign out"}
             </button>
