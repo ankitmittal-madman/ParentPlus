@@ -1,6 +1,11 @@
 # ParentPlus — Agent Handoff
 
 
+## Explicit email account creation draft — 2026-11-04
+
+A separate opt-in sign-up choice is drafted behind a default-off client flag and the existing live OTP flag; ordinary sign-in still prevents automatic signup. Client flags do not restrict direct provider calls. Keep provider-side signup disabled until approved and reviewed. Real provider signup, abuse controls, confirmation, account recovery, identity/session integration and the end-to-end onboarding journey remain unverified. See [the signup spec](superpowers/specs/2026-11-04-explicit-email-signup.md).
+
+
 ## Email code entry focus — 2026-11-04
 
 After a locally accepted email-code request, the sign-in form moves keyboard focus to the code field when it is rendered. This is a keyboard-accessibility improvement; tests use a simulated provider. Live delivery, account provisioning and the complete sign-in journey remain unverified.

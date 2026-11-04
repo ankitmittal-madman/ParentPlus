@@ -47,6 +47,91 @@ describe("LoginPage", () => {
     })).toBeInTheDocument();
   });
 
+  it("hides account creation while it is disabled", () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_ACCOUNT_SIGNUP", "false");
+    render(<LoginPage />);
+    expect(screen.queryByRole("button", { name: "Create account" })).not.toBeInTheDocument();
+  });
+
+  it("requests signup only after explicitly selecting account creation", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_ACCOUNT_SIGNUP", "true");
+    mocks.requestEmailOtp.mockResolvedValue({ success: true, error: null });
+    render(<LoginPage />);
+    fireEvent.click(screen.getByRole("button", { name: "Create account" }));
+    fireEvent.change(screen.getByLabelText("Email address"), { target: { value: " PARENT@EXAMPLE.COM " } });
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    await waitFor(() => expect(mocks.requestEmailOtp).toHaveBeenCalledWith("parent@example.com", "sign-up"));
+    expect(await screen.findByLabelText("Verification code")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Sign in instead" }));
+    expect(screen.queryByLabelText("Verification code")).not.toBeInTheDocument();
+  });
+
+  it("completes the local signup code flow only after verification succeeds", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_ACCOUNT_SIGNUP", "true");
+    mocks.requestEmailOtp.mockResolvedValue({ success: true, error: null });
+    mocks.verifyEmailOtp.mockResolvedValue({ success: true, error: null });
+    render(<LoginPage />);
+    fireEvent.click(screen.getByRole("button", { name: "Create account" }));
+    fireEvent.change(screen.getByLabelText("Email address"), { target: { value: "parent@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    expect(screen.queryByText("Signed in.")).not.toBeInTheDocument();
+    fireEvent.change(await screen.findByLabelText("Verification code"), { target: { value: "123456" } });
+    fireEvent.click(screen.getByRole("button", { name: "Verify code" }));
+    expect(await screen.findByText("Signed in.")).toBeInTheDocument();
+    expect(mocks.verifyEmailOtp).toHaveBeenCalledWith("parent@example.com", "123456");
+  });
+
+  it("prevents changing signup mode during an in-flight request", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_ACCOUNT_SIGNUP", "true");
+    let finish!: (value: { success: boolean; error: null }) => void;
+    mocks.requestEmailOtp.mockReturnValue(new Promise((resolve) => { finish = resolve; }));
+    render(<LoginPage />);
+    fireEvent.click(screen.getByRole("button", { name: "Create account" }));
+    fireEvent.change(screen.getByLabelText("Email address"), { target: { value: "parent@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    expect(screen.getByRole("button", { name: "Sign in instead" })).toBeDisabled();
+    await act(async () => finish({ success: true, error: null }));
+    expect(await screen.findByLabelText("Verification code")).toBeInTheDocument();
+    expect(mocks.requestEmailOtp).toHaveBeenCalledTimes(1);
+  });
+
+  it("returns to sign-in mode after a provider sign-in event interrupts signup verification", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_ACCOUNT_SIGNUP", "true");
+    let notify!: (event: string) => void;
+    let finish!: (value: { success: boolean; error: null }) => void;
+    mocks.observeSessionChanges.mockImplementation((callback) => { notify = callback; return () => {}; });
+    mocks.getSessionStatus.mockResolvedValueOnce({ state: "signed-out" }).mockResolvedValueOnce({ state: "signed-in" });
+    mocks.requestEmailOtp.mockResolvedValue({ success: true, error: null });
+    mocks.verifyEmailOtp.mockReturnValue(new Promise((resolve) => { finish = resolve; }));
+    mocks.signOut.mockResolvedValue({ success: true, error: null });
+    render(<LoginPage />);
+    fireEvent.click(await screen.findByRole("button", { name: "Create account" }));
+    fireEvent.change(screen.getByLabelText("Email address"), { target: { value: "parent@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    fireEvent.change(await screen.findByLabelText("Verification code"), { target: { value: "123456" } });
+    fireEvent.click(screen.getByRole("button", { name: "Verify code" }));
+    act(() => notify("SIGNED_IN"));
+    await act(async () => finish({ success: true, error: null }));
+    fireEvent.click(await screen.findByRole("button", { name: "Sign out" }));
+    expect(await screen.findByRole("button", { name: "Create account" })).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("Email address"), { target: { value: "other@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    await waitFor(() => expect(mocks.requestEmailOtp).toHaveBeenLastCalledWith("other@example.com"));
+  });
+
+  it("keeps repeat code requests in explicitly selected signup mode", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_ACCOUNT_SIGNUP", "true");
+    mocks.requestEmailOtp.mockResolvedValue({ success: true, error: null });
+    render(<LoginPage />);
+    fireEvent.click(screen.getByRole("button", { name: "Create account" }));
+    fireEvent.change(screen.getByLabelText("Email address"), { target: { value: "parent@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Request another code" }));
+    await waitFor(() => expect(mocks.requestEmailOtp).toHaveBeenCalledTimes(2));
+    expect(mocks.requestEmailOtp).toHaveBeenLastCalledWith("parent@example.com", "sign-up");
+  });
+
   it("rejects invalid email without calling OTP service", async () => {
     render(<LoginPage />);
 

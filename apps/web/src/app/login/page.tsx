@@ -9,6 +9,7 @@ import { observeSessionChanges } from "@/lib/auth/session-observer";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
+  const [accountMode, setAccountMode] = useState<"sign-in" | "sign-up">("sign-in");
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -149,6 +150,7 @@ export default function LoginPage() {
           focusEmailAfterSignOut.current = true;
         }
         if (result.state === "signed-in") {
+          setAccountMode("sign-in");
           setEmail("");
           setSubmitted(false);
           setCode("");
@@ -188,7 +190,9 @@ export default function LoginPage() {
     setCodeError("");
 
     try {
-      const result = await requestEmailOtp(normalized);
+      const result = accountMode === "sign-up"
+        ? await requestEmailOtp(normalized, "sign-up")
+        : await requestEmailOtp(normalized);
       if (!mounted.current || generation !== authGeneration.current) return;
 
       if (!result.success) {
@@ -227,6 +231,7 @@ export default function LoginPage() {
         return;
       }
       setVerifiedState(true);
+      setAccountMode("sign-in");
       setSubmitted(false);
       setCode("");
     } catch {
@@ -259,6 +264,7 @@ export default function LoginPage() {
       }
       if (generation !== authGeneration.current) return;
       focusEmailAfterSignOut.current = true;
+      setAccountMode("sign-in");
       setEmail("");
       setVerifiedState(false);
     } catch {
@@ -292,7 +298,7 @@ export default function LoginPage() {
         </h1>
 
         <p className="mt-2 text-sm leading-6 text-muted">
-          Sign in with your email to continue.
+          {accountMode === "sign-up" ? "Create an account with your email." : "Sign in with your email to continue."}
         </p>
 
         {sessionCheck === "checking" && <p role="status" className="mt-5 text-sm text-muted">Checking your session...</p>}
@@ -349,6 +355,24 @@ export default function LoginPage() {
             )}
           </div>
 
+          {process.env.NEXT_PUBLIC_ENABLE_ACCOUNT_SIGNUP === "true" && (
+            <button
+              type="button"
+              disabled={loading || verifying}
+              onClick={() => {
+                if (submittingRef.current) return;
+                setAccountMode((mode) => mode === "sign-in" ? "sign-up" : "sign-in");
+                focusCodeAfterRequest.current = false;
+                setSubmitted(false);
+                setCode("");
+                setCodeError("");
+                setError("");
+              }}
+              className="text-sm font-semibold text-brand underline disabled:opacity-60"
+            >
+              {accountMode === "sign-in" ? "Create account" : "Sign in instead"}
+            </button>
+          )}
           <button
             type="submit"
             disabled={loading || verifying}

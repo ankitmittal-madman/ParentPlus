@@ -22,6 +22,10 @@ ParentPlus aims to connect parents, coaches and academies while protecting child
 
 The founder asked to focus on frequently encountered scenarios and backlog delayed class-setup recovery. Frequency above 80% is not established by usage data; use a clearly labelled assumption until measured. Class-setup writes remain disabled: delayed requests, account identity recovery and unavailable-manager escalation still block release. The current local sign-in retry label makes the existing repeat request discoverable; real email delivery, provider limits and the full sign-in journey remain unverified.
 
+## Local account-creation draft — 2026-11-04
+
+A separate, default-off email account-creation choice is now drafted. Local tests use mocked provider responses. Existing sign-in still disables automatic signup. The client-side flags are not provider access controls; real signup, abuse protection and the full onboarding journey remain unverified and must stay disabled until reviewed. See [the signup spec](superpowers/specs/2026-11-04-explicit-email-signup.md).
+
 ## 1. Features with code or foundation
 
 | ID | Feature / real use | What exists | Covered scenarios and evidence | Missing or not established | Complete E2E? |

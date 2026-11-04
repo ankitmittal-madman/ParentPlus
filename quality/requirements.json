@@ -8213,6 +8213,204 @@
         "apps/web/src/app/login/page.tsx",
         "apps/web/src/app/login/page.test.tsx"
       ]
+    },
+    {
+      "id": "FE-EMAIL-SIGNUP-HELPER-01",
+      "domain": "explicit-email-signup",
+      "description": "requestEmailOtp > keeps explicit account creation disabled unless separately enabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "requestEmailOtp > keeps explicit account creation disabled unless separately enabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/request-email-otp.test.ts::requestEmailOtp > keeps explicit account creation disabled unless separately enabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/request-email-otp.test.ts",
+        "apps/web/src/lib/auth/request-email-otp.ts",
+        "docs/superpowers/specs/2026-11-04-explicit-email-signup.md"
+      ]
+    },
+    {
+      "id": "FE-EMAIL-SIGNUP-HELPER-02",
+      "domain": "explicit-email-signup",
+      "description": "requestEmailOtp > requests an account creation code only when both switches are enabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "requestEmailOtp > requests an account creation code only when both switches are enabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/request-email-otp.test.ts::requestEmailOtp > requests an account creation code only when both switches are enabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/request-email-otp.test.ts",
+        "apps/web/src/lib/auth/request-email-otp.ts",
+        "docs/superpowers/specs/2026-11-04-explicit-email-signup.md"
+      ]
+    },
+    {
+      "id": "FE-EMAIL-SIGNUP-HELPER-03",
+      "domain": "explicit-email-signup",
+      "description": "requestEmailOtp > does not allow signup when live email verification is disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "requestEmailOtp > does not allow signup when live email verification is disabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/request-email-otp.test.ts::requestEmailOtp > does not allow signup when live email verification is disabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/request-email-otp.test.ts",
+        "apps/web/src/lib/auth/request-email-otp.ts",
+        "docs/superpowers/specs/2026-11-04-explicit-email-signup.md"
+      ]
+    },
+    {
+      "id": "FE-EMAIL-SIGNUP-UI-01",
+      "domain": "explicit-email-signup",
+      "description": "LoginPage > hides account creation while it is disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > hides account creation while it is disabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > hides account creation while it is disabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx",
+        "docs/superpowers/specs/2026-11-04-explicit-email-signup.md"
+      ]
+    },
+    {
+      "id": "FE-EMAIL-SIGNUP-UI-02",
+      "domain": "explicit-email-signup",
+      "description": "LoginPage > requests signup only after explicitly selecting account creation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > requests signup only after explicitly selecting account creation"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > requests signup only after explicitly selecting account creation"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx",
+        "docs/superpowers/specs/2026-11-04-explicit-email-signup.md"
+      ]
+    },
+    {
+      "id": "FE-EMAIL-SIGNUP-UI-03",
+      "domain": "explicit-email-signup",
+      "description": "LoginPage > completes the local signup code flow only after verification succeeds.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > completes the local signup code flow only after verification succeeds"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > completes the local signup code flow only after verification succeeds"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx",
+        "docs/superpowers/specs/2026-11-04-explicit-email-signup.md"
+      ]
+    },
+    {
+      "id": "FE-EMAIL-SIGNUP-UI-04",
+      "domain": "explicit-email-signup",
+      "description": "LoginPage > prevents changing signup mode during an in-flight request.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > prevents changing signup mode during an in-flight request"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > prevents changing signup mode during an in-flight request"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx",
+        "docs/superpowers/specs/2026-11-04-explicit-email-signup.md"
+      ]
+    },
+    {
+      "id": "FE-EMAIL-SIGNUP-UI-05",
+      "domain": "explicit-email-signup",
+      "description": "LoginPage > returns to sign-in mode after a provider sign-in event interrupts signup verification.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > returns to sign-in mode after a provider sign-in event interrupts signup verification"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > returns to sign-in mode after a provider sign-in event interrupts signup verification"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx",
+        "docs/superpowers/specs/2026-11-04-explicit-email-signup.md"
+      ]
+    },
+    {
+      "id": "FE-EMAIL-SIGNUP-UI-06",
+      "domain": "explicit-email-signup",
+      "description": "LoginPage > keeps repeat code requests in explicitly selected signup mode.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > keeps repeat code requests in explicitly selected signup mode"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > keeps repeat code requests in explicitly selected signup mode"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx",
+        "docs/superpowers/specs/2026-11-04-explicit-email-signup.md"
+      ]
     }
   ]
 }
