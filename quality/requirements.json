@@ -2554,6 +2554,174 @@
       ]
     },
     {
+      "id": "DB-CLASS-RECOVERY-07",
+      "domain": "class-setup-recovery-private",
+      "description": "test current class recovery rejects mismatched receipt payload.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test current class recovery rejects mismatched receipt payload"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_current_class_recovery_rejects_mismatched_receipt_payload"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002500_private_current_class_recovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-RECOVERY-08",
+      "domain": "class-setup-recovery-private",
+      "description": "test current class recovery rejects foreign history reference.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test current class recovery rejects foreign history reference"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_current_class_recovery_rejects_foreign_history_reference"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002500_private_current_class_recovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-RECOVERY-01",
+      "domain": "class-setup-recovery-private",
+      "description": "test current class recovery finds next request after lost response.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test current class recovery finds next request after lost response"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_current_class_recovery_finds_next_request_after_lost_response"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002500_private_current_class_recovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-RECOVERY-02",
+      "domain": "class-setup-recovery-private",
+      "description": "test current class recovery reports unknown and initial reservation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test current class recovery reports unknown and initial reservation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_current_class_recovery_reports_unknown_and_initial_reservation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002500_private_current_class_recovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-RECOVERY-03",
+      "domain": "class-setup-recovery-private",
+      "description": "test current class recovery hides other manager and denies apps.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test current class recovery hides other manager and denies apps"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_current_class_recovery_hides_other_manager_and_denies_apps"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002500_private_current_class_recovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-RECOVERY-04",
+      "domain": "class-setup-recovery-private",
+      "description": "test current class recovery denies inactive manager and disabled control.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test current class recovery denies inactive manager and disabled control"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_current_class_recovery_denies_inactive_manager_and_disabled_control"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002500_private_current_class_recovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-RECOVERY-05",
+      "domain": "class-setup-recovery-private",
+      "description": "test current recovery waits for advance.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test current recovery waits for advance"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_current_recovery_waits_for_advance"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002500_private_current_class_recovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-RECOVERY-06",
+      "domain": "class-setup-recovery-private",
+      "description": "test advance waits for current recovery.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test advance waits for current recovery"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_advance_waits_for_current_recovery"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002500_private_current_class_recovery.sql"
+      ]
+    },
+    {
       "id": "DB-CLASS-RESERVATION-01",
       "domain": "class-setup-reservation-private",
       "description": "test class setup reservation returns same id for matching retry.",

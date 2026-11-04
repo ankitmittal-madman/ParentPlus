@@ -242,3 +242,9 @@ Local tests exercise acknowledgement against workspace suspension, membership su
 ## Private next-class transition draft — 2026-11-04
 
 A local-only migration adds private next-class transition and receipts. The prior completed/acknowledged intent is archived; a new request ID is bound to actor, workspace, prior intent and normalized payload. Matching retries return the original new intent ID. The actor/workspace advisory lock is shared with legacy reservation; after history exists untokenized reservation fails closed. This is a local draft, not app access. Historical result discovery, retention/deletion, lost request-token recovery, other revocation and race orderings, real auth/provider and UI remain open. Inspect fresh gate evidence and independent review; no hosted migration was performed.
+
+## Private current-class recovery draft — 2026-11-04
+
+A private local recovery operation checks manager and database control, serializes with reservation/advance, and returns the current actor/workspace intent and its linked request details, including completion and acknowledgement state. An absent visible intent remains unknown. It is a current snapshot: if further advances occur it cannot identify which older request a user meant, and it does not provide archived-result lookup. It does not authorise app access; retention/privacy, missing/corrupt receipt, revocation orderings, real provider and UI still require review. No hosted migration was performed. Inspect current tests and independent review.
+
+Independent review found that a corrupted private recovery receipt could mix the current intent with a different payload or another actor's history. Local recovery now checks payload and prior-history actor/workspace consistency and fails closed; tests reproduce both defects against privileged synthetic corruption. App roles cannot modify these tables. Inspect fresh evidence and review; this does not implement old-result discovery or the app journey.

@@ -1031,3 +1031,82 @@ DROP TRIGGER test_reject_next_receipt ON public.class_setup_next_requests;
 SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000005','Art','Morning') IS NOT NULL; ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-2:], ['1:0:0','t'])
+
+    def test_current_class_recovery_finds_next_request_after_lost_response(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE prior AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT * FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+CREATE TEMP TABLE next_intent AS SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000001','Art','Morning') AS id;
+SELECT state='pending' AND intent_id=(SELECT id FROM next_intent) AND prior_intent_id=(SELECT id FROM prior) AND request_id='e6000000-0000-4000-8000-000000000001' AND course_name='Art' AND batch_name='Morning' FROM public.recover_private_current_class_setup('a0000000-0000-4000-8000-000000000001');
+SELECT count(*) FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM next_intent));
+SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM next_intent));
+SELECT state='completed' AND acknowledged AND course_id IS NOT NULL AND batch_id IS NOT NULL FROM public.recover_private_current_class_setup('a0000000-0000-4000-8000-000000000001'); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-4:],['t','1','t','t'])
+
+    def test_current_class_recovery_reports_unknown_and_initial_reservation(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT state || ':' || (intent_id IS NULL)::text FROM public.recover_private_current_class_setup('a0000000-0000-4000-8000-000000000001');
+SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners');
+SELECT state || ':' || (request_id IS NULL AND prior_intent_id IS NULL)::text FROM public.recover_private_current_class_setup('a0000000-0000-4000-8000-000000000001'); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-3], 'unknown:true'); self.assertEqual(out.splitlines()[-1], 'pending:true')
+
+    def test_current_class_recovery_hides_other_manager_and_denies_apps(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner';
+INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('a0000000-0000-4000-8000-000000000001','22222222-2222-4222-8222-222222222222','admin','active');
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners');
+SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
+SELECT state || ':' || (intent_id IS NULL AND course_name IS NULL)::text FROM public.recover_private_current_class_setup('a0000000-0000-4000-8000-000000000001');
+SELECT NOT has_function_privilege('authenticated','public.recover_private_current_class_setup(uuid)','EXECUTE') AND NOT has_function_privilege('anon','public.recover_private_current_class_setup(uuid)','EXECUTE'); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-2:], ['unknown:true','t'])
+
+    def test_current_class_recovery_denies_inactive_manager_and_disabled_control(self):
+        out=run_sql(SETUP + """
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+DO $$ BEGIN BEGIN PERFORM public.recover_private_current_class_setup('a0000000-0000-4000-8000-000000000001'); RAISE EXCEPTION 'coach accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001'; UPDATE public.class_setup_controls SET enabled=false WHERE id=true;
+DO $$ BEGIN BEGIN PERFORM public.recover_private_current_class_setup('a0000000-0000-4000-8000-000000000001'); RAISE EXCEPTION 'disabled accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+SELECT 'denied'; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1],'denied')
+
+    def test_current_class_recovery_rejects_mismatched_receipt_payload(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE prior AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT * FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000001','Art','Morning');
+UPDATE public.class_setup_next_requests SET course_name='Tampered' WHERE request_id='e6000000-0000-4000-8000-000000000001';
+DO $$ BEGIN BEGIN PERFORM public.recover_private_current_class_setup('a0000000-0000-4000-8000-000000000001'); RAISE EXCEPTION 'mismatched receipt accepted'; EXCEPTION WHEN object_not_in_prerequisite_state THEN NULL; END; END $$;
+SELECT 'denied'; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1],'denied')
+
+    def test_current_class_recovery_rejects_foreign_history_reference(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE prior AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT * FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior)); SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000001','Art','Morning');
+SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
+CREATE TEMP TABLE other_prior AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000002','Music','Evening') AS id;
+SELECT * FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000002',(SELECT id FROM other_prior)); SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000002',(SELECT id FROM other_prior));
+SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000002',(SELECT id FROM other_prior),'e6000000-0000-4000-8000-000000000002','Yoga','Noon');
+UPDATE public.class_setup_next_requests SET prior_intent_id=(SELECT id FROM other_prior) WHERE request_id='e6000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+DO $$ BEGIN BEGIN PERFORM public.recover_private_current_class_setup('a0000000-0000-4000-8000-000000000001'); RAISE EXCEPTION 'foreign history accepted'; EXCEPTION WHEN object_not_in_prerequisite_state THEN NULL; END; END $$;
+SELECT 'denied'; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1],'denied')

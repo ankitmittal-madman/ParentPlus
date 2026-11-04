@@ -114,3 +114,5 @@ The old class setup server action now returns unavailable and does not call the 
 A local private acknowledgement draft records acknowledgement of a completed reservation without releasing the slot. Starting a subsequent class, recovery UX and app access remain unfinished.
 
 A private local next-class transition draft uses retained history and payload-bound request IDs. It is not connected to the app; lost-token recovery, history/retention, remaining races and the complete user journey remain unfinished.
+
+A private local recovery draft can return current reservation and next-request details to the same authorised actor. It does not recover an older archived result or complete app-facing class setup.
