@@ -2576,6 +2576,138 @@
       ]
     },
     {
+      "id": "FE-CLASS-WORKSPACES-01",
+      "domain": "class-setup-workspace-selection",
+      "description": "listClassWorkspaces > does not contact the provider when class setup is disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "listClassWorkspaces > does not contact the provider when class setup is disabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/list-class-workspaces.test.ts::listClassWorkspaces > does not contact the provider when class setup is disabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/list-class-workspaces.ts",
+        "apps/web/src/lib/scheduling/list-class-workspaces.test.ts",
+        "supabase/migrations/20261101000300_initial_rls.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-WORKSPACES-02",
+      "domain": "class-setup-workspace-selection",
+      "description": "listClassWorkspaces > requires a verified signed-in user.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "listClassWorkspaces > requires a verified signed-in user"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/list-class-workspaces.test.ts::listClassWorkspaces > requires a verified signed-in user"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/list-class-workspaces.ts",
+        "apps/web/src/lib/scheduling/list-class-workspaces.test.ts",
+        "supabase/migrations/20261101000300_initial_rls.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-WORKSPACES-03",
+      "domain": "class-setup-workspace-selection",
+      "description": "listClassWorkspaces > filters own active manager memberships and active workspaces.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "listClassWorkspaces > filters own active manager memberships and active workspaces"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/list-class-workspaces.test.ts::listClassWorkspaces > filters own active manager memberships and active workspaces"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/list-class-workspaces.ts",
+        "apps/web/src/lib/scheduling/list-class-workspaces.test.ts",
+        "supabase/migrations/20261101000300_initial_rls.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-WORKSPACES-04",
+      "domain": "class-setup-workspace-selection",
+      "description": "listClassWorkspaces > returns an empty list when no eligible workspace exists.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "listClassWorkspaces > returns an empty list when no eligible workspace exists"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/list-class-workspaces.test.ts::listClassWorkspaces > returns an empty list when no eligible workspace exists"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/list-class-workspaces.ts",
+        "apps/web/src/lib/scheduling/list-class-workspaces.test.ts",
+        "supabase/migrations/20261101000300_initial_rls.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-WORKSPACES-05",
+      "domain": "class-setup-workspace-selection",
+      "description": "listClassWorkspaces > fails closed on malformed workspace data.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "listClassWorkspaces > fails closed on malformed workspace data"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/list-class-workspaces.test.ts::listClassWorkspaces > fails closed on malformed workspace data"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/list-class-workspaces.ts",
+        "apps/web/src/lib/scheduling/list-class-workspaces.test.ts",
+        "supabase/migrations/20261101000300_initial_rls.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-WORKSPACES-06",
+      "domain": "class-setup-workspace-selection",
+      "description": "listClassWorkspaces > redacts provider errors.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "listClassWorkspaces > redacts provider errors"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/list-class-workspaces.test.ts::listClassWorkspaces > redacts provider errors"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/list-class-workspaces.ts",
+        "apps/web/src/lib/scheduling/list-class-workspaces.test.ts",
+        "supabase/migrations/20261101000300_initial_rls.sql"
+      ]
+    },
+    {
       "id": "FE-CLASS-SETUP-SERVER-01",
       "domain": "class-setup-server-boundary",
       "description": "createClassSetup > fails closed without constructing a client when disabled.",
