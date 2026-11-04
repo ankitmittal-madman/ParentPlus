@@ -1,6 +1,11 @@
 # ParentPlus Build Progress
 
 
+## Email retry verification — 2026-11-04
+
+Local simulated-provider component tests now cover a repeat email-code request throwing an error and an account change during a delayed failed retry. They check that the prior code remains available on a thrown failure, and that stale information is not restored after an account change. Real provider behaviour and the full parent sign-in journey remain unverified. No usage data establishes an 80% frequency for either scenario.
+
+
 ## Email code paste — 2026-11-04
 
 The local sign-in helper removes whitespace from a pasted verification code before checking for exactly six digits. This is a usability improvement based on an assumed common sign-in scenario; actual frequency is not measured. The provider remains disabled by default. Mocked-provider tests do not establish live delivery, provider verification, expiry or full sign-in.

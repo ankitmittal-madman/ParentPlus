@@ -117,6 +117,39 @@ describe("LoginPage", () => {
     expect(screen.getByRole("status")).toHaveTextContent(/latest request could not be confirmed/i);
   });
 
+  it("keeps the entered code when a repeat request throws", async () => {
+    mocks.requestEmailOtp.mockResolvedValueOnce({ success: true, error: null }).mockRejectedValueOnce(new Error("private provider detail"));
+    render(<LoginPage />);
+    fireEvent.change(screen.getByLabelText("Email address"), { target: { value: "parent@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    fireEvent.change(await screen.findByLabelText("Verification code"), { target: { value: "123456" } });
+    fireEvent.click(screen.getByRole("button", { name: "Request another code" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Unable to confirm the latest request");
+    expect(screen.getByLabelText("Verification code")).toHaveValue("123456");
+    expect(screen.queryByText(/private provider detail/)).not.toBeInTheDocument();
+    expect(screen.queryByText("Signed in.")).not.toBeInTheDocument();
+  });
+
+  it("ignores a failed repeat request after an account change", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
+    let notify!: (event: string) => void;
+    let finish!: (value: { success: boolean; error: string }) => void;
+    mocks.observeSessionChanges.mockImplementation((callback) => { notify = callback; return () => {}; });
+    mocks.getSessionStatus.mockResolvedValueOnce({ state: "signed-out" }).mockResolvedValueOnce({ state: "signed-in" });
+    mocks.requestEmailOtp.mockResolvedValueOnce({ success: true, error: null }).mockReturnValueOnce(new Promise((resolve) => { finish = resolve; }));
+    render(<LoginPage />);
+    fireEvent.change(await screen.findByLabelText("Email address"), { target: { value: "old@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    fireEvent.change(await screen.findByLabelText("Verification code"), { target: { value: "123456" } });
+    fireEvent.click(screen.getByRole("button", { name: "Request another code" }));
+    act(() => notify("SIGNED_IN"));
+    await act(async () => finish({ success: false, error: "private provider detail" }));
+    expect(await screen.findByRole("button", { name: "Sign out" })).toBeInTheDocument();
+    expect(screen.queryByLabelText("Verification code")).not.toBeInTheDocument();
+    expect(screen.queryByText(/private provider detail/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Unable to confirm the latest request/)).not.toBeInTheDocument();
+  });
+
   it("shows service errors without claiming delivery", async () => {
     mocks.requestEmailOtp.mockResolvedValue({
       success: false,

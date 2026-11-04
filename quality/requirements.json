@@ -8150,6 +8150,48 @@
         "apps/web/src/lib/auth/verify-email-otp.ts",
         "apps/web/src/lib/auth/verify-email-otp.test.ts"
       ]
+    },
+    {
+      "id": "FE-LOGIN-RETRY-LABEL-03",
+      "domain": "email-login-retry",
+      "description": "LoginPage > keeps the entered code when a repeat request throws.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > keeps the entered code when a repeat request throws"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > keeps the entered code when a repeat request throws"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.tsx",
+        "apps/web/src/app/login/page.test.tsx"
+      ]
+    },
+    {
+      "id": "FE-LOGIN-RETRY-LABEL-04",
+      "domain": "email-login-retry",
+      "description": "LoginPage > ignores a failed repeat request after an account change.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > ignores a failed repeat request after an account change"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > ignores a failed repeat request after an account change"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.tsx",
+        "apps/web/src/app/login/page.test.tsx"
+      ]
     }
   ]
 }
