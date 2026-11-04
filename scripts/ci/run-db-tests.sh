@@ -61,6 +61,7 @@ BEGIN
     (SELECT count(*) FROM public.schedule_sessions) +
     (SELECT count(*) FROM public.batch_coach_mutation_requests) +
     (SELECT count(*) FROM public.class_setup_requests) +
+    (SELECT count(*) FROM public.class_setup_intents) +
     (SELECT count(*) FROM public.class_setup_controls WHERE enabled)
   INTO v_remaining;
 

@@ -1798,6 +1798,174 @@
       ]
     },
     {
+      "id": "DB-CLASS-RESERVATION-07",
+      "domain": "class-setup-reservation-private",
+      "description": "test class setup reservation rejects invalid details and missing identity.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup reservation rejects invalid details and missing identity"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_reservation_rejects_invalid_details_and_missing_identity"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104001900_private_class_setup_reservation.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-RESERVATION-08",
+      "domain": "class-setup-reservation-private",
+      "description": "test class setup reservations are scoped to actor and workspace.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup reservations are scoped to actor and workspace"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_reservations_are_scoped_to_actor_and_workspace"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104001900_private_class_setup_reservation.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-RESERVATION-01",
+      "domain": "class-setup-reservation-private",
+      "description": "test class setup reservation returns same id for matching retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup reservation returns same id for matching retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_reservation_returns_same_id_for_matching_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104001900_private_class_setup_reservation.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-RESERVATION-02",
+      "domain": "class-setup-reservation-private",
+      "description": "test class setup reservation rejects changed payload.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup reservation rejects changed payload"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_reservation_rejects_changed_payload"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104001900_private_class_setup_reservation.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-RESERVATION-03",
+      "domain": "class-setup-reservation-private",
+      "description": "test class setup reservation denies coach and disabled control.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup reservation denies coach and disabled control"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_reservation_denies_coach_and_disabled_control"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104001900_private_class_setup_reservation.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-RESERVATION-04",
+      "domain": "class-setup-reservation-private",
+      "description": "test class setup reservation is inaccessible to app roles.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup reservation is inaccessible to app roles"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_reservation_is_inaccessible_to_app_roles"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104001900_private_class_setup_reservation.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-RESERVATION-05",
+      "domain": "class-setup-reservation-private",
+      "description": "test class setup reservation concurrent matching requests.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup reservation concurrent matching requests"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_class_setup_reservation_concurrent_matching_requests"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104001900_private_class_setup_reservation.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-RESERVATION-06",
+      "domain": "class-setup-reservation-private",
+      "description": "test class setup reservation concurrent changed requests.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup reservation concurrent changed requests"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_class_setup_reservation_concurrent_changed_requests"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104001900_private_class_setup_reservation.sql"
+      ]
+    },
+    {
       "id": "DB-AUTH-COURSE-CREATION-REJECTS-MISSING-IDENTITY",
       "domain": "authenticated-course-creation",
       "description": "Authenticated course creation rejects missing identity.",

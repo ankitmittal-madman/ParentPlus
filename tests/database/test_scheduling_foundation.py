@@ -721,3 +721,65 @@ RESET ROLE; SELECT (SELECT count(*) FROM public.courses WHERE name='Dance') || '
 SELECT NOT enabled AND NOT has_table_privilege('anon','public.class_setup_controls','UPDATE') AND NOT has_table_privilege('authenticated','public.class_setup_controls','SELECT') AND NOT has_table_privilege('authenticated','public.class_setup_controls','UPDATE') FROM public.class_setup_controls WHERE id=true;
 """)
         self.assertEqual(out, 't')
+
+    def test_class_setup_reservation_returns_same_id_for_matching_retry(self):
+        out = run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE first_reservation AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT (SELECT id FROM first_reservation) = public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001',' Dance ',' Beginners ');
+ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], 't')
+
+    def test_class_setup_reservation_rejects_changed_payload(self):
+        out = run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners');
+DO $$ BEGIN BEGIN PERFORM public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Advanced'); RAISE EXCEPTION 'changed request accepted'; EXCEPTION WHEN unique_violation THEN NULL; END; END $$;
+SELECT count(*) FROM public.class_setup_intents; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], '1')
+
+    def test_class_setup_reservation_denies_coach_and_disabled_control(self):
+        out = run_sql(SETUP + """
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+DO $$ BEGIN BEGIN PERFORM public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners'); RAISE EXCEPTION 'coach accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001'; UPDATE public.class_setup_controls SET enabled=false WHERE id=true;
+DO $$ BEGIN BEGIN PERFORM public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners'); RAISE EXCEPTION 'disabled accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+SELECT count(*) FROM public.class_setup_intents; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], '0')
+
+    def test_class_setup_reservation_is_inaccessible_to_app_roles(self):
+        out = run_sql("""
+SELECT NOT has_table_privilege('authenticated','public.class_setup_intents','SELECT')
+ AND NOT has_table_privilege('anon','public.class_setup_intents','INSERT')
+ AND NOT has_function_privilege('authenticated','public.reserve_private_class_setup(uuid,text,text)','EXECUTE')
+ AND NOT has_function_privilege('anon','public.reserve_private_class_setup(uuid,text,text)','EXECUTE');
+""")
+        self.assertEqual(out, 't')
+
+    def test_class_setup_reservation_rejects_invalid_details_and_missing_identity(self):
+        out = run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+DO $$ BEGIN BEGIN PERFORM public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','  ','Beginners'); RAISE EXCEPTION 'empty name accepted'; EXCEPTION WHEN invalid_parameter_value THEN NULL; END; END $$;
+SELECT set_config('request.jwt.claim.sub','',true);
+DO $$ BEGIN BEGIN PERFORM public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners'); RAISE EXCEPTION 'missing identity accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+SELECT count(*) FROM public.class_setup_intents; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], '0')
+
+    def test_class_setup_reservations_are_scoped_to_actor_and_workspace(self):
+        out = run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners');
+SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
+SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000002','Painting','Advanced');
+DO $$ BEGIN BEGIN PERFORM public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Painting','Advanced'); RAISE EXCEPTION 'cross workspace allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+SELECT count(*) FROM public.class_setup_intents; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], '2')

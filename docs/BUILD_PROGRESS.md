@@ -98,3 +98,5 @@ An off-by-default server action draft prepares validated atomic class setup thro
 A server-only, default-off lookup for active manager workspaces is under development. It is not connected to the practice screen and is not real-provider verified; class creation remains incomplete. See `docs/AGENT_HANDOFF.md` for limits and inspect fresh test evidence.
 
 The class setup screen remains disconnected while durable retry and shared-device privacy are designed. A browser-storage prototype was removed after review identified cross-tab and data exposure risks.
+
+A private local reservation primitive is under development. It is inaccessible to app roles and does not yet implement the complete reservation, creation and acknowledgement journey. Class setup remains incomplete and disabled by default.

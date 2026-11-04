@@ -29,6 +29,7 @@ COMMIT;
     def tearDown(self):
         query(f"""
 BEGIN;
+DELETE FROM public.class_setup_intents WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.class_setup_requests WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.batch_coach_mutation_requests WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.schedule_sessions WHERE workspace_id = '{self.workspace}';
@@ -696,3 +697,36 @@ DO $$ BEGIN BEGIN PERFORM public.create_private_local_session('{self.workspace}'
 
     def test_atomic_setup_database_disabled_after_write(self):
         self.run_atomic_setup_switch_race(False)
+
+    def run_reservation_race(self, changed):
+        query(f"UPDATE public.workspace_memberships SET role='owner' WHERE id='{self.membership}';")
+        first_name, second_name = 'reserve_first_'+uuid.uuid4().hex, 'reserve_second_'+uuid.uuid4().hex
+        first, second = start_psql_session(), start_psql_session()
+        try:
+            for process, name in ((first,first_name),(second,second_name)):
+                process.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false); SELECT set_config('request.jwt.claim.sub','{MEERA}',true);\n")
+            first.stdin.write(f"SELECT 'INTENT:' || public.reserve_private_class_setup('{self.workspace}','Dance','Beginners'); SELECT 'FIRST_LOCKED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_LOCKED'))
+            second_batch = 'Advanced' if changed else 'Beginners'
+            second.stdin.write(f"SELECT 'INTENT:' || public.reserve_private_class_setup('{self.workspace}','Dance','{second_batch}'); COMMIT; SELECT 'SECOND_COMMITTED';\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name,first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_COMMITTED'))
+            if changed:
+                second.stdin.close(); second.stdin=None
+                _, errors=second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode,0)
+                self.assertIn('Resolve the existing class setup first', errors)
+            else:
+                intent=query(f"SELECT id FROM public.class_setup_intents WHERE workspace_id='{self.workspace}';")
+                self.assertTrue(wait_for_session_marker(second,'INTENT:'+intent))
+                self.assertTrue(wait_for_session_marker(second,'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT count(*) FROM public.class_setup_intents WHERE workspace_id='{self.workspace}';"),'1')
+        finally:
+            close_psql_session(second); close_psql_session(first)
+
+    def test_class_setup_reservation_concurrent_matching_requests(self):
+        self.run_reservation_race(False)
+
+    def test_class_setup_reservation_concurrent_changed_requests(self):
+        self.run_reservation_race(True)

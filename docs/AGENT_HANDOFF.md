@@ -210,3 +210,7 @@ A proposed browser-storage retry helper was tested and independently reviewed, t
 The proposed recovery design now distinguishes the existing completion receipt from an earlier durable intent, and records open concurrency, lost-reservation-response, privacy, revocation and pagination requirements. It is a design candidate only: no reservation/status operation or real form exists. See the class setup server boundary specification before implementing it.
 
 The recovery design now has a proposed conservative one-unresolved-intent-per-actor/workspace lifecycle and an explicit concurrency test matrix. It is not implemented: acknowledgement, permission-change recovery, persistence and all new database operations still require code and tests. No UI should rely on the proposal as a working guarantee.
+
+## Private class reservation prototype — 2026-11-04
+
+A local migration introduces a private, app-inaccessible reservation primitive: one actor/workspace intent, payload-bound retries, default-off control and manager checks. The unique constraint serializes concurrent reservations. It does not implement completion, acknowledgement, status recovery, deletion/retention, release or a UI and must not be exposed as a complete workflow. The existing authenticated creation RPC can still be called separately when enabled; it does not consume this reservation. The migration is not deployed. Consult fresh test evidence and independent review before further work.
