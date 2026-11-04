@@ -215,7 +215,7 @@ describe("LoginPage", () => {
     expect(screen.queryByLabelText("Email address")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
     expect(await screen.findByLabelText("Email address")).toHaveValue("");
-    expect(screen.getByLabelText("Email address")).toHaveFocus();
+    await waitFor(() => expect(screen.getByLabelText("Email address")).toHaveFocus());
     expect(screen.queryByText("Signed in.")).not.toBeInTheDocument();
   });
 
@@ -282,7 +282,7 @@ describe("LoginPage", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("Unable to check your session");
     expect(screen.queryByLabelText("Email address")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Try again" }));
-    expect(await screen.findByLabelText("Email address")).toHaveFocus();
+    await waitFor(() => expect(screen.getByLabelText("Email address")).toHaveFocus());
     expect(mocks.getSessionStatus).toHaveBeenCalledTimes(2);
   });
 

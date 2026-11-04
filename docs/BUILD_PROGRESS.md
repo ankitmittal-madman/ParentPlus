@@ -120,3 +120,5 @@ A private local recovery draft can return current reservation and next-request d
 A private local lookup can retrieve a known archived class setup for the same authorised manager. Discovering a lost identifier and the end-to-end application journey remain unfinished.
 
 A private local archive-discovery draft adds bounded, UUID-ordered pages for the same authorised manager. Pages are snapshots, not chronological or guaranteed complete across concurrent changes; application integration remains unfinished.
+
+A local draft now grants authenticated-role access to narrow reservation-protocol wrappers, guarded by a database control that defaults off. Synthetic SQL tests are not real-provider or user-interface validation; the old web action remains unavailable and the complete feature is not release-ready.

@@ -1083,3 +1083,35 @@ DO $$ BEGIN BEGIN PERFORM public.create_private_local_session('{self.workspace}'
         self.run_next_or_discovery_permission_race('discovery','control',True)
     def test_archive_discovery_control_disabled_after_read(self):
         self.run_next_or_discovery_permission_race('discovery','control',False)
+
+    def run_app_completion_membership_race(self, revoke_first):
+        query(f"UPDATE public.workspace_memberships SET role='owner' WHERE id='{self.membership}';")
+        output=query(f"BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT 'INTENT:' || public.app_reserve_class_setup('{self.workspace}','Dance','Beginners'); COMMIT;")
+        intent=next(line.removeprefix('INTENT:') for line in output.splitlines() if line.startswith('INTENT:'))
+        first_name,second_name='app_first_'+uuid.uuid4().hex,'app_second_'+uuid.uuid4().hex
+        first,second=start_psql_session(),start_psql_session()
+        revoke=f"UPDATE public.workspace_memberships SET status='suspended' WHERE id='{self.membership}';\n"
+        complete=f"SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT * FROM public.app_complete_class_setup('{self.workspace}','{intent}');\n"
+        try:
+            first.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{first_name}',false);\n")
+            first.stdin.write(revoke if revoke_first else complete);first.stdin.write("SELECT 'FIRST_LOCKED';\n");first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_LOCKED'))
+            second.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{second_name}',false);\n")
+            second.stdin.write(complete if revoke_first else revoke);second.stdin.write("COMMIT; SELECT 'SECOND_COMMITTED';\n");second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name,first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n");first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_COMMITTED'))
+            if revoke_first:
+                second.stdin.close();second.stdin=None
+                _,errors=second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode,0);self.assertIn('Workspace access denied',errors)
+            else:
+                self.assertTrue(wait_for_session_marker(second,'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT (completed_course_id IS NOT NULL)::text FROM public.class_setup_intents WHERE id='{intent}';"),'false' if revoke_first else 'true')
+        finally:
+            close_psql_session(second);close_psql_session(first)
+
+    def test_app_completion_denied_if_membership_suspended_first(self):
+        self.run_app_completion_membership_race(True)
+    def test_app_completion_commits_before_membership_suspension(self):
+        self.run_app_completion_membership_race(False)

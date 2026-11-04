@@ -3259,6 +3259,216 @@
       ]
     },
     {
+      "id": "DB-CLASS-APP-PROTOCOL-01",
+      "domain": "class-setup-app-protocol",
+      "description": "test app class setup protocol happy path and retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app class setup protocol happy path and retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_app_class_setup_protocol_happy_path_and_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-APP-PROTOCOL-02",
+      "domain": "class-setup-app-protocol",
+      "description": "test app class setup denies anon and private access.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app class setup denies anon and private access"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_app_class_setup_denies_anon_and_private_access"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-APP-PROTOCOL-03",
+      "domain": "class-setup-app-protocol",
+      "description": "test app class setup denies coach disabled and missing identity.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app class setup denies coach disabled and missing identity"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_app_class_setup_denies_coach_disabled_and_missing_identity"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-APP-PROTOCOL-04",
+      "domain": "class-setup-app-protocol",
+      "description": "test app class setup isolates managers and workspaces.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app class setup isolates managers and workspaces"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_app_class_setup_isolates_managers_and_workspaces"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-APP-PROTOCOL-05",
+      "domain": "class-setup-app-protocol",
+      "description": "test app class setup denies legacy unreserved paths.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app class setup denies legacy unreserved paths"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_app_class_setup_denies_legacy_unreserved_paths"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-APP-PROTOCOL-06",
+      "domain": "class-setup-app-protocol",
+      "description": "test app class setup all wrappers are gated when disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app class setup all wrappers are gated when disabled"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_app_class_setup_all_wrappers_are_gated_when_disabled"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-APP-PROTOCOL-07",
+      "domain": "class-setup-app-protocol",
+      "description": "test app class setup wrapper privileges and owner.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app class setup wrapper privileges and owner"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_app_class_setup_wrapper_privileges_and_owner"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-APP-PROTOCOL-08",
+      "domain": "class-setup-app-protocol",
+      "description": "test app class setup completion failure rolls back.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app class setup completion failure rolls back"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_app_class_setup_completion_failure_rolls_back"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-APP-PROTOCOL-09",
+      "domain": "class-setup-app-protocol",
+      "description": "test app completion denied if membership suspended first.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app completion denied if membership suspended first"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_app_completion_denied_if_membership_suspended_first"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-APP-PROTOCOL-10",
+      "domain": "class-setup-app-protocol",
+      "description": "test app completion commits before membership suspension.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test app completion commits before membership suspension"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_app_completion_commits_before_membership_suspension"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
       "id": "DB-CLASS-RESERVATION-01",
       "domain": "class-setup-reservation-private",
       "description": "test class setup reservation returns same id for matching retry.",
