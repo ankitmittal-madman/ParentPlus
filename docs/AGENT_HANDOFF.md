@@ -238,3 +238,7 @@ A local, app-inaccessible acknowledgement primitive locks the caller's completed
 ## Acknowledgement permission-race coverage — 2026-11-04
 
 Local tests exercise acknowledgement against workspace suspension, membership suspension and database-control disablement in both transaction orders, using observed PostgreSQL blocking and checking the committed acknowledgement marker. Inspect fresh gate evidence. A next-class transition is not implemented: independent review identified a delayed legacy request race, requiring a common actor/workspace serialization point and a durable request identity that binds previous intent and payload. Safe retention, lost-token recovery, app access and real-provider testing remain open.
+
+## Private next-class transition draft — 2026-11-04
+
+A local-only migration adds private next-class transition and receipts. The prior completed/acknowledged intent is archived; a new request ID is bound to actor, workspace, prior intent and normalized payload. Matching retries return the original new intent ID. The actor/workspace advisory lock is shared with legacy reservation; after history exists untokenized reservation fails closed. This is a local draft, not app access. Historical result discovery, retention/deletion, lost request-token recovery, other revocation and race orderings, real auth/provider and UI remain open. Inspect fresh gate evidence and independent review; no hosted migration was performed.

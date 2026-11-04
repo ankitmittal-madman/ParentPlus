@@ -955,3 +955,79 @@ DO $$ BEGIN BEGIN PERFORM public.acknowledge_private_class_setup('a0000000-0000-
 SELECT NOT acknowledged FROM public.class_setup_intents WHERE id=(SELECT id FROM saved_intent); ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-1], 't')
+
+    def test_next_class_transition_retries_same_token_without_releasing_history(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE prior AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT count(*) FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+CREATE TEMP TABLE next_intent AS SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT (SELECT id FROM next_intent) <> (SELECT id FROM prior) AND (SELECT id FROM next_intent)=public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000001',' Dance ',' Beginners ');
+DO $$ BEGIN BEGIN PERFORM public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners'); RAISE EXCEPTION 'legacy retry rebound'; EXCEPTION WHEN object_not_in_prerequisite_state THEN NULL; END; END $$;
+SELECT (SELECT count(*) FROM public.class_setup_intent_history WHERE id=(SELECT id FROM prior)) || ':' || (SELECT count(*) FROM public.class_setup_intents WHERE id=(SELECT id FROM next_intent)) || ':' || (SELECT count(*) FROM public.courses WHERE name='Dance'); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-2:], ['t','1:1:1'])
+
+    def test_next_class_transition_requires_completed_acknowledged_prior(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE prior AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+DO $$ BEGIN BEGIN PERFORM public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),gen_random_uuid(),'Art','Morning'); RAISE EXCEPTION 'pending accepted'; EXCEPTION WHEN object_not_in_prerequisite_state THEN NULL; END; END $$;
+SELECT count(*) FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+DO $$ BEGIN BEGIN PERFORM public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),gen_random_uuid(),'Art','Morning'); RAISE EXCEPTION 'unacknowledged accepted'; EXCEPTION WHEN object_not_in_prerequisite_state THEN NULL; END; END $$;
+SELECT count(*) FROM public.class_setup_intents WHERE id=(SELECT id FROM prior); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], '1')
+
+    def test_next_class_transition_rejects_token_reuse_with_changed_details(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE prior AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT count(*) FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000002','Art','Morning');
+DO $$ BEGIN BEGIN PERFORM public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000002','Art','Evening'); RAISE EXCEPTION 'changed token accepted'; EXCEPTION WHEN unique_violation THEN NULL; END; END $$;
+DO $$ BEGIN BEGIN PERFORM public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',gen_random_uuid(),'e6000000-0000-4000-8000-000000000002','Art','Morning'); RAISE EXCEPTION 'changed prior accepted'; EXCEPTION WHEN unique_violation THEN NULL; END; END $$;
+SELECT count(*) FROM public.class_setup_intents WHERE course_name='Art' AND batch_name='Morning'; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], '1')
+
+    def test_next_class_transition_is_inaccessible_to_app_roles(self):
+        out=run_sql("SELECT NOT has_function_privilege('authenticated','public.advance_private_class_setup(uuid,uuid,uuid,text,text)','EXECUTE') AND NOT has_function_privilege('anon','public.advance_private_class_setup(uuid,uuid,uuid,text,text)','EXECUTE') AND NOT has_table_privilege('authenticated','public.class_setup_intent_history','SELECT') AND NOT has_table_privilege('authenticated','public.class_setup_next_requests','SELECT');")
+        self.assertEqual(out,'t')
+
+    def test_next_class_old_token_replay_after_later_transition_is_nonmutating(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE prior AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT * FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+CREATE TEMP TABLE second AS SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000003','Art','Morning') AS id;
+SELECT * FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM second));
+SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM second));
+CREATE TEMP TABLE third AS SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM second),'e6000000-0000-4000-8000-000000000004','Music','Evening') AS id;
+SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000003','Art','Morning')=(SELECT id FROM second);
+SELECT count(*) FROM public.class_setup_intents WHERE id=(SELECT id FROM third) AND course_name='Music'; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-2:], ['t','1'])
+
+    def test_next_class_transition_rolls_back_when_receipt_insert_fails(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE prior AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT * FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+SELECT public.acknowledge_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
+CREATE FUNCTION public.test_reject_next_receipt() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'synthetic receipt failure'; END $$;
+CREATE TRIGGER test_reject_next_receipt BEFORE INSERT ON public.class_setup_next_requests FOR EACH ROW EXECUTE FUNCTION public.test_reject_next_receipt();
+DO $$ BEGIN BEGIN PERFORM public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000005','Art','Morning'); RAISE EXCEPTION USING ERRCODE='P0002',MESSAGE='failure missing'; EXCEPTION WHEN raise_exception THEN IF SQLERRM <> 'synthetic receipt failure' THEN RAISE; END IF; END; END $$;
+SELECT (SELECT count(*) FROM public.class_setup_intents WHERE id=(SELECT id FROM prior)) || ':' || (SELECT count(*) FROM public.class_setup_intent_history) || ':' || (SELECT count(*) FROM public.class_setup_next_requests);
+DROP TRIGGER test_reject_next_receipt ON public.class_setup_next_requests;
+SELECT public.advance_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000005','Art','Morning') IS NOT NULL; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-2:], ['1:0:0','t'])

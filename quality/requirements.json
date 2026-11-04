@@ -2365,6 +2365,195 @@
       ]
     },
     {
+      "id": "DB-NEXT-CLASS-01",
+      "domain": "next-class-private",
+      "description": "test next class transition retries same token without releasing history.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class transition retries same token without releasing history"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_next_class_transition_retries_same_token_without_releasing_history"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql"
+      ]
+    },
+    {
+      "id": "DB-NEXT-CLASS-02",
+      "domain": "next-class-private",
+      "description": "test next class transition requires completed acknowledged prior.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class transition requires completed acknowledged prior"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_next_class_transition_requires_completed_acknowledged_prior"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql"
+      ]
+    },
+    {
+      "id": "DB-NEXT-CLASS-03",
+      "domain": "next-class-private",
+      "description": "test next class transition rejects token reuse with changed details.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class transition rejects token reuse with changed details"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_next_class_transition_rejects_token_reuse_with_changed_details"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql"
+      ]
+    },
+    {
+      "id": "DB-NEXT-CLASS-04",
+      "domain": "next-class-private",
+      "description": "test next class transition is inaccessible to app roles.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class transition is inaccessible to app roles"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_next_class_transition_is_inaccessible_to_app_roles"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql"
+      ]
+    },
+    {
+      "id": "DB-NEXT-CLASS-05",
+      "domain": "next-class-private",
+      "description": "test next class old token replay after later transition is nonmutating.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class old token replay after later transition is nonmutating"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_next_class_old_token_replay_after_later_transition_is_nonmutating"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql"
+      ]
+    },
+    {
+      "id": "DB-NEXT-CLASS-06",
+      "domain": "next-class-private",
+      "description": "test next class transition rolls back when receipt insert fails.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class transition rolls back when receipt insert fails"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_next_class_transition_rolls_back_when_receipt_insert_fails"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql"
+      ]
+    },
+    {
+      "id": "DB-NEXT-CLASS-07",
+      "domain": "next-class-private",
+      "description": "test next class concurrent same token returns same intent.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class concurrent same token returns same intent"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_next_class_concurrent_same_token_returns_same_intent"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql"
+      ]
+    },
+    {
+      "id": "DB-NEXT-CLASS-08",
+      "domain": "next-class-private",
+      "description": "test next class concurrent different tokens cannot fork prior.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class concurrent different tokens cannot fork prior"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_next_class_concurrent_different_tokens_cannot_fork_prior"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql"
+      ]
+    },
+    {
+      "id": "DB-NEXT-CLASS-09",
+      "domain": "next-class-private",
+      "description": "test next class delayed legacy reservation cannot rebind.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test next class delayed legacy reservation cannot rebind"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_next_class_delayed_legacy_reservation_cannot_rebind"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002400_private_next_class_setup.sql"
+      ]
+    },
+    {
       "id": "DB-CLASS-RESERVATION-01",
       "domain": "class-setup-reservation-private",
       "description": "test class setup reservation returns same id for matching retry.",

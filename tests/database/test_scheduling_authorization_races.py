@@ -42,6 +42,8 @@ UPDATE public.class_setup_controls SET enabled=false WHERE id=true;""")
     def tearDown(self):
         query(f"""
 BEGIN;
+DELETE FROM public.class_setup_next_requests WHERE workspace_id = '{self.workspace}';
+DELETE FROM public.class_setup_intent_history WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.class_setup_intents WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.class_setup_requests WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.batch_coach_mutation_requests WHERE workspace_id = '{self.workspace}';
@@ -879,3 +881,46 @@ DO $$ BEGIN BEGIN PERFORM public.create_private_local_session('{self.workspace}'
 
     def test_ack_control_disabled_after_acknowledgement(self):
         self.run_ack_permission_race('control',False)
+
+    def run_next_class_race(self, mode):
+        query(f"UPDATE public.workspace_memberships SET role='owner' WHERE id='{self.membership}';")
+        output=query(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT 'INTENT:' || public.reserve_private_class_setup('{self.workspace}','Dance','Beginners'); COMMIT;")
+        prior=next(line.removeprefix('INTENT:') for line in output.splitlines() if line.startswith('INTENT:'))
+        query(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT * FROM public.complete_private_class_setup('{self.workspace}','{prior}'); SELECT public.acknowledge_private_class_setup('{self.workspace}','{prior}'); COMMIT;")
+        first_name,second_name='next_first_'+uuid.uuid4().hex,'next_second_'+uuid.uuid4().hex
+        token,other_token=str(uuid.uuid4()),str(uuid.uuid4())
+        first,second=start_psql_session(),start_psql_session()
+        try:
+            for proc,name in ((first,first_name),(second,second_name)):
+                proc.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false); SELECT set_config('request.jwt.claim.sub','{MEERA}',true);\n")
+            first.stdin.write(f"SELECT public.advance_private_class_setup('{self.workspace}','{prior}','{token}','Dance','Beginners'); SELECT 'FIRST_LOCKED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_LOCKED'))
+            if mode=='legacy':
+                operation=f"SELECT public.reserve_private_class_setup('{self.workspace}','Dance','Beginners');"
+            else:
+                second_token=token if mode=='same' else other_token
+                operation=f"SELECT 'NEXT:' || public.advance_private_class_setup('{self.workspace}','{prior}','{second_token}','Dance','Beginners');"
+            second.stdin.write(operation+" COMMIT; SELECT 'SECOND_COMMITTED';\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name,first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_COMMITTED'))
+            if mode=='same':
+                next_id=query(f"SELECT next_intent_id FROM public.class_setup_next_requests WHERE request_id='{token}';")
+                self.assertTrue(wait_for_session_marker(second,'NEXT:'+next_id)); self.assertTrue(wait_for_session_marker(second,'SECOND_COMMITTED'))
+            else:
+                second.stdin.close(); second.stdin=None
+                _,errors=second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode,0)
+                self.assertIn('Use the next class setup request' if mode=='legacy' else 'Resolve the existing class setup first',errors)
+            self.assertEqual(query(f"SELECT (SELECT count(*) FROM public.class_setup_intent_history WHERE workspace_id='{self.workspace}') || ':' || (SELECT count(*) FROM public.class_setup_next_requests WHERE workspace_id='{self.workspace}') || ':' || (SELECT count(*) FROM public.class_setup_intents WHERE workspace_id='{self.workspace}');"),'1:1:1')
+        finally:
+            close_psql_session(second); close_psql_session(first)
+
+    def test_next_class_concurrent_same_token_returns_same_intent(self):
+        self.run_next_class_race('same')
+
+    def test_next_class_concurrent_different_tokens_cannot_fork_prior(self):
+        self.run_next_class_race('different')
+
+    def test_next_class_delayed_legacy_reservation_cannot_rebind(self):
+        self.run_next_class_race('legacy')
