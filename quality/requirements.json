@@ -9093,6 +9093,116 @@
         "apps/web/src/app/login/page.test.tsx",
         "docs/superpowers/specs/2026-11-04-parent-created-child-list.md"
       ]
+    },
+    {
+      "id": "DB-CHILD-REPLAY-GUARD-01",
+      "domain": "child-creation-replay-guard",
+      "description": "test child creation retry does not restore deleted guardianship.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child creation retry does not restore deleted guardianship"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_child_creation_retry_does_not_restore_deleted_guardianship"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003300_child_creation_replay_guard.sql",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-REPLAY-GUARD-02",
+      "domain": "child-creation-replay-guard",
+      "description": "test child creation retry denies revoked and disputed guardianship.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child creation retry denies revoked and disputed guardianship"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_child_creation_retry_denies_revoked_and_disputed_guardianship"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003300_child_creation_replay_guard.sql",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-REPLAY-GUARD-03",
+      "domain": "child-creation-replay-guard",
+      "description": "test child retry after guardianship deletion is denied.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child retry after guardianship deletion is denied"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_child_retry_after_guardianship_deletion_is_denied"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003300_child_creation_replay_guard.sql",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-REPLAY-GUARD-04",
+      "domain": "child-creation-replay-guard",
+      "description": "test guardianship deletion waits for child retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test guardianship deletion waits for child retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_guardianship_deletion_waits_for_child_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003300_child_creation_replay_guard.sql",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-REPLAY-GUARD-05",
+      "domain": "child-creation-replay-guard",
+      "description": "test child creation replay guard privileges and owner.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child creation replay guard privileges and owner"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_child_creation_replay_guard_privileges_and_owner"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003300_child_creation_replay_guard.sql",
+        "docs/DB_SECURITY_REVIEW.md"
+      ]
     }
   ]
 }

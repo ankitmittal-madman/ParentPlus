@@ -30,6 +30,10 @@ A separate, default-off email account-creation choice is now drafted. Local test
 
 A default-off local page can list profiles created by the signed-in account, provided its own provisional or active relationship remains. It is a subset, not a complete list of linked children or evidence of legal guardianship. Security, real-provider and revocation limitations are recorded in [the parent profile spec](superpowers/specs/2026-11-04-parent-created-child-list.md).
 
+## Local child-creation replay safeguard — 2026-11-04
+
+A draft database migration prevents an old child-creation request from recreating a deleted guardianship or succeeding after revocation or dispute. This protects a local replay scenario; parent-facing creation, durable lost-response recovery and live-provider validation remain incomplete. The existing authenticated database RPC is not controlled by the separate parent-read flag.
+
 ## 1. Features with code or foundation
 
 | ID | Feature / real use | What exists | Covered scenarios and evidence | Missing or not established | Complete E2E? |

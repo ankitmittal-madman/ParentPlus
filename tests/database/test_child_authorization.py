@@ -342,6 +342,83 @@ INSERT INTO public.guardianships (child_id,guardian_user_id,status,verification_
     def test_created_child_read_before_control_disabled(self):
         self.run_created_child_read_race(False, "control")
 
+    def test_child_creation_retry_does_not_restore_deleted_guardianship(self):
+        result = run_sql("""
+BEGIN; SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE saved_child AS SELECT public.create_child('Synthetic child','cccccccc-1111-4111-8111-cccccccccccc') AS id;
+RESET ROLE; DELETE FROM public.guardianships WHERE child_id=(SELECT id FROM saved_child);
+SET LOCAL ROLE authenticated;
+DO $$ BEGIN BEGIN PERFORM public.create_child('Synthetic child','cccccccc-1111-4111-8111-cccccccccccc'); RAISE EXCEPTION 'deleted guardian retry accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+RESET ROLE; SELECT count(*) FROM public.guardianships WHERE child_id=(SELECT id FROM saved_child); ROLLBACK;
+""")
+        self.assertEqual(result.splitlines()[-1], "0")
+
+    def test_child_creation_retry_denies_revoked_and_disputed_guardianship(self):
+        result = run_sql("""
+BEGIN; SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE saved_child AS SELECT public.create_child('Synthetic child','cccccccc-2222-4222-8222-cccccccccccc') AS id;
+RESET ROLE; UPDATE public.guardianships SET status='revoked' WHERE child_id=(SELECT id FROM saved_child);
+SET LOCAL ROLE authenticated;
+DO $$ BEGIN BEGIN PERFORM public.create_child('Synthetic child','cccccccc-2222-4222-8222-cccccccccccc'); RAISE EXCEPTION 'revoked guardian retry accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+DO $$ BEGIN BEGIN PERFORM public.create_child('Changed child','cccccccc-2222-4222-8222-cccccccccccc'); RAISE EXCEPTION 'revoked guardian learned details'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+RESET ROLE; UPDATE public.guardianships SET status='disputed' WHERE child_id=(SELECT id FROM saved_child);
+SET LOCAL ROLE authenticated;
+DO $$ BEGIN BEGIN PERFORM public.create_child('Synthetic child','cccccccc-2222-4222-8222-cccccccccccc'); RAISE EXCEPTION 'disputed guardian retry accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+RESET ROLE; SELECT status FROM public.guardianships WHERE child_id=(SELECT id FROM saved_child); ROLLBACK;
+""")
+        self.assertEqual(result.splitlines()[-1], "disputed")
+
+    def run_child_retry_guardian_delete_race(self, delete_first):
+        child, request = str(uuid.uuid4()), str(uuid.uuid4())
+        first_name, second_name = "child_retry_first_"+uuid.uuid4().hex, "child_retry_second_"+uuid.uuid4().hex
+        self.addCleanup(query, f"BEGIN; DELETE FROM public.guardianships WHERE child_id='{child}'; DELETE FROM public.children WHERE id='{child}'; COMMIT;")
+        query(f"""BEGIN; INSERT INTO public.children (id,display_name,created_by,creation_request_id)
+VALUES ('{child}','Synthetic race child','11111111-1111-4111-8111-111111111111','{request}');
+INSERT INTO public.guardianships (child_id,guardian_user_id,status,verification_level)
+VALUES ('{child}','11111111-1111-4111-8111-111111111111','provisional','self_declared'); COMMIT;""")
+        first = second = None
+        retry = f"SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true); SELECT 'CHILD:' || public.create_child('Synthetic race child','{request}')::text;\n"
+        delete = f"DELETE FROM public.guardianships WHERE child_id='{child}';\n"
+        try:
+            first = start_psql_session(); second = start_psql_session()
+            for process, name in ((first, first_name), (second, second_name)):
+                process.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false);\n")
+            first.stdin.write(delete if delete_first else retry); first.stdin.write("SELECT 'FIRST_READY';\n"); first.stdin.flush()
+            if not delete_first: self.assertTrue(wait_for_session_marker(first, 'CHILD:'+child))
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_READY'))
+            second.stdin.write(retry if delete_first else delete); second.stdin.write("COMMIT; SELECT 'SECOND_DONE';\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name, first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_DONE';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_DONE'))
+            if delete_first:
+                second.stdin.close(); second.stdin = None
+                _, errors = second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode, 0); self.assertIn('Child creation unavailable', errors)
+            else:
+                self.assertTrue(wait_for_session_marker(second, 'SECOND_DONE'))
+            self.assertEqual(query(f"SELECT count(*) FROM public.guardianships WHERE child_id='{child}';"), '0')
+        finally:
+            if second is not None: close_psql_session(second)
+            if first is not None: close_psql_session(first)
+
+    def test_child_retry_after_guardianship_deletion_is_denied(self):
+        self.run_child_retry_guardian_delete_race(True)
+
+    def test_guardianship_deletion_waits_for_child_retry(self):
+        self.run_child_retry_guardian_delete_race(False)
+
+    def test_child_creation_replay_guard_privileges_and_owner(self):
+        result = run_sql("""
+SELECT p.prosecdef AND p.proconfig @> ARRAY['search_path=""']
+ AND pg_catalog.pg_get_userbyid(p.proowner)=current_user
+ AND has_function_privilege('authenticated',p.oid,'EXECUTE')
+ AND NOT has_function_privilege('anon',p.oid,'EXECUTE')
+FROM pg_catalog.pg_proc p WHERE p.oid='public.create_child(text,uuid)'::regprocedure;
+""")
+        self.assertEqual(result, "t")
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

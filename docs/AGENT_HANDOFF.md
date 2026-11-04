@@ -1,6 +1,13 @@
 # ParentPlus — Agent Handoff
 
 
+## Child-creation replay safeguard — 2026-11-04
+
+A local review reproduced an existing issue where replaying a child-creation request after the creator's guardianship was deleted recreated a provisional relationship, and replay after revocation or dispute still returned success. Draft migration 033 prevents that replay: an existing request requires a current provisional or active relationship before comparing details, and does not recreate one. Local tests cover deletion, revocation, dispute, both deletion/retry orderings and function privileges; see the current gate evidence.
+
+The existing `create_child` function remains directly callable by authenticated database roles and is not controlled by the parent profile-read flag. This change does not implement a child-creation UI, durable recovery after a lost response, real JWT verification, lifecycle or retention policy. Do not treat this local safeguard as approval to use real child data or as proof of production readiness.
+
+
 ## Parent profile disabled-state browser coverage — 2026-11-04
 
 The local browser suite checks that the parent-created profiles page shows its unavailable state when the server flag is off, offers no load control and observed no non-GET/HEAD or external browser-page requests during the test. Local and session storage did not change from after the initial load through reload; server-side calls and other storage are not observed. This is a default-off synthetic check, not an enabled-profile, real-provider, cache-isolation or live-revocation test. The exact-case quality gate requires this browser scenario.

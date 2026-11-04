@@ -1,5 +1,12 @@
 # ParentPlus Database Security Review
 
+
+## Child-creation replay safeguard — 2026-11-04
+
+A local review reproduced an existing issue where replaying a child-creation request after the creator's guardianship was deleted recreated a provisional relationship, and replay after revocation or dispute still returned success. Draft migration 033 prevents that replay: an existing request requires a current provisional or active relationship before comparing details, and does not recreate one. Local tests cover deletion, revocation, dispute, both deletion/retry orderings and function privileges; see the current gate evidence.
+
+The existing `create_child` function remains directly callable by authenticated database roles and is not controlled by the parent profile-read flag. This change does not implement a child-creation UI, durable recovery after a lost response, real JWT verification, lifecycle or retention policy. Do not treat this local safeguard as approval to use real child data or as proof of production readiness.
+
 Status: Open
 Milestone: M2 Authentication and Data Foundation
 Migration: 20261101000100_identity_workspaces.sql
