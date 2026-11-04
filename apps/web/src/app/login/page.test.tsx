@@ -91,6 +91,15 @@ describe("LoginPage", () => {
     );
   });
 
+  it("focuses the code field after an accepted verification request", async () => {
+    mocks.requestEmailOtp.mockResolvedValue({ success: true, error: null });
+    render(<LoginPage />);
+    fireEvent.change(screen.getByLabelText("Email address"), { target: { value: "parent@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    const code = await screen.findByLabelText("Verification code");
+    await waitFor(() => expect(code).toHaveFocus());
+  });
+
   it("allows requesting another code after an accepted request", async () => {
     mocks.requestEmailOtp.mockResolvedValue({ success: true, error: null });
     render(<LoginPage />);
@@ -558,7 +567,8 @@ describe("LoginPage", () => {
     act(() => { window.dispatchEvent(new Event("focus")); });
     await act(async () => { finish({ success: true, error: null }); });
     await waitFor(() => expect(mocks.getSessionStatus).toHaveBeenCalledTimes(2));
-    expect(await screen.findByLabelText("Verification code")).toBeInTheDocument();
+    await screen.findByLabelText("Verification code");
+    await waitFor(() => expect(screen.getByLabelText("Verification code")).toHaveFocus());
     expect(mocks.requestEmailOtp).toHaveBeenCalledTimes(1);
   });
 

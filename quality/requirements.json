@@ -8192,6 +8192,27 @@
         "apps/web/src/app/login/page.tsx",
         "apps/web/src/app/login/page.test.tsx"
       ]
+    },
+    {
+      "id": "FE-LOGIN-CODE-FOCUS-01",
+      "domain": "email-login-accessibility",
+      "description": "LoginPage > focuses the code field after an accepted verification request.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > focuses the code field after an accepted verification request"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > focuses the code field after an accepted verification request"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.tsx",
+        "apps/web/src/app/login/page.test.tsx"
+      ]
     }
   ]
 }

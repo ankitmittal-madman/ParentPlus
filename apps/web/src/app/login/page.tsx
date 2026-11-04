@@ -26,6 +26,8 @@ export default function LoginPage() {
   const submittingRef = useRef(false);
   const successRef = useRef<HTMLParagraphElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
+  const codeRef = useRef<HTMLInputElement>(null);
+  const focusCodeAfterRequest = useRef(false);
   const focusEmailAfterSignOut = useRef(false);
   const authGeneration = useRef(0);
   const pendingAuthChange = useRef(false);
@@ -100,6 +102,7 @@ export default function LoginPage() {
         if (!mounted.current) return;
         authGeneration.current += 1;
         if (event !== "TOKEN_REFRESHED") setEmail("");
+        focusCodeAfterRequest.current = false;
         if (signOutUncertain.current) return;
         pendingAuthChange.current = true;
         setSubmitted(false);
@@ -115,6 +118,14 @@ export default function LoginPage() {
     }
     return () => { active = false; unsubscribe?.(); };
   }, [sessionCheckEnabled, sessionAttempt, scheduleSessionRefresh]);
+
+  useEffect(() => {
+    if (submitted && sessionCheck === "ready" && !loading && focusCodeAfterRequest.current && codeRef.current) {
+      focusCodeAfterRequest.current = false;
+      focusEmailAfterSignOut.current = false;
+      codeRef.current.focus();
+    }
+  }, [submitted, sessionCheck, loading]);
 
   useEffect(() => {
     if (verified) successRef.current?.focus();
@@ -182,17 +193,18 @@ export default function LoginPage() {
 
       if (!result.success) {
         setError(retrying ? "Unable to confirm the latest request. Please try again." : result.error ?? "Unable to send verification code.");
-        if (retrying) setSubmitted(true);
+        if (retrying) { focusCodeAfterRequest.current = true; setSubmitted(true); }
         return;
       }
 
       setEmail(normalized);
       setCode("");
+      focusCodeAfterRequest.current = true;
       setSubmitted(true);
     } catch {
       if (mounted.current && generation === authGeneration.current) {
         setError(retrying ? "Unable to confirm the latest request. Please try again." : "Unable to send verification code. Please try again.");
-        if (retrying) setSubmitted(true);
+        if (retrying) { focusCodeAfterRequest.current = true; setSubmitted(true); }
       }
     } finally {
       submittingRef.current = false;
@@ -317,6 +329,7 @@ export default function LoginPage() {
               value={email}
               onChange={(event) => {
                 setEmail(event.target.value);
+                focusCodeAfterRequest.current = false;
                 setError("");
                 setSubmitted(false);
                 setVerifiedState(false);
@@ -356,6 +369,7 @@ export default function LoginPage() {
               </label>
               <input
                 id="verification-code"
+                ref={codeRef}
                 inputMode="numeric"
                 autoComplete="one-time-code"
                 value={code}

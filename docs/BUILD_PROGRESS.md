@@ -1,6 +1,11 @@
 # ParentPlus Build Progress
 
 
+## Email code entry focus — 2026-11-04
+
+After a locally accepted email-code request, the sign-in form moves keyboard focus to the code field when it is rendered. This is a keyboard-accessibility improvement; tests use a simulated provider. Live delivery, account provisioning and the complete sign-in journey remain unverified.
+
+
 ## Email retry verification — 2026-11-04
 
 Local simulated-provider component tests now cover a repeat email-code request throwing an error and an account change during a delayed failed retry. They check that the prior code remains available on a thrown failure, and that stale information is not restored after an account change. Real provider behaviour and the full parent sign-in journey remain unverified. No usage data establishes an 80% frequency for either scenario.
