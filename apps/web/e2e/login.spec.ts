@@ -25,3 +25,23 @@ test("does not claim email delivery when live OTP is disabled", async ({ page })
   await expect(page.getByRole("status")).toHaveCount(0);
   await expect(page.getByLabel("Verification code")).toHaveCount(0);
 });
+
+test("keeps parent profiles unavailable when disabled", async ({ page }) => {
+  const writes: string[] = [];
+  const external: string[] = [];
+  page.on("request", (request) => {
+    const url = new URL(request.url());
+    if (request.method() !== "GET" && request.method() !== "HEAD") writes.push(url.origin);
+    if (url.origin !== "http://127.0.0.1:3189") external.push(url.origin);
+  });
+  await page.goto("/parent/children");
+  await expect(page.getByRole("heading", { name: "Parent profiles" })).toBeVisible();
+  await expect(page.getByText("Profiles are not available in this environment.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Load profiles" })).toHaveCount(0);
+  const storage = await page.evaluate(() => JSON.stringify({ local: { ...localStorage }, session: { ...sessionStorage } }));
+  await page.reload();
+  await expect(page.getByText("Profiles are not available in this environment.")).toBeVisible();
+  expect(await page.evaluate(() => JSON.stringify({ local: { ...localStorage }, session: { ...sessionStorage } }))).toBe(storage);
+  expect(writes).toEqual([]);
+  expect(external).toEqual([]);
+});

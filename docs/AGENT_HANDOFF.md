@@ -1,6 +1,11 @@
 # ParentPlus — Agent Handoff
 
 
+## Parent profile disabled-state browser coverage — 2026-11-04
+
+The local browser suite checks that the parent-created profiles page shows its unavailable state when the server flag is off, offers no load control and observed no non-GET/HEAD or external browser-page requests during the test. Local and session storage did not change from after the initial load through reload; server-side calls and other storage are not observed. This is a default-off synthetic check, not an enabled-profile, real-provider, cache-isolation or live-revocation test. The exact-case quality gate requires this browser scenario.
+
+
 ## Parent profile navigation — 2026-11-04
 
 When its separate public navigation flag is explicitly enabled, the local signed-in screen links to the existing read-only parent-created profiles page, without prefetch. The navigation flag defaults off and is not an authorization control. The link is hidden when signed out and during sign-out. The destination, server action and database retain their separate default-off and identity controls; when disabled, the page says profiles are unavailable. Simulated-session checks do not prove real-provider navigation, authorization or immediate revocation. See [the parent profile spec](superpowers/specs/2026-11-04-parent-created-child-list.md).

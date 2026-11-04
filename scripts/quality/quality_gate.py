@@ -307,6 +307,7 @@ def find_report(directory, name):
 BROWSER_CASES = {
     'login.spec.ts::rejects an invalid email in the browser',
     'login.spec.ts::does not claim email delivery when live OTP is disabled',
+    'login.spec.ts::keeps parent profiles unavailable when disabled',
     'schedule.spec.ts::shows a clearly labelled example schedule',
 }
 

@@ -463,7 +463,7 @@ class GateTests(unittest.TestCase):
                     gate.verify_evidence(plan, Path(d), results, 'a'*40)
 
     def write_browser_fixture(self, directory):
-        (directory/'playwright-junit.xml').write_text('<testsuites tests="3" failures="0" errors="0" skipped="0"><testsuite tests="2" failures="0" errors="0" skipped="0"><testcase classname="login.spec.ts" name="rejects an invalid email in the browser" time="0.1"/><testcase classname="login.spec.ts" name="does not claim email delivery when live OTP is disabled" time="0.1"/></testsuite><testsuite tests="1" failures="0" errors="0" skipped="0"><testcase classname="schedule.spec.ts" name="shows a clearly labelled example schedule" time="0.1"/></testsuite></testsuites>')
+        (directory/'playwright-junit.xml').write_text('<testsuites tests="4" failures="0" errors="0" skipped="0"><testsuite tests="3" failures="0" errors="0" skipped="0"><testcase classname="login.spec.ts" name="rejects an invalid email in the browser" time="0.1"/><testcase classname="login.spec.ts" name="does not claim email delivery when live OTP is disabled" time="0.1"/><testcase classname="login.spec.ts" name="keeps parent profiles unavailable when disabled" time="0.1"/></testsuite><testsuite tests="1" failures="0" errors="0" skipped="0"><testcase classname="schedule.spec.ts" name="shows a clearly labelled example schedule" time="0.1"/></testsuite></testsuites>')
 
     def test_browser_evidence_rejects_skips_missing_cases_and_tampering(self):
         for mutation in ['missing', 'skipped', 'wrong_case', 'digest']:
