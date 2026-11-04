@@ -2,6 +2,8 @@
 
 Updated: 2026-11-03. Current local state; historical results are identified separately.
 
+For a dated feature-by-feature scenario and end-to-end assessment, see the [Feature Scenario Register](FEATURE_SCENARIO_REGISTER.md). It is a snapshot; verify current source and evidence before relying on it.
+
 ## Checkpoint summary and milestone scope
 
 - Quality-gate preparation baseline: `ac2b1f9af85b531142310fcd851a24c17390f4ae`.
