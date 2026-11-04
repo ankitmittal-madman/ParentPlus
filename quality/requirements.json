@@ -2722,6 +2722,132 @@
       ]
     },
     {
+      "id": "DB-CLASS-ARCHIVED-06",
+      "domain": "class-setup-archive-private",
+      "description": "test archived class recovery rejects batch from another course.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archived class recovery rejects batch from another course"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_archived_class_recovery_rejects_batch_from_another_course"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002600_private_archived_class_recovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ARCHIVED-01",
+      "domain": "class-setup-archive-private",
+      "description": "test archived class recovery finds own completed setup.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archived class recovery finds own completed setup"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_archived_class_recovery_finds_own_completed_setup"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002600_private_archived_class_recovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ARCHIVED-02",
+      "domain": "class-setup-archive-private",
+      "description": "test archived class recovery unknown for current missing and other actor.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archived class recovery unknown for current missing and other actor"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_archived_class_recovery_unknown_for_current_missing_and_other_actor"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002600_private_archived_class_recovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ARCHIVED-03",
+      "domain": "class-setup-archive-private",
+      "description": "test archived class recovery denies coach disabled and app roles.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archived class recovery denies coach disabled and app roles"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_archived_class_recovery_denies_coach_disabled_and_app_roles"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002600_private_archived_class_recovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ARCHIVED-04",
+      "domain": "class-setup-archive-private",
+      "description": "test archived recovery waits for advance.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test archived recovery waits for advance"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_archived_recovery_waits_for_advance"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002600_private_archived_class_recovery.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-ARCHIVED-05",
+      "domain": "class-setup-archive-private",
+      "description": "test advance waits for archived recovery.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test advance waits for archived recovery"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_advance_waits_for_archived_recovery"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002600_private_archived_class_recovery.sql"
+      ]
+    },
+    {
       "id": "DB-CLASS-RESERVATION-01",
       "domain": "class-setup-reservation-private",
       "description": "test class setup reservation returns same id for matching retry.",

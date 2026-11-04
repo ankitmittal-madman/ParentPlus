@@ -958,3 +958,34 @@ DO $$ BEGIN BEGIN PERFORM public.create_private_local_session('{self.workspace}'
 
     def test_advance_waits_for_current_recovery(self):
         self.run_current_recovery_advance_race(False)
+
+    def run_archived_recovery_advance_race(self, advance_first):
+        query(f"UPDATE public.workspace_memberships SET role='owner' WHERE id='{self.membership}';")
+        output=query(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT 'INTENT:' || public.reserve_private_class_setup('{self.workspace}','Dance','Beginners'); COMMIT;")
+        prior=next(line.removeprefix('INTENT:') for line in output.splitlines() if line.startswith('INTENT:'))
+        query(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT * FROM public.complete_private_class_setup('{self.workspace}','{prior}'); SELECT public.acknowledge_private_class_setup('{self.workspace}','{prior}'); COMMIT;")
+        first_name,second_name='archive_first_'+uuid.uuid4().hex,'archive_second_'+uuid.uuid4().hex
+        token=str(uuid.uuid4());first,second=start_psql_session(),start_psql_session()
+        advance=f"SELECT public.advance_private_class_setup('{self.workspace}','{prior}','{token}','Art','Morning');\n"
+        recover=f"SELECT 'STATUS:' || state FROM public.recover_private_archived_class_setup('{self.workspace}','{prior}');\n"
+        try:
+            for proc,name in ((first,first_name),(second,second_name)):
+                proc.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false); SELECT set_config('request.jwt.claim.sub','{MEERA}',true);\n")
+            first.stdin.write(advance if advance_first else recover);first.stdin.write("SELECT 'FIRST_LOCKED';\n");first.stdin.flush()
+            if not advance_first: self.assertTrue(wait_for_session_marker(first,'STATUS:unknown'))
+            self.assertTrue(wait_for_session_marker(first,'FIRST_LOCKED'))
+            second.stdin.write(recover if advance_first else advance);second.stdin.write("COMMIT; SELECT 'SECOND_COMMITTED';\n");second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name,first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n");first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_COMMITTED'))
+            if advance_first: self.assertTrue(wait_for_session_marker(second,'STATUS:archived'))
+            self.assertTrue(wait_for_session_marker(second,'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT count(*) FROM public.class_setup_intent_history WHERE id='{prior}';"),'1')
+        finally:
+            close_psql_session(second);close_psql_session(first)
+
+    def test_archived_recovery_waits_for_advance(self):
+        self.run_archived_recovery_advance_race(True)
+
+    def test_advance_waits_for_archived_recovery(self):
+        self.run_archived_recovery_advance_race(False)

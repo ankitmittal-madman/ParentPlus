@@ -116,3 +116,5 @@ A local private acknowledgement draft records acknowledgement of a completed res
 A private local next-class transition draft uses retained history and payload-bound request IDs. It is not connected to the app; lost-token recovery, history/retention, remaining races and the complete user journey remain unfinished.
 
 A private local recovery draft can return current reservation and next-request details to the same authorised actor. It does not recover an older archived result or complete app-facing class setup.
+
+A private local lookup can retrieve a known archived class setup for the same authorised manager. Discovering a lost identifier and the end-to-end application journey remain unfinished.
