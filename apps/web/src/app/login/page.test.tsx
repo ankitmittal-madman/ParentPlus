@@ -91,6 +91,32 @@ describe("LoginPage", () => {
     );
   });
 
+  it("allows requesting another code after an accepted request", async () => {
+    mocks.requestEmailOtp.mockResolvedValue({ success: true, error: null });
+    render(<LoginPage />);
+    fireEvent.change(screen.getByLabelText("Email address"), { target: { value: "parent@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Request another code" }));
+    await waitFor(() => expect(mocks.requestEmailOtp).toHaveBeenCalledTimes(2));
+    expect(await screen.findByText(/Verification request accepted/)).toBeInTheDocument();
+    expect(await screen.findByLabelText("Verification code")).toBeInTheDocument();
+  });
+
+  it("clearly offers another code request and reports a failed retry", async () => {
+    mocks.requestEmailOtp.mockResolvedValueOnce({ success: true, error: null }).mockResolvedValueOnce({ success: false, error: "Unable to send verification code. Please try again." });
+    render(<LoginPage />);
+    fireEvent.change(screen.getByLabelText("Email address"), { target: { value: " TEST@EXAMPLE.COM " } });
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    fireEvent.change(await screen.findByLabelText("Verification code"), { target: { value: "123456" } });
+    fireEvent.click(await screen.findByRole("button", { name: "Request another code" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Unable to confirm the latest request");
+    expect(mocks.requestEmailOtp).toHaveBeenCalledTimes(2);
+    expect(mocks.requestEmailOtp).toHaveBeenLastCalledWith("test@example.com");
+    expect(screen.queryByText(/Verification request accepted/)).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Verification code")).toHaveValue("123456");
+    expect(screen.getByRole("status")).toHaveTextContent(/latest request could not be confirmed/i);
+  });
+
   it("shows service errors without claiming delivery", async () => {
     mocks.requestEmailOtp.mockResolvedValue({
       success: false,

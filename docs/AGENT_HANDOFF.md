@@ -1,6 +1,11 @@
 # ParentPlus — Agent Handoff
 
 
+## Prioritisation update — 2026-11-04
+
+The founder requested prioritising frequently encountered scenarios and placing delayed class-setup recovery in the backlog. No usage data establishes a numerical occurrence probability; prioritisation is an assumption pending evidence. The class-setup write controls remain disabled, and delayed requests, identity recovery and unavailable-manager escalation continue to block that feature's release. The local email sign-in screen now labels the existing retry action “Request another code” after an accepted request and keeps code entry available after a failed retry, without claiming delivery; provider delivery, rate limits and real sign-in remain unverified.
+
+
 ## Partial workspace class-setup safeguard — 2026-11-04
 
 Local draft migration 031 limits each academy to one unacknowledged class-setup intent, including across managers. This protects only concurrent unresolved intents and may block independent setup work. An independently identified delayed request can still arrive after acknowledgement and create another intent; a workspace generation or equivalent fencing, identity-loss recovery, and an escalation path for unavailable managers remain open release blockers. The feature stays disabled. See [the class setup boundary spec](superpowers/specs/2026-11-03-class-setup-server-boundary.md).

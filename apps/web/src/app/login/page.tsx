@@ -159,6 +159,7 @@ export default function LoginPage() {
     if (submittingRef.current) return;
 
     const normalized = email.trim().toLowerCase();
+    const retrying = submitted;
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
       setError("Enter a valid email address.");
@@ -172,7 +173,7 @@ export default function LoginPage() {
     setError("");
     setSubmitted(false);
     setVerifiedState(false);
-    setCode("");
+    if (!retrying) setCode("");
     setCodeError("");
 
     try {
@@ -180,14 +181,19 @@ export default function LoginPage() {
       if (!mounted.current || generation !== authGeneration.current) return;
 
       if (!result.success) {
-        setError(result.error ?? "Unable to send verification code.");
+        setError(retrying ? "Unable to confirm the latest request. Please try again." : result.error ?? "Unable to send verification code.");
+        if (retrying) setSubmitted(true);
         return;
       }
 
       setEmail(normalized);
+      setCode("");
       setSubmitted(true);
     } catch {
-      if (mounted.current && generation === authGeneration.current) setError("Unable to send verification code. Please try again.");
+      if (mounted.current && generation === authGeneration.current) {
+        setError(retrying ? "Unable to confirm the latest request. Please try again." : "Unable to send verification code. Please try again.");
+        if (retrying) setSubmitted(true);
+      }
     } finally {
       submittingRef.current = false;
       if (mounted.current) { setLoading(false); scheduleSessionRefresh(); }
@@ -335,14 +341,14 @@ export default function LoginPage() {
             disabled={loading || verifying}
             className="w-full rounded-xl bg-brand px-5 py-3 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? "Sending..." : "Continue"}
+            {loading ? "Sending..." : submitted ? "Request another code" : "Continue"}
           </button>
         </form>}
 
         {sessionCheck === "ready" && submitted && (
           <>
             <p role="status" className="mt-5 text-sm text-muted">
-              Verification request accepted. Check your email for instructions.
+              {error ? "The latest request could not be confirmed. You can try a code or request another." : "Verification request accepted. Check your email for instructions."}
             </p>
             <form onSubmit={handleVerify} noValidate className="mt-5 space-y-3">
               <label htmlFor="verification-code" className="block text-sm font-semibold text-ink">

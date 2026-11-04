@@ -8087,6 +8087,48 @@
         "tests/database/test_scheduling_authorization_races.py",
         "supabase/migrations/20261104003100_one_unresolved_class_setup_per_workspace.sql"
       ]
+    },
+    {
+      "id": "FE-LOGIN-RETRY-LABEL-01",
+      "domain": "email-login-retry",
+      "description": "LoginPage > allows requesting another code after an accepted request.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > allows requesting another code after an accepted request"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > allows requesting another code after an accepted request"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.tsx",
+        "apps/web/src/app/login/page.test.tsx"
+      ]
+    },
+    {
+      "id": "FE-LOGIN-RETRY-LABEL-02",
+      "domain": "email-login-retry",
+      "description": "LoginPage > clearly offers another code request and reports a failed retry.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "LoginPage > clearly offers another code request and reports a failed retry"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > clearly offers another code request and reports a failed retry"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.tsx",
+        "apps/web/src/app/login/page.test.tsx"
+      ]
     }
   ]
 }

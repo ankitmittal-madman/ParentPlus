@@ -18,6 +18,10 @@ ParentPlus aims to connect parents, coaches and academies while protecting child
 
 “Covered” below means an executable test exists for the described scope. It does not mean every variation or production environment is covered. Security/authorization database checks use synthetic users and a disposable PostgreSQL database, not real Supabase signed JWTs. Several historical creation-wrapper tests temporarily grant permissions in isolated test fixtures; migration 022 revokes those direct app-role grants in the current local schema.
 
+## Current priority update — 2026-11-04
+
+The founder asked to focus on frequently encountered scenarios and backlog delayed class-setup recovery. Frequency above 80% is not established by usage data; use a clearly labelled assumption until measured. Class-setup writes remain disabled: delayed requests, account identity recovery and unavailable-manager escalation still block release. The current local sign-in retry label makes the existing repeat request discoverable; real email delivery, provider limits and the full sign-in journey remain unverified.
+
 ## 1. Features with code or foundation
 
 | ID | Feature / real use | What exists | Covered scenarios and evidence | Missing or not established | Complete E2E? |
