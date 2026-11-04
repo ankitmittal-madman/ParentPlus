@@ -34,6 +34,10 @@ A default-off local page can list profiles created by the signed-in account, pro
 
 A draft database migration prevents an old child-creation request from recreating a deleted guardianship or succeeding after revocation or dispute. This protects a local replay scenario; parent-facing creation, durable lost-response recovery and live-provider validation remain incomplete. The existing authenticated database RPC is not controlled by the separate parent-read flag.
 
+## Local child creation control — 2026-11-04
+
+The local database draft now defaults child creation off even for direct authenticated calls. Synthetic tests explicitly enable the control where needed and test its disabled/missing states. The parent-facing creation journey and live-provider verification remain incomplete; see [the child creation control spec](superpowers/specs/2026-11-04-child-creation-control.md).
+
 ## 1. Features with code or foundation
 
 | ID | Feature / real use | What exists | Covered scenarios and evidence | Missing or not established | Complete E2E? |

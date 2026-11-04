@@ -10,7 +10,10 @@ import uuid
 from tests.database.test_concurrent_authorization import query, start_psql_session, wait_for_session_marker, wait_for_blocking_relationship, close_psql_session
 
 
-def run_sql(sql):
+def run_sql(sql, *, enable_creation=False):
+    # Enable only inside the rolled-back transaction for existing behaviour tests.
+    if enable_creation and 'public.create_child(' in sql and 'BEGIN;' in sql:
+        sql = sql.replace('BEGIN;', 'BEGIN; UPDATE public.child_creation_controls SET enabled=true WHERE id=true;', 1)
     result = subprocess.run(
         [
             "docker", "exec", "-i", get_test_container(),
@@ -29,6 +32,11 @@ def run_sql(sql):
         raise AssertionError(result.stderr.strip())
 
     return result.stdout.strip()
+
+
+def run_sql_enabled(sql):
+    """Enable creation explicitly inside this synthetic transaction only."""
+    return run_sql(sql, enable_creation=True)
 
 
 class ChildAuthorizationTests(unittest.TestCase):
@@ -65,7 +73,7 @@ SELECT has_table_privilege(
 
 
     def test_child_creation_idempotency(self):
-        result = run_sql("""
+        result = run_sql_enabled("""
 BEGIN;
 SET LOCAL ROLE authenticated;
 SELECT set_config(
@@ -119,7 +127,7 @@ ROLLBACK;
 
 
     def test_child_request_conflict(self):
-        result = run_sql("""
+        result = run_sql_enabled("""
 BEGIN;
 SET LOCAL ROLE authenticated;
 SELECT set_config(
@@ -170,7 +178,7 @@ ROLLBACK;
 
 
     def test_child_creation_atomic_failure(self):
-        result = run_sql("""
+        result = run_sql_enabled("""
 BEGIN;
 
 CREATE FUNCTION public.test_child_guardian_failure()
@@ -249,7 +257,7 @@ ROLLBACK;
         self.assertEqual(result.splitlines()[-1], "t")
 
     def test_created_child_list_filters_ownership_and_guardian_status(self):
-        result = run_sql("""
+        result = run_sql_enabled("""
 BEGIN; UPDATE public.parent_child_read_controls SET enabled=true WHERE id=true;
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 CREATE TEMP TABLE my_child AS SELECT public.create_child('Own child','aaaaaaaa-7777-4777-8777-aaaaaaaaaaaa') AS id;
@@ -343,7 +351,7 @@ INSERT INTO public.guardianships (child_id,guardian_user_id,status,verification_
         self.run_created_child_read_race(False, "control")
 
     def test_child_creation_retry_does_not_restore_deleted_guardianship(self):
-        result = run_sql("""
+        result = run_sql_enabled("""
 BEGIN; SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 CREATE TEMP TABLE saved_child AS SELECT public.create_child('Synthetic child','cccccccc-1111-4111-8111-cccccccccccc') AS id;
@@ -355,7 +363,7 @@ RESET ROLE; SELECT count(*) FROM public.guardianships WHERE child_id=(SELECT id 
         self.assertEqual(result.splitlines()[-1], "0")
 
     def test_child_creation_retry_denies_revoked_and_disputed_guardianship(self):
-        result = run_sql("""
+        result = run_sql_enabled("""
 BEGIN; SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 CREATE TEMP TABLE saved_child AS SELECT public.create_child('Synthetic child','cccccccc-2222-4222-8222-cccccccccccc') AS id;
@@ -373,8 +381,8 @@ RESET ROLE; SELECT status FROM public.guardianships WHERE child_id=(SELECT id FR
     def run_child_retry_guardian_delete_race(self, delete_first):
         child, request = str(uuid.uuid4()), str(uuid.uuid4())
         first_name, second_name = "child_retry_first_"+uuid.uuid4().hex, "child_retry_second_"+uuid.uuid4().hex
-        self.addCleanup(query, f"BEGIN; DELETE FROM public.guardianships WHERE child_id='{child}'; DELETE FROM public.children WHERE id='{child}'; COMMIT;")
-        query(f"""BEGIN; INSERT INTO public.children (id,display_name,created_by,creation_request_id)
+        self.addCleanup(query, f"BEGIN; DELETE FROM public.guardianships WHERE child_id='{child}'; DELETE FROM public.children WHERE id='{child}'; UPDATE public.child_creation_controls SET enabled=false WHERE id=true; COMMIT;")
+        query(f"""BEGIN; UPDATE public.child_creation_controls SET enabled=true WHERE id=true; INSERT INTO public.children (id,display_name,created_by,creation_request_id)
 VALUES ('{child}','Synthetic race child','11111111-1111-4111-8111-111111111111','{request}');
 INSERT INTO public.guardianships (child_id,guardian_user_id,status,verification_level)
 VALUES ('{child}','11111111-1111-4111-8111-111111111111','provisional','self_declared'); COMMIT;""")
@@ -418,6 +426,83 @@ SELECT p.prosecdef AND p.proconfig @> ARRAY['search_path=""']
 FROM pg_catalog.pg_proc p WHERE p.oid='public.create_child(text,uuid)'::regprocedure;
 """)
         self.assertEqual(result, "t")
+
+    def test_child_creation_database_control_denies_authenticated_creation(self):
+        result = run_sql("""
+BEGIN; SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+DO $$ BEGIN BEGIN PERFORM public.create_child('Synthetic child','dddddddd-1111-4111-8111-dddddddddddd'); RAISE EXCEPTION 'disabled creation allowed'; EXCEPTION WHEN insufficient_privilege THEN IF SQLERRM <> 'Child creation unavailable' THEN RAISE; END IF; END; END $$;
+RESET ROLE; SELECT count(*) FROM public.children WHERE creation_request_id='dddddddd-1111-4111-8111-dddddddddddd'; ROLLBACK;
+""", enable_creation=False)
+        self.assertEqual(result.splitlines()[-1], "0")
+
+    def test_child_creation_control_is_private_and_default_off(self):
+        result = run_sql("""
+BEGIN; SET LOCAL ROLE authenticated;
+DO $$ BEGIN BEGIN UPDATE public.child_creation_controls SET enabled=true WHERE id=true; RAISE EXCEPTION 'control update allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+RESET ROLE; ROLLBACK;
+SELECT (SELECT count(*)=1 AND bool_and(id AND NOT enabled) FROM public.child_creation_controls)
+ AND NOT has_table_privilege('authenticated','public.child_creation_controls','SELECT')
+ AND NOT has_table_privilege('authenticated','public.child_creation_controls','UPDATE')
+ AND NOT has_table_privilege('anon','public.child_creation_controls','UPDATE');
+""")
+        self.assertEqual(result, "t")
+
+    def test_child_creation_control_missing_fails_closed(self):
+        result = run_sql("""
+BEGIN; DELETE FROM public.child_creation_controls WHERE id=true;
+SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+DO $$ BEGIN BEGIN PERFORM public.create_child('Synthetic child','dddddddd-2222-4222-8222-dddddddddddd'); RAISE EXCEPTION 'missing control allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+RESET ROLE; SELECT count(*) FROM public.children WHERE creation_request_id='dddddddd-2222-4222-8222-dddddddddddd'; ROLLBACK;
+""", enable_creation=False)
+        self.assertEqual(result.splitlines()[-1], "0")
+
+    def test_child_creation_control_disabled_blocks_existing_retry(self):
+        result = run_sql("""
+BEGIN; UPDATE public.child_creation_controls SET enabled=true WHERE id=true;
+SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT public.create_child('Synthetic child','dddddddd-3333-4333-8333-dddddddddddd');
+RESET ROLE; UPDATE public.child_creation_controls SET enabled=false WHERE id=true;
+SET LOCAL ROLE authenticated;
+DO $$ BEGIN BEGIN PERFORM public.create_child('Synthetic child','dddddddd-3333-4333-8333-dddddddddddd'); RAISE EXCEPTION 'disabled retry allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+RESET ROLE; SELECT count(*) FROM public.children WHERE creation_request_id='dddddddd-3333-4333-8333-dddddddddddd'; ROLLBACK;
+""", enable_creation=False)
+        self.assertEqual(result.splitlines()[-1], "1")
+
+    def run_child_creation_control_race(self, disable_first):
+        request = str(uuid.uuid4())
+        first_name, second_name = "child_gate_first_"+uuid.uuid4().hex, "child_gate_second_"+uuid.uuid4().hex
+        self.addCleanup(query, f"BEGIN; DELETE FROM public.guardianships WHERE child_id IN (SELECT id FROM public.children WHERE creation_request_id='{request}'); DELETE FROM public.children WHERE creation_request_id='{request}'; UPDATE public.child_creation_controls SET enabled=false WHERE id=true; COMMIT;")
+        query("UPDATE public.child_creation_controls SET enabled=true WHERE id=true;")
+        first = second = None
+        create = f"SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true); SELECT public.create_child('Synthetic race child','{request}');\n"
+        disable = "UPDATE public.child_creation_controls SET enabled=false WHERE id=true;\n"
+        try:
+            first = start_psql_session(); second = start_psql_session()
+            for process, name in ((first, first_name), (second, second_name)):
+                process.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false);\n")
+            first.stdin.write(disable if disable_first else create); first.stdin.write("SELECT 'FIRST_READY';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, "FIRST_READY"))
+            second.stdin.write(create if disable_first else disable); second.stdin.write("COMMIT; SELECT 'SECOND_DONE';\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name, first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_DONE';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, "FIRST_DONE"))
+            if disable_first:
+                second.stdin.close(); second.stdin = None
+                _, errors = second.communicate(timeout=15)
+                self.assertNotEqual(second.returncode, 0); self.assertIn("Child creation unavailable", errors)
+            else:
+                self.assertTrue(wait_for_session_marker(second, "SECOND_DONE"))
+            self.assertEqual(query(f"SELECT count(*) FROM public.children WHERE creation_request_id='{request}';"), '0' if disable_first else '1')
+        finally:
+            if second is not None: close_psql_session(second)
+            if first is not None: close_psql_session(first)
+
+    def test_child_creation_control_disabled_before_write(self):
+        self.run_child_creation_control_race(True)
+
+    def test_child_creation_completes_before_control_disabled(self):
+        self.run_child_creation_control_race(False)
 
 
 if __name__ == "__main__":

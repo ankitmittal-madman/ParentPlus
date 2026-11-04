@@ -68,7 +68,8 @@ BEGIN
       CROSS JOIN (VALUES ('public.create_course(uuid,text,uuid)'),('public.create_batch(uuid,uuid,text,uuid)'),('public.create_course_and_batch(uuid,text,text,uuid)')) f(signature)
       WHERE has_function_privilege(r.role_name, f.signature, 'EXECUTE')) +
     (SELECT count(*) FROM public.class_setup_controls WHERE enabled) +
-    (SELECT count(*) FROM public.parent_child_read_controls WHERE enabled)
+    (SELECT count(*) FROM public.parent_child_read_controls WHERE enabled) +
+    (SELECT CASE WHEN count(*)=1 AND bool_and(id AND NOT enabled) THEN 0 ELSE 1 END FROM public.child_creation_controls)
   INTO v_remaining;
 
   IF v_remaining <> 0 THEN

@@ -9203,6 +9203,138 @@
         "supabase/migrations/20261104003300_child_creation_replay_guard.sql",
         "docs/DB_SECURITY_REVIEW.md"
       ]
+    },
+    {
+      "id": "DB-CHILD-CREATE-CONTROL-01",
+      "domain": "child-creation-database-control",
+      "description": "test child creation database control denies authenticated creation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child creation database control denies authenticated creation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_child_creation_database_control_denies_authenticated_creation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003400_child_creation_database_control.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-control.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-CREATE-CONTROL-02",
+      "domain": "child-creation-database-control",
+      "description": "test child creation control is private and default off.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child creation control is private and default off"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_child_creation_control_is_private_and_default_off"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003400_child_creation_database_control.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-control.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-CREATE-CONTROL-03",
+      "domain": "child-creation-database-control",
+      "description": "test child creation control missing fails closed.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child creation control missing fails closed"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_child_creation_control_missing_fails_closed"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003400_child_creation_database_control.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-control.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-CREATE-CONTROL-04",
+      "domain": "child-creation-database-control",
+      "description": "test child creation control disabled blocks existing retry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child creation control disabled blocks existing retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_child_creation_control_disabled_blocks_existing_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003400_child_creation_database_control.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-control.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-CREATE-CONTROL-05",
+      "domain": "child-creation-database-control",
+      "description": "test child creation control disabled before write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child creation control disabled before write"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_child_creation_control_disabled_before_write"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003400_child_creation_database_control.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-control.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-CREATE-CONTROL-06",
+      "domain": "child-creation-database-control",
+      "description": "test child creation completes before control disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child creation completes before control disabled"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_authorization.ChildAuthorizationTests.test_child_creation_completes_before_control_disabled"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_authorization.py",
+        "supabase/migrations/20261104003400_child_creation_database_control.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-control.md"
+      ]
     }
   ]
 }
