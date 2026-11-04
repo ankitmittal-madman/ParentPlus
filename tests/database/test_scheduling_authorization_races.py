@@ -1142,3 +1142,47 @@ DO $$ BEGIN BEGIN PERFORM public.create_private_local_session('{self.workspace}'
         self.run_app_begin_race(False)
     def test_app_begin_concurrent_changed_request_conflicts(self):
         self.run_app_begin_race(True)
+
+    def test_different_managers_concurrent_begin_blocks_until_winner_commits(self):
+        second_actor = '22222222-2222-4222-8222-222222222222'
+        query(f"""UPDATE public.workspace_memberships SET role='owner' WHERE id='{self.membership}';
+INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('{self.workspace}','{second_actor}','admin','active');""")
+        first_name, second_name = 'workspace_begin_first_'+uuid.uuid4().hex, 'workspace_begin_second_'+uuid.uuid4().hex
+        first, second = start_psql_session(), start_psql_session()
+        try:
+            for proc, name, actor in ((first, first_name, MEERA), (second, second_name, second_actor)):
+                proc.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false); SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{actor}',true);\n")
+            first.stdin.write(f"SELECT 'FIRST:' || disposition FROM public.app_begin_class_setup('{self.workspace}','Dance','Morning'); SELECT 'FIRST_READY';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_READY'))
+            second.stdin.write(f"SELECT * FROM public.app_begin_class_setup('{self.workspace}','Dance','Morning'); COMMIT;\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name, first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_COMMITTED'))
+            second.stdin.close(); second.stdin = None
+            _, errors = second.communicate(timeout=15)
+            self.assertNotEqual(second.returncode, 0)
+            self.assertIn('class_setup_one_unresolved_per_workspace', errors)
+            self.assertEqual(query(f"SELECT count(*) FROM public.class_setup_intents WHERE workspace_id='{self.workspace}' AND NOT acknowledged;"), '1')
+        finally:
+            close_psql_session(second); close_psql_session(first)
+
+    def test_different_manager_can_begin_after_first_transaction_rolls_back(self):
+        second_actor = '22222222-2222-4222-8222-222222222222'
+        query(f"""UPDATE public.workspace_memberships SET role='owner' WHERE id='{self.membership}';
+INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('{self.workspace}','{second_actor}','admin','active');""")
+        first_name, second_name = 'workspace_rollback_first_'+uuid.uuid4().hex, 'workspace_rollback_second_'+uuid.uuid4().hex
+        first, second = start_psql_session(), start_psql_session()
+        try:
+            for proc, name, actor in ((first, first_name, MEERA), (second, second_name, second_actor)):
+                proc.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false); SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{actor}',true);\n")
+            first.stdin.write(f"SELECT * FROM public.app_begin_class_setup('{self.workspace}','Dance','Morning'); SELECT 'FIRST_READY';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_READY'))
+            second.stdin.write(f"SELECT 'SECOND:' || disposition FROM public.app_begin_class_setup('{self.workspace}','Dance','Morning'); COMMIT; SELECT 'SECOND_COMMITTED';\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name, first_name))
+            first.stdin.write("ROLLBACK; SELECT 'FIRST_ROLLED_BACK';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_ROLLED_BACK'))
+            self.assertTrue(wait_for_session_marker(second, 'SECOND:created'))
+            self.assertTrue(wait_for_session_marker(second, 'SECOND_COMMITTED'))
+            self.assertEqual(query(f"SELECT count(*) FROM public.class_setup_intents WHERE workspace_id='{self.workspace}' AND actor_id='{second_actor}';"), '1')
+        finally:
+            close_psql_session(second); close_psql_session(first)

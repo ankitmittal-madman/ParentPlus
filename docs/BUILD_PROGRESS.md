@@ -1,6 +1,16 @@
 # ParentPlus Build Progress
 
 
+## Partial workspace class-setup safeguard — 2026-11-04
+
+Local draft migration 031 limits each academy to one unacknowledged class-setup intent, including across managers. This protects only concurrent unresolved intents and may block independent setup work. An independently identified delayed request can still arrive after acknowledgement and create another intent; a workspace generation or equivalent fencing, identity-loss recovery, and an escalation path for unavailable managers remain open release blockers. The feature stays disabled. See [the class setup boundary spec](superpowers/specs/2026-11-03-class-setup-server-boundary.md).
+
+
+## Cross-manager class recovery blocker — 2026-11-04
+
+A fresh isolated database diagnostic confirmed that two authorised managers in one academy can each receive a new pending reservation for the same class while the second manager's own recovery reports `unknown`. This was synthetic, rolled back and did not touch hosted services. Class setup writes remain disabled. See [the class setup boundary spec](superpowers/specs/2026-11-03-class-setup-server-boundary.md) for the reproduction, release boundary and required cross-manager concurrency, privacy and recovery scenarios. No fix or real-provider validation is claimed.
+
+
 ## Current class setup continuation — 2026-11-04
 
 Local draft migration 030 introduces an authenticated begin operation that distinguishes a newly created reservation from an existing pending, completed or acknowledged reservation, under the existing actor/workspace lock. The ambiguous older app reservation wrapper is revoked in that migration. Its TypeScript operation bridge validates the returned classification. This is groundwork, not a released class-creation journey; the class recovery screen remains read-only and setup controls remain disabled by default.

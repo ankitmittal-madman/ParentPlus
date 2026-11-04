@@ -1369,3 +1369,23 @@ SELECT p.prosecdef AND p.proconfig @> ARRAY['search_path=""'] AND pg_catalog.pg_
 FROM pg_catalog.pg_proc p WHERE p.oid='public.app_begin_class_setup(uuid,text,text)'::regprocedure;
 """)
         self.assertEqual(out,'t')
+
+    def test_workspace_class_setup_blocks_other_manager_until_acknowledged(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('a0000000-0000-4000-8000-000000000001','22222222-2222-4222-8222-222222222222','admin','active');
+SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE first_intent AS SELECT intent_id FROM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Morning');
+SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
+DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Morning'); RAISE EXCEPTION 'second manager accepted'; EXCEPTION WHEN unique_violation THEN NULL; END; END $$;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT count(*) FROM public.app_complete_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM first_intent));
+SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
+DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Other','Evening'); RAISE EXCEPTION 'unacknowledged completion allowed'; EXCEPTION WHEN unique_violation THEN NULL; END; END $$;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT public.app_acknowledge_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM first_intent));
+SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
+SELECT disposition || ':' || state FROM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Morning');
+ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], 'created:pending')

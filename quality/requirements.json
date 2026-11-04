@@ -8024,6 +8024,69 @@
         "apps/web/src/lib/scheduling/class-setup-operations.test.ts",
         "supabase/migrations/20261104003000_authenticated_begin_class_setup.sql"
       ]
+    },
+    {
+      "id": "DB-CLASS-WORKSPACE-GUARD-01",
+      "domain": "class-setup-workspace-guard",
+      "description": "test workspace class setup blocks other manager until acknowledged.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test workspace class setup blocks other manager until acknowledged"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_workspace_class_setup_blocks_other_manager_until_acknowledged"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104003100_one_unresolved_class_setup_per_workspace.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-WORKSPACE-GUARD-02",
+      "domain": "class-setup-workspace-guard",
+      "description": "test different managers concurrent begin blocks until winner commits.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test different managers concurrent begin blocks until winner commits"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_different_managers_concurrent_begin_blocks_until_winner_commits"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104003100_one_unresolved_class_setup_per_workspace.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-WORKSPACE-GUARD-03",
+      "domain": "class-setup-workspace-guard",
+      "description": "test different manager can begin after first transaction rolls back.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test different manager can begin after first transaction rolls back"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_different_manager_can_begin_after_first_transaction_rolls_back"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104003100_one_unresolved_class_setup_per_workspace.sql"
+      ]
     }
   ]
 }
