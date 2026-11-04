@@ -4724,6 +4724,204 @@
       ]
     },
     {
+      "id": "FE-CLASS-OPERATION-BRIDGE-01",
+      "domain": "class-setup-operation-bridge",
+      "description": "runClassSetupOperation > fails closed before contacting the provider when disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runClassSetupOperation > fails closed before contacting the provider when disabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/class-setup-operations.test.ts::runClassSetupOperation > fails closed before contacting the provider when disabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/class-setup-operations.ts",
+        "apps/web/src/lib/scheduling/class-setup-operations.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-OPERATION-BRIDGE-02",
+      "domain": "class-setup-operation-bridge",
+      "description": "runClassSetupOperation > rejects invalid inputs and operation-specific identifiers before provider access.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runClassSetupOperation > rejects invalid inputs and operation-specific identifiers before provider access"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/class-setup-operations.test.ts::runClassSetupOperation > rejects invalid inputs and operation-specific identifiers before provider access"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/class-setup-operations.ts",
+        "apps/web/src/lib/scheduling/class-setup-operations.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-OPERATION-BRIDGE-03",
+      "domain": "class-setup-operation-bridge",
+      "description": "runClassSetupOperation > rejects missing or changed identities before any write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runClassSetupOperation > rejects missing or changed identities before any write"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/class-setup-operations.test.ts::runClassSetupOperation > rejects missing or changed identities before any write"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/class-setup-operations.ts",
+        "apps/web/src/lib/scheduling/class-setup-operations.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-OPERATION-BRIDGE-04",
+      "domain": "class-setup-operation-bridge",
+      "description": "runClassSetupOperation > reserves normalized names without sending a caller-supplied actor.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runClassSetupOperation > reserves normalized names without sending a caller-supplied actor"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/class-setup-operations.test.ts::runClassSetupOperation > reserves normalized names without sending a caller-supplied actor"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/class-setup-operations.ts",
+        "apps/web/src/lib/scheduling/class-setup-operations.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-OPERATION-BRIDGE-05",
+      "domain": "class-setup-operation-bridge",
+      "description": "runClassSetupOperation > completes a reservation and validates returned identifiers.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runClassSetupOperation > completes a reservation and validates returned identifiers"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/class-setup-operations.test.ts::runClassSetupOperation > completes a reservation and validates returned identifiers"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/class-setup-operations.ts",
+        "apps/web/src/lib/scheduling/class-setup-operations.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-OPERATION-BRIDGE-06",
+      "domain": "class-setup-operation-bridge",
+      "description": "runClassSetupOperation > acknowledges only an explicit successful acknowledgement.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runClassSetupOperation > acknowledges only an explicit successful acknowledgement"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/class-setup-operations.test.ts::runClassSetupOperation > acknowledges only an explicit successful acknowledgement"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/class-setup-operations.ts",
+        "apps/web/src/lib/scheduling/class-setup-operations.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-OPERATION-BRIDGE-07",
+      "domain": "class-setup-operation-bridge",
+      "description": "runClassSetupOperation > advances with the original prior and request IDs.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runClassSetupOperation > advances with the original prior and request IDs"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/class-setup-operations.test.ts::runClassSetupOperation > advances with the original prior and request IDs"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/class-setup-operations.ts",
+        "apps/web/src/lib/scheduling/class-setup-operations.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-OPERATION-BRIDGE-08",
+      "domain": "class-setup-operation-bridge",
+      "description": "runClassSetupOperation > treats RPC errors and thrown calls as uncertain without retrying.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runClassSetupOperation > treats RPC errors and thrown calls as uncertain without retrying"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/class-setup-operations.test.ts::runClassSetupOperation > treats RPC errors and thrown calls as uncertain without retrying"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/class-setup-operations.ts",
+        "apps/web/src/lib/scheduling/class-setup-operations.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-OPERATION-BRIDGE-09",
+      "domain": "class-setup-operation-bridge",
+      "description": "runClassSetupOperation > does not claim success for malformed operation results.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runClassSetupOperation > does not claim success for malformed operation results"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/class-setup-operations.test.ts::runClassSetupOperation > does not claim success for malformed operation results"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/class-setup-operations.ts",
+        "apps/web/src/lib/scheduling/class-setup-operations.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
       "id": "FE-CLASS-SETUP-SERVER-01",
       "domain": "class-setup-server-boundary",
       "description": "Mocked identity behavior; legacy RPC is disabled: createClassSetup > fails closed without constructing a client when disabled.",

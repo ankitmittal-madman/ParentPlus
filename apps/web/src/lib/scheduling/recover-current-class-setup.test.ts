@@ -42,7 +42,7 @@ describe("recoverCurrentClassSetup", () => {
   });
   it("denies an account switch before calling the RPC", async () => {
     mocks.getUser.mockResolvedValue({ data: { user: { id: prior } }, error: null });
-    expect(await recoverCurrentClassSetup(input)).toEqual({ ok: false, error: "Your account has changed. Restart class setup." });
+    expect(await recoverCurrentClassSetup(input)).toEqual({ ok: false, error: "Your account has changed. Sign in to the original account before continuing." });
     expect(mocks.rpc).not.toHaveBeenCalled();
   });
   it("returns a sanitized pending request and sends only the workspace", async () => {

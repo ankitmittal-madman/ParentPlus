@@ -45,7 +45,7 @@ describe("createClassSetup", () => {
 
   it("rejects a retry when the signed-in account has changed", async () => {
     mocks.getUser.mockResolvedValue({ data: { user: { id: "b0000000-0000-4000-8000-000000000002" } }, error: null });
-    expect(await createClassSetup(input)).toEqual({ ok: false, error: "Your account has changed. Restart class setup." });
+    expect(await createClassSetup(input)).toEqual({ ok: false, error: "Your account has changed. Sign in to the original account before continuing." });
     expect(mocks.rpc).not.toHaveBeenCalled();
   });
 

@@ -32,7 +32,7 @@ export async function createClassSetup(input: unknown): Promise<Result> {
       return { ok: false, error: "Please sign in to continue." };
     }
     if (identity.user.id.toLowerCase() !== value.expectedActorId.toLowerCase()) {
-      return { ok: false, error: "Your account has changed. Restart class setup." };
+      return { ok: false, error: "Your account has changed. Sign in to the original account before continuing." };
     }
     // Reservation recovery is not ready. Never call the legacy unreserved RPC.
     return { ok: false, error: "Class setup is not available." };

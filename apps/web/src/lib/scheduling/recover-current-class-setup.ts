@@ -22,7 +22,7 @@ export async function recoverCurrentClassSetup(input: unknown): Promise<Result> 
     const { data: identity, error: identityError } = await client.auth.getUser();
     const actorId = identity.user?.id;
     if (identityError || !isId(actorId)) return { ok: false, error: "Please sign in to continue." };
-    if (actorId.toLowerCase() !== value.expectedActorId.toLowerCase()) return { ok: false, error: "Your account has changed. Restart class setup." };
+    if (actorId.toLowerCase() !== value.expectedActorId.toLowerCase()) return { ok: false, error: "Your account has changed. Sign in to the original account before continuing." };
     const { data, error } = await client.rpc("app_current_class_setup", { p_workspace_id: value.workspaceId });
     if (error || !Array.isArray(data) || data.length !== 1 || !data[0] || typeof data[0] !== "object" || Array.isArray(data[0])) return failure;
     const row = data[0] as Record<string, unknown>;

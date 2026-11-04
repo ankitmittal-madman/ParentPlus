@@ -124,3 +124,5 @@ A private local archive-discovery draft adds bounded, UUID-ordered pages for the
 A local draft now grants authenticated-role access to narrow reservation-protocol wrappers, guarded by a database control that defaults off. Synthetic SQL tests are not real-provider or user-interface validation; the old web action remains unavailable and the complete feature is not release-ready.
 
 A disabled-by-default server bridge for current class recovery is under development. Its identity and RPC tests use mocks; the real provider, archived recovery UI, class creation screen and end-to-end journey remain unverified.
+
+A disabled-by-default server bridge now drafts reserve, complete, acknowledgement and next-class operations with account checks and uncertain-result handling. Tests mock the provider; the real screen and end-to-end journey remain incomplete.
