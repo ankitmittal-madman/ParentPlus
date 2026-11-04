@@ -10,10 +10,17 @@ from tests.database.test_concurrent_authorization import (
 
 class SchedulingAuthorizationRaceTests(unittest.TestCase):
     def setUp(self):
+        self.addCleanup(self.restore_legacy_acl)
+        legacy = self._testMethodName.startswith(('test_authenticated_course_', 'test_authenticated_batch_', 'test_atomic_setup_'))
+        legacy_grants = '''GRANT EXECUTE ON FUNCTION public.create_course(uuid,text,uuid) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.create_batch(uuid,uuid,text,uuid) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.create_course_and_batch(uuid,text,text,uuid) TO authenticated;''' if legacy else ''
         self.workspace, self.membership, self.course, self.batch, request = (str(uuid.uuid4()) for _ in range(5))
         query(f"""
 BEGIN;
 UPDATE public.class_setup_controls SET enabled=true WHERE id=true;
+-- Only historical behavior races temporarily restore grants in this disposable DB.
+{legacy_grants}
 INSERT INTO public.workspaces (id, name, type, created_by, creation_request_id)
 VALUES ('{self.workspace}', 'Race academy', 'academy', '{MEERA}', '{request}');
 INSERT INTO public.workspace_memberships (id, workspace_id, user_id, role, status)
@@ -25,6 +32,12 @@ INSERT INTO public.batch_coach_assignments (workspace_id, batch_id, membership_i
 VALUES ('{self.workspace}', '{self.batch}', '{self.membership}');
 COMMIT;
 """)
+
+    def restore_legacy_acl(self):
+        query("""REVOKE EXECUTE ON FUNCTION public.create_course(uuid,text,uuid) FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.create_batch(uuid,uuid,text,uuid) FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.create_course_and_batch(uuid,text,text,uuid) FROM authenticated;
+UPDATE public.class_setup_controls SET enabled=false WHERE id=true;""")
 
     def tearDown(self):
         query(f"""
@@ -39,6 +52,9 @@ DELETE FROM public.courses WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.workspace_memberships WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.workspaces WHERE id = '{self.workspace}';
 UPDATE public.class_setup_controls SET enabled=false WHERE id=true;
+REVOKE EXECUTE ON FUNCTION public.create_course(uuid,text,uuid) FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.create_batch(uuid,uuid,text,uuid) FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.create_course_and_batch(uuid,text,text,uuid) FROM authenticated;
 COMMIT;
 """)
 

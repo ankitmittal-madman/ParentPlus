@@ -15,6 +15,14 @@ INSERT INTO public.courses (id, workspace_id, name) VALUES
  ('c0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000001', 'Music');
 """
 
+# Historical behavior tests temporarily grant these draft functions inside their
+# rolled-back transaction. Separate tests verify the real post-migration ACL.
+LEGACY_SETUP = SETUP.replace("BEGIN;", """BEGIN;
+GRANT EXECUTE ON FUNCTION public.create_course(uuid,text,uuid) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.create_batch(uuid,uuid,text,uuid) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.create_course_and_batch(uuid,text,text,uuid) TO authenticated;
+""", 1)
+
 class SchedulingFoundationTests(unittest.TestCase):
     def test_valid_same_workspace_batch_and_assignment(self):
         out = run_sql(SETUP + """
@@ -474,7 +482,7 @@ SELECT (SELECT count(*) FROM public.schedule_sessions s JOIN journey j ON s.id=j
         self.assertEqual(out.splitlines()[-1], '1:0:1')
 
     def test_authenticated_course_creation_owner_and_admin_retry(self):
-        out = run_sql(SETUP + """
+        out = run_sql(LEGACY_SETUP + """
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
@@ -489,7 +497,7 @@ SELECT count(*) FROM public.courses WHERE name IN ('Dance','Advanced Dance'); RO
         self.assertEqual(out.splitlines()[-3:], ['t', 't', '2'])
 
     def test_authenticated_course_creation_rejects_unapproved_roles_and_suspensions(self):
-        out = run_sql(SETUP + """
+        out = run_sql(LEGACY_SETUP + """
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 DO $$ BEGIN BEGIN PERFORM public.create_course('a0000000-0000-4000-8000-000000000001','Dance',gen_random_uuid()); RAISE EXCEPTION 'coach accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
@@ -509,7 +517,7 @@ RESET ROLE; SELECT count(*) FROM public.courses WHERE name='Dance'; ROLLBACK;
         self.assertEqual(out.splitlines()[-1], '0')
 
     def test_authenticated_course_creation_rejects_bad_input_and_changed_retry(self):
-        out = run_sql(SETUP + """
+        out = run_sql(LEGACY_SETUP + """
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 DO $$ BEGIN
@@ -531,7 +539,7 @@ RESET ROLE;
 SET LOCAL ROLE authenticated;
 DO $$ BEGIN BEGIN INSERT INTO public.courses (workspace_id,name) VALUES (gen_random_uuid(),'Bypass'); RAISE EXCEPTION 'direct insert succeeded'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
 RESET ROLE;
-SELECT has_function_privilege('authenticated','public.create_course(uuid,text,uuid)','EXECUTE') AND NOT has_function_privilege('anon','public.create_course(uuid,text,uuid)','EXECUTE') AND NOT has_table_privilege('authenticated','public.courses','SELECT') AND NOT has_table_privilege('authenticated','public.courses','INSERT');
+SELECT NOT has_function_privilege('authenticated','public.create_course(uuid,text,uuid)','EXECUTE') AND NOT has_function_privilege('anon','public.create_course(uuid,text,uuid)','EXECUTE') AND NOT has_table_privilege('authenticated','public.courses','SELECT') AND NOT has_table_privilege('authenticated','public.courses','INSERT');
 ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-1], 't')
@@ -546,7 +554,7 @@ FROM pg_catalog.pg_proc p WHERE p.oid='public.create_course(uuid,text,uuid)'::re
         self.assertEqual(out, 't')
 
     def test_authenticated_course_creation_rejects_missing_identity(self):
-        out = run_sql(SETUP + """
+        out = run_sql(LEGACY_SETUP + """
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','',true);
 DO $$ BEGIN BEGIN PERFORM public.create_course('a0000000-0000-4000-8000-000000000001','Dance',gen_random_uuid()); RAISE EXCEPTION 'missing identity accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
@@ -555,7 +563,7 @@ RESET ROLE; SELECT count(*) FROM public.courses WHERE name='Dance'; ROLLBACK;
         self.assertEqual(out.splitlines()[-1], '0')
 
     def test_authenticated_batch_creation_owner_admin_and_retry(self):
-        out = run_sql(SETUP + """
+        out = run_sql(LEGACY_SETUP + """
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 SELECT public.create_batch('a0000000-0000-4000-8000-000000000001','c0000000-0000-4000-8000-000000000001',' Beginners ','e4000000-0000-4000-8000-000000000001') = public.create_batch('a0000000-0000-4000-8000-000000000001','c0000000-0000-4000-8000-000000000001','Beginners','e4000000-0000-4000-8000-000000000001');
@@ -566,7 +574,7 @@ RESET ROLE; SELECT count(*) FROM public.batches WHERE name IN ('Beginners','Adva
         self.assertEqual(out.splitlines()[-3:], ['t', 't', '2'])
 
     def test_authenticated_batch_rejects_unauthorized_missing_or_suspended_actor(self):
-        out = run_sql(SETUP + """
+        out = run_sql(LEGACY_SETUP + """
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','',true);
 DO $$ BEGIN BEGIN PERFORM public.create_batch('a0000000-0000-4000-8000-000000000001','c0000000-0000-4000-8000-000000000001','Beginners',gen_random_uuid()); RAISE EXCEPTION 'missing actor accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
 SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
@@ -582,7 +590,7 @@ RESET ROLE; SELECT count(*) FROM public.batches; ROLLBACK;
         self.assertEqual(out.splitlines()[-1], '0')
 
     def test_authenticated_batch_rejects_cross_workspace_course_and_changed_retry(self):
-        out = run_sql(SETUP + """
+        out = run_sql(LEGACY_SETUP + """
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
 INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('a0000000-0000-4000-8000-000000000002','11111111-1111-4111-8111-111111111111','admin','active');
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
@@ -603,7 +611,7 @@ DO $$ BEGIN BEGIN PERFORM public.create_batch(gen_random_uuid(),gen_random_uuid(
 RESET ROLE; SET LOCAL ROLE authenticated;
 DO $$ BEGIN BEGIN INSERT INTO public.batches (workspace_id,course_id,name) VALUES (gen_random_uuid(),gen_random_uuid(),'Bypass'); RAISE EXCEPTION 'direct insert succeeded'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
 RESET ROLE;
-SELECT has_function_privilege('authenticated','public.create_batch(uuid,uuid,text,uuid)','EXECUTE') AND NOT has_function_privilege('anon','public.create_batch(uuid,uuid,text,uuid)','EXECUTE') AND NOT has_function_privilege('authenticated','public.create_private_batch(uuid,uuid,text,uuid)','EXECUTE') AND NOT has_table_privilege('authenticated','public.batches','SELECT') AND NOT has_table_privilege('authenticated','public.batches','INSERT'); ROLLBACK;
+SELECT NOT has_function_privilege('authenticated','public.create_batch(uuid,uuid,text,uuid)','EXECUTE') AND NOT has_function_privilege('anon','public.create_batch(uuid,uuid,text,uuid)','EXECUTE') AND NOT has_function_privilege('authenticated','public.create_private_batch(uuid,uuid,text,uuid)','EXECUTE') AND NOT has_table_privilege('authenticated','public.batches','SELECT') AND NOT has_table_privilege('authenticated','public.batches','INSERT'); ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-1], 't')
 
@@ -611,7 +619,7 @@ SELECT has_function_privilege('authenticated','public.create_batch(uuid,uuid,tex
         self.assertEqual(run_sql("SELECT p.prosecdef AND p.proconfig @> ARRAY['search_path=\"\"'] AND pg_catalog.pg_get_userbyid(p.proowner)=current_user FROM pg_catalog.pg_proc p WHERE p.oid='public.create_batch(uuid,uuid,text,uuid)'::regprocedure;"), 't')
 
     def test_atomic_class_setup_creates_both_and_retries_for_owner_and_admin(self):
-        out = run_sql(SETUP + """
+        out = run_sql(LEGACY_SETUP + """
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 CREATE TEMP TABLE first_setup AS SELECT * FROM public.create_course_and_batch('a0000000-0000-4000-8000-000000000001','Dance','Beginners','e5000000-0000-4000-8000-000000000001');
@@ -623,7 +631,7 @@ RESET ROLE; SELECT (SELECT count(*) FROM public.courses WHERE name IN ('Dance','
         self.assertEqual(out.splitlines()[-3:], ['t', '1', '2:2'])
 
     def test_atomic_class_setup_rolls_back_when_batch_invalid(self):
-        out = run_sql(SETUP + """
+        out = run_sql(LEGACY_SETUP + """
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 DO $$ BEGIN BEGIN PERFORM public.create_course_and_batch('a0000000-0000-4000-8000-000000000001','Dance','  ',gen_random_uuid()); RAISE EXCEPTION 'invalid batch accepted'; EXCEPTION WHEN invalid_parameter_value THEN NULL; END; END $$;
@@ -632,7 +640,7 @@ RESET ROLE; SELECT (SELECT count(*) FROM public.courses WHERE name='Dance') || '
         self.assertEqual(out.splitlines()[-1], '0:0')
 
     def test_atomic_class_setup_rejects_changed_retry_without_mutation(self):
-        out = run_sql(SETUP + """
+        out = run_sql(LEGACY_SETUP + """
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 DO $$ BEGIN
@@ -645,7 +653,7 @@ RESET ROLE; SELECT (SELECT count(*) FROM public.courses WHERE name='Dance') || '
         self.assertEqual(out.splitlines()[-1], '1:1:0')
 
     def test_atomic_class_setup_rejects_coach_and_missing_identity(self):
-        out = run_sql(SETUP + """
+        out = run_sql(LEGACY_SETUP + """
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 DO $$ BEGIN BEGIN PERFORM public.create_course_and_batch('a0000000-0000-4000-8000-000000000001','Dance','Beginners',gen_random_uuid()); RAISE EXCEPTION 'coach accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
 SELECT set_config('request.jwt.claim.sub','',true);
@@ -658,12 +666,12 @@ RESET ROLE; SELECT count(*) FROM public.courses WHERE name='Dance'; ROLLBACK;
         out = run_sql("""
 BEGIN; SET LOCAL ROLE anon; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 DO $$ BEGIN BEGIN PERFORM public.create_course_and_batch(gen_random_uuid(),'Dance','Beginners',gen_random_uuid()); RAISE EXCEPTION 'anonymous accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
-RESET ROLE; SELECT has_function_privilege('authenticated','public.create_course_and_batch(uuid,text,text,uuid)','EXECUTE') AND NOT has_function_privilege('anon','public.create_course_and_batch(uuid,text,text,uuid)','EXECUTE') AND NOT has_table_privilege('authenticated','public.courses','INSERT') AND NOT has_table_privilege('authenticated','public.batches','INSERT'); ROLLBACK;
+RESET ROLE; SELECT NOT has_function_privilege('authenticated','public.create_course_and_batch(uuid,text,text,uuid)','EXECUTE') AND NOT has_function_privilege('anon','public.create_course_and_batch(uuid,text,text,uuid)','EXECUTE') AND NOT has_table_privilege('authenticated','public.courses','INSERT') AND NOT has_table_privilege('authenticated','public.batches','INSERT'); ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-1], 't')
 
     def test_atomic_class_setup_does_not_adopt_standalone_request_ids(self):
-        out = run_sql(SETUP + """
+        out = run_sql(LEGACY_SETUP + """
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 CREATE TEMP TABLE standalone_course AS SELECT public.create_course('a0000000-0000-4000-8000-000000000001','Dance','e5000000-0000-4000-8000-000000000003') AS id;
@@ -686,7 +694,7 @@ FROM pg_catalog.pg_proc p WHERE p.oid='public.create_course_and_batch(uuid,text,
         self.assertEqual(out, 't')
 
     def test_atomic_class_setup_rolls_back_actual_batch_insert_failure_and_retries(self):
-        out = run_sql(SETUP + """
+        out = run_sql(LEGACY_SETUP + """
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
 CREATE FUNCTION public.test_reject_batch_insert() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'synthetic batch failure'; END $$;
 CREATE TRIGGER test_reject_batch_insert BEFORE INSERT ON public.batches FOR EACH ROW EXECUTE FUNCTION public.test_reject_batch_insert();
@@ -703,7 +711,7 @@ SELECT (SELECT count(*) FROM public.courses WHERE name='Dance') || ':' || (SELEC
         self.assertEqual(out.splitlines()[-3:], ['0:0:0', '1', '1:1:1'])
 
     def test_atomic_class_setup_database_switch_denies_authenticated_manager(self):
-        out = run_sql(SETUP + """
+        out = run_sql(LEGACY_SETUP + """
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
 UPDATE public.class_setup_controls SET enabled=false WHERE id=true;
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
@@ -876,3 +884,16 @@ SELECT 'denied'; ROLLBACK;
     def test_class_setup_status_denies_application_roles(self):
         out=run_sql("SELECT NOT has_function_privilege('authenticated','public.private_class_setup_status(uuid)','EXECUTE') AND NOT has_function_privilege('anon','public.private_class_setup_status(uuid)','EXECUTE');")
         self.assertEqual(out,'t')
+
+    def test_unreserved_class_creation_denied_to_app_roles_even_when_enabled(self):
+        out = run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+DO $$ BEGIN
+ BEGIN PERFORM public.create_course('a0000000-0000-4000-8000-000000000001','Dance',gen_random_uuid()); RAISE EXCEPTION 'course bypass allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+ BEGIN PERFORM public.create_batch('a0000000-0000-4000-8000-000000000001','c0000000-0000-4000-8000-000000000001','Beginners',gen_random_uuid()); RAISE EXCEPTION 'batch bypass allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+ BEGIN PERFORM public.create_course_and_batch('a0000000-0000-4000-8000-000000000001','Dance','Beginners',gen_random_uuid()); RAISE EXCEPTION 'combined bypass allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+END $$;
+RESET ROLE; SELECT (SELECT count(*) FROM public.courses WHERE name='Dance') || ':' || (SELECT count(*) FROM public.batches); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], '0:0')

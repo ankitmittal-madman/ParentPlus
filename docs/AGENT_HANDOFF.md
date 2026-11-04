@@ -222,3 +222,7 @@ A local-only private completion operation locks the actor/workspace intent and a
 ## Private class setup recovery status — 2026-11-04
 
 A local-only, app-inaccessible status function checks active manager/workspace and the default-off control, then locks the current actor's visible reservation. It returns pending or completed for a visible record; a missing row is explicitly unknown, including when a reservation is in flight. A status result is a snapshot, not proof that no other API created a class. Direct authenticated creation still bypasses reservations; acknowledgement, permission-revocation races, real provider, UI and hosted verification remain outstanding. Consult fresh evidence and review; no hosted migration was performed.
+
+## Direct creation access restriction — 2026-11-04
+
+Draft migration 022 revokes app-role execution on all three legacy course/batch creation entrypoints. A separate test executes each as an authenticated manager with the control enabled and expects denial. Historical wrapper behavior tests temporarily grant execution only in disposable test fixtures; their successful calls do not describe current application permissions. Frontend action unit tests mock the provider and do not establish live access; the existing server action will fail against the restricted database and remains disconnected. Reservation APIs, status and completion are still private, so no class setup UI is enabled. Verify effective hosted ownership/role memberships and migration rollout before any future deployment.

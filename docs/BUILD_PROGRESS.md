@@ -104,3 +104,5 @@ A private local reservation primitive is under development. It is inaccessible t
 A local private completion draft can atomically attach created course and batch IDs to a reservation. Status recovery, acknowledgement and the user journey are not implemented; the separate authenticated creation endpoint still bypasses reservations. The feature is not release-ready.
 
 A private local recovery-status draft distinguishes pending, completed and unknown reservations. It is not connected to the application, and it does not close the direct creation API bypass. Class setup remains incomplete and disabled by default.
+
+A local migration now restricts the three legacy direct creation functions from app roles. The real class setup journey remains unavailable while reviewed reservation wrappers and recovery are built. Provider mocks do not verify actual access.

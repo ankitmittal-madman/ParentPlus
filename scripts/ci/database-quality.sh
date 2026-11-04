@@ -42,6 +42,9 @@ cleanup() {
     (SELECT count(*) FROM public.batch_coach_mutation_requests) +
     (SELECT count(*) FROM public.class_setup_requests) +
     (SELECT count(*) FROM public.class_setup_intents) +
+    (SELECT count(*) FROM (VALUES ('anon'),('authenticated')) r(role_name)
+      CROSS JOIN (VALUES ('public.create_course(uuid,text,uuid)'),('public.create_batch(uuid,uuid,text,uuid)'),('public.create_course_and_batch(uuid,text,text,uuid)')) f(signature)
+      WHERE has_function_privilege(r.role_name, f.signature, 'EXECUTE')) +
     (SELECT count(*) FROM public.class_setup_controls WHERE enabled);" \
         > "$EVIDENCE/cleanup-count.txt" \
         2> "$EVIDENCE/cleanup-error.txt"; then

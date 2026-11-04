@@ -1,3 +1,4 @@
+// Provider calls below are mocks; successful mock responses do not establish live RPC access.
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createClassSetup } from "./create-class-setup";
 

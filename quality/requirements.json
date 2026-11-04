@@ -1690,7 +1690,7 @@
     {
       "id": "DB-AUTH-COURSE-CREATION-OWNER-AND-ADMIN-RETRY",
       "domain": "authenticated-course-creation",
-      "description": "Authenticated course creation owner and admin retry.",
+      "description": "Historical temporary-grant test: Authenticated course creation owner and admin retry.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -1712,7 +1712,7 @@
     {
       "id": "DB-AUTH-COURSE-CREATION-REJECTS-UNAPPROVED-ROLES-AND-SUSPENSIONS",
       "domain": "authenticated-course-creation",
-      "description": "Authenticated course creation rejects unapproved roles and suspensions.",
+      "description": "Historical temporary-grant test: Authenticated course creation rejects unapproved roles and suspensions.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -1734,7 +1734,7 @@
     {
       "id": "DB-AUTH-COURSE-CREATION-REJECTS-BAD-INPUT-AND-CHANGED-RETRY",
       "domain": "authenticated-course-creation",
-      "description": "Authenticated course creation rejects bad input and changed retry.",
+      "description": "Historical temporary-grant test: Authenticated course creation rejects bad input and changed retry.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -1756,7 +1756,7 @@
     {
       "id": "DB-AUTH-COURSE-CREATION-DOES-NOT-GRANT-TABLE-OR-ANONYMOUS-ACCESS",
       "domain": "authenticated-course-creation",
-      "description": "Authenticated course creation does not grant table or anonymous access.",
+      "description": "Historical temporary-grant test: Authenticated course creation does not grant table or anonymous access.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -1778,7 +1778,7 @@
     {
       "id": "DB-AUTH-COURSE-WRAPPER-METADATA-AND-PRIVATE-HELPER-DENIAL",
       "domain": "authenticated-course-creation",
-      "description": "Authenticated course wrapper metadata and private helper denial.",
+      "description": "Historical temporary-grant test: Authenticated course wrapper metadata and private helper denial.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2092,6 +2092,27 @@
       ]
     },
     {
+      "id": "DB-UNRESERVED-CREATION-DENIED",
+      "domain": "class-setup-unreserved-denial",
+      "description": "App role cannot execute any unreserved class creation function even when enabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "authenticated manager cannot bypass reservation through direct creation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_unreserved_class_creation_denied_to_app_roles_even_when_enabled"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002200_disable_unreserved_class_creation.sql"
+      ]
+    },
+    {
       "id": "DB-CLASS-RESERVATION-01",
       "domain": "class-setup-reservation-private",
       "description": "test class setup reservation returns same id for matching retry.",
@@ -2220,7 +2241,7 @@
     {
       "id": "DB-AUTH-COURSE-CREATION-REJECTS-MISSING-IDENTITY",
       "domain": "authenticated-course-creation",
-      "description": "Authenticated course creation rejects missing identity.",
+      "description": "Historical temporary-grant test: Authenticated course creation rejects missing identity.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2242,7 +2263,7 @@
     {
       "id": "DB-AUTH-COURSE-WORKSPACE-SUSPENDED-BEFORE-WRITE",
       "domain": "authenticated-course-creation",
-      "description": "Authenticated course workspace suspended before write.",
+      "description": "Historical temporary-grant test: Authenticated course workspace suspended before write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2264,7 +2285,7 @@
     {
       "id": "DB-AUTH-COURSE-WORKSPACE-SUSPENDED-AFTER-WRITE",
       "domain": "authenticated-course-creation",
-      "description": "Authenticated course workspace suspended after write.",
+      "description": "Historical temporary-grant test: Authenticated course workspace suspended after write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2286,7 +2307,7 @@
     {
       "id": "DB-AUTH-COURSE-MANAGER-SUSPENDED-BEFORE-WRITE",
       "domain": "authenticated-course-creation",
-      "description": "Authenticated course manager suspended before write.",
+      "description": "Historical temporary-grant test: Authenticated course manager suspended before write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2308,7 +2329,7 @@
     {
       "id": "DB-AUTH-COURSE-MANAGER-SUSPENDED-AFTER-WRITE",
       "domain": "authenticated-course-creation",
-      "description": "Authenticated course manager suspended after write.",
+      "description": "Historical temporary-grant test: Authenticated course manager suspended after write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2330,7 +2351,7 @@
     {
       "id": "DB-AUTH-COURSE-CONCURRENT-IDENTICAL-RETRY",
       "domain": "authenticated-course-creation",
-      "description": "Authenticated course concurrent identical retry.",
+      "description": "Historical temporary-grant test: Authenticated course concurrent identical retry.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2352,7 +2373,7 @@
     {
       "id": "DB-AUTH-COURSE-CONCURRENT-CHANGED-RETRY",
       "domain": "authenticated-course-creation",
-      "description": "Authenticated course concurrent changed retry.",
+      "description": "Historical temporary-grant test: Authenticated course concurrent changed retry.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2374,7 +2395,7 @@
     {
       "id": "DB-AUTH-BATCH-CREATION-OWNER-ADMIN-AND-RETRY",
       "domain": "authenticated-batch-creation",
-      "description": "Authenticated batch creation owner admin and retry.",
+      "description": "Historical temporary-grant test: Authenticated batch creation owner admin and retry.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2396,7 +2417,7 @@
     {
       "id": "DB-AUTH-BATCH-REJECTS-UNAUTHORIZED-MISSING-OR-SUSPENDED-ACTOR",
       "domain": "authenticated-batch-creation",
-      "description": "Authenticated batch rejects unauthorized missing or suspended actor.",
+      "description": "Historical temporary-grant test: Authenticated batch rejects unauthorized missing or suspended actor.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2418,7 +2439,7 @@
     {
       "id": "DB-AUTH-BATCH-REJECTS-CROSS-WORKSPACE-COURSE-AND-CHANGED-RETRY",
       "domain": "authenticated-batch-creation",
-      "description": "Authenticated batch rejects cross workspace course and changed retry.",
+      "description": "Historical temporary-grant test: Authenticated batch rejects cross workspace course and changed retry.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2440,7 +2461,7 @@
     {
       "id": "DB-AUTH-BATCH-DENIES-ANON-DIRECT-TABLE-AND-PRIVATE-ACCESS",
       "domain": "authenticated-batch-creation",
-      "description": "Authenticated batch denies anon direct table and private access.",
+      "description": "Historical temporary-grant test: Authenticated batch denies anon direct table and private access.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2462,7 +2483,7 @@
     {
       "id": "DB-AUTH-BATCH-WRAPPER-SECURITY-METADATA",
       "domain": "authenticated-batch-creation",
-      "description": "Authenticated batch wrapper security metadata.",
+      "description": "Historical temporary-grant test: Authenticated batch wrapper security metadata.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2484,7 +2505,7 @@
     {
       "id": "DB-AUTH-BATCH-WORKSPACE-SUSPENDED-BEFORE-WRITE",
       "domain": "authenticated-batch-creation",
-      "description": "Authenticated batch workspace suspended before write.",
+      "description": "Historical temporary-grant test: Authenticated batch workspace suspended before write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2506,7 +2527,7 @@
     {
       "id": "DB-AUTH-BATCH-WORKSPACE-SUSPENDED-AFTER-WRITE",
       "domain": "authenticated-batch-creation",
-      "description": "Authenticated batch workspace suspended after write.",
+      "description": "Historical temporary-grant test: Authenticated batch workspace suspended after write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2528,7 +2549,7 @@
     {
       "id": "DB-AUTH-BATCH-MANAGER-SUSPENDED-BEFORE-WRITE",
       "domain": "authenticated-batch-creation",
-      "description": "Authenticated batch manager suspended before write.",
+      "description": "Historical temporary-grant test: Authenticated batch manager suspended before write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2550,7 +2571,7 @@
     {
       "id": "DB-AUTH-BATCH-MANAGER-SUSPENDED-AFTER-WRITE",
       "domain": "authenticated-batch-creation",
-      "description": "Authenticated batch manager suspended after write.",
+      "description": "Historical temporary-grant test: Authenticated batch manager suspended after write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2572,7 +2593,7 @@
     {
       "id": "DB-AUTH-BATCH-COURSE-DELETED-BEFORE-WRITE",
       "domain": "authenticated-batch-creation",
-      "description": "Authenticated batch course deleted before write.",
+      "description": "Historical temporary-grant test: Authenticated batch course deleted before write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2594,7 +2615,7 @@
     {
       "id": "DB-AUTH-BATCH-COURSE-DELETED-AFTER-WRITE",
       "domain": "authenticated-batch-creation",
-      "description": "Authenticated batch course deleted after write.",
+      "description": "Historical temporary-grant test: Authenticated batch course deleted after write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2616,7 +2637,7 @@
     {
       "id": "DB-AUTH-BATCH-CONCURRENT-IDENTICAL-RETRY",
       "domain": "authenticated-batch-creation",
-      "description": "Authenticated batch concurrent identical retry.",
+      "description": "Historical temporary-grant test: Authenticated batch concurrent identical retry.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2638,7 +2659,7 @@
     {
       "id": "DB-AUTH-BATCH-CONCURRENT-CHANGED-RETRY",
       "domain": "authenticated-batch-creation",
-      "description": "Authenticated batch concurrent changed retry.",
+      "description": "Historical temporary-grant test: Authenticated batch concurrent changed retry.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2828,7 +2849,7 @@
     {
       "id": "DB-ATOMIC-SETUP-ATOMIC-SETUP-WORKSPACE-SUSPENDED-BEFORE-WRITE",
       "domain": "atomic-class-setup",
-      "description": "Atomic setup workspace suspended before write.",
+      "description": "Historical temporary-grant test: Atomic setup workspace suspended before write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2849,7 +2870,7 @@
     {
       "id": "DB-ATOMIC-SETUP-ATOMIC-SETUP-WORKSPACE-SUSPENDED-AFTER-WRITE",
       "domain": "atomic-class-setup",
-      "description": "Atomic setup workspace suspended after write.",
+      "description": "Historical temporary-grant test: Atomic setup workspace suspended after write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2870,7 +2891,7 @@
     {
       "id": "DB-ATOMIC-SETUP-ATOMIC-SETUP-MANAGER-SUSPENDED-BEFORE-WRITE",
       "domain": "atomic-class-setup",
-      "description": "Atomic setup manager suspended before write.",
+      "description": "Historical temporary-grant test: Atomic setup manager suspended before write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2891,7 +2912,7 @@
     {
       "id": "DB-ATOMIC-SETUP-ATOMIC-SETUP-MANAGER-SUSPENDED-AFTER-WRITE",
       "domain": "atomic-class-setup",
-      "description": "Atomic setup manager suspended after write.",
+      "description": "Historical temporary-grant test: Atomic setup manager suspended after write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2912,7 +2933,7 @@
     {
       "id": "DB-ATOMIC-SETUP-ATOMIC-SETUP-CONCURRENT-IDENTICAL-RETRY",
       "domain": "atomic-class-setup",
-      "description": "Atomic setup concurrent identical retry.",
+      "description": "Historical temporary-grant test: Atomic setup concurrent identical retry.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2933,7 +2954,7 @@
     {
       "id": "DB-ATOMIC-SETUP-ATOMIC-SETUP-CONCURRENT-CHANGED-RETRY",
       "domain": "atomic-class-setup",
-      "description": "Atomic setup concurrent changed retry.",
+      "description": "Historical temporary-grant test: Atomic setup concurrent changed retry.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2954,7 +2975,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-09",
       "domain": "class-setup-server-boundary",
-      "description": "createClassSetup > rejects a retry when the signed-in account has changed.",
+      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > rejects a retry when the signed-in account has changed.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -2976,7 +2997,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-10",
       "domain": "class-setup-server-boundary",
-      "description": "createClassSetup > rejects a missing or malformed expected actor before contacting the provider.",
+      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > rejects a missing or malformed expected actor before contacting the provider.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3130,7 +3151,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-01",
       "domain": "class-setup-server-boundary",
-      "description": "createClassSetup > fails closed without constructing a client when disabled.",
+      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > fails closed without constructing a client when disabled.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3152,7 +3173,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-02",
       "domain": "class-setup-server-boundary",
-      "description": "createClassSetup > rejects malformed IDs and names before constructing a client.",
+      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > rejects malformed IDs and names before constructing a client.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3174,7 +3195,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-03",
       "domain": "class-setup-server-boundary",
-      "description": "createClassSetup > rejects a missing user without calling the RPC.",
+      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > rejects a missing user without calling the RPC.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3196,7 +3217,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-04",
       "domain": "class-setup-server-boundary",
-      "description": "createClassSetup > rejects a provider identity error without calling the RPC.",
+      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > rejects a provider identity error without calling the RPC.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3218,7 +3239,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-05",
       "domain": "class-setup-server-boundary",
-      "description": "createClassSetup > sends normalized values and the original retry ID to the atomic RPC.",
+      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > sends normalized values and the original retry ID to the atomic RPC.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3240,7 +3261,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-06",
       "domain": "class-setup-server-boundary",
-      "description": "createClassSetup > redacts RPC errors.",
+      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > redacts RPC errors.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3262,7 +3283,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-07",
       "domain": "class-setup-server-boundary",
-      "description": "createClassSetup > redacts thrown client errors.",
+      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > redacts thrown client errors.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3284,7 +3305,7 @@
     {
       "id": "FE-CLASS-SETUP-SERVER-08",
       "domain": "class-setup-server-boundary",
-      "description": "createClassSetup > does not claim success for malformed RPC results.",
+      "description": "Mocked provider behavior; live RPC is restricted: createClassSetup > does not claim success for malformed RPC results.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3348,7 +3369,7 @@
     {
       "id": "DB-ATOMIC-SETUP-GATE-ATOMIC-SETUP-DATABASE-DISABLED-BEFORE-WRITE",
       "domain": "atomic-class-setup-gate",
-      "description": "Atomic setup database disabled before write.",
+      "description": "Historical temporary-grant test: Atomic setup database disabled before write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
@@ -3369,7 +3390,7 @@
     {
       "id": "DB-ATOMIC-SETUP-GATE-ATOMIC-SETUP-DATABASE-DISABLED-AFTER-WRITE",
       "domain": "atomic-class-setup-gate",
-      "description": "Atomic setup database disabled after write.",
+      "description": "Historical temporary-grant test: Atomic setup database disabled after write.",
       "status": "implemented",
       "risk": "critical",
       "coverage": "covered",
