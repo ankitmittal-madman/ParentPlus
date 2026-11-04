@@ -9335,6 +9335,1138 @@
         "supabase/migrations/20261104003400_child_creation_database_control.sql",
         "docs/superpowers/specs/2026-11-04-child-creation-control.md"
       ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-01",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey default off and legacy rpc private.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey default off and legacy rpc private"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_default_off_and_legacy_rpc_private"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-02",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey private helpers and wrapper ownership.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey private helpers and wrapper ownership"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_private_helpers_and_wrapper_ownership"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-03",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey direct legacy call denied even when enabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey direct legacy call denied even when enabled"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_direct_legacy_call_denied_even_when_enabled"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-04",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey missing control and identity fail closed.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey missing control and identity fail closed"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_missing_control_and_identity_fail_closed"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-05",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey does not adopt existing same name profile.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey does not adopt existing same name profile"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_does_not_adopt_existing_same_name_profile"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-06",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey retry acknowledge and next profile.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey retry acknowledge and next profile"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_retry_acknowledge_and_next_profile"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-07",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey is scoped to current actor.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey is scoped to current actor"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_is_scoped_to_current_actor"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-08",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey denies read and retry after guardian revocation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey denies read and retry after guardian revocation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_denies_read_and_retry_after_guardian_revocation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-09",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey rolls back if guardian insert fails.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey rolls back if guardian insert fails"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_rolls_back_if_guardian_insert_fails"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-10",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey rolls back if intent write fails.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey rolls back if intent write fails"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_rolls_back_if_intent_write_fails"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-11",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey concurrent same initial request.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey concurrent same initial request"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_concurrent_same_initial_request"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-12",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey concurrent changed initial request.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey concurrent changed initial request"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_concurrent_changed_initial_request"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-13",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey retry creates after first transaction rolls back.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey retry creates after first transaction rolls back"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_retry_creates_after_first_transaction_rolls_back"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-14",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey concurrent same next request.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey concurrent same next request"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_concurrent_same_next_request"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-15",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey concurrent changed next request.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey concurrent changed next request"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_concurrent_changed_next_request"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-16",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey concurrent different initial token.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey concurrent different initial token"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_concurrent_different_initial_token"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-17",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey concurrent different next token.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey concurrent different next token"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_concurrent_different_next_token"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-18",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey rejects stale prior after multiple profiles.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey rejects stale prior after multiple profiles"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_rejects_stale_prior_after_multiple_profiles"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-19",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey status after guardian revocation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey status after guardian revocation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_status_after_guardian_revocation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-20",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey status before guardian revocation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey status before guardian revocation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_status_before_guardian_revocation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-21",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey status after control disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey status after control disabled"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_status_after_control_disabled"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-22",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey status before control disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey status before control disabled"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_status_before_control_disabled"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-23",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey recovers exact status across transactions.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey recovers exact status across transactions"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_recovers_exact_status_across_transactions"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-JOURNEY-24",
+      "domain": "parent-child-creation-journey",
+      "description": "test child journey distinguishes competing request tokens.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test child journey distinguishes competing request tokens"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_child_journey_distinguishes_competing_request_tokens"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-ACTION-01",
+      "domain": "parent-child-creation-journey",
+      "description": "runChildCreation > fails closed without provider access when disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runChildCreation > fails closed without provider access when disabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-journey.test.ts::runChildCreation > fails closed without provider access when disabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-journey.test.ts",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-ACTION-02",
+      "domain": "parent-child-creation-journey",
+      "description": "runChildCreation > fails closed when the parent page is disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runChildCreation > fails closed when the parent page is disabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-journey.test.ts::runChildCreation > fails closed when the parent page is disabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-journey.test.ts",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-ACTION-03",
+      "domain": "parent-child-creation-journey",
+      "description": "runChildCreation > rejects invalid operations and details before provider access.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runChildCreation > rejects invalid operations and details before provider access"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-journey.test.ts::runChildCreation > rejects invalid operations and details before provider access"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-journey.test.ts",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-ACTION-04",
+      "domain": "parent-child-creation-journey",
+      "description": "runChildCreation > rejects missing or changed user identity before the RPC.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runChildCreation > rejects missing or changed user identity before the RPC"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-journey.test.ts::runChildCreation > rejects missing or changed user identity before the RPC"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-journey.test.ts",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-ACTION-05",
+      "domain": "parent-child-creation-journey",
+      "description": "runChildCreation > returns a scoped empty or current status.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runChildCreation > returns a scoped empty or current status"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-journey.test.ts::runChildCreation > returns a scoped empty or current status"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-journey.test.ts",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-ACTION-06",
+      "domain": "parent-child-creation-journey",
+      "description": "runChildCreation > starts an explicit request without passing a caller actor to the database.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runChildCreation > starts an explicit request without passing a caller actor to the database"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-journey.test.ts::runChildCreation > starts an explicit request without passing a caller actor to the database"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-journey.test.ts",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-ACTION-07",
+      "domain": "parent-child-creation-journey",
+      "description": "runChildCreation > acknowledges only the explicit intent after identity verification.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runChildCreation > acknowledges only the explicit intent after identity verification"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-journey.test.ts::runChildCreation > acknowledges only the explicit intent after identity verification"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-journey.test.ts",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-ACTION-08",
+      "domain": "parent-child-creation-journey",
+      "description": "runChildCreation > does not claim success for malformed or contradictory results.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runChildCreation > does not claim success for malformed or contradictory results"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-journey.test.ts::runChildCreation > does not claim success for malformed or contradictory results"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-journey.test.ts",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-ACTION-09",
+      "domain": "parent-child-creation-journey",
+      "description": "runChildCreation > redacts provider failures and treats them as uncertain.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runChildCreation > redacts provider failures and treats them as uncertain"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-journey.test.ts::runChildCreation > redacts provider failures and treats them as uncertain"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-journey.test.ts",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-PANEL-01",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildCreationPanel > requires a deliberate status check before profile entry.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildCreationPanel > requires a deliberate status check before profile entry"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/child-creation-panel.test.tsx::ChildCreationPanel > requires a deliberate status check before profile entry"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/child-creation-panel.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-PANEL-02",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildCreationPanel > creates a profile and requires explicit acknowledgement.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildCreationPanel > creates a profile and requires explicit acknowledgement"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/child-creation-panel.test.tsx::ChildCreationPanel > creates a profile and requires explicit acknowledgement"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/child-creation-panel.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-PANEL-03",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildCreationPanel > acknowledges a result only on a separate action and rechecks it.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildCreationPanel > acknowledges a result only on a separate action and rechecks it"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/child-creation-panel.test.tsx::ChildCreationPanel > acknowledges a result only on a separate action and rechecks it"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/child-creation-panel.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-PANEL-04",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildCreationPanel > uses the confirmed prior intent when adding another profile.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildCreationPanel > uses the confirmed prior intent when adding another profile"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/child-creation-panel.test.tsx::ChildCreationPanel > uses the confirmed prior intent when adding another profile"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/child-creation-panel.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-PANEL-05",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildCreationPanel > requires another status check after an uncertain write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildCreationPanel > requires another status check after an uncertain write"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/child-creation-panel.test.tsx::ChildCreationPanel > requires another status check after an uncertain write"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/child-creation-panel.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-PANEL-06",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildCreationPanel > rejects an unrelated status after a write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildCreationPanel > rejects an unrelated status after a write"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/child-creation-panel.test.tsx::ChildCreationPanel > rejects an unrelated status after a write"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/child-creation-panel.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-PANEL-07",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildCreationPanel > retries the same request after an unconfirmed attempt in the same session.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildCreationPanel > retries the same request after an unconfirmed attempt in the same session"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/child-creation-panel.test.tsx::ChildCreationPanel > retries the same request after an unconfirmed attempt in the same session"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/child-creation-panel.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-PANEL-08",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildCreationPanel > does not treat another tab's request as recovery of an uncertain write.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildCreationPanel > does not treat another tab's request as recovery of an uncertain write"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/child-creation-panel.test.tsx::ChildCreationPanel > does not treat another tab's request as recovery of an uncertain write"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/child-creation-panel.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-PANEL-09",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildCreationPanel > binds an interrupted write to the original account in the current page.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildCreationPanel > binds an interrupted write to the original account in the current page"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/child-creation-panel.test.tsx::ChildCreationPanel > binds an interrupted write to the original account in the current page"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/child-creation-panel.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-PANEL-10",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildCreationPanel > does not keep a child name for retry after a session change.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildCreationPanel > does not keep a child name for retry after a session change"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/child-creation-panel.test.tsx::ChildCreationPanel > does not keep a child name for retry after a session change"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/child-creation-panel.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-PANEL-11",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildCreationPanel > fails closed if session monitoring is unavailable.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildCreationPanel > fails closed if session monitoring is unavailable"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/child-creation-panel.test.tsx::ChildCreationPanel > fails closed if session monitoring is unavailable"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/child-creation-panel.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-INTEGRATION-01",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > marks a previously loaded list stale when a profile request starts.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > marks a previously loaded list stale when a profile request starts"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > marks a previously loaded list stale when a profile request starts"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "apps/web/src/lib/parent/events.ts"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-INTEGRATION-02",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > ignores an earlier list response while creation is pending.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > ignores an earlier list response while creation is pending"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > ignores an earlier list response while creation is pending"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "apps/web/src/lib/parent/events.ts"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-INTEGRATION-03",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > keeps list loading blocked while a creation result is uncertain.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > keeps list loading blocked while a creation result is uncertain"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > keeps list loading blocked while a creation result is uncertain"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "apps/web/src/lib/parent/events.ts"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-INTEGRATION-04",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > re-enables list loading after the same uncertain request is confirmed.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > re-enables list loading after the same uncertain request is confirmed"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > re-enables list loading after the same uncertain request is confirmed"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "apps/web/src/lib/parent/events.ts"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-INTEGRATION-05",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > explains why the list remains blocked after an uncertain request and session change.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > explains why the list remains blocked after an uncertain request and session change"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > explains why the list remains blocked after an uncertain request and session change"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "apps/web/src/lib/parent/events.ts"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-GATE-01",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildrenPage > exposes creation only when both server controls are explicitly enabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildrenPage > exposes creation only when both server controls are explicitly enabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/page.test.tsx::ParentChildrenPage > exposes creation only when both server controls are explicitly enabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/page.test.tsx",
+        "apps/web/src/app/parent/children/page.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-JOURNEY-GATE-02",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildrenPage > does not expose creation when the parent page is disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildrenPage > does not expose creation when the parent page is disabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/page.test.tsx::ParentChildrenPage > does not expose creation when the parent page is disabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/page.test.tsx",
+        "apps/web/src/app/parent/children/page.tsx",
+        "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
+      ]
     }
   ]
 }

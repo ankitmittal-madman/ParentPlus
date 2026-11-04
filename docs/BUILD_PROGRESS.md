@@ -1,6 +1,11 @@
 # ParentPlus Build Progress
 
 
+## Parent child-creation journey draft — 2026-11-04
+
+A default-off local draft now provides a parent creation, explicit confirmation and add-another flow backed by an actor-scoped durable intent and request identifier. Migration 035 revokes authenticated access to the legacy direct creation function; historical behaviour tests use temporary synthetic grants, and separate tests verify the real denial. Cross-account recovery, navigation/reload uncertainty, old-profile reconciliation, real provider/JWT behaviour and retention remain release blockers. See [the child creation journey spec](superpowers/specs/2026-11-04-child-creation-journey.md).
+
+
 ## Child creation database control — 2026-11-04
 
 Draft migration 034 adds a private database switch that defaults off and gates direct authenticated `create_child` calls and retries. Existing behaviour tests explicitly enable it only in synthetic isolated fixtures; separate checks cover disabled/missing control, privileges and disable-versus-write ordering. A denied retry does not prove an earlier request failed. The parent-facing creation journey, durable lost-response recovery, real JWT/provider verification and lifecycle review remain incomplete. See [the child creation control spec](superpowers/specs/2026-11-04-child-creation-control.md).
@@ -10,7 +15,7 @@ Draft migration 034 adds a private database switch that defaults off and gates d
 
 A local review reproduced an existing issue where replaying a child-creation request after the creator's guardianship was deleted recreated a provisional relationship, and replay after revocation or dispute still returned success. Draft migration 033 prevents that replay: an existing request requires a current provisional or active relationship before comparing details, and does not recreate one. Local tests cover deletion, revocation, dispute, both deletion/retry orderings and function privileges; see the current gate evidence.
 
-The existing `create_child` function remains directly callable by authenticated database roles and is not controlled by the parent profile-read flag. This change does not implement a child-creation UI, durable recovery after a lost response, real JWT verification, lifecycle or retention policy. Do not treat this local safeguard as approval to use real child data or as proof of production readiness.
+At migration 033 the existing `create_child` function remained directly callable by authenticated database roles and was not controlled by the parent profile-read flag. Migration 035 later revokes that direct access and adds a default-off local journey; real JWT verification, complete recovery, lifecycle and retention remain unverified. Do not treat this local safeguard as approval to use real child data or as proof of production readiness.
 
 
 ## Parent profile disabled-state browser coverage — 2026-11-04

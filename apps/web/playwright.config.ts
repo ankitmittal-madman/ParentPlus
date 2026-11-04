@@ -22,6 +22,6 @@ export default defineConfig({
     url: "http://127.0.0.1:3189/login",
     reuseExistingServer: false,
     timeout: 30000,
-    env: { NEXT_PUBLIC_ENABLE_LIVE_OTP: "false", PARENTPLUS_ENABLE_PARENT_CHILD_LIST: "false" },
+    env: { NEXT_PUBLIC_ENABLE_LIVE_OTP: "false", PARENTPLUS_ENABLE_PARENT_CHILD_LIST: "false", PARENTPLUS_ENABLE_CHILD_CREATION: "false" },
   },
 });

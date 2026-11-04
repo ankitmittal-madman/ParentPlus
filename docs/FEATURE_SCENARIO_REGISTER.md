@@ -32,11 +32,15 @@ A default-off local page can list profiles created by the signed-in account, pro
 
 ## Local child-creation replay safeguard — 2026-11-04
 
-A draft database migration prevents an old child-creation request from recreating a deleted guardianship or succeeding after revocation or dispute. This protects a local replay scenario; parent-facing creation, durable lost-response recovery and live-provider validation remain incomplete. The existing authenticated database RPC is not controlled by the separate parent-read flag.
+A draft database migration prevents an old child-creation request from recreating a deleted guardianship or succeeding after revocation or dispute. This protects a local replay scenario; parent-facing creation, durable lost-response recovery and live-provider validation remain incomplete. At that checkpoint the authenticated database RPC was not controlled by the separate parent-read flag; migration 035 later revoked direct authenticated access.
 
 ## Local child creation control — 2026-11-04
 
 The local database draft now defaults child creation off even for direct authenticated calls. Synthetic tests explicitly enable the control where needed and test its disabled/missing states. The parent-facing creation journey and live-provider verification remain incomplete; see [the child creation control spec](superpowers/specs/2026-11-04-child-creation-control.md).
+
+## Local parent child-creation journey draft — 2026-11-04
+
+A default-off local parent screen now supports checking status, entering a name, confirming a result and deliberately starting another profile. Its database journey binds an actor, prior intent and request identifier; mocked component and synthetic SQL tests are not live-provider end-to-end evidence. Recovery across accounts, navigation and older profiles remains incomplete. See [the journey spec](superpowers/specs/2026-11-04-child-creation-journey.md).
 
 ## 1. Features with code or foundation
 

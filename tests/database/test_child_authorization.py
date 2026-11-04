@@ -13,7 +13,7 @@ from tests.database.test_concurrent_authorization import query, start_psql_sessi
 def run_sql(sql, *, enable_creation=False):
     # Enable only inside the rolled-back transaction for existing behaviour tests.
     if enable_creation and 'public.create_child(' in sql and 'BEGIN;' in sql:
-        sql = sql.replace('BEGIN;', 'BEGIN; UPDATE public.child_creation_controls SET enabled=true WHERE id=true;', 1)
+        sql = sql.replace('BEGIN;', 'BEGIN; GRANT EXECUTE ON FUNCTION public.create_child(text,uuid) TO authenticated; UPDATE public.child_creation_controls SET enabled=true WHERE id=true;', 1)
     result = subprocess.run(
         [
             "docker", "exec", "-i", get_test_container(),
@@ -381,8 +381,8 @@ RESET ROLE; SELECT status FROM public.guardianships WHERE child_id=(SELECT id FR
     def run_child_retry_guardian_delete_race(self, delete_first):
         child, request = str(uuid.uuid4()), str(uuid.uuid4())
         first_name, second_name = "child_retry_first_"+uuid.uuid4().hex, "child_retry_second_"+uuid.uuid4().hex
-        self.addCleanup(query, f"BEGIN; DELETE FROM public.guardianships WHERE child_id='{child}'; DELETE FROM public.children WHERE id='{child}'; UPDATE public.child_creation_controls SET enabled=false WHERE id=true; COMMIT;")
-        query(f"""BEGIN; UPDATE public.child_creation_controls SET enabled=true WHERE id=true; INSERT INTO public.children (id,display_name,created_by,creation_request_id)
+        self.addCleanup(query, f"BEGIN; DELETE FROM public.guardianships WHERE child_id='{child}'; DELETE FROM public.children WHERE id='{child}'; UPDATE public.child_creation_controls SET enabled=false WHERE id=true; REVOKE EXECUTE ON FUNCTION public.create_child(text,uuid) FROM authenticated; COMMIT;")
+        query(f"""BEGIN; GRANT EXECUTE ON FUNCTION public.create_child(text,uuid) TO authenticated; UPDATE public.child_creation_controls SET enabled=true WHERE id=true; INSERT INTO public.children (id,display_name,created_by,creation_request_id)
 VALUES ('{child}','Synthetic race child','11111111-1111-4111-8111-111111111111','{request}');
 INSERT INTO public.guardianships (child_id,guardian_user_id,status,verification_level)
 VALUES ('{child}','11111111-1111-4111-8111-111111111111','provisional','self_declared'); COMMIT;""")
@@ -421,7 +421,7 @@ VALUES ('{child}','11111111-1111-4111-8111-111111111111','provisional','self_dec
         result = run_sql("""
 SELECT p.prosecdef AND p.proconfig @> ARRAY['search_path=""']
  AND pg_catalog.pg_get_userbyid(p.proowner)=current_user
- AND has_function_privilege('authenticated',p.oid,'EXECUTE')
+ AND NOT has_function_privilege('authenticated',p.oid,'EXECUTE')
  AND NOT has_function_privilege('anon',p.oid,'EXECUTE')
 FROM pg_catalog.pg_proc p WHERE p.oid='public.create_child(text,uuid)'::regprocedure;
 """)
@@ -429,7 +429,7 @@ FROM pg_catalog.pg_proc p WHERE p.oid='public.create_child(text,uuid)'::regproce
 
     def test_child_creation_database_control_denies_authenticated_creation(self):
         result = run_sql("""
-BEGIN; SET LOCAL ROLE authenticated;
+BEGIN; GRANT EXECUTE ON FUNCTION public.create_child(text,uuid) TO authenticated; SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 DO $$ BEGIN BEGIN PERFORM public.create_child('Synthetic child','dddddddd-1111-4111-8111-dddddddddddd'); RAISE EXCEPTION 'disabled creation allowed'; EXCEPTION WHEN insufficient_privilege THEN IF SQLERRM <> 'Child creation unavailable' THEN RAISE; END IF; END; END $$;
 RESET ROLE; SELECT count(*) FROM public.children WHERE creation_request_id='dddddddd-1111-4111-8111-dddddddddddd'; ROLLBACK;
@@ -450,7 +450,7 @@ SELECT (SELECT count(*)=1 AND bool_and(id AND NOT enabled) FROM public.child_cre
 
     def test_child_creation_control_missing_fails_closed(self):
         result = run_sql("""
-BEGIN; DELETE FROM public.child_creation_controls WHERE id=true;
+BEGIN; GRANT EXECUTE ON FUNCTION public.create_child(text,uuid) TO authenticated; DELETE FROM public.child_creation_controls WHERE id=true;
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 DO $$ BEGIN BEGIN PERFORM public.create_child('Synthetic child','dddddddd-2222-4222-8222-dddddddddddd'); RAISE EXCEPTION 'missing control allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
 RESET ROLE; SELECT count(*) FROM public.children WHERE creation_request_id='dddddddd-2222-4222-8222-dddddddddddd'; ROLLBACK;
@@ -459,7 +459,7 @@ RESET ROLE; SELECT count(*) FROM public.children WHERE creation_request_id='dddd
 
     def test_child_creation_control_disabled_blocks_existing_retry(self):
         result = run_sql("""
-BEGIN; UPDATE public.child_creation_controls SET enabled=true WHERE id=true;
+BEGIN; GRANT EXECUTE ON FUNCTION public.create_child(text,uuid) TO authenticated; UPDATE public.child_creation_controls SET enabled=true WHERE id=true;
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 SELECT public.create_child('Synthetic child','dddddddd-3333-4333-8333-dddddddddddd');
 RESET ROLE; UPDATE public.child_creation_controls SET enabled=false WHERE id=true;
@@ -472,8 +472,8 @@ RESET ROLE; SELECT count(*) FROM public.children WHERE creation_request_id='dddd
     def run_child_creation_control_race(self, disable_first):
         request = str(uuid.uuid4())
         first_name, second_name = "child_gate_first_"+uuid.uuid4().hex, "child_gate_second_"+uuid.uuid4().hex
-        self.addCleanup(query, f"BEGIN; DELETE FROM public.guardianships WHERE child_id IN (SELECT id FROM public.children WHERE creation_request_id='{request}'); DELETE FROM public.children WHERE creation_request_id='{request}'; UPDATE public.child_creation_controls SET enabled=false WHERE id=true; COMMIT;")
-        query("UPDATE public.child_creation_controls SET enabled=true WHERE id=true;")
+        self.addCleanup(query, f"BEGIN; DELETE FROM public.guardianships WHERE child_id IN (SELECT id FROM public.children WHERE creation_request_id='{request}'); DELETE FROM public.children WHERE creation_request_id='{request}'; UPDATE public.child_creation_controls SET enabled=false WHERE id=true; REVOKE EXECUTE ON FUNCTION public.create_child(text,uuid) FROM authenticated; COMMIT;")
+        query("BEGIN; GRANT EXECUTE ON FUNCTION public.create_child(text,uuid) TO authenticated; UPDATE public.child_creation_controls SET enabled=true WHERE id=true; COMMIT;")
         first = second = None
         create = f"SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true); SELECT public.create_child('Synthetic race child','{request}');\n"
         disable = "UPDATE public.child_creation_controls SET enabled=false WHERE id=true;\n"

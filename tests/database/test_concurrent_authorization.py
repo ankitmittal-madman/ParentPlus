@@ -75,6 +75,7 @@ def create_test_child():
 
     output = query(f"""
 BEGIN;
+GRANT EXECUTE ON FUNCTION public.create_child(text,uuid) TO authenticated;
 UPDATE public.child_creation_controls SET enabled=true WHERE id=true;
 SET LOCAL ROLE authenticated;
 SELECT set_config(
@@ -87,6 +88,7 @@ SELECT 'CHILD_ID:' || public.create_child(
 )::text;
 RESET ROLE;
 UPDATE public.child_creation_controls SET enabled=false WHERE id=true;
+REVOKE EXECUTE ON FUNCTION public.create_child(text,uuid) FROM authenticated;
 COMMIT;
 """)
 

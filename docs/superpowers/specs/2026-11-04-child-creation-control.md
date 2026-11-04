@@ -13,3 +13,7 @@ The fresh database initialization and final cleanup checks require exactly one d
 ## Remaining release work
 
 A parent-facing creation screen, durable recovery after a lost response or account change, explicit lifecycle and retention decisions, real signed-JWT/provider verification, production role/owner review, abuse controls and real-device end-to-end testing remain open. Do not enable the database control or use real child data until the relevant review and authorization are complete.
+
+## Later local journey
+
+Migration 035 later revokes authenticated execution of the legacy function and adds default-off journey wrappers. Historical tests use explicit temporary grants only in isolated synthetic fixtures; actual-role tests verify the legacy denial. See [the journey spec](2026-11-04-child-creation-journey.md).
