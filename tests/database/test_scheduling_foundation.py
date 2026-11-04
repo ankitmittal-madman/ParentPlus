@@ -1320,3 +1320,16 @@ DROP TRIGGER test_reject_app_batch ON public.batches; SET LOCAL ROLE authenticat
 SELECT count(*) FROM public.app_complete_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior)); ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-2:],['0:0','1'])
+
+    def test_current_class_recovery_rejects_batch_from_another_course(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE intent AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT * FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM intent));
+INSERT INTO public.batches (id,workspace_id,course_id,name) VALUES ('d0000000-0000-4000-8000-000000000001','a0000000-0000-4000-8000-000000000001','c0000000-0000-4000-8000-000000000001','Unrelated');
+UPDATE public.class_setup_intents SET completed_batch_id='d0000000-0000-4000-8000-000000000001' WHERE id=(SELECT id FROM intent);
+DO $$ BEGIN BEGIN PERFORM public.recover_private_current_class_setup('a0000000-0000-4000-8000-000000000001'); RAISE EXCEPTION 'mismatched batch accepted'; EXCEPTION WHEN object_not_in_prerequisite_state THEN NULL; END; END $$;
+SELECT 'denied'; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1],'denied')

@@ -122,3 +122,5 @@ A private local lookup can retrieve a known archived class setup for the same au
 A private local archive-discovery draft adds bounded, UUID-ordered pages for the same authorised manager. Pages are snapshots, not chronological or guaranteed complete across concurrent changes; application integration remains unfinished.
 
 A local draft now grants authenticated-role access to narrow reservation-protocol wrappers, guarded by a database control that defaults off. Synthetic SQL tests are not real-provider or user-interface validation; the old web action remains unavailable and the complete feature is not release-ready.
+
+A disabled-by-default server bridge for current class recovery is under development. Its identity and RPC tests use mocks; the real provider, archived recovery UI, class creation screen and end-to-end journey remain unverified.

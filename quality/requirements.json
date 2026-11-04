@@ -2596,6 +2596,27 @@
       ]
     },
     {
+      "id": "DB-CLASS-RECOVERY-09",
+      "domain": "class-setup-recovery-private",
+      "description": "Current recovery rejects a completed batch from a different course.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "current recovery denies mismatched completed course and batch"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_current_class_recovery_rejects_batch_from_another_course"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002900_validate_current_class_recovery.sql"
+      ]
+    },
+    {
       "id": "DB-CLASS-RECOVERY-01",
       "domain": "class-setup-recovery-private",
       "description": "test current class recovery finds next request after lost response.",
@@ -4502,6 +4523,204 @@
         "apps/web/src/lib/scheduling/list-class-workspaces.ts",
         "apps/web/src/lib/scheduling/list-class-workspaces.test.ts",
         "supabase/migrations/20261101000300_initial_rls.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-BRIDGE-01",
+      "domain": "class-setup-recovery-bridge",
+      "description": "recoverCurrentClassSetup > fails closed before contacting the provider when disabled.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "recoverCurrentClassSetup > fails closed before contacting the provider when disabled"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts::recoverCurrentClassSetup > fails closed before contacting the provider when disabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/recover-current-class-setup.ts",
+        "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-BRIDGE-02",
+      "domain": "class-setup-recovery-bridge",
+      "description": "recoverCurrentClassSetup > rejects malformed workspace and expected actor IDs.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "recoverCurrentClassSetup > rejects malformed workspace and expected actor IDs"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts::recoverCurrentClassSetup > rejects malformed workspace and expected actor IDs"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/recover-current-class-setup.ts",
+        "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-BRIDGE-03",
+      "domain": "class-setup-recovery-bridge",
+      "description": "recoverCurrentClassSetup > denies missing or failed provider identity before the RPC.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "recoverCurrentClassSetup > denies missing or failed provider identity before the RPC"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts::recoverCurrentClassSetup > denies missing or failed provider identity before the RPC"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/recover-current-class-setup.ts",
+        "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-BRIDGE-04",
+      "domain": "class-setup-recovery-bridge",
+      "description": "recoverCurrentClassSetup > denies an account switch before calling the RPC.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "recoverCurrentClassSetup > denies an account switch before calling the RPC"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts::recoverCurrentClassSetup > denies an account switch before calling the RPC"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/recover-current-class-setup.ts",
+        "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-BRIDGE-05",
+      "domain": "class-setup-recovery-bridge",
+      "description": "recoverCurrentClassSetup > returns a sanitized pending request and sends only the workspace.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "recoverCurrentClassSetup > returns a sanitized pending request and sends only the workspace"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts::recoverCurrentClassSetup > returns a sanitized pending request and sends only the workspace"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/recover-current-class-setup.ts",
+        "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-BRIDGE-06",
+      "domain": "class-setup-recovery-bridge",
+      "description": "recoverCurrentClassSetup > keeps unknown distinct from failure or absence.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "recoverCurrentClassSetup > keeps unknown distinct from failure or absence"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts::recoverCurrentClassSetup > keeps unknown distinct from failure or absence"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/recover-current-class-setup.ts",
+        "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-BRIDGE-07",
+      "domain": "class-setup-recovery-bridge",
+      "description": "recoverCurrentClassSetup > returns a valid completed result with acknowledgement state.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "recoverCurrentClassSetup > returns a valid completed result with acknowledgement state"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts::recoverCurrentClassSetup > returns a valid completed result with acknowledgement state"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/recover-current-class-setup.ts",
+        "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-BRIDGE-08",
+      "domain": "class-setup-recovery-bridge",
+      "description": "recoverCurrentClassSetup > rejects inconsistent or malformed provider results without claiming success.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "recoverCurrentClassSetup > rejects inconsistent or malformed provider results without claiming success"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts::recoverCurrentClassSetup > rejects inconsistent or malformed provider results without claiming success"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/recover-current-class-setup.ts",
+        "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-RECOVERY-BRIDGE-09",
+      "domain": "class-setup-recovery-bridge",
+      "description": "recoverCurrentClassSetup > redacts provider and thrown errors.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "recoverCurrentClassSetup > redacts provider and thrown errors"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts::recoverCurrentClassSetup > redacts provider and thrown errors"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/recover-current-class-setup.ts",
+        "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts",
+        "supabase/migrations/20261104002800_authenticated_class_setup_protocol.sql"
       ]
     },
     {
