@@ -839,3 +839,40 @@ SELECT (SELECT course_id FROM separate_result) <> (SELECT course_id FROM public.
 SELECT (SELECT count(*) FROM public.courses WHERE name='Dance') || ':' || (SELECT count(*) FROM public.batches WHERE name='Beginners'); ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-2:], ['t','2:2'])
+
+    def test_class_setup_status_reports_unknown_pending_and_completed(self):
+        out = run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT state FROM public.private_class_setup_status('a0000000-0000-4000-8000-000000000001');
+CREATE TEMP TABLE saved_intent AS SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners') AS id;
+SELECT state FROM public.private_class_setup_status('a0000000-0000-4000-8000-000000000001');
+SELECT count(*) FROM public.complete_private_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM saved_intent));
+SELECT state FROM public.private_class_setup_status('a0000000-0000-4000-8000-000000000001'); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-4:], ['unknown','pending','1','completed'])
+
+    def test_class_setup_status_does_not_reveal_another_manager_intent(self):
+        out = run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner';
+INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('a0000000-0000-4000-8000-000000000001','22222222-2222-4222-8222-222222222222','admin','active');
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT public.reserve_private_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners');
+SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
+SELECT state || ':' || (intent_id IS NULL)::text FROM public.private_class_setup_status('a0000000-0000-4000-8000-000000000001'); ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], 'unknown:true')
+
+    def test_class_setup_status_denies_coach_and_disabled_control(self):
+        out = run_sql(SETUP + """
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+DO $$ BEGIN BEGIN PERFORM public.private_class_setup_status('a0000000-0000-4000-8000-000000000001'); RAISE EXCEPTION 'coach allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001'; UPDATE public.class_setup_controls SET enabled=false WHERE id=true;
+DO $$ BEGIN BEGIN PERFORM public.private_class_setup_status('a0000000-0000-4000-8000-000000000001'); RAISE EXCEPTION 'disabled allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+SELECT 'denied'; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], 'denied')
+
+    def test_class_setup_status_denies_application_roles(self):
+        out=run_sql("SELECT NOT has_function_privilege('authenticated','public.private_class_setup_status(uuid)','EXECUTE') AND NOT has_function_privilege('anon','public.private_class_setup_status(uuid)','EXECUTE');")
+        self.assertEqual(out,'t')

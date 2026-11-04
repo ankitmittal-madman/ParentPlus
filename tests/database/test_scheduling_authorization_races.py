@@ -755,3 +755,38 @@ DO $$ BEGIN BEGIN PERFORM public.create_private_local_session('{self.workspace}'
             self.assertEqual(query(f"SELECT (SELECT count(*) FROM public.courses WHERE workspace_id='{self.workspace}' AND name='Dance') || ':' || (SELECT count(*) FROM public.batches WHERE workspace_id='{self.workspace}' AND name='Beginners') || ':' || (SELECT count(*) FROM public.class_setup_intents WHERE id='{intent}' AND completed_course_id IS NOT NULL);"),'1:1:1')
         finally:
             close_psql_session(second); close_psql_session(first)
+
+    def test_class_setup_status_waits_for_inflight_completion(self):
+        query(f"UPDATE public.workspace_memberships SET role='owner' WHERE id='{self.membership}';")
+        output=query(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT 'INTENT:' || public.reserve_private_class_setup('{self.workspace}','Dance','Beginners'); COMMIT;")
+        intent=next(line.removeprefix('INTENT:') for line in output.splitlines() if line.startswith('INTENT:'))
+        first_name,second_name='status_complete_'+uuid.uuid4().hex,'status_read_'+uuid.uuid4().hex
+        first,second=start_psql_session(),start_psql_session()
+        try:
+            for proc,name in ((first,first_name),(second,second_name)):
+                proc.stdin.write(f"BEGIN; SET LOCAL lock_timeout='10s'; SELECT set_config('application_name','{name}',false); SELECT set_config('request.jwt.claim.sub','{MEERA}',true);\n")
+            first.stdin.write(f"SELECT * FROM public.complete_private_class_setup('{self.workspace}','{intent}'); SELECT 'FIRST_LOCKED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_LOCKED'))
+            second.stdin.write(f"SELECT 'STATUS:' || state FROM public.private_class_setup_status('{self.workspace}'); COMMIT; SELECT 'SECOND_COMMITTED';\n"); second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name,first_name))
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_COMMITTED'))
+            self.assertTrue(wait_for_session_marker(second,'STATUS:completed'))
+            self.assertTrue(wait_for_session_marker(second,'SECOND_COMMITTED'))
+        finally:
+            close_psql_session(second); close_psql_session(first)
+
+    def test_class_setup_status_missing_row_is_unknown_during_inflight_reservation(self):
+        query(f"UPDATE public.workspace_memberships SET role='owner' WHERE id='{self.membership}';")
+        first=start_psql_session()
+        try:
+            first.stdin.write(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT public.reserve_private_class_setup('{self.workspace}','Dance','Beginners'); SELECT 'FIRST_LOCKED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_LOCKED'))
+            status=query(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT 'STATUS:' || state FROM public.private_class_setup_status('{self.workspace}'); COMMIT;")
+            self.assertIn('STATUS:unknown',status.splitlines())
+            first.stdin.write("COMMIT; SELECT 'FIRST_COMMITTED';\n"); first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first,'FIRST_COMMITTED'))
+            status=query(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{MEERA}',true); SELECT 'STATUS:' || state FROM public.private_class_setup_status('{self.workspace}'); COMMIT;")
+            self.assertIn('STATUS:pending',status.splitlines())
+        finally:
+            close_psql_session(first)

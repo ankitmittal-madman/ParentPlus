@@ -1966,6 +1966,132 @@
       ]
     },
     {
+      "id": "DB-CLASS-STATUS-01",
+      "domain": "class-setup-status-private",
+      "description": "test class setup status reports unknown pending and completed.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup status reports unknown pending and completed"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_status_reports_unknown_pending_and_completed"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002100_private_class_setup_status.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-STATUS-02",
+      "domain": "class-setup-status-private",
+      "description": "test class setup status does not reveal another manager intent.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup status does not reveal another manager intent"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_status_does_not_reveal_another_manager_intent"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002100_private_class_setup_status.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-STATUS-03",
+      "domain": "class-setup-status-private",
+      "description": "test class setup status denies coach and disabled control.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup status denies coach and disabled control"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_status_denies_coach_and_disabled_control"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002100_private_class_setup_status.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-STATUS-04",
+      "domain": "class-setup-status-private",
+      "description": "test class setup status denies application roles.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup status denies application roles"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_class_setup_status_denies_application_roles"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_foundation.py",
+        "supabase/migrations/20261104002100_private_class_setup_status.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-STATUS-05",
+      "domain": "class-setup-status-private",
+      "description": "test class setup status waits for inflight completion.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup status waits for inflight completion"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_class_setup_status_waits_for_inflight_completion"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002100_private_class_setup_status.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-STATUS-06",
+      "domain": "class-setup-status-private",
+      "description": "test class setup status missing row is unknown during inflight reservation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "test class setup status missing row is unknown during inflight reservation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_class_setup_status_missing_row_is_unknown_during_inflight_reservation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_scheduling_authorization_races.py",
+        "supabase/migrations/20261104002100_private_class_setup_status.sql"
+      ]
+    },
+    {
       "id": "DB-CLASS-RESERVATION-01",
       "domain": "class-setup-reservation-private",
       "description": "test class setup reservation returns same id for matching retry.",
