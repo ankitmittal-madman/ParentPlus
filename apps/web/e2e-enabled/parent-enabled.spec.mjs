@@ -7,8 +7,11 @@ const other = "22222222-2222-4222-8222-222222222222";
 let blockedOrigins = [];
 let pageErrors = [];
 const enc = (value) => Buffer.from(JSON.stringify(value)).toString("base64url");
+function tokenFor(id) {
+  return enc({ alg: "HS256", typ: "JWT" }) + "." + enc({ sub: id, aud: "authenticated", role: "authenticated", exp: 4102444800, iat: 1700000000 }) + ".c3ludGhldGlj";
+}
 function sessionCookie(id) {
-  const token = enc({ alg: "HS256", typ: "JWT" }) + "." + enc({ sub: id, aud: "authenticated", role: "authenticated", exp: 4102444800, iat: 1700000000 }) + ".c3ludGhldGlj";
+  const token = tokenFor(id);
   const user = { id, aud: "authenticated", role: "authenticated", email: "parent@example.test", app_metadata: {}, user_metadata: {}, created_at: "2026-01-01T00:00:00.000Z" };
   return { name: "sb-localhost-auth-token", value: "base64-" + enc({ access_token: token, refresh_token: "synthetic-refresh", expires_at: 4102444800, expires_in: 3600, token_type: "bearer", user }), url: app };
 }
@@ -105,4 +108,36 @@ test("keeps an unresolved request locked after an account switch", async ({ page
   const after = await (await request.get(fake + "/__test/events")).json();
   expect(after.filter((event) => event === "app_current_child_creation")).toHaveLength(before.filter((event) => event === "app_current_child_creation").length);
   expect(after).toContain("user:" + other);
+});
+
+
+test("fences an uncommitted request before allowing a new profile", async ({ page, request }) => {
+  expect((await request.post(fake + "/__test/fail-before")).ok()).toBeTruthy();
+  await page.goto("/parent/children");
+  await page.getByRole("button", { name: "Check creation status" }).click();
+  await page.getByLabel("Child name").fill("Asha");
+  await page.getByRole("button", { name: "Create profile" }).click();
+  await expect(page.getByText(/unable to confirm the profile/i)).toBeVisible();
+  const marker = await page.evaluate(() => sessionStorage.getItem("parentplus.child-creation-recovery.v1"));
+  expect(marker).toBeTruthy();
+  expect(marker).not.toContain("Asha");
+  const originalRequest = JSON.parse(marker).requestId;
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+  await page.getByRole("button", { name: "Check creation status" }).click();
+  await page.getByRole("button", { name: "Stop waiting for this request" }).click();
+  await expect(page.getByLabel("Child name")).toBeVisible();
+  expect(await page.evaluate(() => sessionStorage.getItem("parentplus.child-creation-recovery.v1"))).toBeNull();
+  const headers = { authorization: "Bearer " + tokenFor(actor), apikey: "synthetic-public-key" };
+  const delayed = await request.post(fake + "/rest/v1/rpc/app_begin_child_creation", { headers, data: { p_display_name: "Asha", p_prior_intent_id: null, p_request_id: originalRequest } });
+  expect(delayed.status()).toBe(409);
+  await page.getByLabel("Child name").fill("Asha");
+  await page.getByRole("button", { name: "Create profile" }).click();
+  await expect(page.getByText("Profile: Asha")).toBeVisible();
+  const state = await request.post(fake + "/rest/v1/rpc/app_current_child_creation", { headers, data: {} });
+  const profiles = await state.json();
+  expect(profiles).toHaveLength(1);
+  expect(profiles[0].request_id).not.toBe(originalRequest);
+  const events = await (await request.get(fake + "/__test/events")).json();
+  expect(events).toContain("app_fence_child_creation");
 });

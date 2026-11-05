@@ -315,6 +315,7 @@ BROWSER_ENABLED_CASES = {
     'parent-enabled.spec.mjs::creates and confirms a profile using a synthetic provider',
     'parent-enabled.spec.mjs::recovers an unconfirmed request after another tab creates a later profile',
     'parent-enabled.spec.mjs::keeps an unresolved request locked after an account switch',
+    'parent-enabled.spec.mjs::fences an uncommitted request before allowing a new profile',
 }
 
 
