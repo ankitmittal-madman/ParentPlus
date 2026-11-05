@@ -27,3 +27,7 @@ The local application clears its tab marker only after it verifies the original 
 - Browser-to-server and signed-JWT/provider verification, plus review of retention and operational escalation before release.
 
 The database diagnostic `ChildCreationJourneyTests.test_empty_status_does_not_prevent_a_later_creation` checks only that a later synthetic database request can create after an empty status in separate transactions. It does not simulate a real network delay or prove the proposed safeguard.
+
+## Local integration simulation
+
+The actual React panels and server actions are tested together with a synthetic in-memory provider and mocked session observer. One test injects a later request into the fake provider; it is not evidence of a real second browser tab or database transaction. These jsdom tests do not replace real browser-to-database, signed-JWT or hosted-provider verification.

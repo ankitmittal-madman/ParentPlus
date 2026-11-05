@@ -12250,6 +12250,156 @@
         "apps/web/src/app/parent/children/child-creation-panel.tsx",
         "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
       ]
+    },
+    {
+      "id": "FE-CHILD-INTEGRATION-20261105-01",
+      "domain": "parent-child-creation-journey",
+      "description": "Parent journey integration with a synthetic provider > creates, acknowledges and lists a profile through the real server actions.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "Parent journey integration with a synthetic provider > creates, acknowledges and lists a profile through the real server actions"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-journey.integration.test.tsx::Parent journey integration with a synthetic provider > creates, acknowledges and lists a profile through the real server actions"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-journey.integration.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "apps/web/src/lib/parent/list-created-children.ts",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-INTEGRATION-20261105-02",
+      "domain": "parent-child-creation-journey",
+      "description": "Parent journey integration with a synthetic provider > recovers a committed request after its response is lost and the panel remounts.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "Parent journey integration with a synthetic provider > recovers a committed request after its response is lost and the panel remounts"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-journey.integration.test.tsx::Parent journey integration with a synthetic provider > recovers a committed request after its response is lost and the panel remounts"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-journey.integration.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "apps/web/src/lib/parent/list-created-children.ts",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-INTEGRATION-20261105-03",
+      "domain": "parent-child-creation-journey",
+      "description": "Parent journey integration with a synthetic provider > recognises a superseded request through the real history action without displaying a later profile.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "Parent journey integration with a synthetic provider > recognises a superseded request through the real history action without displaying a later profile"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-journey.integration.test.tsx::Parent journey integration with a synthetic provider > recognises a superseded request through the real history action without displaying a later profile"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-journey.integration.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "apps/web/src/lib/parent/list-created-children.ts",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-INTEGRATION-20261105-04",
+      "domain": "parent-child-creation-journey",
+      "description": "Parent journey integration with a synthetic provider > keeps recovery locked after an account change without calling a provider RPC.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "Parent journey integration with a synthetic provider > keeps recovery locked after an account change without calling a provider RPC"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-journey.integration.test.tsx::Parent journey integration with a synthetic provider > keeps recovery locked after an account change without calling a provider RPC"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-journey.integration.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "apps/web/src/lib/parent/list-created-children.ts",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-INTEGRATION-20261105-05",
+      "domain": "parent-child-creation-journey",
+      "description": "Parent journey integration with a synthetic provider > keeps the earlier request locked if historical access is revoked.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "Parent journey integration with a synthetic provider > keeps the earlier request locked if historical access is revoked"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-journey.integration.test.tsx::Parent journey integration with a synthetic provider > keeps the earlier request locked if historical access is revoked"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-journey.integration.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "apps/web/src/lib/parent/list-created-children.ts",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-INTEGRATION-20261105-06",
+      "domain": "parent-child-creation-journey",
+      "description": "Parent journey integration with a synthetic provider > fences an undelivered request before accepting a new request through the real actions.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "Parent journey integration with a synthetic provider > fences an undelivered request before accepting a new request through the real actions"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-journey.integration.test.tsx::Parent journey integration with a synthetic provider > fences an undelivered request before accepting a new request through the real actions"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-journey.integration.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "apps/web/src/app/parent/children/created-children-panel.tsx",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "apps/web/src/lib/parent/list-created-children.ts",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
     }
   ]
 }

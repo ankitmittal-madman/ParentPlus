@@ -1,6 +1,10 @@
 # ParentPlus Build Progress
 
 
+## Parent creation integration simulation — 2026-11-05
+
+Local component integration tests connect the actual parent panels and server actions to a synthetic in-memory provider and mocked session observer. They cover creation, acknowledgement, listing, lost responses, fencing, an advanced request, account change and denied historical access. The advanced request is injected into the fake provider, not a second browser tab. These tests use jsdom and do not exercise real browser-to-database, database concurrency, signed JWTs or a hosted provider. The feature remains disabled.
+
 ## Earlier child-creation recovery local draft — 2026-11-05
 
 Draft migration 037 archives name-free references to future superseded requests. After a guarded history lookup, the local interface can recognise an earlier request without displaying a later profile as its result; it requires a fresh status check before another creation. Synthetic tests cover access, rollback and lock ordering. Already-overwritten history, deletion and retention policy, immediate revocation and real-provider end-to-end checks remain open; the feature stays disabled.
