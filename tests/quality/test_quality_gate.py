@@ -519,6 +519,17 @@ class GateTests(unittest.TestCase):
                 with self.assertRaises(gate.GateError):
                     gate.verify_evidence(plan, directory, {'quality': 'success', 'frontend': 'success'}, 'a'*40)
 
+    def test_enabled_browser_stops_when_namespace_is_unavailable(self):
+        with tempfile.TemporaryDirectory() as d:
+            fake = Path(d)/'unshare'
+            fake.write_text('#!/bin/sh\nexit 1\n')
+            fake.chmod(0o755)
+            env = {'PATH': d+os.pathsep+os.environ.get('PATH', ''), 'PARENTPLUS_CHROMIUM_PATH': '/bin/true'}
+            result = subprocess.run(['bash', str(ROOT/'scripts/ci/enabled-parent-browser.sh')], cwd=ROOT, env=env, capture_output=True, text=True, timeout=30)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn('network namespace is unavailable', result.stderr)
+            self.assertNotIn('PASS: Isolated enabled parent browser checks completed', result.stdout)
+
     def test_enabled_browser_config_rejects_nonlocal_provider(self):
         env = {'PATH': os.environ.get('PATH', ''), 'PARENTPLUS_SYNTHETIC_BROWSER': '1',
                'PARENTPLUS_CHROMIUM_PATH': '/synthetic/browser', 'NEXT_PUBLIC_SUPABASE_URL': 'https://example.invalid',

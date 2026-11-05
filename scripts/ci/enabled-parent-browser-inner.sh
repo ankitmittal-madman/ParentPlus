@@ -4,6 +4,7 @@ if [ "${PARENTPLUS_SYNTHETIC_BROWSER:-}" != '1' ] || [ "$#" -ne 1 ] || [ ! -d "$
   echo 'STOP: Isolated synthetic browser configuration required' >&2
   exit 1
 fi
+printf '%s\n' network > "$1/test-phase"
 ip link set lo up
 python3 - <<'PY'
 import json
@@ -17,7 +18,9 @@ for family in ('-4', '-6'):
         raise SystemExit('STOP: Browser namespace has a non-loopback route')
 PY
 cd "$1"
+printf '%s\n' build > test-phase
 ./node_modules/.bin/next build
+printf '%s\n' startup > test-phase
 node e2e-enabled/fake-supabase.mjs >test-fake.log 2>&1 &
 fake_pid=$!
 ./node_modules/.bin/next start --hostname 127.0.0.1 --port 3190 >test-next.log 2>&1 &
@@ -43,4 +46,5 @@ if [ "$ready" -ne 1 ]; then
   echo 'STOP: Synthetic services did not become ready' >&2
   exit 1
 fi
+printf '%s\n' browser > test-phase
 timeout 90s ./node_modules/.bin/playwright test --config=playwright.enabled.config.mjs
