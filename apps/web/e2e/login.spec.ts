@@ -15,6 +15,9 @@ test("rejects an invalid email in the browser", async ({ page }) => {
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.locator("#email-error")).toHaveText("Enter a valid email address.");
   await expect(page.getByLabel("Email address")).toHaveAttribute("aria-invalid", "true");
+  await page.getByLabel("Email address").fill("coach@example.com");
+  await expect(page.getByLabel("Email address")).toHaveAttribute("aria-invalid", "false");
+  await expect(page.locator("#email-error")).toHaveCount(0);
 });
 
 test("does not claim email delivery when live OTP is disabled", async ({ page }) => {
@@ -22,6 +25,8 @@ test("does not claim email delivery when live OTP is disabled", async ({ page })
   await page.getByLabel("Email address").fill("coach@example.com");
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.locator("#email-error")).toHaveText("Email verification is not enabled in this environment.");
+  await expect(page.getByLabel("Email address")).toHaveAttribute("aria-invalid", "false");
+  await expect(page.getByLabel("Email address")).toHaveAccessibleDescription("Email verification is not enabled in this environment.");
   await expect(page.getByRole("status")).toHaveCount(0);
   await expect(page.getByLabel("Verification code")).toHaveCount(0);
 });
