@@ -52,6 +52,29 @@ describe("requestEmailOtp", () => {
     });
   });
 
+  it("keeps explicit account creation disabled unless separately enabled", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_ACCOUNT_SIGNUP", "false");
+    const result = await requestEmailOtp("parent@example.com", "sign-up");
+    expect(result.success).toBe(false);
+    expect(mocks.createClient).not.toHaveBeenCalled();
+  });
+
+  it("requests an account creation code only when both switches are enabled", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_ACCOUNT_SIGNUP", "true");
+    mocks.signInWithOtp.mockResolvedValue({ error: null });
+    expect((await requestEmailOtp(" PARENT@EXAMPLE.COM ", "sign-up")).success).toBe(true);
+    expect(mocks.signInWithOtp).toHaveBeenCalledWith({ email: "parent@example.com", options: { shouldCreateUser: true } });
+  });
+
+  it("does not allow signup when live email verification is disabled", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_ACCOUNT_SIGNUP", "true");
+    const result = await requestEmailOtp("parent@example.com", "sign-up");
+    expect(result.success).toBe(false);
+    expect(mocks.createClient).not.toHaveBeenCalled();
+  });
+
   it("handles Supabase errors without exposing details", async () => {
     vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
     mocks.signInWithOtp.mockResolvedValue({

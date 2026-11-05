@@ -34,7 +34,26 @@ cleanup() {
           (SELECT count(*) FROM public.guardianships) +
           (SELECT count(*) FROM public.workspace_children) +
           (SELECT count(*) FROM public.connection_requests) +
-          (SELECT count(*) FROM public.connection_events);" \
+          (SELECT count(*) FROM public.connection_events) +
+    (SELECT count(*) FROM public.courses) +
+    (SELECT count(*) FROM public.batches) +
+    (SELECT count(*) FROM public.batch_coach_assignments) +
+    (SELECT count(*) FROM public.schedule_sessions) +
+    (SELECT count(*) FROM public.batch_coach_mutation_requests) +
+    (SELECT count(*) FROM public.class_setup_requests) +
+    (SELECT count(*) FROM public.class_setup_intents) +
+    (SELECT count(*) FROM public.class_setup_next_requests) +
+    (SELECT count(*) FROM public.class_setup_intent_history) +
+    (SELECT count(*) FROM public.child_creation_intents) +
+    (SELECT count(*) FROM public.child_creation_fences) +
+    (SELECT count(*) FROM public.child_creation_history) +
+    (SELECT count(*) FROM (VALUES ('anon'),('authenticated')) r(role_name) WHERE has_function_privilege(r.role_name, 'public.create_child(text,uuid)', 'EXECUTE')) +
+    (SELECT count(*) FROM (VALUES ('anon'),('authenticated')) r(role_name)
+      CROSS JOIN (VALUES ('public.create_course(uuid,text,uuid)'),('public.create_batch(uuid,uuid,text,uuid)'),('public.create_course_and_batch(uuid,text,text,uuid)')) f(signature)
+      WHERE has_function_privilege(r.role_name, f.signature, 'EXECUTE')) +
+    (SELECT count(*) FROM public.class_setup_controls WHERE enabled) +
+    (SELECT count(*) FROM public.parent_child_read_controls WHERE enabled) +
+    (SELECT CASE WHEN count(*)=1 AND bool_and(id AND NOT enabled) THEN 0 ELSE 1 END FROM public.child_creation_controls);" \
         > "$EVIDENCE/cleanup-count.txt" \
         2> "$EVIDENCE/cleanup-error.txt"; then
 

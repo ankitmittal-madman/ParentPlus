@@ -38,6 +38,9 @@ def scenario_sql(test_body):
 
     return f"""
 BEGIN;
+-- Synthetic fixture only; rollback restores the default-off control.
+GRANT EXECUTE ON FUNCTION public.create_child(text,uuid) TO authenticated;
+UPDATE public.child_creation_controls SET enabled=true WHERE id=true;
 
 CREATE TEMP TABLE test_ids (
   workspace_id uuid,

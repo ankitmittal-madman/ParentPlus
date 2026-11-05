@@ -28,11 +28,16 @@ def query(sql):
 
 
 def as_user(user_id, statement):
+    # Only the synthetic child-creation setup enables the control in its transaction.
+    enable = "GRANT EXECUTE ON FUNCTION public.create_child(text,uuid) TO authenticated; UPDATE public.child_creation_controls SET enabled=true WHERE id=true;" if "public.create_child(" in statement else ""
+    disable = "RESET ROLE; UPDATE public.child_creation_controls SET enabled=false WHERE id=true; REVOKE EXECUTE ON FUNCTION public.create_child(text,uuid) FROM authenticated;" if enable else ""
     output = query(f"""
 BEGIN;
+{enable}
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '{user_id}', true);
 {statement}
+{disable}
 COMMIT;
 """)
     return output.splitlines()[-1]

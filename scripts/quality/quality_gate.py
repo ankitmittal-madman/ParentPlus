@@ -304,6 +304,23 @@ def find_report(directory, name):
     return path
 
 
+BROWSER_CASES = {
+    'login.spec.ts::rejects an invalid email in the browser',
+    'login.spec.ts::does not claim email delivery when live OTP is disabled',
+    'login.spec.ts::keeps parent profiles unavailable when disabled',
+    'schedule.spec.ts::shows a clearly labelled example schedule',
+}
+
+BROWSER_ENABLED_CASES = {
+    'parent-enabled.spec.mjs::creates and confirms a profile using a synthetic provider',
+    'parent-enabled.spec.mjs::recovers a confirmation committed before its response was lost',
+    'parent-enabled.spec.mjs::retries an uncommitted confirmation after reload',
+    'parent-enabled.spec.mjs::recovers an unconfirmed request after another tab creates a later profile',
+    'parent-enabled.spec.mjs::keeps an unresolved request locked after an account switch',
+    'parent-enabled.spec.mjs::fences an uncommitted request before allowing a new profile',
+}
+
+
 def junit_refs(path, suite):
     try:
         root = ET.parse(path).getroot()
@@ -324,6 +341,12 @@ def junit_refs(path, suite):
                 if suite == 'frontend':
                     require(classname.startswith('src/') and '..' not in PurePosixPath(classname).parts, 'Invalid frontend case path')
                     ref = 'apps/web/' + classname + '::' + name
+                elif suite == 'browser':
+                    require(classname in {'login.spec.ts', 'schedule.spec.ts'}, 'Invalid browser case path')
+                    ref = classname + '::' + name
+                elif suite == 'browser_enabled':
+                    require(classname == 'parent-enabled.spec.mjs', 'Invalid enabled browser case path')
+                    ref = classname + '::' + name
                 elif suite == 'concurrency':
                     require(classname == 'ParentPlus.Concurrency' and Path(name).name == name, 'Invalid standalone case identity')
                     ref = 'tests/database/' + name
@@ -360,7 +383,7 @@ def execution_context():
 
 def report_names(suite):
     require(suite in {'frontend', 'database'}, 'Invalid receipt suite')
-    return (['vitest-junit.xml'] if suite == 'frontend' else
+    return (['vitest-junit.xml', 'playwright-junit.xml', 'playwright-enabled-junit.xml'] if suite == 'frontend' else
             ['unittest-junit.xml', 'concurrency-junit.xml', 'cleanup-count.txt'])
 
 
@@ -378,8 +401,13 @@ def create_receipt(root, suite, directory, plan=None):
     for name in report_names(suite):
         path = find_report(directory, name)
         if name.endswith('.xml'):
-            kind = 'concurrency' if name.startswith('concurrency') else suite
-            require(junit_refs(path, kind), 'Empty execution evidence')
+            kind = ('browser' if name == 'playwright-junit.xml' else 'browser_enabled' if name == 'playwright-enabled-junit.xml' else 'concurrency' if name.startswith('concurrency') else suite)
+            refs = junit_refs(path, kind)
+            require(refs, 'Empty execution evidence')
+            if kind == 'browser':
+                require(refs == BROWSER_CASES, 'Browser evidence differs from required cases')
+            if kind == 'browser_enabled':
+                require(refs == BROWSER_ENABLED_CASES, 'Enabled browser evidence differs from required cases')
         else:
             require(path.read_text().strip() == '0', 'Database cleanup incomplete')
     receipt = {'version': 1, 'suite': suite, 'commit': commit,
@@ -428,6 +456,15 @@ def verify_evidence(plan, directory, results, commit):
         actual = junit_refs(path, suite)
         require(actual == set(refs), f'{suite} evidence differs from inventory: missing={sorted(set(refs)-actual)}, unexpected={sorted(actual-set(refs))}')
         verified[suite] = {'tests':len(actual), 'sha256':hashlib.sha256(path.read_bytes()).hexdigest()}
+    if 'frontend' in selected:
+        path = find_report(directory, 'playwright-junit.xml')
+        actual = junit_refs(path, 'browser')
+        require(actual == BROWSER_CASES, 'Browser evidence differs from required cases')
+        verified['browser'] = {'tests': len(actual), 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
+        path = find_report(directory, 'playwright-enabled-junit.xml')
+        actual = junit_refs(path, 'browser_enabled')
+        require(actual == BROWSER_ENABLED_CASES, 'Enabled browser evidence differs from required cases')
+        verified['browser_enabled'] = {'tests': len(actual), 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
     if 'database' in selected:
         require(find_report(directory, 'cleanup-count.txt').read_text().strip() == '0', 'Database cleanup is missing or incomplete')
     for suite in set(selected) & {'frontend', 'database'}:

@@ -2,6 +2,7 @@ import { createClient } from "../supabase/browser";
 
 export async function verifyEmailOtp(email: string, token: string) {
   const normalizedEmail = email.trim().toLowerCase();
+  const normalizedToken = token.replace(/\s/g, "");
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
     return {
@@ -10,7 +11,7 @@ export async function verifyEmailOtp(email: string, token: string) {
     };
   }
 
-  if (!/^[0-9]{6}$/.test(token)) {
+  if (!/^[0-9]{6}$/.test(normalizedToken)) {
     return {
       success: false,
       error: "Enter the six-digit verification code.",
@@ -29,7 +30,7 @@ export async function verifyEmailOtp(email: string, token: string) {
 
     const { data, error } = await supabase.auth.verifyOtp({
       email: normalizedEmail,
-      token,
+      token: normalizedToken,
       type: "email",
     });
 

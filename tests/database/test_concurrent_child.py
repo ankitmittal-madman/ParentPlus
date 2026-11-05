@@ -71,6 +71,8 @@ def main():
     print("Test request ID:", request_id)
 
     try:
+        # Both sessions need the same committed, synthetic-only enable during this race.
+        query("BEGIN; GRANT EXECUTE ON FUNCTION public.create_child(text,uuid) TO authenticated; UPDATE public.child_creation_controls SET enabled=true WHERE id=true; COMMIT;")
         with ThreadPoolExecutor(max_workers=2) as pool:
             futures = [
                 pool.submit(create_child, request_id)
@@ -106,7 +108,10 @@ SELECT
         print("PASS: Concurrent child creation")
 
     finally:
-        cleanup(request_id)
+        try:
+            cleanup(request_id)
+        finally:
+            query("BEGIN; UPDATE public.child_creation_controls SET enabled=false WHERE id=true; REVOKE EXECUTE ON FUNCTION public.create_child(text,uuid) FROM authenticated; COMMIT;")
         print("PASS: Test cleanup completed")
 
 

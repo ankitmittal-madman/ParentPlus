@@ -80,3 +80,39 @@ are inspected. Keep this index concise and link detailed feature reports.
 Do not close broad security checklist items just because a narrower test passed.
 The ten product gaps and their conditional release blockers remain in the audit
 and registry; the documentation foundation changes none of their statuses.
+
+## Reconstructed email verification screen — local scope
+
+The reconstructed uncommitted slice uses mocked UI verification and keeps live OTP disabled by default. New scenarios cover accepted/rejected verification, field-associated errors, changing the email and concurrent submission; the successful state also receives keyboard focus. The initial focused tests failed because the code field was absent; the separate focus regression failed before its fix. Inspect the current local quality plan and reports for exact snapshot results; earlier environment results do not attest to this reconstructed work.
+
+An independent reviewer identified incomplete session-aware continuation and sign-out, provider template compatibility, and potential account enumeration when provider responses differ for unknown accounts. These remain open for the live sign-in slice; no hosted provider was contacted. Complete sign-in browser E2E and real-provider sign-in remain release gaps.
+
+## Browser test and evidence extension — local scope
+
+The initial two Playwright scenarios exercise the login page through a real local Chromium browser with OTP disabled: invalid email and the disabled-provider response. Browser page requests outside the fixed localhost origin are intercepted, but this is not an operating-system network sandbox. The frontend CI workflow was changed locally to install Chromium and run these checks before attesting; the change has not been verified on GitHub.
+
+An independent reviewer identified that skipped browser tests could otherwise appear as a successful frontend job. The quality gate now requires a Playwright JUnit report containing exactly the required cases, including the synthetic schedule preview, with no skipped, failed or missing results, and binds its digest in the frontend receipt. Regression tests exercise absent, skipped, wrong-case and altered evidence. A reviewer rechecked the correction and reported no remaining blocking finding in that scope. Inspect the current source-bound summary for the full run; hosted CI for this change, complete sign-in, live OTP and session behavior remain unverified.
+
+## Local sign-out — current scope
+
+The local screen and helper cover current-session sign-out after successful verification, generic failure handling and duplicate-submission protection using mocked provider responses. An independent reviewer found the SDK can remove local state before returning a provider error. A synthetic-fetch test using the actual SDK reproduced this; the screen now reports uncertainty rather than claiming an active session, and successful sign-out restores keyboard focus. The reviewer rechecked the correction and found no further important issue in this local slice. Inspect the source-bound local gate for current results. A local sign-out request is not proof of global device revocation, live provider behavior, session restoration or access authorization.
+
+## Session restoration — current local scope
+
+The local login screen uses provider `getUser` to choose between a signed-in display, sign-in form for a missing session, and a fail-closed retry for provider or configuration failures. Tests use mocked results and disabled mode makes no provider call. An independent reviewer identified that provider identity alone does not prove email verification; the screen now uses neutral signed-in wording, and retry focus was corrected. Inspect the current source-bound gate and final review for exact results. Cross-tab changes, expiry over time, live provider integration and server-side authorization remain unverified release gaps.
+
+## Synthetic schedule preview — local scope
+
+The schedule component and local Chromium tests cover the example-data notice and labelled list of course, batch and example session time. They do not establish backend scheduling, child access, enrollment or browser E2E for real scheduling. Inspect current local quality evidence and independent review for this source snapshot.
+
+## Session-change safety — current local scope
+
+Auth event handling is tested with synthetic notifications and deferred promises, including stale session/OTP results, sign-out failures during account changes, prior-email clearing, provider revalidation and unsubscribe. Independent review found account-switch and stale-email races; regression tests reproduced them and the revised implementation was rechecked. Exact current results belong to the source-bound gate summary. Mocked notifications do not establish live cross-tab delivery, remote revocation, timely expiry, or authorization of protected data.
+
+## Session resume revalidation — local scope
+
+When live authentication is enabled, returning focus or visibility triggers a recheck; disabled mode does not check. A signed-out user’s OTP entry or in-flight request is preserved if the provider confirms signed-out state. Tests use deferred promises for events overtaking older checks. Tests use synthetic focus events and mocked provider responses. Current source-bound gate evidence and independent review determine the result for the working snapshot. This is not continuous expiry monitoring, verified real cross-tab delivery, remote revocation or authorization to child/workspace data.
+
+## Scheduling recurrence foundation — local scope
+
+A pure local utility and tests cover one-off and bounded weekly recurrence, IANA time zones, daylight-saving gaps and overlaps, offset changes, elapsed duration, invalid input and occurrence boundaries. An independent reviewer found no material defect in the initial implementation and requested additional boundary coverage, which was added. The utility is not a backend authorization mechanism and is not integrated with persistent schedules. Inspect the current source-bound gate and independent re-review for exact results; hosted, UI and database scheduling behavior remains unimplemented.

@@ -55,7 +55,7 @@ Use TDD where practical: reproduce the expected failure first, implement the sma
 | Dependencies, CI or gate | Broad regressions, lockfile integrity, gate positive/negative tests, source/receipt validation and workflow syntax validation; examine impact on existing check enforcement |
 | Documentation only | Registry/gate validation, links/commands and consistency review; product suites only if selection/risk requires them |
 
-There is currently no installed browser E2E suite. If a feature requires it, add a suitable local harness within scope or report the release blocker; do not claim the existing component tests are E2E. New third-party services or paid tools require approval.
+The browser E2E suite currently covers two disabled-OTP login cases and the synthetic schedule preview. If a feature requires additional browser coverage, add the suitable tests within scope or report the release blocker; do not claim component tests are E2E or that these limited cases establish a complete sign-in journey. New third-party services or paid tools require approval.
 
 Do not use zero-test runs, skipped/disabled security cases, expected failures or formatter success as substitutes for passing required tests. Capture exit codes even through pipelines (`set -euo pipefail`), inspect actual case identities/counts and keep passed, failed, skipped and unrun distinct. Do not repeatedly broaden testing after relevant checks pass unless code changes or unresolved findings justify it.
 
