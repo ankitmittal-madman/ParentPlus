@@ -6,14 +6,15 @@ const other='22222222-2222-4222-8222-222222222222';
 const enc=x=>Buffer.from(JSON.stringify(x)).toString('base64url');
 const tokenFor=id=>enc({alg:'HS256',typ:'JWT'})+'.'+enc({sub:id,aud:'authenticated',role:'authenticated',exp:4102444800,iat:1700000000})+'.c3ludGhldGlj';
 const user={id:actor,aud:'authenticated',role:'authenticated',email:'parent@example.test',app_metadata:{},user_metadata:{},created_at:'2026-01-01T00:00:00.000Z'};
-let current=null,history=[],fenced=new Set(),lose=false,failBefore=false,events=[];
-function reset(){current=null;history=[];fenced=new Set();lose=false;failBefore=false;events=[]}
+let current=null,history=[],fenced=new Set(),lose=false,loseAck=false,failBefore=false,events=[];
+function reset(){current=null;history=[];fenced=new Set();lose=false;loseAck=false;failBefore=false;events=[]}
 const server=http.createServer(async(req,res)=>{
   res.setHeader('Access-Control-Allow-Origin','http://127.0.0.1:3190');res.setHeader('Access-Control-Allow-Headers','authorization, apikey, content-type, x-client-info, x-supabase-api-version');res.setHeader('Access-Control-Allow-Methods','GET, POST, OPTIONS');res.setHeader('Content-Type','application/json');
   if(req.method==='OPTIONS'){res.writeHead(204);return res.end();}
   let body='';for await(const chunk of req)body+=chunk;let args={};try{if(body)args=JSON.parse(body)}catch{res.writeHead(400);return res.end('{}');}
   if(req.url==='/__test/reset'&&req.method==='POST'){reset();return res.end('{}');}
   if(req.url==='/__test/lose'&&req.method==='POST'){lose=true;return res.end('{}');}
+  if(req.url==='/__test/lose-ack'&&req.method==='POST'){loseAck=true;return res.end('{}');}
   if(req.url==='/__test/fail-before'&&req.method==='POST'){failBefore=true;return res.end('{}');}
   if(req.url==='/__test/events'&&req.method==='GET')return res.end(JSON.stringify(events));
   const identity=[actor,other].find(id=>req.headers.authorization==='Bearer '+tokenFor(id));
@@ -34,7 +35,7 @@ const server=http.createServer(async(req,res)=>{
     if(lose){lose=false;res.writeHead(503);return res.end(JSON.stringify({message:'synthetic response lost'}));}
     return res.end(JSON.stringify([{...current,disposition:'created'}]));
   }
-  if(op==='app_ack_child_creation'){if(current&&current.intent_id===args.p_intent_id){current.acknowledged=true;return res.end('true');}res.writeHead(400);return res.end('{}');}
+  if(op==='app_ack_child_creation'){if(current&&current.intent_id===args.p_intent_id){current.acknowledged=true;if(loseAck){loseAck=false;res.writeHead(503);return res.end(JSON.stringify({message:'synthetic confirmation response lost'}));}return res.end('true');}res.writeHead(400);return res.end('{}');}
   if(op==='app_fence_child_creation'){
     if(current&&current.request_id===args.p_request_id&&current.prior_intent_id===args.p_prior_intent_id)return res.end('"created"');
     if((!current&&args.p_prior_intent_id===null)||(current&&current.acknowledged&&current.intent_id===args.p_prior_intent_id)){fenced.add(args.p_request_id);return res.end('"fenced"');}

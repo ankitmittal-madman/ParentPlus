@@ -467,7 +467,7 @@ class GateTests(unittest.TestCase):
         (directory/'playwright-junit.xml').write_text('<testsuites tests="4" failures="0" errors="0" skipped="0"><testsuite tests="3" failures="0" errors="0" skipped="0"><testcase classname="login.spec.ts" name="rejects an invalid email in the browser" time="0.1"/><testcase classname="login.spec.ts" name="does not claim email delivery when live OTP is disabled" time="0.1"/><testcase classname="login.spec.ts" name="keeps parent profiles unavailable when disabled" time="0.1"/></testsuite><testsuite tests="1" failures="0" errors="0" skipped="0"><testcase classname="schedule.spec.ts" name="shows a clearly labelled example schedule" time="0.1"/></testsuite></testsuites>')
 
     def write_enabled_browser_fixture(self, directory):
-        (directory/'playwright-enabled-junit.xml').write_text('<testsuites tests="4" failures="0" errors="0" skipped="0"><testsuite tests="4" failures="0" errors="0" skipped="0"><testcase classname="parent-enabled.spec.mjs" name="creates and confirms a profile using a synthetic provider" time="0.1"/><testcase classname="parent-enabled.spec.mjs" name="recovers an unconfirmed request after another tab creates a later profile" time="0.1"/><testcase classname="parent-enabled.spec.mjs" name="keeps an unresolved request locked after an account switch" time="0.1"/><testcase classname="parent-enabled.spec.mjs" name="fences an uncommitted request before allowing a new profile" time="0.1"/></testsuite></testsuites>')
+        (directory/'playwright-enabled-junit.xml').write_text('<testsuites tests="5" failures="0" errors="0" skipped="0"><testsuite tests="5" failures="0" errors="0" skipped="0"><testcase classname="parent-enabled.spec.mjs" name="creates and confirms a profile using a synthetic provider" time="0.1"/><testcase classname="parent-enabled.spec.mjs" name="recovers a confirmation committed before its response was lost" time="0.1"/><testcase classname="parent-enabled.spec.mjs" name="recovers an unconfirmed request after another tab creates a later profile" time="0.1"/><testcase classname="parent-enabled.spec.mjs" name="keeps an unresolved request locked after an account switch" time="0.1"/><testcase classname="parent-enabled.spec.mjs" name="fences an uncommitted request before allowing a new profile" time="0.1"/></testsuite></testsuites>')
 
     def test_browser_evidence_rejects_skips_missing_cases_and_tampering(self):
         for mutation in ['missing', 'skipped', 'wrong_case', 'digest']:
@@ -502,7 +502,7 @@ class GateTests(unittest.TestCase):
                 gate.verify_evidence(plan, Path(d), {'quality': 'success', 'frontend': 'success'}, 'a'*40)
 
     def test_enabled_browser_evidence_rejects_skips_missing_cases_and_tampering(self):
-        for mutation in ['missing', 'skipped', 'wrong_case', 'missing_fence', 'digest']:
+        for mutation in ['missing', 'skipped', 'wrong_case', 'missing_fence', 'missing_confirmation', 'digest']:
             with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as d:
                 directory = Path(d)
                 plan = {'version': 1, 'commit': 'a'*40, 'selected': {'quality': [], 'frontend': []},
@@ -516,9 +516,12 @@ class GateTests(unittest.TestCase):
                 elif mutation == 'wrong_case': report.write_text(report.read_text().replace('creates and confirms a profile using a synthetic provider', 'different case'))
                 elif mutation == 'missing_fence':
                     case = '<testcase classname="parent-enabled.spec.mjs" name="fences an uncommitted request before allowing a new profile" time="0.1"/>'
-                    report.write_text(report.read_text().replace('tests="4"', 'tests="3"').replace(case, ''))
+                    report.write_text(report.read_text().replace('tests="5"', 'tests="4"').replace(case, ''))
+                elif mutation == 'missing_confirmation':
+                    case = '<testcase classname="parent-enabled.spec.mjs" name="recovers a confirmation committed before its response was lost" time="0.1"/>'
+                    report.write_text(report.read_text().replace('tests="5"', 'tests="4"').replace(case, ''))
                 else: report.write_text(report.read_text().replace('time="0.1"', 'time="0.2"', 1))
-                if mutation in {'skipped', 'wrong_case', 'missing_fence'}: self.write_receipt_fixture(directory, plan)
+                if mutation in {'skipped', 'wrong_case', 'missing_fence', 'missing_confirmation'}: self.write_receipt_fixture(directory, plan)
                 with self.assertRaises(gate.GateError):
                     gate.verify_evidence(plan, directory, {'quality': 'success', 'frontend': 'success'}, 'a'*40)
 

@@ -56,6 +56,35 @@ test("creates and confirms a profile using a synthetic provider", async ({ page,
   expect(events).toContain("app_list_created_children");
 });
 
+test("recovers a confirmation committed before its response was lost", async ({ page, request }) => {
+  await page.goto("/parent/children");
+  await page.getByRole("button", { name: "Check creation status" }).click();
+  await page.getByLabel("Child name").fill("Asha");
+  await page.getByRole("button", { name: "Create profile" }).click();
+  await expect(page.getByText("Profile: Asha")).toBeVisible();
+  await page.getByRole("button", { name: "Load profiles" }).click();
+  await expect(page.getByRole("listitem")).toHaveText(["Asha"]);
+  expect((await request.post(fake + "/__test/lose-ack")).ok()).toBeTruthy();
+  await page.getByRole("button", { name: "Confirm result" }).click();
+  await expect(page.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+  await expect(page.getByRole("listitem")).toHaveCount(0);
+  await expect(page.getByText("Unable to confirm the profile. Check creation status before trying again.")).toBeVisible();
+  const marker = await page.evaluate(() => sessionStorage.getItem("parentplus.child-creation-recovery.v1"));
+  expect(marker).toBeTruthy();
+  expect(marker).not.toContain("Asha");
+  expect(JSON.parse(marker).operation).toBe("ack");
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+  await page.getByRole("button", { name: "Check creation status" }).click();
+  await expect(page.getByText("Result confirmed")).toBeVisible();
+  expect(await page.evaluate(() => sessionStorage.getItem("parentplus.child-creation-recovery.v1"))).toBeNull();
+  await page.getByRole("button", { name: "Load profiles" }).click();
+  await expect(page.getByRole("listitem")).toHaveText(["Asha"]);
+  const events = await (await request.get(fake + "/__test/events")).json();
+  expect(events.filter((event) => event === "app_ack_child_creation")).toHaveLength(1);
+  expect(events.filter((event) => event === "app_begin_child_creation")).toHaveLength(1);
+});
+
 test("recovers an unconfirmed request after another tab creates a later profile", async ({ page, context, request }) => {
   expect((await request.post(fake + "/__test/lose")).ok()).toBeTruthy();
   await page.goto("/parent/children");

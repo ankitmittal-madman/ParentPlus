@@ -169,7 +169,7 @@ export default function ChildCreationPanel() {
     }
     writeContext.current = scope; inFlight.current = true; setBusy(true); setRetryReady(false); setRetryAckReady(false); setFenceReady(false); setNotice("");
     const currentGeneration = ++generation.current;
-    if (operation === "begin") window.dispatchEvent(new Event(CHILD_PROFILES_CHANGED));
+    window.dispatchEvent(new Event(CHILD_PROFILES_CHANGED));
     try {
       const result = operation === "begin"
         ? await runChildCreation({ operation, expectedActorId: actor, displayName: cleanName, priorIntentId, requestId })
