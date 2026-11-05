@@ -27,3 +27,39 @@ test("shows a clearly labelled example schedule", async ({ page }) => {
   await page.reload();
   await expect(page.getByRole("status")).toHaveCount(0);
 });
+
+test("supports coach navigation at a narrow phone width", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.route("**/*", async (route) => {
+    const url = new URL(route.request().url());
+    if (url.origin === "http://127.0.0.1:3189") await route.continue();
+    else await route.abort();
+  });
+  await page.goto("/schedule");
+  const nav = page.getByRole("navigation", { name: "Main navigation" });
+  const links = nav.getByRole("link");
+  await expect(links).toHaveCount(5);
+  await expect(nav.getByRole("link", { name: "Schedule" })).toHaveAttribute("aria-current", "page");
+  const boxes = await links.evaluateAll((elements) => elements.map((element) => {
+    const box = element.getBoundingClientRect();
+    const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+    return { left: box.left, right: box.right, width: box.width, height: box.height, hit: !!hit && element.contains(hit) };
+  }));
+  for (const [index, box] of boxes.entries()) {
+    expect(box.width).toBeGreaterThanOrEqual(44);
+    expect(box.height).toBeGreaterThanOrEqual(44);
+    expect(box.left).toBeGreaterThanOrEqual(0);
+    expect(box.right).toBeLessThanOrEqual(320);
+    expect(box.hit).toBe(true);
+    if (index) expect(box.left).toBeGreaterThanOrEqual(boxes[index - 1].right);
+  }
+  await nav.getByRole("link", { name: "Today" }).focus();
+  await page.keyboard.press("Tab");
+  await expect(nav.getByRole("link", { name: "Schedule" })).toBeFocused();
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Tab");
+  await expect(nav.getByRole("link", { name: "Students" })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/students$/);
+  await expect(nav.getByRole("link", { name: "Students" })).toHaveAttribute("aria-current", "page");
+});

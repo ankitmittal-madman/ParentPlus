@@ -1,5 +1,9 @@
 # ParentPlus Build Progress
 
+## Coach navigation browser check — 2026-11-05
+
+An automated Chromium scenario checks the five coach navigation links at a 320-pixel viewport: visible and non-overlapping 44-pixel targets, centre hit testing, keyboard traversal, navigation and current-page indication. This is one synthetic browser viewport, not physical-device, touch, screen-reader, contrast or full accessibility verification.
+
 ## Sign-in error browser checks — 2026-11-05
 
 The local disabled-provider browser checks now verify that correcting an invalid email clears its warning, and a valid email is not marked invalid when email verification is unavailable. This uses Chromium and a disabled provider; real assistive technology and live email delivery remain unverified.
