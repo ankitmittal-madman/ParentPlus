@@ -11722,6 +11722,534 @@
         "apps/web/src/app/parent/children/child-creation-panel.tsx",
         "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
       ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-01",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_original_request_remains_recoverable_after_advance.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_original_request_remains_recoverable_after_advance"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_original_request_remains_recoverable_after_advance"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-02",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_wrong_prior_and_actor_do_not_reveal_history.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_wrong_prior_and_actor_do_not_reveal_history"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_wrong_prior_and_actor_do_not_reveal_history"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-03",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_revoked_guardian_cannot_recover_previous_profile.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_revoked_guardian_cannot_recover_previous_profile"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_revoked_guardian_cannot_recover_previous_profile"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-04",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_current_request_is_not_claimed_as_historical.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_current_request_is_not_claimed_as_historical"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_current_request_is_not_claimed_as_historical"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-05",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_history_and_trigger_are_private_and_disabled_by_default.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_history_and_trigger_are_private_and_disabled_by_default"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_history_and_trigger_are_private_and_disabled_by_default"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-06",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_rolled_back_advance_does_not_archive_current.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_rolled_back_advance_does_not_archive_current"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_rolled_back_advance_does_not_archive_current"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-07",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_deleted_old_profile_returns_unknown.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_deleted_old_profile_returns_unknown"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_deleted_old_profile_returns_unknown"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-08",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_reused_request_id_is_bound_to_original_prior.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_reused_request_id_is_bound_to_original_prior"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_reused_request_id_is_bound_to_original_prior"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-09",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_missing_identity_cannot_recover_history.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_missing_identity_cannot_recover_history"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_missing_identity_cannot_recover_history"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-10",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_archive_failure_rolls_back_new_profile_and_intent.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_archive_failure_rolls_back_new_profile_and_intent"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_archive_failure_rolls_back_new_profile_and_intent"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-11",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_advance_commit_before_history_lookup.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_advance_commit_before_history_lookup"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_advance_commit_before_history_lookup"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-12",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_advance_rollback_before_history_lookup.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_advance_rollback_before_history_lookup"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_advance_rollback_before_history_lookup"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-13",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_history_lookup_commit_before_advance.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_history_lookup_commit_before_advance"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_history_lookup_commit_before_advance"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-14",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_history_lookup_rollback_before_advance.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_history_lookup_rollback_before_advance"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_history_lookup_rollback_before_advance"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-15",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_revocation_commits_before_history_lookup.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_revocation_commits_before_history_lookup"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_revocation_commits_before_history_lookup"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-16",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_history_lookup_commits_before_revocation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_history_lookup_commits_before_revocation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_history_lookup_commits_before_revocation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-17",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_disable_commits_before_history_lookup.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_disable_commits_before_history_lookup"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_disable_commits_before_history_lookup"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-HISTORY-CHILDRECOVERYHISTORYTESTS-18",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryHistoryTests.test_history_lookup_commits_before_disable.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryHistoryTests.test_history_lookup_commits_before_disable"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_history.ChildRecoveryHistoryTests.test_history_lookup_commits_before_disable"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_history.py",
+        "supabase/migrations/20261105003700_child_creation_recovery_history.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-HISTORY-RUNCHILDCREATION-01",
+      "domain": "parent-child-creation-journey",
+      "description": "runChildCreation > checks an earlier request only for the verified actor.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runChildCreation > checks an earlier request only for the verified actor"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-journey.test.ts::runChildCreation > checks an earlier request only for the verified actor"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-journey.test.ts",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-HISTORY-RUNCHILDCREATION-02",
+      "domain": "parent-child-creation-journey",
+      "description": "runChildCreation > rejects malformed history requests, switched accounts and invalid outcomes.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runChildCreation > rejects malformed history requests, switched accounts and invalid outcomes"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-journey.test.ts::runChildCreation > rejects malformed history requests, switched accounts and invalid outcomes"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-journey.test.ts",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-HISTORY-PARENTCHILDPANELS-01",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > recognises an earlier verified request without presenting the later profile as its result.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > recognises an earlier verified request without presenting the later profile as its result"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > recognises an earlier verified request without presenting the later profile as its result"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-HISTORY-PARENTCHILDPANELS-02",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > keeps an earlier request locked when its history is unknown.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > keeps an earlier request locked when its history is unknown"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > keeps an earlier request locked when its history is unknown"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-HISTORY-PARENTCHILDPANELS-03",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > ignores a historical result after sign-out.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > ignores a historical result after sign-out"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > ignores a historical result after sign-out"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-HISTORY-PARENTCHILDPANELS-04",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > does not clear a replaced marker after history is found.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > does not clear a replaced marker after history is found"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > does not clear a replaced marker after history is found"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
     }
   ]
 }

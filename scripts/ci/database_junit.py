@@ -21,6 +21,7 @@ MODULES = [
     "tests.database.test_child_authorization",
     "tests.database.test_child_creation_journey",
     "tests.database.test_child_recovery_fence",
+    "tests.database.test_child_recovery_history",
     "tests.database.test_connection_authorization",
     "tests.database.test_approval_safety",
     "tests.database.test_approval_authorization_races",
@@ -104,7 +105,7 @@ def main():
 
     print(f"JUnit evidence written: {output}", flush=True)
 
-    expected_tests = 302
+    expected_tests = 320
     actual_tests = result.testsRun
     recorded_cases = len(group.findall("testcase"))
 
@@ -129,7 +130,7 @@ def main():
         )
         return 1
 
-    print("PASS: All 302 database unit tests verified", flush=True)
+    print("PASS: All 320 database unit tests verified", flush=True)
     return 0
 
 

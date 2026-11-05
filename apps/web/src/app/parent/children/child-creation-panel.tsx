@@ -121,16 +121,23 @@ export default function ChildCreationPanel() {
     try {
       const result = await runChildCreation({ operation: "fence", expectedActorId: required.actor, priorIntentId: required.priorIntentId, requestId: required.requestId });
       if (currentGeneration !== generation.current) return;
-      if (!result.ok || result.operation !== "fence" || !sameId(result.actorId, required.actor) || result.disposition === "unknown") throw new Error("unresolved");
+      if (!result.ok || result.operation !== "fence" || !sameId(result.actorId, required.actor)) throw new Error("unresolved");
+      let historical = false;
+      if (result.disposition === "unknown") {
+        const history = await runChildCreation({ operation: "history", expectedActorId: required.actor, priorIntentId: required.priorIntentId, requestId: required.requestId });
+        if (currentGeneration !== generation.current) return;
+        if (!history.ok || history.operation !== "history" || !sameId(history.actorId, required.actor) || history.disposition !== "found") throw new Error("unresolved");
+        historical = true;
+      }
       const status = await runChildCreation({ operation: "status", expectedActorId: required.actor });
       if (currentGeneration !== generation.current) return;
       if (!status.ok || status.operation !== "status" || !sameId(status.actorId, required.actor)) throw new Error("unresolved");
       const matching = status.current && sameId(status.current.requestId, required.requestId) && sameId(status.current.priorIntentId, required.priorIntentId);
       const priorCurrent = required.priorIntentId === null ? status.current === null : !!status.current && sameId(status.current.intentId, required.priorIntentId) && status.current.acknowledged;
-      if ((result.disposition === "created" && !matching) || (result.disposition === "fenced" && !priorCurrent)) throw new Error("unresolved");
+      if (!historical && ((result.disposition === "created" && !matching) || (result.disposition === "fenced" && !priorCurrent))) throw new Error("unresolved");
       if (!clearRecoveryMarker(markerFor(required))) throw new Error("unresolved");
-      requiredRecovery.current = null; setRecoveryLocked(false); setChecked(true); setCurrent(status.current); setAdding(status.current === null); setName("");
-      setNotice(result.disposition === "fenced" ? "The earlier request cannot create a profile. You can start a new request." : "The earlier profile was found. Please check the result.");
+      requiredRecovery.current = null; setRecoveryLocked(false); setChecked(!historical); setCurrent(historical ? null : status.current); setAdding(!historical && status.current === null); setName("");
+      setNotice(historical ? "An earlier request created a profile. Check creation status before adding another." : result.disposition === "fenced" ? "The earlier request cannot create a profile. You can start a new request." : "The earlier profile was found. Please check the result.");
       window.dispatchEvent(new Event(CHILD_CREATION_CONFIRMED));
     } catch {
       if (currentGeneration === generation.current) { setChecked(false); setCurrent(null); setAdding(false); setRecoveryLocked(true); setNotice("Unable to resolve the earlier request. Check creation status again."); }

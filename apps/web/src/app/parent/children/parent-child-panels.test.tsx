@@ -502,4 +502,79 @@ describe("ParentChildPanels", () => {
     expect(screen.queryByLabelText("Child name")).not.toBeInTheDocument();
   });
 
+  it("recognises an earlier verified request without presenting the later profile as its result", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    const advanced = { ...current, intentId: "cccccccc-cccc-4ccc-8ccc-cccccccccccc", priorIntentId: current.intentId, requestId: "dddddddd-dddd-4ddd-8ddd-dddddddddddd", name: "Later profile" };
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: null, requestId: request }));
+    mocks.run.mockReset().mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: advanced })
+      .mockResolvedValueOnce({ ok: true, operation: "fence", actorId: actor, disposition: "unknown" })
+      .mockResolvedValueOnce({ ok: true, operation: "history", actorId: actor, disposition: "found" })
+      .mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: advanced });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Stop waiting for this request" }));
+    expect(await screen.findByText(/earlier request created a profile/i)).toBeInTheDocument();
+    expect(mocks.run).toHaveBeenNthCalledWith(3, { operation: "history", expectedActorId: actor, priorIntentId: null, requestId: request });
+    expect(screen.queryByText(/Later profile/)).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Add another profile" })).not.toBeInTheDocument();
+    expect(sessionStorage.getItem(key)).toBeNull();
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeEnabled();
+  });
+
+  it("keeps an earlier request locked when its history is unknown", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: null, requestId: request }));
+    mocks.run.mockReset().mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: null })
+      .mockResolvedValueOnce({ ok: true, operation: "fence", actorId: actor, disposition: "unknown" })
+      .mockResolvedValueOnce({ ok: true, operation: "history", actorId: actor, disposition: "unknown" });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Stop waiting for this request" }));
+    expect(await screen.findByText(/unable to resolve/i)).toBeInTheDocument();
+    expect(sessionStorage.getItem(key)).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+  });
+
+  it("ignores a historical result after sign-out", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: null, requestId: request }));
+    const listeners: ((event: string) => void)[] = [];
+    mocks.observe.mockImplementation((callback) => { listeners.push(callback); return () => {}; });
+    let finish!: (value: unknown) => void;
+    mocks.run.mockReset().mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: null })
+      .mockResolvedValueOnce({ ok: true, operation: "fence", actorId: actor, disposition: "unknown" })
+      .mockReturnValueOnce(new Promise((resolve) => { finish = resolve; }));
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Stop waiting for this request" }));
+    await vi.waitFor(() => expect(mocks.run).toHaveBeenCalledTimes(3));
+    act(() => listeners.forEach((listener) => listener("SIGNED_OUT")));
+    await act(async () => finish({ ok: true, operation: "history", actorId: actor, disposition: "found" }));
+    expect(mocks.run).toHaveBeenCalledTimes(3);
+    expect(sessionStorage.getItem(key)).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+    expect(screen.queryByText(/earlier request created a profile/i)).not.toBeInTheDocument();
+  });
+
+  it("does not clear a replaced marker after history is found", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    const changedRequest = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: null, requestId: request }));
+    let finish!: (value: unknown) => void;
+    mocks.run.mockReset().mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: null })
+      .mockResolvedValueOnce({ ok: true, operation: "fence", actorId: actor, disposition: "unknown" })
+      .mockReturnValueOnce(new Promise((resolve) => { finish = resolve; }))
+      .mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: null });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Stop waiting for this request" }));
+    await vi.waitFor(() => expect(mocks.run).toHaveBeenCalledTimes(3));
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: null, requestId: changedRequest }));
+    await act(async () => finish({ ok: true, operation: "history", actorId: actor, disposition: "found" }));
+    expect(await screen.findByText(/unable to resolve/i)).toBeInTheDocument();
+    expect(sessionStorage.getItem(key)).toContain(changedRequest);
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+    expect(screen.queryByText(/earlier request created a profile/i)).not.toBeInTheDocument();
+  });
+
 });

@@ -80,4 +80,17 @@ describe("runChildCreation", () => {
     expect((await runChildCreation({ operation: "fence", expectedActorId: actor, priorIntentId: null, requestId: request })).ok).toBe(false);
   });
 
+  it("checks an earlier request only for the verified actor", async () => {
+    mocks.rpc.mockResolvedValueOnce({ data: "found", error: null });
+    expect(await runChildCreation({ operation: "history", expectedActorId: actor, priorIntentId: null, requestId: request })).toEqual({ ok: true, operation: "history", actorId: actor, disposition: "found" });
+    expect(mocks.rpc).toHaveBeenCalledWith("app_historical_child_creation", { p_prior_intent_id: null, p_request_id: request });
+  });
+  it("rejects malformed history requests, switched accounts and invalid outcomes", async () => {
+    expect((await runChildCreation({ operation: "history", expectedActorId: actor, priorIntentId: null, requestId: "bad" })).ok).toBe(false);
+    expect((await runChildCreation({ operation: "history", expectedActorId: other, priorIntentId: null, requestId: request })).ok).toBe(false);
+    expect(mocks.rpc).not.toHaveBeenCalled();
+    mocks.rpc.mockResolvedValueOnce({ data: "unexpected", error: null });
+    expect((await runChildCreation({ operation: "history", expectedActorId: actor, priorIntentId: null, requestId: request })).ok).toBe(false);
+  });
+
 });

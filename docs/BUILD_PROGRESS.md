@@ -1,9 +1,13 @@
 # ParentPlus Build Progress
 
 
+## Earlier child-creation recovery local draft — 2026-11-05
+
+Draft migration 037 archives name-free references to future superseded requests. After a guarded history lookup, the local interface can recognise an earlier request without displaying a later profile as its result; it requires a fresh status check before another creation. Synthetic tests cover access, rollback and lock ordering. Already-overwritten history, deletion and retention policy, immediate revocation and real-provider end-to-end checks remain open; the feature stays disabled.
+
 ## Child-creation recovery scenario checks — 2026-11-05
 
-Mocked component tests exercise recovery for a second profile, unacknowledged or mismatched state, account changes, a replaced tab marker and an earlier request superseded by a later profile. An older overwritten intent still remains unresolved; these tests do not provide cross-tab history or real-provider evidence. See the [recovery fence spec](superpowers/specs/2026-11-05-child-creation-recovery-fence.md).
+Mocked component tests exercise recovery for a second profile, unacknowledged or mismatched state, account changes, a replaced tab marker and an earlier request superseded by a later profile. These mocked tests do not themselves establish cross-tab history or real-provider evidence; migration 037 adds a separate local history draft for future superseded intents. See the [recovery fence spec](superpowers/specs/2026-11-05-child-creation-recovery-fence.md).
 
 ## Child-creation recovery fence local draft — 2026-11-05
 

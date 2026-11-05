@@ -10,7 +10,8 @@ type Result =
   | { ok: true; operation: "status"; actorId: string; current: Current | null }
   | { ok: true; operation: "begin"; current: Current; disposition: "created" | "existing" }
   | { ok: true; operation: "ack" }
-  | { ok: true; operation: "fence"; actorId: string; disposition: "fenced" | "created" | "unknown" };
+  | { ok: true; operation: "fence"; actorId: string; disposition: "fenced" | "created" | "unknown" }
+  | { ok: true; operation: "history"; actorId: string; disposition: "found" | "unknown" };
 
 function parseCurrent(row: unknown): Current | null {
   if (!row || typeof row !== "object" || Array.isArray(row)) return null;
@@ -29,7 +30,7 @@ export async function runChildCreation(input: unknown): Promise<Result> {
   if (!input || typeof input !== "object" || Array.isArray(input)) return invalid;
   const value = input as Record<string, unknown>;
   const { operation, expectedActorId } = value;
-  if (operation !== "status" && operation !== "begin" && operation !== "ack" && operation !== "fence") return invalid;
+  if (operation !== "status" && operation !== "begin" && operation !== "ack" && operation !== "fence" && operation !== "history") return invalid;
   if ((operation !== "status" || expectedActorId !== undefined) && !isId(expectedActorId)) return invalid;
   let name = "";
   if (operation === "begin") {
@@ -38,12 +39,17 @@ export async function runChildCreation(input: unknown): Promise<Result> {
     if (!name || Array.from(name).length > 120) return invalid;
   }
   if (operation === "ack" && !isId(value.intentId)) return invalid;
-  if (operation === "fence" && (!isId(value.requestId) || (value.priorIntentId !== null && !isId(value.priorIntentId)))) return invalid;
+  if ((operation === "fence" || operation === "history") && (!isId(value.requestId) || (value.priorIntentId !== null && !isId(value.priorIntentId)))) return invalid;
   try {
     const client = await createClient();
     const { data: identity, error: identityError } = await client.auth.getUser();
     const actor = identity.user?.id;
     if (identityError || !isId(actor) || (isId(expectedActorId) && actor.toLowerCase() !== expectedActorId.toLowerCase())) return unavailable;
+    if (operation === "history") {
+      const { data, error } = await client.rpc("app_historical_child_creation", { p_prior_intent_id: value.priorIntentId, p_request_id: value.requestId });
+      if (error || (data !== "found" && data !== "unknown")) return unavailable;
+      return { ok: true, operation, actorId: actor, disposition: data };
+    }
     if (operation === "fence") {
       const { data, error } = await client.rpc("app_fence_child_creation", { p_prior_intent_id: value.priorIntentId, p_request_id: value.requestId });
       if (error || (data !== "fenced" && data !== "created" && data !== "unknown")) return unavailable;
