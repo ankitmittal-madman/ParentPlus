@@ -4,16 +4,24 @@ if [ "${PARENTPLUS_SYNTHETIC_BROWSER:-}" != '1' ] || [ "$#" -ne 1 ] || [ ! -d "$
   echo 'STOP: Isolated synthetic browser configuration required' >&2
   exit 1
 fi
+if [ -n "${PARENTPLUS_VERIFY_DROPPED_UID:-}" ] || [ -n "${PARENTPLUS_VERIFY_DROPPED_GID:-}" ]; then
+  printf '%s\n' privilege > "$1/test-phase"
+  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  /usr/bin/python3 "$script_dir/verify-browser-privileges.py"
+fi
 printf '%s\n' network > "$1/test-phase"
-ip link set lo up
-python3 - <<'PY'
+# The privileged bootstrap already enabled loopback before dropping privileges.
+if ! /usr/bin/python3 -c 'import json,subprocess,sys; x=json.loads(subprocess.check_output(["/usr/sbin/ip","-j","link","show","lo"],text=True)); sys.exit(0 if x and "UP" in x[0]["flags"] else 1)'; then
+  /usr/sbin/ip link set lo up
+fi
+/usr/bin/python3 - <<'PY'
 import json
 import subprocess
-links = json.loads(subprocess.check_output(['ip', '-j', 'link', 'show'], text=True))
+links = json.loads(subprocess.check_output(['/usr/sbin/ip', '-j', 'link', 'show'], text=True))
 if {link['ifname'] for link in links} != {'lo'}:
     raise SystemExit('STOP: Browser namespace has non-loopback interfaces')
 for family in ('-4', '-6'):
-    routes = json.loads(subprocess.check_output(['ip', '-j', family, 'route', 'show', 'table', 'all'], text=True))
+    routes = json.loads(subprocess.check_output(['/usr/sbin/ip', '-j', family, 'route', 'show', 'table', 'all'], text=True))
     if any(route.get('dev') not in (None, 'lo') or route.get('dst') == 'default' for route in routes):
         raise SystemExit('STOP: Browser namespace has a non-loopback route')
 PY

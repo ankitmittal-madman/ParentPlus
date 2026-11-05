@@ -20,10 +20,27 @@ if [ ! -x "$chromium_path" ]; then
   echo "STOP: Local Chromium executable is unavailable" >&2
   exit 1
 fi
-if ! unshare -Urn true >/dev/null 2>&1; then
-  echo '::error title=Isolated browser prerequisites::The required user and network namespace could not be created.'
-  echo 'STOP: network namespace is unavailable; enabled browser checks cannot run safely' >&2
+namespace_mode=user
+runner_uid="$(/usr/bin/id -u)"
+runner_gid="$(/usr/bin/id -g)"
+if [ "$runner_uid" -eq 0 ] || [ "$runner_gid" -eq 0 ]; then
+  echo '::error title=Isolated browser prerequisites::The browser runner requires a non-root user and group.'
+  echo 'STOP: browser runner cannot run as root' >&2
   exit 1
+fi
+if ! unshare -Urn true >/dev/null 2>&1; then
+  namespace_mode=unavailable
+  # Only fixed system commands run before privileges are dropped.
+  if [ "${PARENTPLUS_SKIP_PRIVILEGED_FALLBACK:-}" != '1' ] && [ "$runner_uid" -ne 0 ] &&
+     [ -x /usr/bin/sudo ] && [ -x /usr/bin/unshare ] && [ -x /usr/sbin/ip ] && [ -x /usr/bin/setpriv ] &&
+     /usr/bin/sudo -n /usr/bin/unshare -n -- /usr/bin/true >/dev/null 2>&1; then
+    namespace_mode=privileged-bootstrap
+  fi
+  if [ "$namespace_mode" = unavailable ]; then
+    echo '::error title=Isolated browser prerequisites::The required network namespace could not be created safely.'
+    echo 'STOP: network namespace is unavailable; enabled browser checks cannot run safely' >&2
+    exit 1
+  fi
 fi
 
 # Copy an application snapshot excluding root env files and build/test caches.
@@ -41,14 +58,31 @@ fi
 # A fresh network namespace has no external interfaces; all processes, including
 # Next server actions and Chromium, run there with a scrubbed environment.
 printf '%s\n' namespace > "$test_dir/test-phase"
-if ! unshare -Urn env -i PATH="$PATH" NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--dns-result-order=ipv4first \
-  PARENTPLUS_SYNTHETIC_BROWSER=1 PARENTPLUS_CHROMIUM_PATH="$chromium_path" \
-  NEXT_PUBLIC_ENABLE_LIVE_OTP=true NEXT_PUBLIC_ENABLE_ACCOUNT_SIGNUP=false \
-  NEXT_PUBLIC_SUPABASE_URL=http://localhost:3191 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=synthetic-public-key \
-  PARENTPLUS_ENABLE_PARENT_CHILD_LIST=true PARENTPLUS_ENABLE_CHILD_CREATION=true \
-  bash "$repo_root/scripts/ci/enabled-parent-browser-inner.sh" "$test_dir"; then
+clean_env=(PATH="$PATH" NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--dns-result-order=ipv4first
+  PARENTPLUS_SYNTHETIC_BROWSER=1 PARENTPLUS_CHROMIUM_PATH="$chromium_path"
+  NEXT_PUBLIC_ENABLE_LIVE_OTP=true NEXT_PUBLIC_ENABLE_ACCOUNT_SIGNUP=false
+  NEXT_PUBLIC_SUPABASE_URL=http://localhost:3191 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=synthetic-public-key
+  PARENTPLUS_ENABLE_PARENT_CHILD_LIST=true PARENTPLUS_ENABLE_CHILD_CREATION=true)
+inner_script="$repo_root/scripts/ci/enabled-parent-browser-inner.sh"
+run_namespace() {
+  if [ "$namespace_mode" = user ]; then
+    unshare -Urn /usr/bin/env -i "${clean_env[@]}" /bin/bash "$inner_script" "$test_dir"
+  else
+    # No checkout code or interpolated shell text executes as root.
+    /usr/bin/sudo -n /usr/bin/unshare -n -- /usr/bin/env -i /bin/bash --noprofile --norc -c '
+      set -eu
+      /usr/sbin/ip link set lo up
+      target_uid="$1"; target_gid="$2"; shift 2
+      exec /usr/bin/setpriv --reuid "$target_uid" --regid "$target_gid" --clear-groups \
+        --bounding-set=-all --inh-caps=-all --ambient-caps=-all --no-new-privs "$@"
+    ' parentplus "$runner_uid" "$runner_gid" /usr/bin/env -i "${clean_env[@]}" \
+      PARENTPLUS_VERIFY_DROPPED_UID="$runner_uid" PARENTPLUS_VERIFY_DROPPED_GID="$runner_gid" \
+      /bin/bash "$inner_script" "$test_dir"
+  fi
+}
+if ! run_namespace; then
   phase="$(cat "$test_dir/test-phase" 2>/dev/null || printf '%s' unknown)"
-  case "$phase" in namespace|network|build|startup|browser) ;; *) phase=unknown ;; esac
+  case "$phase" in namespace|privilege|network|build|startup|browser) ;; *) phase=unknown ;; esac
   echo "::error title=Isolated browser checks::The synthetic browser run failed during the $phase phase."
   echo "STOP: isolated browser run failed during $phase" >&2
   exit 1

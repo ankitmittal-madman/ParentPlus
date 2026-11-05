@@ -519,16 +519,48 @@ class GateTests(unittest.TestCase):
                 with self.assertRaises(gate.GateError):
                     gate.verify_evidence(plan, directory, {'quality': 'success', 'frontend': 'success'}, 'a'*40)
 
-    def test_enabled_browser_stops_when_namespace_is_unavailable(self):
+    def test_enabled_browser_stops_when_namespace_or_caller_is_unsafe(self):
         with tempfile.TemporaryDirectory() as d:
             fake = Path(d)/'unshare'
             fake.write_text('#!/bin/sh\nexit 1\n')
             fake.chmod(0o755)
-            env = {'PATH': d+os.pathsep+os.environ.get('PATH', ''), 'PARENTPLUS_CHROMIUM_PATH': '/bin/true'}
+            env = {'PATH': d+os.pathsep+os.environ.get('PATH', ''), 'PARENTPLUS_CHROMIUM_PATH': '/bin/true', 'PARENTPLUS_SKIP_PRIVILEGED_FALLBACK': '1'}
             result = subprocess.run(['bash', str(ROOT/'scripts/ci/enabled-parent-browser.sh')], cwd=ROOT, env=env, capture_output=True, text=True, timeout=30)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn('network namespace is unavailable', result.stderr)
+            expected = 'browser runner cannot run as root' if os.getuid() == 0 or os.getgid() == 0 else 'network namespace is unavailable'
+            self.assertIn(expected, result.stderr)
             self.assertNotIn('PASS: Isolated enabled parent browser checks completed', result.stdout)
+
+    def test_enabled_browser_rejects_an_unverified_privilege_drop(self):
+        with tempfile.TemporaryDirectory() as d:
+            env = {'PATH': os.environ.get('PATH', ''), 'PARENTPLUS_SYNTHETIC_BROWSER': '1',
+                   'PARENTPLUS_VERIFY_DROPPED_UID': str(os.getuid()+1), 'PARENTPLUS_VERIFY_DROPPED_GID': str(os.getgid()+1)}
+            result = subprocess.run(['bash', str(ROOT/'scripts/ci/enabled-parent-browser-inner.sh'), d], cwd=ROOT, env=env, capture_output=True, text=True, timeout=10)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn('privileged bootstrap verification failed', result.stderr)
+            self.assertFalse((Path(d)/'test-next.log').exists())
+
+    def test_privileged_browser_verifier_rejects_each_unsafe_identity_or_capability(self):
+        import runpy
+        verify = runpy.run_path(str(ROOT/'scripts/ci/verify-browser-privileges.py'))['valid_drop']
+        fields = {'Uid': '1001 1001 1001 1001', 'Gid': '1002 1002 1002 1002', 'Groups': '',
+                  'CapInh': '0000000000000000', 'CapPrm': '0000000000000000', 'CapEff': '0000000000000000',
+                  'CapBnd': '0000000000000000', 'CapAmb': '0000000000000000', 'NoNewPrivs': '1'}
+        self.assertTrue(verify(fields, 1001, 1002))
+        changes = {'Uid': '1001 0 1001 1001', 'Gid': '1002 1002 0 1002', 'Groups': '1002',
+                   'CapInh': '1', 'CapPrm': '1', 'CapEff': '1', 'CapBnd': '1', 'CapAmb': '1', 'NoNewPrivs': '0'}
+        for name, value in changes.items():
+            with self.subTest(field=name):
+                bad = dict(fields); bad[name] = value
+                self.assertFalse(verify(bad, 1001, 1002))
+        missing = dict(fields); missing.pop('CapEff')
+        self.assertFalse(verify(missing, 1001, 1002))
+        self.assertFalse(verify(fields, 0, 1002))
+        self.assertFalse(verify(fields, 1001, 0))
+        empty_uid = dict(fields); empty_uid['Uid'] = ''
+        self.assertFalse(verify(empty_uid, 1001, 1002))
+        invalid_capability = dict(fields); invalid_capability['CapPrm'] = 'not-hex'
+        self.assertFalse(verify(invalid_capability, 1001, 1002))
 
     def test_enabled_browser_config_rejects_nonlocal_provider(self):
         env = {'PATH': os.environ.get('PATH', ''), 'PARENTPLUS_SYNTHETIC_BROWSER': '1',

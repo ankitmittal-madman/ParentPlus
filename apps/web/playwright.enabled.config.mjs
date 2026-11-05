@@ -10,10 +10,10 @@ if (process.env.PARENTPLUS_SYNTHETIC_BROWSER !== "1" ||
   throw new Error("The enabled browser suite requires the isolated synthetic provider.");
 }
 if (!process.env.PARENTPLUS_CHROMIUM_PATH) throw new Error("An explicit local Chromium executable is required.");
-const links = JSON.parse(execFileSync("ip", ["-j", "link", "show"], { encoding: "utf8" }));
+const links = JSON.parse(execFileSync("/usr/sbin/ip", ["-j", "link", "show"], { encoding: "utf8" }));
 if (links.length !== 1 || links[0].ifname !== "lo") throw new Error("Enabled browser checks require a loopback-only namespace.");
 for (const family of ["-4", "-6"]) {
-  const routes = JSON.parse(execFileSync("ip", ["-j", family, "route", "show", "table", "all"], { encoding: "utf8" }));
+  const routes = JSON.parse(execFileSync("/usr/sbin/ip", ["-j", family, "route", "show", "table", "all"], { encoding: "utf8" }));
   if (routes.some((route) => (route.dev && route.dev !== "lo") || route.dst === "default")) throw new Error("Enabled browser checks require loopback-only routes.");
 }
 
