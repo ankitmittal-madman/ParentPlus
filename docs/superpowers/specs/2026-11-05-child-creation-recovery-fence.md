@@ -42,6 +42,7 @@ The separate enabled browser suite uses Chromium and the actual Next application
 | Unconfirmed response, a second tab advances and the first recovers | `recovers an unconfirmed request after another tab creates a later profile` |
 | Original account changes while a request is unresolved | `keeps an unresolved request locked after an account switch` |
 | A committed confirmation with a lost response recovers after reload | `recovers a confirmation committed before its response was lost` |
+| An uncommitted confirmation is retried after reload | `retries an uncommitted confirmation after reload` |
 | A synthetic uncommitted request is fenced before a new one | `fences an uncommitted request before allowing a new profile` |
 
-The quality gate requires the five exact browser cases in addition to the existing disabled-feature browser evidence; the feature remains disabled by default.
+The quality gate requires the six exact browser cases in addition to the existing disabled-feature browser evidence; the feature remains disabled by default.

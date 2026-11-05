@@ -85,6 +85,44 @@ test("recovers a confirmation committed before its response was lost", async ({ 
   expect(events.filter((event) => event === "app_begin_child_creation")).toHaveLength(1);
 });
 
+test("retries an uncommitted confirmation after reload", async ({ page, request }) => {
+  await page.goto("/parent/children");
+  await page.getByRole("button", { name: "Check creation status" }).click();
+  await page.getByLabel("Child name").fill("Asha");
+  await page.getByRole("button", { name: "Create profile" }).click();
+  await expect(page.getByText("Profile: Asha")).toBeVisible();
+  expect((await request.post(fake + "/__test/fail-before-ack")).ok()).toBeTruthy();
+  await page.getByRole("button", { name: "Confirm result" }).click();
+  await expect(page.getByText("Unable to confirm the profile. Check creation status before trying again.")).toBeVisible();
+  const marker = await page.evaluate(() => sessionStorage.getItem("parentplus.child-creation-recovery.v1"));
+  expect(marker).toBeTruthy();
+  expect(marker).not.toContain("Asha");
+  expect(JSON.parse(marker).operation).toBe("ack");
+  const headers = { authorization: "Bearer " + tokenFor(actor), apikey: "synthetic-public-key" };
+  const before = await (await request.post(fake + "/rest/v1/rpc/app_current_child_creation", { headers, data: {} })).json();
+  expect(before).toHaveLength(1);
+  expect(before[0].intent_id).toBe(JSON.parse(marker).priorIntentId);
+  expect(before[0].acknowledged).toBe(false);
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+  await page.getByRole("button", { name: "Check creation status" }).click();
+  await expect(page.getByRole("button", { name: "Retry confirmation" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+  await page.getByRole("button", { name: "Retry confirmation" }).click();
+  await expect(page.getByText("Result confirmed")).toBeVisible();
+  const after = await (await request.post(fake + "/rest/v1/rpc/app_current_child_creation", { headers, data: {} })).json();
+  expect(after).toHaveLength(1);
+  expect(after[0].intent_id).toBe(before[0].intent_id);
+  expect(after[0].child_id).toBe(before[0].child_id);
+  expect(after[0].acknowledged).toBe(true);
+  expect(await page.evaluate(() => sessionStorage.getItem("parentplus.child-creation-recovery.v1"))).toBeNull();
+  await page.getByRole("button", { name: "Load profiles" }).click();
+  await expect(page.getByRole("listitem")).toHaveText(["Asha"]);
+  const events = await (await request.get(fake + "/__test/events")).json();
+  expect(events.filter((event) => event === "app_ack_child_creation")).toHaveLength(2);
+  expect(events.filter((event) => event === "app_begin_child_creation")).toHaveLength(1);
+});
+
 test("recovers an unconfirmed request after another tab creates a later profile", async ({ page, context, request }) => {
   expect((await request.post(fake + "/__test/lose")).ok()).toBeTruthy();
   await page.goto("/parent/children");
