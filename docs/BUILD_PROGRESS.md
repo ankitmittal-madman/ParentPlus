@@ -1,5 +1,9 @@
 # ParentPlus Build Progress
 
+## Sign-in error accessibility — 2026-11-05
+
+The local email form marks an email invalid for a format error, but does not mark a valid email invalid when requesting or re-requesting a code fails. Component tests use simulated service responses; live delivery and real assistive-technology testing remain unverified.
+
 
 ## Isolated enabled parent browser checks — 2026-11-05
 

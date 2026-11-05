@@ -189,7 +189,12 @@ describe("LoginPage", () => {
     expect(screen.getByRole("alert")).toHaveTextContent(
       "Enter a valid email address."
     );
+    expect(screen.getByLabelText("Email address")).toHaveAttribute("aria-invalid", "true");
     expect(mocks.requestEmailOtp).not.toHaveBeenCalled();
+    fireEvent.change(screen.getByLabelText("Email address"), { target: { value: "parent@example.com" } });
+    expect(screen.getByLabelText("Email address")).not.toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByLabelText("Email address")).not.toHaveAttribute("aria-describedby");
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
   it("requests OTP with normalized email", async () => {
@@ -247,6 +252,7 @@ describe("LoginPage", () => {
     fireEvent.change(await screen.findByLabelText("Verification code"), { target: { value: "123456" } });
     fireEvent.click(await screen.findByRole("button", { name: "Request another code" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Unable to confirm the latest request");
+    expect(screen.getByLabelText("Email address")).not.toHaveAttribute("aria-invalid", "true");
     expect(mocks.requestEmailOtp).toHaveBeenCalledTimes(2);
     expect(mocks.requestEmailOtp).toHaveBeenLastCalledWith("test@example.com");
     expect(screen.queryByText(/Verification request accepted/)).not.toBeInTheDocument();
@@ -306,6 +312,7 @@ describe("LoginPage", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "not enabled"
     );
+    expect(screen.getByLabelText("Email address")).not.toHaveAttribute("aria-invalid", "true");
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 

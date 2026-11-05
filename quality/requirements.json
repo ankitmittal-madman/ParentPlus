@@ -7251,7 +7251,8 @@
       "risk": "high",
       "coverage": "covered",
       "scenarios": [
-        "LoginPage > rejects invalid email without calling OTP service"
+        "LoginPage > rejects invalid email without calling OTP service",
+        "Invalid email is identified to assistive technology"
       ],
       "tests": [
         {
@@ -7314,7 +7315,8 @@
       "risk": "high",
       "coverage": "covered",
       "scenarios": [
-        "LoginPage > shows service errors without claiming delivery"
+        "LoginPage > shows service errors without claiming delivery",
+        "A service failure does not mark a valid email invalid"
       ],
       "tests": [
         {
@@ -8117,7 +8119,8 @@
       "risk": "high",
       "coverage": "covered",
       "scenarios": [
-        "LoginPage > clearly offers another code request and reports a failed retry"
+        "LoginPage > clearly offers another code request and reports a failed retry",
+        "A failed retry does not mark a valid email invalid"
       ],
       "tests": [
         {

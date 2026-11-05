@@ -8,6 +8,8 @@ import { signOut } from "@/lib/auth/sign-out";
 import { getSessionStatus } from "@/lib/auth/session-status";
 import { observeSessionChanges } from "@/lib/auth/session-observer";
 
+const EMAIL_FORMAT = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [accountMode, setAccountMode] = useState<"sign-in" | "sign-up">("sign-in");
@@ -175,7 +177,7 @@ export default function LoginPage() {
     const normalized = email.trim().toLowerCase();
     const retrying = submitted;
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
+    if (!EMAIL_FORMAT.test(normalized)) {
       setError("Enter a valid email address.");
       setSubmitted(false);
       return;
@@ -343,7 +345,7 @@ export default function LoginPage() {
                 setCode("");
                 setCodeError("");
               }}
-              aria-invalid={Boolean(error)}
+              aria-invalid={Boolean(error) && !EMAIL_FORMAT.test(email.trim().toLowerCase())}
               aria-describedby={error ? "email-error" : undefined}
               placeholder="you@example.com"
               className="w-full rounded-xl border border-gray-300 px-4 py-3 text-base text-ink outline-none focus-visible:ring-2 focus-visible:ring-brand"
