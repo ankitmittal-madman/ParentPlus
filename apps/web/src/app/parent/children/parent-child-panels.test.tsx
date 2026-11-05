@@ -386,4 +386,120 @@ describe("ParentChildPanels", () => {
     expect(screen.queryByLabelText("Child name")).not.toBeInTheDocument();
   });
 
+  it("allows another profile only after fencing the exact request for an acknowledged prior profile", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    const prior = { ...current, acknowledged: true };
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: prior.intentId, requestId: "dddddddd-dddd-4ddd-8ddd-dddddddddddd" }));
+    mocks.run.mockReset().mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: prior })
+      .mockResolvedValueOnce({ ok: true, operation: "fence", actorId: actor, disposition: "fenced" })
+      .mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: prior });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Stop waiting for this request" }));
+    const add = await screen.findByRole("button", { name: "Add another profile" });
+    expect(sessionStorage.getItem(key)).toBeNull();
+    expect(mocks.run).toHaveBeenNthCalledWith(2, { operation: "fence", expectedActorId: actor, priorIntentId: prior.intentId, requestId: "dddddddd-dddd-4ddd-8ddd-dddddddddddd" });
+    fireEvent.click(add);
+    expect(await screen.findByLabelText("Child name")).toBeInTheDocument();
+  });
+
+  it("does not unlock if the prior profile is unacknowledged after fencing", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    const prior = { ...current, acknowledged: true };
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: prior.intentId, requestId: "dddddddd-dddd-4ddd-8ddd-dddddddddddd" }));
+    mocks.run.mockReset().mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: prior })
+      .mockResolvedValueOnce({ ok: true, operation: "fence", actorId: actor, disposition: "fenced" })
+      .mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: { ...prior, acknowledged: false } });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Stop waiting for this request" }));
+    expect(await screen.findByText(/unable to resolve/i)).toBeInTheDocument();
+    expect(sessionStorage.getItem(key)).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+    expect(screen.queryByRole("button", { name: "Add another profile" })).not.toBeInTheDocument();
+  });
+
+  it("does not unlock if the recovery marker is replaced during fencing", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    const changedRequest = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: null, requestId: request }));
+    let finish!: (value: unknown) => void;
+    mocks.run.mockReset().mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: null })
+      .mockReturnValueOnce(new Promise((resolve) => { finish = resolve; }))
+      .mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: null });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Stop waiting for this request" }));
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: null, requestId: changedRequest }));
+    await act(async () => finish({ ok: true, operation: "fence", actorId: actor, disposition: "fenced" }));
+    expect(await screen.findByText(/unable to resolve/i)).toBeInTheDocument();
+    expect(sessionStorage.getItem(key)).toContain(changedRequest);
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+    expect(screen.queryByLabelText("Child name")).not.toBeInTheDocument();
+  });
+
+  it("does not unlock if the fence response identifies a different account", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: null, requestId: request }));
+    mocks.run.mockReset().mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: null })
+      .mockResolvedValueOnce({ ok: true, operation: "fence", actorId: "22222222-2222-4222-8222-222222222222", disposition: "fenced" });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Stop waiting for this request" }));
+    expect(await screen.findByText(/unable to resolve/i)).toBeInTheDocument();
+    expect(mocks.run).toHaveBeenCalledTimes(2);
+    expect(sessionStorage.getItem(key)).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+  });
+
+  it("keeps a request unresolved when mocked current intent differs and fence returns unknown", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    const advanced = { ...current, intentId: "cccccccc-cccc-4ccc-8ccc-cccccccccccc", priorIntentId: current.intentId, requestId: "dddddddd-dddd-4ddd-8ddd-dddddddddddd", name: "Other profile" };
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: null, requestId: request }));
+    mocks.run.mockReset().mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: advanced })
+      .mockResolvedValueOnce({ ok: true, operation: "fence", actorId: actor, disposition: "unknown" });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Stop waiting for this request" }));
+    expect(await screen.findByText(/unable to resolve/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Other profile/)).not.toBeInTheDocument();
+    expect(sessionStorage.getItem(key)).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+  });
+
+  it("does not show a different profile when a created result cannot be matched", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: null, requestId: request }));
+    mocks.run.mockReset().mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: null })
+      .mockResolvedValueOnce({ ok: true, operation: "fence", actorId: actor, disposition: "created" })
+      .mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: { ...current, requestId: "dddddddd-dddd-4ddd-8ddd-dddddddddddd", name: "Other profile" } });
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Stop waiting for this request" }));
+    expect(await screen.findByText(/unable to resolve/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Other profile/)).not.toBeInTheDocument();
+    expect(sessionStorage.getItem(key)).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+  });
+
+  it("ignores a post-fence status response after sign-out", async () => {
+    const key = "parentplus.child-creation-recovery.v1";
+    sessionStorage.setItem(key, JSON.stringify({ version: 1, actor, operation: "begin", priorIntentId: null, requestId: request }));
+    const listeners: ((event: string) => void)[] = [];
+    mocks.observe.mockImplementation((callback) => { listeners.push(callback); return () => {}; });
+    let finish!: (value: unknown) => void;
+    mocks.run.mockReset().mockResolvedValueOnce({ ok: true, operation: "status", actorId: actor, current: null })
+      .mockResolvedValueOnce({ ok: true, operation: "fence", actorId: actor, disposition: "fenced" })
+      .mockReturnValueOnce(new Promise((resolve) => { finish = resolve; }));
+    render(<><CreatedChildrenPanel /><ChildCreationPanel /></>);
+    fireEvent.click(await screen.findByRole("button", { name: "Check creation status" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Stop waiting for this request" }));
+    await vi.waitFor(() => expect(mocks.run).toHaveBeenCalledTimes(3));
+    act(() => listeners.forEach((listener) => listener("SIGNED_OUT")));
+    await act(async () => finish({ ok: true, operation: "status", actorId: actor, current: null }));
+    expect(sessionStorage.getItem(key)).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Load profiles" })).toBeDisabled();
+    expect(screen.queryByLabelText("Child name")).not.toBeInTheDocument();
+  });
+
 });

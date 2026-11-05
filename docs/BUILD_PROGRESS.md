@@ -1,6 +1,10 @@
 # ParentPlus Build Progress
 
 
+## Child-creation recovery scenario checks — 2026-11-05
+
+Mocked component tests exercise recovery for a second profile, unacknowledged or mismatched state, account changes, a replaced tab marker and an earlier request superseded by a later profile. An older overwritten intent still remains unresolved; these tests do not provide cross-tab history or real-provider evidence. See the [recovery fence spec](superpowers/specs/2026-11-05-child-creation-recovery-fence.md).
+
 ## Child-creation recovery fence local draft — 2026-11-05
 
 Draft migration 036 and a default-off application flow fence an exact unresolved request or find its already-created current result. Local synthetic tests cover both lock orderings, rollbacks, stale references, access and control changes; no hosted data is changed. This is not a complete release: privacy and retention decisions, identity loss, historical outcomes, real provider, signed JWT and enabled browser end-to-end checks remain open. See the [recovery fence spec](superpowers/specs/2026-11-05-child-creation-recovery-fence.md).

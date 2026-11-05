@@ -11568,6 +11568,160 @@
         "apps/web/src/app/parent/children/child-creation-panel.tsx",
         "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
       ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-EDGE-20261105-01",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > allows another profile only after fencing the exact request for an acknowledged prior profile.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > allows another profile only after fencing the exact request for an acknowledged prior profile"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > allows another profile only after fencing the exact request for an acknowledged prior profile"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-EDGE-20261105-02",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > does not unlock if the prior profile is unacknowledged after fencing.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > does not unlock if the prior profile is unacknowledged after fencing"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > does not unlock if the prior profile is unacknowledged after fencing"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-EDGE-20261105-03",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > does not unlock if the recovery marker is replaced during fencing.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > does not unlock if the recovery marker is replaced during fencing"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > does not unlock if the recovery marker is replaced during fencing"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-EDGE-20261105-04",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > does not unlock if the fence response identifies a different account.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > does not unlock if the fence response identifies a different account"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > does not unlock if the fence response identifies a different account"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-EDGE-20261105-05",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > keeps a request unresolved when mocked current intent differs and fence returns unknown.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > keeps a request unresolved when mocked current intent differs and fence returns unknown"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > keeps a request unresolved when mocked current intent differs and fence returns unknown"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-EDGE-20261105-06",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > does not show a different profile when a created result cannot be matched.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > does not show a different profile when a created result cannot be matched"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > does not show a different profile when a created result cannot be matched"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-EDGE-20261105-07",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > ignores a post-fence status response after sign-out.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > ignores a post-fence status response after sign-out"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > ignores a post-fence status response after sign-out"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
     }
   ]
 }
