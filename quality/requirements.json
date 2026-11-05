@@ -6321,7 +6321,7 @@
       "status": "implemented",
       "risk": "high",
       "coverage": "covered",
-      "scenarios": ["LoginPage > associates rejected code errors with the code field"],
+      "scenarios": ["LoginPage > associates rejected code errors with the code field", "The code instruction and error remain associated with the field"],
       "tests": [
         {
           "suite": "frontend",
@@ -8204,7 +8204,8 @@
       "risk": "high",
       "coverage": "covered",
       "scenarios": [
-        "LoginPage > focuses the code field after an accepted verification request"
+        "LoginPage > focuses the code field after an accepted verification request",
+        "The six-digit email code instruction is visible and associated with the code field"
       ],
       "tests": [
         {

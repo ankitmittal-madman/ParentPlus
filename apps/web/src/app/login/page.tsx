@@ -394,6 +394,7 @@ export default function LoginPage() {
               <label htmlFor="verification-code" className="block text-sm font-semibold text-ink">
                 Verification code
               </label>
+              <p id="code-hint" className="text-sm text-muted">Enter the six-digit code from your email.</p>
               <input
                 id="verification-code"
                 ref={codeRef}
@@ -403,7 +404,7 @@ export default function LoginPage() {
                 onChange={(event) => { setCode(event.target.value); setCodeError(""); }}
                 disabled={loading || verifying}
                 aria-invalid={Boolean(codeError)}
-                aria-describedby={codeError ? "code-error" : undefined}
+                aria-describedby={codeError ? "code-hint code-error" : "code-hint"}
                 className="w-full rounded-xl border border-gray-300 px-4 py-3 focus-visible:ring-2 focus-visible:ring-brand"
               />
               {codeError && <p id="code-error" role="alert" className="text-sm text-red-700">{codeError}</p>}

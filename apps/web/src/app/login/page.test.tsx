@@ -231,6 +231,8 @@ describe("LoginPage", () => {
     fireEvent.click(screen.getByRole("button", { name: "Continue" }));
     const code = await screen.findByLabelText("Verification code");
     await waitFor(() => expect(code).toHaveFocus());
+    expect(screen.getByText("Enter the six-digit code from your email.")).toBeVisible();
+    expect(code).toHaveAccessibleDescription("Enter the six-digit code from your email.");
   });
 
   it("allows requesting another code after an accepted request", async () => {
@@ -369,7 +371,7 @@ describe("LoginPage", () => {
     fireEvent.change(await screen.findByLabelText("Verification code"), { target: { value: "123456" } });
     fireEvent.click(screen.getByRole("button", { name: "Verify code" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Verification failed");
-    expect(screen.getByLabelText("Verification code")).toHaveAccessibleDescription("Verification failed. Check your code or request a new one.");
+    expect(screen.getByLabelText("Verification code")).toHaveAccessibleDescription("Enter the six-digit code from your email. Verification failed. Check your code or request a new one.");
     expect(screen.getByLabelText("Email address")).not.toHaveAttribute("aria-invalid", "true");
     expect(screen.queryByText("Signed in.")).not.toBeInTheDocument();
   });

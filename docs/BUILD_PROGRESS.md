@@ -1,5 +1,9 @@
 # ParentPlus Build Progress
 
+## Email code entry guidance — 2026-11-05
+
+The local code-entry screen tells users to enter the six-digit code from their email and associates the instruction and any error with the code field. Component tests use simulated provider responses; real email templates, live delivery and assistive-technology testing remain unverified.
+
 ## Sign-in error accessibility — 2026-11-05
 
 The local email form marks an email invalid for a format error, but does not mark a valid email invalid when requesting or re-requesting a code fails. Component tests use simulated service responses; live delivery and real assistive-technology testing remain unverified.
