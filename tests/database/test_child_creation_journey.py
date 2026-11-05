@@ -6,6 +6,20 @@ from tests.database.test_child_authorization import run_sql
 
 
 class ChildCreationJourneyTests(unittest.TestCase):
+    def test_empty_status_does_not_prevent_a_later_creation(self):
+        """A synthetic later request can commit after an empty status check."""
+        actor = '11111111-1111-4111-8111-111111111111'
+        name = 'Synthetic delayed request '+uuid.uuid4().hex
+        request_id = str(uuid.uuid4())
+        self.addCleanup(query, f"BEGIN; DELETE FROM public.child_creation_intents WHERE actor_id='{actor}' AND display_name='{name}'; DELETE FROM public.guardianships WHERE child_id IN (SELECT id FROM public.children WHERE created_by='{actor}' AND display_name='{name}'); DELETE FROM public.children WHERE created_by='{actor}' AND display_name='{name}'; UPDATE public.child_creation_controls SET enabled=false WHERE id=true; COMMIT;")
+        query('UPDATE public.child_creation_controls SET enabled=true WHERE id=true;')
+        status = query(f"BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{actor}',true); SELECT 'STATUS:' || count(*) FROM public.app_current_child_creation(); COMMIT;")
+        self.assertIn('STATUS:0', status.splitlines())
+        created = query(f"BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{actor}',true); SELECT 'CREATED:' || disposition FROM public.app_begin_child_creation('{name}',NULL,'{request_id}'); COMMIT;")
+        self.assertIn('CREATED:created', created.splitlines())
+        later_status = query(f"BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{actor}',true); SELECT 'MATCH:' || count(*) FROM public.app_current_child_creation() WHERE request_id='{request_id}'; COMMIT;")
+        self.assertIn('MATCH:1', later_status.splitlines())
+
     def test_child_journey_default_off_and_legacy_rpc_private(self):
         result = run_sql("""
 BEGIN; SET LOCAL ROLE authenticated;

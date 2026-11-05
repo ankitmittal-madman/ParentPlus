@@ -103,7 +103,7 @@ def main():
 
     print(f"JUnit evidence written: {output}", flush=True)
 
-    expected_tests = 283
+    expected_tests = 284
     actual_tests = result.testsRun
     recorded_cases = len(group.findall("testcase"))
 
@@ -128,7 +128,7 @@ def main():
         )
         return 1
 
-    print("PASS: All 283 database unit tests verified", flush=True)
+    print("PASS: All 284 database unit tests verified", flush=True)
     return 0
 
 

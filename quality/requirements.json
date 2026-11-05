@@ -10930,6 +10930,28 @@
         "apps/web/src/app/parent/children/created-children-panel.tsx",
         "docs/superpowers/specs/2026-11-04-child-creation-journey.md"
       ]
+    },
+    {
+      "id": "DB-CHILD-RECOVERY-EMPTY-STATUS-01",
+      "domain": "parent-child-creation-journey",
+      "description": "An empty creation status does not rule out a subsequent creation request.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "Empty status precedes a successful later synthetic creation in a separate transaction."
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_creation_journey.ChildCreationJourneyTests.test_empty_status_does_not_prevent_a_later_creation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_creation_journey.py",
+        "supabase/migrations/20261104003500_child_creation_journey.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
     }
   ]
 }
