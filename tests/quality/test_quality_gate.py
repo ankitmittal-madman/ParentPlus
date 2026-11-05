@@ -288,7 +288,7 @@ class GateTests(unittest.TestCase):
 
     def write_receipt_fixture(self, directory, plan):
         plan.setdefault('source_fingerprint','f'*64)
-        for suite, names in [('frontend',['vitest-junit.xml','playwright-junit.xml']), ('database',['unittest-junit.xml','concurrency-junit.xml','cleanup-count.txt'])]:
+        for suite, names in [('frontend',['vitest-junit.xml','playwright-junit.xml','playwright-enabled-junit.xml']), ('database',['unittest-junit.xml','concurrency-junit.xml','cleanup-count.txt'])]:
             if suite in plan['selected']:
                 receipt={'version':1, 'suite':suite, 'commit':plan['commit'],
                     'source_fingerprint':plan['source_fingerprint'],
@@ -463,7 +463,11 @@ class GateTests(unittest.TestCase):
                     gate.verify_evidence(plan, Path(d), results, 'a'*40)
 
     def write_browser_fixture(self, directory):
+        self.write_enabled_browser_fixture(directory)
         (directory/'playwright-junit.xml').write_text('<testsuites tests="4" failures="0" errors="0" skipped="0"><testsuite tests="3" failures="0" errors="0" skipped="0"><testcase classname="login.spec.ts" name="rejects an invalid email in the browser" time="0.1"/><testcase classname="login.spec.ts" name="does not claim email delivery when live OTP is disabled" time="0.1"/><testcase classname="login.spec.ts" name="keeps parent profiles unavailable when disabled" time="0.1"/></testsuite><testsuite tests="1" failures="0" errors="0" skipped="0"><testcase classname="schedule.spec.ts" name="shows a clearly labelled example schedule" time="0.1"/></testsuite></testsuites>')
+
+    def write_enabled_browser_fixture(self, directory):
+        (directory/'playwright-enabled-junit.xml').write_text('<testsuites tests="3" failures="0" errors="0" skipped="0"><testsuite tests="3" failures="0" errors="0" skipped="0"><testcase classname="parent-enabled.spec.mjs" name="creates and confirms a profile using a synthetic provider" time="0.1"/><testcase classname="parent-enabled.spec.mjs" name="recovers an unconfirmed request after another tab creates a later profile" time="0.1"/><testcase classname="parent-enabled.spec.mjs" name="keeps an unresolved request locked after an account switch" time="0.1"/></testsuite></testsuites>')
 
     def test_browser_evidence_rejects_skips_missing_cases_and_tampering(self):
         for mutation in ['missing', 'skipped', 'wrong_case', 'digest']:
@@ -496,6 +500,54 @@ class GateTests(unittest.TestCase):
             self.write_receipt_fixture(Path(d), plan)
             with self.assertRaises(gate.GateError):
                 gate.verify_evidence(plan, Path(d), {'quality': 'success', 'frontend': 'success'}, 'a'*40)
+
+    def test_enabled_browser_evidence_rejects_skips_missing_cases_and_tampering(self):
+        for mutation in ['missing', 'skipped', 'wrong_case', 'digest']:
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as d:
+                directory = Path(d)
+                plan = {'version': 1, 'commit': 'a'*40, 'selected': {'quality': [], 'frontend': []},
+                        'expected': {'frontend': ['apps/web/src/a.test.ts::A > works']}}
+                (directory/'vitest-junit.xml').write_text('<testsuites><testsuite tests="1" failures="0" errors="0" skipped="0"><testcase classname="src/a.test.ts" name="A &gt; works" time="0.1"/></testsuite></testsuites>')
+                self.write_browser_fixture(directory)
+                self.write_receipt_fixture(directory, plan)
+                report = directory/'playwright-enabled-junit.xml'
+                if mutation == 'missing': report.unlink()
+                elif mutation == 'skipped': report.write_text(report.read_text().replace('skipped="0"', 'skipped="1"'))
+                elif mutation == 'wrong_case': report.write_text(report.read_text().replace('creates and confirms a profile using a synthetic provider', 'different case'))
+                else: report.write_text(report.read_text().replace('time="0.1"', 'time="0.2"', 1))
+                if mutation in {'skipped', 'wrong_case'}: self.write_receipt_fixture(directory, plan)
+                with self.assertRaises(gate.GateError):
+                    gate.verify_evidence(plan, directory, {'quality': 'success', 'frontend': 'success'}, 'a'*40)
+
+    def test_enabled_browser_config_rejects_nonlocal_provider(self):
+        env = {'PATH': os.environ.get('PATH', ''), 'PARENTPLUS_SYNTHETIC_BROWSER': '1',
+               'PARENTPLUS_CHROMIUM_PATH': '/synthetic/browser', 'NEXT_PUBLIC_SUPABASE_URL': 'https://example.invalid',
+               'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY': 'synthetic-public-key', 'NEXT_PUBLIC_ENABLE_LIVE_OTP': 'true',
+               'PARENTPLUS_ENABLE_PARENT_CHILD_LIST': 'true', 'PARENTPLUS_ENABLE_CHILD_CREATION': 'true'}
+        config = (ROOT/'apps/web/playwright.enabled.config.mjs').as_uri()
+        result = subprocess.run(['node', '--input-type=module', '-e', 'await import(process.argv[1])', config], env=env, capture_output=True, text=True, timeout=10)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('isolated synthetic provider', result.stderr)
+
+    def test_synthetic_provider_rejects_nonlocal_configuration(self):
+        env = {'PATH': os.environ.get('PATH', ''), 'PARENTPLUS_SYNTHETIC_BROWSER': '1',
+               'NEXT_PUBLIC_SUPABASE_URL': 'https://example.invalid', 'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY': 'synthetic-public-key'}
+        result = subprocess.run(['node', str(ROOT/'apps/web/e2e-enabled/fake-supabase.mjs')], env=env, capture_output=True, text=True, timeout=10)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Synthetic provider configuration required', result.stderr)
+
+    def test_frontend_requires_enabled_browser_evidence(self):
+        with tempfile.TemporaryDirectory() as d:
+            directory = Path(d)
+            plan = {'version': 1, 'commit': 'a'*40, 'selected': {'quality': [], 'frontend': []},
+                    'expected': {'frontend': ['apps/web/src/a.test.ts::A > works']}}
+            (directory/'vitest-junit.xml').write_text('<testsuites><testsuite tests="1" failures="0" errors="0" skipped="0"><testcase classname="src/a.test.ts" name="A &gt; works" time="0.1"/></testsuite></testsuites>')
+            self.write_browser_fixture(directory)
+            enabled = directory/'playwright-enabled-junit.xml'
+            if enabled.exists(): enabled.unlink()
+            self.write_receipt_fixture(directory, plan)
+            with self.assertRaises(gate.GateError):
+                gate.verify_evidence(plan, directory, {'quality': 'success', 'frontend': 'success'}, 'a'*40)
 
     def test_frontend_evidence_identity_normalization(self):
         with tempfile.TemporaryDirectory() as d:

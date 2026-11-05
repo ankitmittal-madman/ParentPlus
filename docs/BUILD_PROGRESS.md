@@ -1,6 +1,10 @@
 # ParentPlus Build Progress
 
 
+## Isolated enabled parent browser checks — 2026-11-05
+
+A separate Chromium suite builds and runs the actual Next application with fixed synthetic session data and a local in-memory provider inside a network namespace that exposes only loopback IP interfaces and routes. It covers creation and acknowledgement, an unconfirmed response followed by two-tab advancement and historical recovery, and an account switch. The original disabled-feature browser checks remain separate. CI requires both browser reports and fails if namespace isolation is unavailable. This is simulated-provider evidence, not proof of signed-JWT verification, database authorization or concurrency, hosted behaviour, or filesystem isolation. The feature remains disabled.
+
 ## Parent creation integration simulation — 2026-11-05
 
 Local component integration tests connect the actual parent panels and server actions to a synthetic in-memory provider and mocked session observer. They cover creation, acknowledgement, listing, lost responses, fencing, an advanced request, account change and denied historical access. The advanced request is injected into the fake provider, not a second browser tab. These tests use jsdom and do not exercise real browser-to-database, database concurrency, signed JWTs or a hosted provider. The feature remains disabled.

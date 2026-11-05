@@ -31,3 +31,15 @@ The database diagnostic `ChildCreationJourneyTests.test_empty_status_does_not_pr
 ## Local integration simulation
 
 The actual React panels and server actions are tested together with a synthetic in-memory provider and mocked session observer. One test injects a later request into the fake provider; it is not evidence of a real second browser tab or database transaction. These jsdom tests do not replace real browser-to-database, signed-JWT or hosted-provider verification.
+
+## Isolated enabled browser checks
+
+The separate enabled browser suite uses Chromium and the actual Next application with preseeded synthetic session data and a local in-memory provider. The runner removes root environment files from its temporary copy, scrubs the process environment, and runs the services and browser in a network namespace with loopback-only IP interfaces and routes. This is not filesystem isolation and does not prove host Unix-domain sockets are inaccessible. The normal disabled-feature suite remains separate. CI requires both exact JUnit reports and fails closed if the namespace cannot be created. The fake provider is not evidence of actual database authorization, signed-JWT verification, true database concurrency, email delivery or hosted behaviour.
+
+| Scenario | Required enabled browser case |
+| --- | --- |
+| Create, confirm and list a synthetic profile | `creates and confirms a profile using a synthetic provider` |
+| Unconfirmed response, a second tab advances and the first recovers | `recovers an unconfirmed request after another tab creates a later profile` |
+| Original account changes while a request is unresolved | `keeps an unresolved request locked after an account switch` |
+
+The quality gate requires the three exact browser cases in addition to the existing disabled-feature browser evidence; the feature remains disabled by default.
