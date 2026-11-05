@@ -67,4 +67,17 @@ describe("runChildCreation", () => {
     const result = await runChildCreation({ operation: "status" });
     expect(result.ok).toBe(false); expect(JSON.stringify(result)).not.toContain("private provider detail");
   });
+  it("fences only a validated request for the verified actor", async () => {
+    mocks.rpc.mockResolvedValueOnce({ data: "fenced", error: null });
+    expect(await runChildCreation({ operation: "fence", expectedActorId: actor, priorIntentId: null, requestId: request })).toEqual({ ok: true, operation: "fence", actorId: actor, disposition: "fenced" });
+    expect(mocks.rpc).toHaveBeenCalledWith("app_fence_child_creation", { p_prior_intent_id: null, p_request_id: request });
+  });
+  it("rejects invalid fence input, changed identity and malformed outcomes", async () => {
+    expect((await runChildCreation({ operation: "fence", expectedActorId: actor, priorIntentId: null, requestId: "bad" })).ok).toBe(false);
+    expect((await runChildCreation({ operation: "fence", expectedActorId: other, priorIntentId: null, requestId: request })).ok).toBe(false);
+    expect(mocks.rpc).not.toHaveBeenCalled();
+    mocks.rpc.mockResolvedValueOnce({ data: "unexpected", error: null });
+    expect((await runChildCreation({ operation: "fence", expectedActorId: actor, priorIntentId: null, requestId: request })).ok).toBe(false);
+  });
+
 });

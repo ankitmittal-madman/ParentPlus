@@ -10952,6 +10952,622 @@
         "supabase/migrations/20261104003500_child_creation_journey.sql",
         "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
       ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-01",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_fence_prevents_late_initial_creation_and_is_idempotent.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_fence_prevents_late_initial_creation_and_is_idempotent"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_fence_prevents_late_initial_creation_and_is_idempotent"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-02",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_existing_request_is_reported_without_cancelling_it.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_existing_request_is_reported_without_cancelling_it"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_existing_request_is_reported_without_cancelling_it"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-03",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_stale_prior_is_unknown_and_does_not_fence.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_stale_prior_is_unknown_and_does_not_fence"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_stale_prior_is_unknown_and_does_not_fence"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-04",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_fence_rollback_allows_original_request.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_fence_rollback_allows_original_request"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_fence_rollback_allows_original_request"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-05",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_fence_is_private_and_disabled_by_default.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_fence_is_private_and_disabled_by_default"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_fence_is_private_and_disabled_by_default"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-06",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_fence_binds_prior_and_is_scoped_to_actor.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_fence_binds_prior_and_is_scoped_to_actor"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_fence_binds_prior_and_is_scoped_to_actor"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-07",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_cannot_fence_current_request_with_changed_prior.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_cannot_fence_current_request_with_changed_prior"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_cannot_fence_current_request_with_changed_prior"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-08",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_fence_commits_before_delayed_create.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_fence_commits_before_delayed_create"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_fence_commits_before_delayed_create"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-09",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_create_commits_before_fence.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_create_commits_before_fence"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_create_commits_before_fence"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-10",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_fence_rollback_allows_waiting_create.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_fence_rollback_allows_waiting_create"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_fence_rollback_allows_waiting_create"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-11",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_create_rollback_allows_waiting_fence.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_create_rollback_allows_waiting_fence"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_create_rollback_allows_waiting_fence"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-12",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_fence_remains_effective_after_later_profiles.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_fence_remains_effective_after_later_profiles"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_fence_remains_effective_after_later_profiles"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-13",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_fence_does_not_expose_revoked_child.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_fence_does_not_expose_revoked_child"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_fence_does_not_expose_revoked_child"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-14",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_missing_identity_cannot_fence.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_missing_identity_cannot_fence"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_missing_identity_cannot_fence"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-15",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_fence_for_next_generation_blocks_exact_delayed_request.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_fence_for_next_generation_blocks_exact_delayed_request"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_fence_for_next_generation_blocks_exact_delayed_request"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-16",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_superseded_request_returns_unknown_without_new_fence.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_superseded_request_returns_unknown_without_new_fence"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_superseded_request_returns_unknown_without_new_fence"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-17",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_disable_commits_before_fence.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_disable_commits_before_fence"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_disable_commits_before_fence"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "DB-CHILD-FENCE-CHILDRECOVERYFENCETESTS-18",
+      "domain": "parent-child-creation-journey",
+      "description": "ChildRecoveryFenceTests.test_fence_commits_before_disable.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ChildRecoveryFenceTests.test_fence_commits_before_disable"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_child_recovery_fence.ChildRecoveryFenceTests.test_fence_commits_before_disable"
+        }
+      ],
+      "sources": [
+        "tests/database/test_child_recovery_fence.py",
+        "supabase/migrations/20261105003600_child_creation_recovery_fence.sql",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-RUNCHILDCREATION-01",
+      "domain": "parent-child-creation-journey",
+      "description": "runChildCreation > fences only a validated request for the verified actor.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runChildCreation > fences only a validated request for the verified actor"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-journey.test.ts::runChildCreation > fences only a validated request for the verified actor"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-journey.test.ts",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-RUNCHILDCREATION-02",
+      "domain": "parent-child-creation-journey",
+      "description": "runChildCreation > rejects invalid fence input, changed identity and malformed outcomes.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "runChildCreation > rejects invalid fence input, changed identity and malformed outcomes"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent/child-creation-journey.test.ts::runChildCreation > rejects invalid fence input, changed identity and malformed outcomes"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent/child-creation-journey.test.ts",
+        "apps/web/src/lib/parent/child-creation-journey.ts",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-PARENTCHILDPANELS-01",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > safely stops a delayed original request before allowing a new profile.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > safely stops a delayed original request before allowing a new profile"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > safely stops a delayed original request before allowing a new profile"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-PARENTCHILDPANELS-02",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > does not unlock if recovery returns unknown.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > does not unlock if recovery returns unknown"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > does not unlock if recovery returns unknown"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-PARENTCHILDPANELS-03",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > shows the original profile when creation won the race.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > shows the original profile when creation won the race"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > shows the original profile when creation won the race"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-PARENTCHILDPANELS-04",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > keeps recovery locked when status changes after a fence.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > keeps recovery locked when status changes after a fence"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > keeps recovery locked when status changes after a fence"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-PARENTCHILDPANELS-05",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > ignores a fence response after sign-out.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > ignores a fence response after sign-out"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > ignores a fence response after sign-out"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-PARENTCHILDPANELS-06",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > does not unlock after a lost fence response.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > does not unlock after a lost fence response"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > does not unlock after a lost fence response"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-PARENTCHILDPANELS-07",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > recovers after a lost fence response using the same request.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > recovers after a lost fence response using the same request"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > recovers after a lost fence response using the same request"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
+    },
+    {
+      "id": "FE-CHILD-FENCE-PARENTCHILDPANELS-08",
+      "domain": "parent-child-creation-journey",
+      "description": "ParentChildPanels > stays locked if marker removal fails after a confirmed fence.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "ParentChildPanels > stays locked if marker removal fails after a confirmed fence"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/parent-child-panels.test.tsx::ParentChildPanels > stays locked if marker removal fails after a confirmed fence"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/parent-child-panels.test.tsx",
+        "apps/web/src/app/parent/children/child-creation-panel.tsx",
+        "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
+      ]
     }
   ]
 }

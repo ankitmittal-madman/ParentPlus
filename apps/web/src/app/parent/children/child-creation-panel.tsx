@@ -22,6 +22,7 @@ export default function ChildCreationPanel() {
   const [busy, setBusy] = useState(false);
   const [retryReady, setRetryReady] = useState(false);
   const [retryAckReady, setRetryAckReady] = useState(false);
+  const [fenceReady, setFenceReady] = useState(false);
   const [recoveryLocked, setRecoveryLocked] = useState(false);
   const inFlight = useRef(false);
   const generation = useRef(0);
@@ -37,7 +38,7 @@ export default function ChildCreationPanel() {
       else if (requiredRecovery.current) requiredRecovery.current = { ...requiredRecovery.current, displayName: null };
       setRecoveryLocked(requiredRecovery.current !== null);
       writeContext.current = null; generation.current += 1; inFlight.current = false;
-      setActor(""); setChecked(false); setCurrent(null); setAdding(false); setName(""); setBusy(false); setRetryReady(false); setRetryAckReady(false);
+      setActor(""); setChecked(false); setCurrent(null); setAdding(false); setName(""); setBusy(false); setRetryReady(false); setRetryAckReady(false); setFenceReady(false);
       setNotice(requiredRecovery.current ? "A request may still be processing. Sign in to the original account and check its status." : "Your session may have changed. Check creation status again.");
     };
     const visible = () => { if (document.visibilityState === "visible") invalidate(); };
@@ -67,7 +68,7 @@ export default function ChildCreationPanel() {
 
   async function checkStatus() {
     if (monitor !== "ready" || inFlight.current) return;
-    inFlight.current = true; setBusy(true); setNotice(""); setActor(""); setChecked(false); setCurrent(null); setAdding(false); setName(""); setRetryReady(false); setRetryAckReady(false);
+    inFlight.current = true; setBusy(true); setNotice(""); setActor(""); setChecked(false); setCurrent(null); setAdding(false); setName(""); setRetryReady(false); setRetryAckReady(false); setFenceReady(false);
     const currentGeneration = ++generation.current;
     let required = requiredRecovery.current;
     try {
@@ -96,6 +97,7 @@ export default function ChildCreationPanel() {
           const canRetry = required.operation === "begin" && required.displayName !== null && required.requestId !== null;
           const canRetryAck = required.operation === "ack" && !!result.current && sameId(result.current.intentId, required.priorIntentId) && !result.current.acknowledged;
           setRetryReady(canRetry); setRetryAckReady(canRetryAck);
+          setFenceReady(required.operation === "begin" && required.requestId !== null);
           if (canRetryAck) setCurrent(result.current);
           setNotice(canRetry ? "Unable to confirm the earlier request. Check its status or retry the same request." : canRetryAck ? "Confirmation is not yet confirmed. You can retry the same confirmation." : "Unable to confirm the earlier request. Do not start another until it is resolved."); return;
         }
@@ -107,6 +109,34 @@ export default function ChildCreationPanel() {
       setActor(result.actorId); setChecked(true); setCurrent(result.current); setAdding(result.current === null);
     } catch { if (currentGeneration === generation.current) setNotice("Unable to confirm the profile. Check its status again."); }
     finally { if (currentGeneration === generation.current) { inFlight.current = false; setBusy(false); } }
+  }
+
+  async function resolveEarlierRequest() {
+    const required = requiredRecovery.current;
+    if (!fenceReady || !required || required.operation !== "begin" || !required.requestId || !actor || inFlight.current || !sameId(actor, required.actor)) return;
+    const stored = readRecoveryMarker();
+    if (stored.state !== "present" || !writeRecoveryMarker(markerFor(required))) { setNotice("Recovery information is unavailable. Check creation status again."); return; }
+    inFlight.current = true; writeContext.current = required; setBusy(true); setFenceReady(false); setRetryReady(false); setNotice("");
+    const currentGeneration = ++generation.current;
+    try {
+      const result = await runChildCreation({ operation: "fence", expectedActorId: required.actor, priorIntentId: required.priorIntentId, requestId: required.requestId });
+      if (currentGeneration !== generation.current) return;
+      if (!result.ok || result.operation !== "fence" || !sameId(result.actorId, required.actor) || result.disposition === "unknown") throw new Error("unresolved");
+      const status = await runChildCreation({ operation: "status", expectedActorId: required.actor });
+      if (currentGeneration !== generation.current) return;
+      if (!status.ok || status.operation !== "status" || !sameId(status.actorId, required.actor)) throw new Error("unresolved");
+      const matching = status.current && sameId(status.current.requestId, required.requestId) && sameId(status.current.priorIntentId, required.priorIntentId);
+      const priorCurrent = required.priorIntentId === null ? status.current === null : !!status.current && sameId(status.current.intentId, required.priorIntentId) && status.current.acknowledged;
+      if ((result.disposition === "created" && !matching) || (result.disposition === "fenced" && !priorCurrent)) throw new Error("unresolved");
+      if (!clearRecoveryMarker(markerFor(required))) throw new Error("unresolved");
+      requiredRecovery.current = null; setRecoveryLocked(false); setChecked(true); setCurrent(status.current); setAdding(status.current === null); setName("");
+      setNotice(result.disposition === "fenced" ? "The earlier request cannot create a profile. You can start a new request." : "The earlier profile was found. Please check the result.");
+      window.dispatchEvent(new Event(CHILD_CREATION_CONFIRMED));
+    } catch {
+      if (currentGeneration === generation.current) { setChecked(false); setCurrent(null); setAdding(false); setRecoveryLocked(true); setNotice("Unable to resolve the earlier request. Check creation status again."); }
+    } finally {
+      if (currentGeneration === generation.current) { writeContext.current = null; inFlight.current = false; setBusy(false); }
+    }
   }
 
   async function perform(operation: "begin" | "ack", retry?: Recovery) {
@@ -130,7 +160,7 @@ export default function ChildCreationPanel() {
       if (stored.state === "present") requiredRecovery.current = { ...stored.marker, displayName: null };
       setNotice("Recovery information is unavailable or another request is unresolved. Check its status before continuing."); return;
     }
-    writeContext.current = scope; inFlight.current = true; setBusy(true); setRetryReady(false); setRetryAckReady(false); setNotice("");
+    writeContext.current = scope; inFlight.current = true; setBusy(true); setRetryReady(false); setRetryAckReady(false); setFenceReady(false); setNotice("");
     const currentGeneration = ++generation.current;
     if (operation === "begin") window.dispatchEvent(new Event(CHILD_PROFILES_CHANGED));
     try {
@@ -174,6 +204,7 @@ export default function ChildCreationPanel() {
       <button type="button" disabled={busy} onClick={checkStatus} className="mt-4 rounded-lg bg-[#1F6F6B] px-4 py-2 font-semibold text-white disabled:opacity-50">Check creation status</button>
       {busy && <p role="status">Checking…</p>}
       {notice && <p role="alert">{notice}</p>}
+      {fenceReady && <div><p className="mt-3 text-sm">This attempts to permanently stop the request if it has not created a profile. If it already created one and the result is still available, we will show it. Otherwise the request may remain unresolved.</p><button type="button" disabled={busy} onClick={() => { void resolveEarlierRequest(); }} className="mt-3 rounded-lg border px-4 py-2">Stop waiting for this request</button></div>}
       {retryAckReady && <button type="button" disabled={busy} onClick={() => { const retry = requiredRecovery.current; if (retry) void perform("ack", retry); }} className="mt-3 rounded-lg border px-4 py-2">Retry confirmation</button>}
       {retryReady && <button type="button" disabled={busy} onClick={() => { const retry = requiredRecovery.current; if (retry) void perform("begin", retry); }} className="mt-3 rounded-lg border px-4 py-2">Retry same request</button>}
       {checked && current && <div className="mt-3"><p>Profile: {current.name}</p><p>{current.acknowledged ? "Result confirmed" : "Please confirm you have seen this result."}</p></div>}

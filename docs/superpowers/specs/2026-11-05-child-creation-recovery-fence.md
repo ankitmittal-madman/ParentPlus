@@ -1,10 +1,10 @@
-# Child-creation recovery fence — proposed local design
+# Child-creation recovery fence — local draft
 
 ## Problem and scope
 
-After a parent submits a profile, an empty creation status does not prove that the original request failed: it can arrive later. After a reload the tab retains a request reference but deliberately does not retain the child's name. Asking the parent to enter the name again cannot prove the payload matches the original; the two requests could race with different names. The current client therefore keeps the request unresolved. This document proposes a safeguard; it is not implemented or enabled.
+After a parent submits a profile, an empty creation status does not prove that the original request failed: it can arrive later. After a reload the tab retains a request reference but deliberately does not retain the child's name. Asking the parent to enter the name again cannot prove the payload matches the original; the two requests could race with different names. The current client therefore keeps the request unresolved. Migration 036 and a default-off application flow implement a local draft; neither hosted deployment nor release is authorized or verified.
 
-## Proposed outcome
+## Local draft outcome
 
 Give the original signed-in account an explicit way to resolve an uncertain request before starting another. Under the same database transaction and actor lock used for creation:
 
@@ -14,7 +14,7 @@ Give the original signed-in account an explicit way to resolve an uncertain requ
 
 A rejection must be durable across tab closure, later requests and transaction retries. Without an independently enforced expiry, do not delete it merely because time has passed. Its privacy, retention, abuse and eventual deletion policy must be decided and reviewed before release. The record must not contain the child's name. The server must obtain the identity from the verified session and database `auth.uid()`; tab storage is untrusted context, not authority.
 
-The application should clear its tab marker only after it verifies the original actor, request and prior, a committed rejection or exact existing result, and successful marker removal. Errors, account changes, revoked access, unavailable storage, missing control or disabled controls remain unresolved. A separate status check is needed before offering a fresh request, with protection against concurrent advancement. No implementation may assume the proposed rejection alone supplies cross-device coordination or historic receipts.
+The local application clears its tab marker only after it verifies the original actor, request and prior, a committed rejection or exact existing result, and successful marker removal. Errors, account changes, revoked access, unavailable storage, missing control or disabled controls remain unresolved. A separate status check is needed before offering a fresh request, with protection against concurrent advancement. A fenced outcome applies to the exact actor, prior intent and request tuple, not proof that the UUID never appeared in older generations. The draft does not provide cross-device coordination or historic receipts.
 
 ## Required tests before implementation is considered complete
 

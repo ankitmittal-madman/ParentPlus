@@ -1,6 +1,10 @@
 # ParentPlus Build Progress
 
 
+## Child-creation recovery fence local draft — 2026-11-05
+
+Draft migration 036 and a default-off application flow fence an exact unresolved request or find its already-created current result. Local synthetic tests cover both lock orderings, rollbacks, stale references, access and control changes; no hosted data is changed. This is not a complete release: privacy and retention decisions, identity loss, historical outcomes, real provider, signed JWT and enabled browser end-to-end checks remain open. See the [recovery fence spec](superpowers/specs/2026-11-05-child-creation-recovery-fence.md).
+
 ## Child-creation recovery fence design — 2026-11-05
 
 A local synthetic database diagnostic checks that an empty status can be followed by creation in a later transaction. The [proposed recovery fence](superpowers/specs/2026-11-05-child-creation-recovery-fence.md) specifies a durable rejection and race, privacy and recovery tests. It is design work only: no fence, application flow or hosted change is implemented. The feature remains disabled.
