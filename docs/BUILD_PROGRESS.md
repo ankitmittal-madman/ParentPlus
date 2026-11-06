@@ -1,5 +1,9 @@
 # ParentPlus Build Progress
 
+## Coach dashboard preview clarity — 2026-11-06
+
+The dashboard identifies its classes and records as example data and replaces the nonfunctional start-class label with an example label. Component and local browser checks cover the preview wording; this is not real class scheduling or persistence.
+
 ## Coach navigation browser check — 2026-11-05
 
 An automated Chromium scenario checks the five coach navigation links at a 320-pixel viewport: visible and non-overlapping 44-pixel targets, centre hit testing, keyboard traversal, navigation and current-page indication. This is one synthetic browser viewport, not physical-device, touch, screen-reader, contrast or full accessibility verification.

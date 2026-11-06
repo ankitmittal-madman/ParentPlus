@@ -12404,6 +12404,17 @@
         "apps/web/src/lib/parent/list-created-children.ts",
         "docs/superpowers/specs/2026-11-05-child-creation-recovery-fence.md"
       ]
+    },
+    {
+      "id": "FE-COACH-DASHBOARD-SAMPLE-DATA",
+      "domain": "coach-dashboard",
+      "description": "Identify the coach dashboard as example data and avoid a nonfunctional class action.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": ["The dashboard identifies sample classes and records and does not offer a fake start action"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/(coach)/page.test.tsx::Coach dashboard > clearly identifies sample data and does not offer a fake class action"}],
+      "sources": ["apps/web/src/app/(coach)/page.tsx", "apps/web/src/app/(coach)/page.test.tsx"]
     }
   ]
 }
