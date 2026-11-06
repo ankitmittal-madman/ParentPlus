@@ -42,7 +42,9 @@ class WorkspaceReceiptUpgradeTests(unittest.TestCase):
             created_volumes = [mount['Name'] for mount in mounts if mount['Type'] == 'volume']
             stage = 'container_ready'
             for _ in range(100):
-                if docker('exec', CONTAINER, 'pg_isready', '-U', USER, '-d', DB, check=False).returncode == 0:
+                # The image starts a temporary socket-only server during initialization.
+                # Wait for the final server's loopback listener before loading fixtures.
+                if docker('exec', CONTAINER, 'pg_isready', '-h', '127.0.0.1', '-U', USER, '-d', DB, check=False).returncode == 0:
                     break
                 time.sleep(0.2)
             else:
