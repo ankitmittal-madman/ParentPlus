@@ -12426,6 +12426,83 @@
       "scenarios": ["An approval waiting on a workspace lock fails after expiry without creating a relationship or approval event"],
       "tests": [{"suite": "database", "ref": "tests.database.test_approval_safety.ApprovalSafetyTests.test_expiry_while_waiting_for_workspace_lock"}],
       "sources": ["supabase/migrations/20261106003800_approval_expiry_after_locks.sql", "tests/database/test_approval_safety.py"]
+    },
+    {
+      "id": "DB-CONNECTION-REUSED-KEY-AFTER-APPROVAL",
+      "domain": "guardian-connection-request",
+      "description": "A reused key returns the original request after approval",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["A reused key returns the original request after approval"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_connection_authorization.ConnectionAuthorizationTests.test_reused_pending_key_replays_original_after_approval"}],
+      "sources": ["supabase/migrations/20261106003900_connection_request_receipts.sql", "tests/database/test_connection_authorization.py"]
+    },
+    {
+      "id": "DB-CONNECTION-REUSED-KEY-AUTHORIZATION",
+      "domain": "guardian-connection-request",
+      "description": "A reused key rejects a different child and a revoked guardian",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["A reused key rejects a different child and a revoked guardian"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_connection_authorization.ConnectionAuthorizationTests.test_reused_key_rejects_changed_child_and_revoked_guardian"}],
+      "sources": ["supabase/migrations/20261106003900_connection_request_receipts.sql", "tests/database/test_connection_authorization.py"]
+    },
+    {
+      "id": "DB-CONNECTION-RECEIPT-MISSING-REQUEST",
+      "domain": "guardian-connection-request",
+      "description": "A retained receipt fails closed when its request is missing",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["A retained receipt fails closed when its request is missing"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_connection_authorization.ConnectionAuthorizationTests.test_deleted_request_receipt_fails_closed"}],
+      "sources": ["supabase/migrations/20261106003900_connection_request_receipts.sql", "tests/database/test_connection_authorization.py"]
+    },
+    {
+      "id": "DB-CONNECTION-RECEIPT-WRITE-ROLLBACK",
+      "domain": "guardian-connection-request",
+      "description": "A receipt insertion failure rolls back the request and event",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["A receipt insertion failure rolls back the request and event"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_connection_authorization.ConnectionAuthorizationTests.test_receipt_failure_rolls_back_request_and_event"}],
+      "sources": ["supabase/migrations/20261106003900_connection_request_receipts.sql", "tests/database/test_connection_authorization.py"]
+    },
+    {
+      "id": "DB-CONNECTION-RECEIPT-EXPIRY-WAIT",
+      "domain": "guardian-connection-request",
+      "description": "A request waiting past expiry does not bind its key to the expired request",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["A request waiting past expiry does not bind its key to the expired request"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_approval_safety.ApprovalSafetyTests.test_request_waiting_for_tuple_lock_does_not_reuse_expired_pending"}],
+      "sources": ["supabase/migrations/20261106003900_connection_request_receipts.sql", "tests/database/test_approval_safety.py"]
+    },
+    {
+      "id": "DB-CONNECTION-RECEIPT-KEY-RACE-COMMIT",
+      "domain": "guardian-connection-request",
+      "description": "A committed key cannot concurrently bind a different child",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["A committed key cannot concurrently bind a different child"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_approval_safety.ApprovalSafetyTests.test_same_key_different_children_first_commits"}],
+      "sources": ["supabase/migrations/20261106003900_connection_request_receipts.sql", "tests/database/test_approval_safety.py"]
+    },
+    {
+      "id": "DB-CONNECTION-RECEIPT-KEY-RACE-ROLLBACK",
+      "domain": "guardian-connection-request",
+      "description": "A rolled-back key can be bound by the waiting request",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["A rolled-back key can be bound by the waiting request"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_approval_safety.ApprovalSafetyTests.test_same_key_different_children_first_rolls_back"}],
+      "sources": ["supabase/migrations/20261106003900_connection_request_receipts.sql", "tests/database/test_approval_safety.py"]
     }
   ]
 }

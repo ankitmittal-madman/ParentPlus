@@ -3,7 +3,7 @@
 
 ## Guardian connection approval and retry — 2026-11-06
 
-Local migration 038 adds a post-lock expiry recheck to the approval draft after a deterministic synthetic workspace-lock test reproduced approval after expiry. This is not hosted verification. An independent source review also found that a second request key that reuses an existing pending connection is not recorded; retrying that key after approval can create another request, and reuse with different payload may not be detected. A durable, payload-bound receipt and its concurrency, lifecycle, retention and privacy rules remain unresolved. Do not connect or release the journey on the basis of the expiry fix alone.
+Local migration 038 adds a post-lock expiry recheck to the approval draft after a deterministic synthetic workspace-lock test reproduced approval after expiry. This is not hosted verification. An independent source review also found that a second request key that reuses an existing pending connection is not recorded; retrying that key after approval can create another request, and reuse with different payload may not be detected. Draft migration 039 adds a local payload-bound receipt for future successful keys and backfills original keys only; synthetic tests are required for each claimed behavior. Previously unrecorded reused keys cannot be reconstructed. Receipt retention, erasure, abuse controls, migration compatibility and privacy rules remain unresolved. Do not connect or release the journey on the basis of the expiry fix alone.
 
 
 ## Parent child-creation journey draft — 2026-11-04

@@ -119,6 +119,7 @@ OR workspace_child_id IN (
   SELECT id FROM public.workspace_children
   WHERE child_id = '{child_id}'
 );
+DELETE FROM public.connection_request_receipts WHERE child_id = '{child_id}';
 DELETE FROM public.connection_requests
 WHERE child_id = '{child_id}';
 DELETE FROM public.workspace_children

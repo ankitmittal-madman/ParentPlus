@@ -90,6 +90,153 @@ ROLLBACK;
 
 class ConnectionAuthorizationTests(unittest.TestCase):
 
+    def test_receipt_failure_rolls_back_request_and_event(self):
+        sql = scenario_sql("""
+CREATE FUNCTION pg_temp.fail_connection_receipt() RETURNS trigger LANGUAGE plpgsql AS $body$
+BEGIN RAISE EXCEPTION 'synthetic receipt failure'; END $body$;
+CREATE TRIGGER fail_connection_receipt BEFORE INSERT ON public.connection_request_receipts
+FOR EACH ROW EXECUTE FUNCTION pg_temp.fail_connection_receipt();
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+DO $test$
+DECLARE ids record; failed boolean := false;
+BEGIN
+  SELECT * INTO ids FROM test_ids;
+  BEGIN
+    PERFORM public.request_workspace_connection(ids.workspace_id, ids.child_id, 'dddddddd-1111-4111-8111-dddddddddddd');
+  EXCEPTION WHEN OTHERS THEN
+    IF SQLERRM = 'synthetic receipt failure' THEN failed := true; ELSE RAISE; END IF;
+  END;
+  IF NOT failed THEN RAISE EXCEPTION 'FAIL: receipt failure not observed'; END IF;
+END $test$;
+RESET ROLE;
+DO $test$ BEGIN
+  IF EXISTS (SELECT 1 FROM public.connection_requests) OR EXISTS (SELECT 1 FROM public.connection_events)
+     OR EXISTS (SELECT 1 FROM public.connection_request_receipts) THEN
+    RAISE EXCEPTION 'FAIL: partial connection after receipt failure';
+  END IF;
+  RAISE NOTICE 'PASS: receipt failure rolls back connection';
+END $test$;
+""")
+        stdout, stderr = run_sql(sql)
+        self.assertIn("PASS: receipt failure rolls back connection", stderr)
+        self.assertIn("ROLLBACK", stdout)
+
+    def test_reused_key_rejects_changed_child_and_revoked_guardian(self):
+        sql = scenario_sql("""
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+UPDATE test_ids SET second_child_id = public.create_child('Second example', 'cccccccc-1111-4111-8111-cccccccccccc');
+UPDATE test_ids SET request_id = public.request_workspace_connection(workspace_id, child_id, 'aaaaaaaa-1111-4111-8111-aaaaaaaaaaaa');
+SELECT public.request_workspace_connection(workspace_id, child_id, 'bbbbbbbb-1111-4111-8111-bbbbbbbbbbbb') FROM test_ids;
+DO $test$
+DECLARE ids record; denied boolean := false;
+BEGIN
+  SELECT * INTO ids FROM test_ids;
+  BEGIN
+    PERFORM public.request_workspace_connection(ids.workspace_id, ids.second_child_id, 'bbbbbbbb-1111-4111-8111-bbbbbbbbbbbb');
+  EXCEPTION WHEN OTHERS THEN
+    IF SQLERRM = 'Request ID reused with different details' THEN denied := true; ELSE RAISE; END IF;
+  END;
+  IF NOT denied THEN RAISE EXCEPTION 'FAIL: changed payload accepted'; END IF;
+END $test$;
+RESET ROLE;
+UPDATE public.guardianships SET status='revoked' WHERE child_id=(SELECT child_id FROM test_ids) AND guardian_user_id='11111111-1111-4111-8111-111111111111';
+SET LOCAL ROLE authenticated;
+DO $test$
+DECLARE ids record; denied boolean := false;
+BEGIN
+  SELECT * INTO ids FROM test_ids;
+  BEGIN
+    PERFORM public.request_workspace_connection(ids.workspace_id, ids.child_id, 'bbbbbbbb-1111-4111-8111-bbbbbbbbbbbb');
+  EXCEPTION WHEN OTHERS THEN
+    IF SQLERRM = 'Guardian not authorized' THEN denied := true; ELSE RAISE; END IF;
+  END;
+  IF NOT denied THEN RAISE EXCEPTION 'FAIL: revoked guardian received retry result'; END IF;
+END $test$;
+RESET ROLE;
+DO $test$ BEGIN
+  IF has_table_privilege('authenticated', 'public.connection_request_receipts', 'SELECT,INSERT,UPDATE,DELETE')
+     OR has_table_privilege('anon', 'public.connection_request_receipts', 'SELECT,INSERT,UPDATE,DELETE') THEN
+    RAISE EXCEPTION 'FAIL: receipt table exposed to app roles';
+  END IF;
+  RAISE NOTICE 'PASS: changed payload and revoked guardian denied';
+END $test$;
+""")
+        stdout, stderr = run_sql(sql)
+        self.assertIn("PASS: changed payload and revoked guardian denied", stderr)
+        self.assertIn("ROLLBACK", stdout)
+
+    def test_deleted_request_receipt_fails_closed(self):
+        sql = scenario_sql("""
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+UPDATE test_ids SET request_id = public.request_workspace_connection(workspace_id, child_id, 'aaaaaaaa-1111-4111-8111-aaaaaaaaaaaa');
+SELECT public.request_workspace_connection(workspace_id, child_id, 'bbbbbbbb-1111-4111-8111-bbbbbbbbbbbb') FROM test_ids;
+RESET ROLE;
+DELETE FROM public.connection_events WHERE connection_request_id=(SELECT request_id FROM test_ids);
+DELETE FROM public.connection_requests WHERE id=(SELECT request_id FROM test_ids);
+SET LOCAL ROLE authenticated;
+DO $test$
+DECLARE ids record; denied boolean := false;
+BEGIN
+  SELECT * INTO ids FROM test_ids;
+  BEGIN
+    PERFORM public.request_workspace_connection(ids.workspace_id, ids.child_id, 'bbbbbbbb-1111-4111-8111-bbbbbbbbbbbb');
+  EXCEPTION WHEN OTHERS THEN
+    IF SQLERRM = 'Connection request unavailable' THEN denied := true; ELSE RAISE; END IF;
+  END;
+  IF NOT denied THEN RAISE EXCEPTION 'FAIL: deleted request created again'; END IF;
+END $test$;
+RESET ROLE;
+DO $test$ BEGIN
+  IF EXISTS (SELECT 1 FROM public.connection_requests) OR EXISTS (SELECT 1 FROM public.connection_events) THEN
+    RAISE EXCEPTION 'FAIL: deleted request recreated';
+  END IF;
+  RAISE NOTICE 'PASS: missing request fails closed';
+END $test$;
+""")
+        stdout, stderr = run_sql(sql)
+        self.assertIn("PASS: missing request fails closed", stderr)
+        self.assertIn("ROLLBACK", stdout)
+
+    def test_reused_pending_key_replays_original_after_approval(self):
+        sql = scenario_sql("""
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+UPDATE test_ids SET request_id = public.request_workspace_connection(
+  workspace_id, child_id, 'aaaaaaaa-1111-4111-8111-aaaaaaaaaaaa');
+DO $test$
+DECLARE ids record; reused uuid;
+BEGIN
+  SELECT * INTO ids FROM test_ids;
+  reused := public.request_workspace_connection(ids.workspace_id, ids.child_id, 'bbbbbbbb-1111-4111-8111-bbbbbbbbbbbb');
+  IF reused IS DISTINCT FROM ids.request_id THEN RAISE EXCEPTION 'FAIL: pending request was not reused'; END IF;
+END $test$;
+SELECT set_config('request.jwt.claim.sub', '22222222-2222-4222-8222-222222222222', true);
+SELECT public.approve_guardian_connection((SELECT request_id FROM test_ids));
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+DO $test$
+DECLARE ids record; replay uuid;
+BEGIN
+  SELECT * INTO ids FROM test_ids;
+  replay := public.request_workspace_connection(ids.workspace_id, ids.child_id, 'bbbbbbbb-1111-4111-8111-bbbbbbbbbbbb');
+  IF replay IS DISTINCT FROM ids.request_id THEN RAISE EXCEPTION 'FAIL: retry created a new request after approval'; END IF;
+END $test$;
+RESET ROLE;
+DO $test$
+BEGIN
+  IF (SELECT count(*) FROM public.connection_requests) <> 1
+     OR (SELECT count(*) FROM public.connection_events WHERE event_type = 'requested') <> 1 THEN
+    RAISE EXCEPTION 'FAIL: retry duplicated request or event';
+  END IF;
+  RAISE NOTICE 'PASS: reused key returns original after approval';
+END $test$;
+""")
+        stdout, stderr = run_sql(sql)
+        self.assertIn("PASS: reused key returns original after approval", stderr)
+        self.assertIn("ROLLBACK", stdout)
+
     def test_guardian_connection_creation(self):
         sql = scenario_sql("""
 SET LOCAL ROLE authenticated;

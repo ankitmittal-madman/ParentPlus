@@ -61,7 +61,7 @@ mapfile -t MIGRATIONS < <(
     -type f -name '*.sql' | sort
 )
 
-if [ "${#MIGRATIONS[@]}" -ne 38 ]; then
+if [ "${#MIGRATIONS[@]}" -ne 39 ]; then
   echo "STOP: Unexpected migration count"
   exit 1
 fi
@@ -113,10 +113,10 @@ BASELINE=$(docker exec "$CONTAINER" \
     (SELECT count(*) FROM public.children) || ':' ||
     (SELECT count(*) FROM public.child_creation_controls WHERE id=true AND NOT enabled);")
 
-if [ "$BASELINE" != "3:3:23:0:0:1" ]; then
+if [ "$BASELINE" != "3:3:24:0:0:1" ]; then
   echo "STOP: Unexpected database baseline: $BASELINE"
   exit 1
 fi
 
 echo "PASS: Database initialized successfully"
-echo "PASS: All 38 migrations applied"
+echo "PASS: All 39 migrations applied"

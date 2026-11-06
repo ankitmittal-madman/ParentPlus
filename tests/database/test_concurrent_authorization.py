@@ -108,6 +108,7 @@ WHERE connection_request_id IN (
   SELECT id FROM public.connection_requests
   WHERE child_id = '{child_id}'
 );
+DELETE FROM public.connection_request_receipts WHERE child_id = '{child_id}';
 DELETE FROM public.connection_requests
 WHERE child_id = '{child_id}';
 DELETE FROM public.guardianships

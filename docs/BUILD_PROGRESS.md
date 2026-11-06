@@ -1,5 +1,9 @@
 # ParentPlus Build Progress
 
+## Connection-request retry receipt local draft — 2026-11-06
+
+Draft migration 039 records each successful request key, including keys that reuse a pending request, to prevent a retry after approval creating a second request. A synthetic lock-race test also checks that an expired pending request is not reused after waiting. UUID-only receipts are retained without foreign keys so a missing request fails closed; historical reused keys cannot be reconstructed. Retention, erasure, abuse controls, live provider identity, legacy migration, database exposure controls and full lifecycle review remain release blockers. The existing authenticated RPC is directly callable when deployed; no hosted database was changed.
+
 ## Connection approval expiry safeguard — 2026-11-06
 
 A local synthetic test reproduced approval of an expired request after waiting on a workspace lock. Draft migration 038 rechecks expiry after the blocking authorization and relationship locks, before approval writes. The targeted test verifies rejection without a relationship or approval event. This does not resolve connection-request retry receipts, provider identity, hosted migration ownership, audit/retention policy or release readiness; no hosted database was changed.

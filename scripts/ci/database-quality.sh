@@ -33,7 +33,8 @@ cleanup() {
           (SELECT count(*) FROM public.children) +
           (SELECT count(*) FROM public.guardianships) +
           (SELECT count(*) FROM public.workspace_children) +
-          (SELECT count(*) FROM public.connection_requests) +
+          (SELECT count(*) FROM public.connection_request_receipts) +
+    (SELECT count(*) FROM public.connection_requests) +
           (SELECT count(*) FROM public.connection_events) +
     (SELECT count(*) FROM public.courses) +
     (SELECT count(*) FROM public.batches) +

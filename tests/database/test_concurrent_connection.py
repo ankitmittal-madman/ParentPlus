@@ -111,7 +111,10 @@ SELECT
      ON r.id = e.connection_request_id
    WHERE r.workspace_id = '{workspace_id}'
      AND r.child_id = '{child_id}'
-     AND e.event_type = 'requested');
+     AND e.event_type = 'requested'),
+  (SELECT count(*) FROM public.connection_request_receipts
+   WHERE actor_id = '{MEERA}' AND child_id = '{child_id}'
+     AND request_key IN ('{request_ids[0]}', '{request_ids[1]}'));
 """).split("|")
 
         print("Returned request IDs:", results)
@@ -119,7 +122,7 @@ SELECT
         print("Requested audit events:", counts[1])
 
         assert len(set(results)) == 1
-        assert counts == ["1", "1"]
+        assert counts == ["1", "1", "2"]
 
         print("PASS: Concurrent connection initiation")
 
@@ -132,6 +135,7 @@ WHERE connection_request_id IN (
   SELECT id FROM public.connection_requests
   WHERE child_id = '{child_id}'
 );
+DELETE FROM public.connection_request_receipts WHERE child_id = '{child_id}';
 DELETE FROM public.connection_requests
 WHERE child_id = '{child_id}';
 DELETE FROM public.guardianships
