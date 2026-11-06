@@ -1,5 +1,13 @@
 # ParentPlus — Agent Handoff
 
+## Workspace creation control draft — 2026-11-06
+
+Migration 043 adds a default-off database guard for workspace creation and
+replay, with synthetic concurrency and access tests. The isolated suite must
+enable it for older behavior tests and restore it afterward. Inspect current
+Git and fresh quality evidence before relying on this draft. Hosted cutover,
+real identity, receipt retention, rate limits and full onboarding remain open.
+
 
 ## Parent child-creation journey draft — 2026-11-04
 

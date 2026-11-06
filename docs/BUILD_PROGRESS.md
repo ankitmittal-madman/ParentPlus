@@ -1,5 +1,16 @@
 # ParentPlus Build Progress
 
+## Workspace creation database control — 2026-11-06
+
+Local draft migration 043 puts workspace creation and replay behind a private,
+default-off database control. It locks the control during each call and keeps
+the prior creation implementation inaccessible to application roles. Synthetic
+tests exercise disabled and missing controls, retry, private access and both
+orders of disable-versus-creation/replay. The isolated test runner explicitly
+enables the control for existing behavior checks and restores it afterward.
+This is not a complete onboarding journey: hosted migration cutover, real
+identity, receipt retention, rate limiting, rollout and recovery remain open.
+
 ## Workspace receipt legacy upgrade check — 2026-11-06
 
 A separate disposable PostgreSQL container creates and renames a synthetic workspace under migration 041, applies 042, and checks that its name and owner remain while original creation details are marked unknown and retries fail closed. A new post-upgrade workspace retry is also checked. This is one isolated upgrade path, not verification of hosted data, concurrent rollout, recovery policy or receipt retention.

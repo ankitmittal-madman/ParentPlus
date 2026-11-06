@@ -52,13 +52,13 @@ class WorkspaceReceiptUpgradeTests(unittest.TestCase):
             self.assertEqual(docker('inspect', CONTAINER, '--format', '{{.HostConfig.NetworkMode}}').stdout.strip(), 'none')
             self.assertEqual(docker('port', CONTAINER).stdout.strip(), '')
             stage = 'migration_inventory'
-            migrations = sorted((ROOT / 'supabase/migrations').glob('*.sql'))
-            self.assertEqual(len(migrations), 42)
-            self.assertEqual(migrations[-1], UPGRADE)
+            migrations = sorted(path for path in (ROOT / 'supabase/migrations').glob('*.sql') if path.name < UPGRADE.name)
+            self.assertEqual(len(migrations), 41)
+            self.assertTrue(UPGRADE.is_file())
             stage = 'auth_fixture'
             sql((ROOT / 'tests/database/supabase_auth_fixture.sql').read_text())
             stage = 'old_migrations'
-            for migration in migrations[:-1]:
+            for migration in migrations:
                 sql(migration.read_text())
             stage = 'legacy_creation'
             legacy_id = sql(f"""

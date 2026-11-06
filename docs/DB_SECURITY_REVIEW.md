@@ -1,5 +1,12 @@
 # ParentPlus Database Security Review
 
+Local draft migration 043 introduces a private default-off control for the
+workspace-creation RPC and locks it across creation and replay. Its synthetic
+tests do not verify hosted function ownership, role inheritance, existing
+dependencies, or in-flight operations during a hosted cutover. Migration 042
+is still exposed before 043 is applied; review the full rollout before use.
+Receipt retention, account lifecycle, rate limiting and real identity remain open.
+
 
 ## Workspace creation replay access — 2026-11-06
 
