@@ -1,5 +1,16 @@
 # ParentPlus Database Security Review
 
+Draft 046 introduces a private exact-key workspace fence and a BEFORE INSERT
+guard sharing creation's actor/key lock. The BEFORE guard performs no writes;
+receipt creation stays AFTER INSERT so conflicting inserts do not add receipts.
+Fencing does not establish that a workspace never existed or authorise a new
+key. Fences retain actor and request identifiers with no expiry; retention,
+erasure, abuse controls, hosted ownership and rollout remain release blockers.
+The fence and new workspace inserts fail closed outside READ COMMITTED; a
+stale REPEATABLE READ or SERIALIZABLE snapshot cannot be relied on after an
+advisory-lock wait. READ UNCOMMITTED is also rejected conservatively. Existing
+receipt-only replay paths are not covered by this insert restriction.
+
 Local draft 045 adds a private workspace creation status lookup. It shares the
 creation control and actor/request lock; it locks workspace and membership before
 rechecking the receipt. Application roles have no execute privilege. An unknown

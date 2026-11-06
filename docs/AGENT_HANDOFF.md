@@ -1,5 +1,14 @@
 # ParentPlus — Agent Handoff
 
+## Private exact-request workspace fence — 2026-11-06
+
+Draft 046 introduces a private exact-actor/key fence, with a BEFORE INSERT guard
+for legacy and current creation paths. It rejects future same-key creation after
+the fence commits but does not prove historical absence or permit another key.
+It is not app-accessible and does not recover lost identifiers. Retention,
+rollout and the full onboarding recovery journey remain open; inspect fresh
+evidence and review before relying on this local draft.
+
 ## Private workspace recovery status — 2026-11-06
 
 Draft migration 045 adds a private, controlled, actor/request-scoped lookup for

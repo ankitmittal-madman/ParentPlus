@@ -1,5 +1,19 @@
 # ParentPlus Build Progress
 
+## Private workspace request fence — 2026-11-06
+
+Draft migration 046 adds an actor-scoped, exact-request fence. After a fence
+commits, a later guarded or legacy workspace insert using that same key is
+rejected. Existing receipts or surviving workspaces yield unknown instead of a
+fenced claim. The private operation is disabled for app roles and requires the
+default-off database control. This does not prove historical absence, recover a
+lost key, prevent another key, or by itself permit a new request. Indefinite
+fence retention, account changes, rate limits, hosted rollout and the full
+onboarding journey remain unresolved.
+New workspace inserts and the private fence operation conservatively reject
+transaction isolation levels other than READ COMMITTED, because an older
+snapshot could miss a committed fence; this includes READ UNCOMMITTED.
+
 ## Private workspace recovery status — 2026-11-06
 
 Draft migration 045 adds a private, read-only lookup for an actor's exact

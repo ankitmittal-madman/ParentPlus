@@ -40,7 +40,7 @@ class WorkspaceCutoverRaceTests(unittest.TestCase):
     def test_legacy_call_paused_before_insert_is_recorded_after_cutover(self):
         created = False
         volumes = []
-        locker = writer = None
+        locker = writer = fenced_writer = None
         if docker('container', 'inspect', CONTAINER, check=False).returncode == 0:
             self.fail('STOP: cutover test container already exists')
         try:
@@ -70,14 +70,24 @@ BEGIN
  END IF;
  RETURN nullif(current_setting('request.jwt.claim.sub',true),'')::uuid;
 END $$;""")
-            locker, writer = session(), session()
+            locker, writer, fenced_writer = session(), session(), session()
             locker.stdin.write("BEGIN; SET application_name='pp_cutover_locker'; SELECT pg_advisory_xact_lock(989898);\n")
             locker.stdin.flush()
             self.assertTrue(wait_for("SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE application_name='pp_cutover_locker' AND state='idle in transaction');"))
             writer.stdin.write(f"BEGIN; SET application_name='pp_cutover_late_writer'; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{ACTOR}',true); SELECT set_config('parentplus.test_pause','yes',true); SELECT public.create_workspace('Late Academy','academy','{KEY}'); COMMIT;\n\\q\n")
             writer.stdin.flush()
             self.assertTrue(wait_for("SELECT EXISTS(SELECT 1 FROM pg_stat_activity a JOIN pg_stat_activity b ON b.pid = ANY(pg_blocking_pids(a.pid)) WHERE a.application_name='pp_cutover_late_writer' AND b.application_name='pp_cutover_locker');"))
+            fenced_key = '88888888-aaaa-4aaa-8aaa-888888888888'
+            fenced_writer.stdin.write(f"BEGIN; SET application_name='pp_cutover_fenced_writer'; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{ACTOR}',true); SELECT set_config('parentplus.test_pause','yes',true); SELECT public.create_workspace('Fenced Academy','academy','{fenced_key}'); COMMIT;\n\\q\n")
+            fenced_writer.stdin.flush()
+            self.assertTrue(wait_for("SELECT EXISTS(SELECT 1 FROM pg_stat_activity a JOIN pg_stat_activity b ON b.pid = ANY(pg_blocking_pids(a.pid)) WHERE a.application_name='pp_cutover_fenced_writer' AND b.application_name='pp_cutover_locker');"))
             sql((ROOT / 'supabase/migrations' / cutoff).read_text())
+            later = sorted(p for p in (ROOT / 'supabase/migrations').glob('*.sql') if '20261106004300' <= p.name[:14] <= '20261106004600')
+            self.assertEqual(len(later), 4)
+            for path in later:
+                sql(path.read_text())
+            sql('UPDATE public.workspace_creation_controls SET enabled=true WHERE id=true;')
+            self.assertEqual(sql(f"BEGIN; SELECT set_config('request.jwt.claim.sub','{ACTOR}',true); SELECT public.fence_workspace_creation('{fenced_key}'); COMMIT;").splitlines()[-1], 'fenced')
             locker.stdin.write('COMMIT;\n\\q\n')
             locker.stdin.flush()
             locker.stdin.close()
@@ -88,6 +98,13 @@ END $$;""")
             writer.stdin = None
             _, errors = writer.communicate(timeout=20)
             self.assertEqual(writer.returncode, 0, errors)
+            fenced_writer.stdin.close()
+            fenced_writer.stdin = None
+            _, errors = fenced_writer.communicate(timeout=20)
+            self.assertNotEqual(fenced_writer.returncode, 0)
+            self.assertIn('Workspace creation request fenced', errors)
+            self.assertEqual(sql(f"SELECT count(*) FROM public.workspaces WHERE created_by='{ACTOR}' AND creation_request_id='{fenced_key}';"), '0')
+            self.assertEqual(sql(f"SELECT count(*) FROM public.workspace_creation_receipts WHERE actor_id='{ACTOR}' AND request_key='{fenced_key}';"), '0')
             self.assertEqual(sql(f"SELECT count(*) FROM public.workspace_creation_receipts WHERE actor_id='{ACTOR}' AND request_key='{KEY}' AND original_name IS NULL;"), '1')
             original_id = sql(f"SELECT workspace_id FROM public.workspace_creation_receipts WHERE actor_id='{ACTOR}' AND request_key='{KEY}';")
             sql(f"DELETE FROM public.workspace_memberships WHERE workspace_id IN (SELECT id FROM public.workspaces WHERE created_by='{ACTOR}' AND creation_request_id='{KEY}'); DELETE FROM public.workspaces WHERE created_by='{ACTOR}' AND creation_request_id='{KEY}';")
@@ -98,7 +115,7 @@ END $$;""")
             self.assertNotEqual(result.returncode, 0)
             self.assertEqual(sql(f"SELECT count(*) FROM public.workspaces WHERE created_by='{ACTOR}' AND creation_request_id='{KEY}';"), '0')
         finally:
-            for process in (writer, locker):
+            for process in (fenced_writer, writer, locker):
                 if process and process.poll() is None:
                     process.kill()
                     process.communicate(timeout=10)

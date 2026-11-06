@@ -20,6 +20,7 @@ MODULES = [
     "tests.database.test_workspace_cutover_race",
     "tests.database.test_workspace_forward_upgrade",
     "tests.database.test_workspace_recovery_status",
+    "tests.database.test_workspace_creation_fence",
     "tests.database.test_workspace_replay_races",
     "tests.database.test_workspace_receipt_upgrade",
     "tests.database.test_scheduling_foundation",
@@ -112,7 +113,7 @@ def main():
 
     print(f"JUnit evidence written: {output}", flush=True)
 
-    expected_tests = 377
+    expected_tests = 397
     actual_tests = result.testsRun
     recorded_cases = len(group.findall("testcase"))
 
@@ -137,7 +138,7 @@ def main():
         )
         return 1
 
-    print("PASS: All 377 database unit tests verified", flush=True)
+    print("PASS: All 397 database unit tests verified", flush=True)
     return 0
 
 

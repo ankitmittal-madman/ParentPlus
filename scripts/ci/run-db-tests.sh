@@ -61,6 +61,7 @@ DECLARE
 BEGIN
   SELECT
     (SELECT count(*) FROM public.workspace_creation_receipts) +
+    (SELECT count(*) FROM public.workspace_creation_fences) +
     (SELECT count(*) FROM public.workspaces) +
     (SELECT count(*) FROM public.workspace_memberships) +
     (SELECT count(*) FROM public.children) +
