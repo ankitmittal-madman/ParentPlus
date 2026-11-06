@@ -26,6 +26,9 @@ COMMIT;
 class ApprovalSafetyTests(unittest.TestCase):
 
     def setUp(self):
+        from tests.database.connection_test_access import grant_connection_test_access, revoke_connection_test_access
+        grant_connection_test_access()
+        self.addCleanup(revoke_connection_test_access)
         self.workspace_id = create_test_workspace()
         self.child_id = create_test_child()
 

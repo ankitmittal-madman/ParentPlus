@@ -22,6 +22,11 @@ from tests.database.test_concurrent_authorization import (
 class ApprovalAuthorizationRaceTests(unittest.TestCase):
     """Deterministic approval-versus-permission-change tests."""
 
+    def setUp(self):
+        from tests.database.connection_test_access import grant_connection_test_access, revoke_connection_test_access
+        grant_connection_test_access()
+        self.addCleanup(revoke_connection_test_access)
+
     def test_guardian_revocation_first(self):
         import uuid
 

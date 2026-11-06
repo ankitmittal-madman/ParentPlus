@@ -77,7 +77,7 @@ SELECT public.request_workspace_connection(
     return output.splitlines()[-1]
 
 
-def main():
+def _run_test():
     workspace_request_id = str(uuid.uuid4())
     child_request_id = str(uuid.uuid4())
     request_ids = [str(uuid.uuid4()), str(uuid.uuid4())]
@@ -156,6 +156,15 @@ WHERE id = '{workspace_id}';
 COMMIT;
 """)
             print("PASS: Workspace test records cleaned up")
+
+
+def main():
+    from tests.database.connection_test_access import grant_connection_test_access, revoke_connection_test_access
+    grant_connection_test_access()
+    try:
+        _run_test()
+    finally:
+        revoke_connection_test_access()
 
 
 if __name__ == "__main__":

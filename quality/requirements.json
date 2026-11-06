@@ -12503,6 +12503,17 @@
       "scenarios": ["A rolled-back key can be bound by the waiting request"],
       "tests": [{"suite": "database", "ref": "tests.database.test_approval_safety.ApprovalSafetyTests.test_same_key_different_children_first_rolls_back"}],
       "sources": ["supabase/migrations/20261106003900_connection_request_receipts.sql", "tests/database/test_approval_safety.py"]
+    },
+    {
+      "id": "DB-CONNECTION-UNRELEASED-EXECUTION-DENIED",
+      "domain": "guardian-connection-authorization",
+      "description": "Unreleased connection request and approval functions deny application roles.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["Anonymous and authenticated roles cannot execute connection request or approval functions in the default local schema"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_connection_exposure.ConnectionExposureTests.test_unreleased_connection_functions_deny_application_roles"}],
+      "sources": ["supabase/migrations/20261106004000_disable_unreleased_connection_rpc.sql", "tests/database/test_connection_exposure.py"]
     }
   ]
 }

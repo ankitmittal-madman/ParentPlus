@@ -269,6 +269,11 @@ def close_psql_session(process):
 
 class ConcurrentAuthorizationTests(unittest.TestCase):
 
+    def setUp(self):
+        from tests.database.connection_test_access import grant_connection_test_access, revoke_connection_test_access
+        grant_connection_test_access()
+        self.addCleanup(revoke_connection_test_access)
+
     def test_revocation_commits_before_authorization(self):
         workspace_id = None
         child_id = None

@@ -43,7 +43,7 @@ COMMIT;
     return output.splitlines()[-1]
 
 
-def main():
+def _run_test():
     workspace_id = None
     child_id = None
 
@@ -142,6 +142,15 @@ COMMIT;
 """)
 
         print("PASS: Test cleanup completed")
+
+
+def main():
+    from tests.database.connection_test_access import grant_connection_test_access, revoke_connection_test_access
+    grant_connection_test_access()
+    try:
+        _run_test()
+    finally:
+        revoke_connection_test_access()
 
 
 if __name__ == "__main__":

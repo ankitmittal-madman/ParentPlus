@@ -38,6 +38,8 @@ def scenario_sql(test_body):
 
     return f"""
 BEGIN;
+-- Exercise historical behavior only inside this rolled-back synthetic fixture.
+GRANT EXECUTE ON FUNCTION public.request_workspace_connection(uuid,uuid,uuid), public.approve_guardian_connection(uuid) TO authenticated;
 -- Synthetic fixture only; rollback restores the default-off control.
 GRANT EXECUTE ON FUNCTION public.create_child(text,uuid) TO authenticated;
 UPDATE public.child_creation_controls SET enabled=true WHERE id=true;
