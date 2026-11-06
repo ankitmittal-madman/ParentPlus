@@ -1,5 +1,13 @@
 # ParentPlus — Agent Handoff
 
+## Private workspace recovery status — 2026-11-06
+
+Draft migration 045 adds a private, controlled, actor/request-scoped lookup for
+known workspace creation outcomes. It is not app-accessible or an onboarding UI.
+Unknown can precede a delayed request and must not unlock a replacement request.
+Check fresh evidence and independent review. Lost-key discovery, historical
+retention, identity, rollout and the full academy journey remain incomplete.
+
 ## Local forward workspace receipt repair — 2026-11-06
 
 Draft migration 044 reconciles surviving workspaces with unknown missing receipts

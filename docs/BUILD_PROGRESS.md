@@ -1,5 +1,15 @@
 # ParentPlus Build Progress
 
+## Private workspace recovery status — 2026-11-06
+
+Draft migration 045 adds a private, read-only lookup for an actor's exact
+workspace creation request. It returns a known workspace ID only when its
+receipt, workspace and creator membership remain valid; otherwise it returns
+unknown. It uses the database control and request lock, and application roles
+cannot call it. A status is a snapshot: unknown does not prove that a delayed
+request cannot arrive and never authorises a replacement key. Lost keys,
+retention, actual identity, a reviewed app journey and hosted use remain open.
+
 ## Workspace receipt forward repair draft — 2026-11-06
 
 Local migration 044 disables workspace creation, installs the cutover safeguard,

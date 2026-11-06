@@ -61,7 +61,7 @@ mapfile -t MIGRATIONS < <(
     -type f -name '*.sql' | sort
 )
 
-if [ "${#MIGRATIONS[@]}" -ne 44 ]; then
+if [ "${#MIGRATIONS[@]}" -ne 45 ]; then
   echo "STOP: Unexpected migration count"
   exit 1
 fi
@@ -123,4 +123,4 @@ if [ "$BASELINE" != "3:3:26:0:0:1:1:0" ]; then
 fi
 
 echo "PASS: Database initialized successfully"
-echo "PASS: All 44 migrations applied"
+echo "PASS: All 45 migrations applied"

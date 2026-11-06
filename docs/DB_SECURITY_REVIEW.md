@@ -1,5 +1,13 @@
 # ParentPlus Database Security Review
 
+Local draft 045 adds a private workspace creation status lookup. It shares the
+creation control and actor/request lock; it locks workspace and membership before
+rechecking the receipt. Application roles have no execute privilege. An unknown
+response is not an absence proof, including for delayed legacy calls or snapshots
+under stricter isolation. Returning an ID does not verify legal ownership or
+authorise child, class or enrollment access. Hosted identity, maintenance lock
+ordering, receipt retention and any eventual app exposure still require review.
+
 Local forward draft 044 repairs missing receipts for surviving workspace rows
 without inferring their original details. It disables creation, rejects conflicting
 receipts and preserves existing payloads; an old in-flight body may fail and
