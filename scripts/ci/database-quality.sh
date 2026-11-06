@@ -118,7 +118,7 @@ READY=0
 
 for attempt in $(seq 1 30); do
   if docker exec "$CONTAINER" \
-    pg_isready -U parentplus_test \
+    pg_isready -h 127.0.0.1 -U parentplus_test \
     -d parentplus_test >/dev/null 2>&1; then
     READY=1
     break
