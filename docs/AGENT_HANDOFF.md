@@ -1,5 +1,13 @@
 # ParentPlus — Agent Handoff
 
+## Local workspace cutover correction — 2026-11-06
+
+Revised draft 042 drains active workspace writers before backfill and adds a
+private tombstone trigger for legacy calls reaching insertion after cutover.
+Synthetic race tests cover both timings and retained-key rejection. This does
+not repair an installation that already ran the earlier 042, nor reconstruct
+previously deleted keys; review a forward repair and hosted cutover separately.
+
 ## Blocking workspace migration race — 2026-11-06
 
 An independent isolated 041-to-042 concurrent upgrade reproduction found an

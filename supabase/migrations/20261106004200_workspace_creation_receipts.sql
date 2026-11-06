@@ -12,6 +12,25 @@ create table public.workspace_creation_receipts (
 );
 alter table public.workspace_creation_receipts enable row level security;
 revoke all on public.workspace_creation_receipts from public, anon, authenticated;
+-- Drain writers that inserted before cutover and prevent new inserts until
+-- the trigger, backfill and replacement implementation commit together.
+lock table public.workspaces in share row exclusive mode;
+
+create function public.record_workspace_creation_tombstone()
+returns trigger language plpgsql security definer set search_path = '' as $$
+begin
+  begin
+    insert into public.workspace_creation_receipts(actor_id,request_key,workspace_id,original_name,original_type)
+      values (new.created_by,new.creation_request_id,new.id,null,null);
+  exception when unique_violation then
+    raise exception using errcode='42501', message='Workspace creation recovery unavailable';
+  end;
+  return new;
+end;
+$$;
+revoke all on function public.record_workspace_creation_tombstone() from public, anon, authenticated;
+create trigger workspace_creation_tombstone after insert on public.workspaces
+  for each row execute function public.record_workspace_creation_tombstone();
 -- A current name is not evidence of the original name. Preserve unknown legacy keys.
 insert into public.workspace_creation_receipts(actor_id,request_key,workspace_id,original_name,original_type)
 select created_by,creation_request_id,id,null,null from public.workspaces;
@@ -59,8 +78,12 @@ begin
     values (v_name,p_type,v_user_id,p_request_id) returning id into v_workspace_id;
   insert into public.workspace_memberships(workspace_id,user_id,role,status)
     values (v_workspace_id,v_user_id,'owner','active');
-  insert into public.workspace_creation_receipts(actor_id,request_key,workspace_id,original_name,original_type)
-    values (v_user_id,p_request_id,v_workspace_id,v_name,p_type);
+  update public.workspace_creation_receipts set original_name=v_name, original_type=p_type
+    where actor_id=v_user_id and request_key=p_request_id and workspace_id=v_workspace_id
+      and original_name is null and original_type is null;
+  if not found then
+    raise exception using errcode='42501', message='Workspace creation recovery unavailable';
+  end if;
   return v_workspace_id;
 end;
 $$;

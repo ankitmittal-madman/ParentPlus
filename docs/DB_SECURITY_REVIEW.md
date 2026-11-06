@@ -1,5 +1,14 @@
 # ParentPlus Database Security Review
 
+**Local correction, limited scope:** revised draft 042 locks workspace writes
+during trigger installation and backfill, then records unknown receipts for
+legacy inserts after cutover. Two isolated transaction tests cover an existing
+uncommitted writer and an old call paused before insertion; retained keys reject
+replacement. This does not repair databases that already applied the old 042,
+reconstruct deleted missing keys, validate real hosted privileges or establish a
+production rollout. The historical race reproduction below remains relevant to
+those installations and hosted rollout stays blocked.
+
 The isolated 041-to-043 test covers committed existing workspaces and retry
 behavior across the default-off control migration. It does not establish safety
 for concurrent writers or hosted cutover; the earlier 042 backfill and later

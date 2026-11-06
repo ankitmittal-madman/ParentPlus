@@ -1,5 +1,15 @@
 # ParentPlus Build Progress
 
+## Workspace cutover race correction — 2026-11-06
+
+The local draft of migration 042 now drains existing workspace writers before
+backfill and installs a trigger to retain an unknown receipt for legacy calls
+that insert after cutover. Synthetic tests exercise both transaction orderings
+and reject reuse of a retained key after privileged deletion. This change only
+affects databases that apply the revised migration; installations that already
+ran the old 042 need a separately designed forward repair. Deleted pre-existing
+keys cannot be reconstructed. Hosted cutover and receipt retention remain open.
+
 ## Workspace control upgrade check — 2026-11-06
 
 An isolated synthetic upgrade test applies migrations 041, 042 and 043 in
