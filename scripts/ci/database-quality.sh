@@ -15,10 +15,15 @@ fi
 CREATED=0
 INITIALIZED=0
 TEST_EXIT=1
+STAGE='container setup'
 
 cleanup() {
   status=$?
+  initial_status=$status
   trap - EXIT
+  if [ "$status" -ne 0 ]; then
+    echo "::error title=Database gate::Stopped during $STAGE"
+  fi
 
   if [ "$CREATED" -eq 1 ]; then
     if [ "$INITIALIZED" -eq 1 ]; then
@@ -83,6 +88,9 @@ cleanup() {
     fi
   fi
 
+  if [ "$status" -ne 0 ] && [ "$initial_status" -eq 0 ]; then
+    echo '::error title=Database gate::Stopped during database cleanup'
+  fi
   exit "$status"
 }
 
@@ -104,6 +112,7 @@ docker run -d \
 CREATED=1
 
 echo "=== WAIT FOR POSTGRESQL ==="
+STAGE='database readiness'
 
 READY=0
 
@@ -120,6 +129,7 @@ done
 test "$READY" -eq 1
 
 echo "=== INITIALIZE DATABASE ==="
+STAGE='database initialization'
 
 PARENTPLUS_TEST_CONTAINER="$CONTAINER" \
   bash scripts/ci/init-test-db.sh \
@@ -128,6 +138,7 @@ PARENTPLUS_TEST_CONTAINER="$CONTAINER" \
 INITIALIZED=1
 
 echo "=== EXECUTE DATABASE TESTS ==="
+STAGE='database test execution'
 
 if PARENTPLUS_TEST_CONTAINER="$CONTAINER" \
   timeout 300s bash scripts/ci/run-db-tests.sh \
@@ -138,6 +149,7 @@ else
 fi
 
 echo "=== VALIDATE TEST EVIDENCE ==="
+STAGE='database evidence validation'
 
 if python3 scripts/ci/validate-db-evidence.py \
   2>&1 | tee "$EVIDENCE/evidence-validation.log"; then
@@ -148,6 +160,10 @@ fi
 
 if [ "$TEST_EXIT" -ne 0 ] || [ "$EVIDENCE_EXIT" -ne 0 ]; then
   echo "FAIL: Database quality gate"
+  if [ "$TEST_EXIT" -ne 0 ]; then
+    STAGE='database test execution'
+  fi
+  python3 scripts/ci/summarize_db_failures.py
   exit 1
 fi
 
