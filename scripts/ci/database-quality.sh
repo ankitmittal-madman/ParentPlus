@@ -28,7 +28,8 @@ cleanup() {
         psql -X -A -t -v ON_ERROR_STOP=1 \
         -U parentplus_test -d parentplus_test \
         -c "SELECT
-          (SELECT count(*) FROM public.workspaces) +
+          (SELECT count(*) FROM public.workspace_creation_receipts) +
+    (SELECT count(*) FROM public.workspaces) +
           (SELECT count(*) FROM public.workspace_memberships) +
           (SELECT count(*) FROM public.children) +
           (SELECT count(*) FROM public.guardianships) +

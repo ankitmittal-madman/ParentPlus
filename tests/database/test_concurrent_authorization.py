@@ -133,6 +133,7 @@ WHERE id = '{child_id}';
 BEGIN;
 DELETE FROM public.workspace_memberships
 WHERE workspace_id = '{workspace_id}';
+DELETE FROM public.workspace_creation_receipts WHERE workspace_id = '{workspace_id}';
 DELETE FROM public.workspaces
 WHERE id = '{workspace_id}';
 COMMIT;

@@ -60,6 +60,7 @@ DELETE FROM public.children
 WHERE id = '{self.child_id}';
 DELETE FROM public.workspace_memberships
 WHERE workspace_id = '{self.workspace_id}';
+DELETE FROM public.workspace_creation_receipts WHERE workspace_id = '{self.workspace_id}';
 DELETE FROM public.workspaces
 WHERE id = '{self.workspace_id}';
 COMMIT;

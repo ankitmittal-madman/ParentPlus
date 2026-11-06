@@ -10,6 +10,63 @@ from tests.database.test_concurrent_authorization import (
 
 
 class WorkspaceReplayRaceTests(unittest.TestCase):
+    def exercise_creation_key_race(self, first_commits):
+        first = second = None
+        key = str(uuid.uuid4())
+        first_name = 'creation_first_' + uuid.uuid4().hex
+        second_name = 'creation_second_' + uuid.uuid4().hex
+        try:
+            first, second = start_psql_session(), start_psql_session()
+            first.stdin.write(f"""
+BEGIN; SET LOCAL lock_timeout='10s';
+SELECT set_config('application_name','{first_name}',false);
+SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{RAHUL}',true);
+SELECT public.create_workspace('First Academy','academy','{key}'); SELECT 'FIRST_CREATED';
+""")
+            first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_CREATED'))
+            second.stdin.write(f"""
+BEGIN; SET LOCAL lock_timeout='10s';
+SELECT set_config('application_name','{second_name}',false);
+SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{RAHUL}',true);
+SELECT public.create_workspace('Second Academy','academy','{key}'); COMMIT; SELECT 'SECOND_COMMITTED';
+""")
+            second.stdin.flush()
+            self.assertTrue(wait_for_blocking_relationship(second_name, first_name))
+            first.stdin.write(('COMMIT' if first_commits else 'ROLLBACK') + "; SELECT 'FIRST_DONE';\n")
+            first.stdin.flush()
+            self.assertTrue(wait_for_session_marker(first, 'FIRST_DONE'))
+            second.stdin.close()
+            second.stdin = None
+            output, errors = second.communicate(timeout=15)
+            if first_commits:
+                self.assertNotEqual(second.returncode, 0)
+                self.assertIn('Request ID reused with different workspace details', errors)
+                expected = 'First Academy'
+            else:
+                self.assertEqual(second.returncode, 0, errors)
+                self.assertIn('SECOND_COMMITTED', output)
+                expected = 'Second Academy'
+            self.assertEqual(query(f"SELECT original_name FROM public.workspace_creation_receipts WHERE actor_id='{RAHUL}' AND request_key='{key}';"), expected)
+            self.assertEqual(query(f"SELECT count(*) FROM public.workspaces WHERE created_by='{RAHUL}' AND creation_request_id='{key}';"), '1')
+        finally:
+            for process in (second, first):
+                if process is not None:
+                    close_psql_session(process)
+            query(f"""
+BEGIN;
+DELETE FROM public.workspace_memberships WHERE workspace_id IN (SELECT id FROM public.workspaces WHERE created_by='{RAHUL}' AND creation_request_id='{key}');
+DELETE FROM public.workspace_creation_receipts WHERE actor_id='{RAHUL}' AND request_key='{key}';
+DELETE FROM public.workspaces WHERE created_by='{RAHUL}' AND creation_request_id='{key}';
+COMMIT;
+""")
+
+    def test_changed_payload_waits_for_first_creation_commit(self):
+        self.exercise_creation_key_race(True)
+
+    def test_changed_payload_can_create_after_first_creation_rollback(self):
+        self.exercise_creation_key_race(False)
+
     def exercise_race(self, target, commits):
         workspace = create_test_workspace()
         first = second = None

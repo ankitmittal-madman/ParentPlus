@@ -12591,6 +12591,83 @@
       "scenarios": ["Membership suspension waits for in-flight authorized replay"],
       "tests": [{"suite": "database", "ref": "tests.database.test_workspace_replay_races.WorkspaceReplayRaceTests.test_membership_suspension_waits_for_replay"}],
       "sources": ["supabase/migrations/20261106004100_workspace_replay_access.sql", "tests/database/test_workspace_replay_races.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-RECEIPT-RENAME",
+      "domain": "workspace-onboarding",
+      "description": "New workspace retry preserves the original payload after rename",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["New workspace retry preserves the original payload after rename"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_authorization.AuthorizationTests.test_new_workspace_retry_uses_original_details_after_rename"}],
+      "sources": ["supabase/migrations/20261106004200_workspace_creation_receipts.sql", "tests/database/test_authorization.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-RECEIPT-DELETED",
+      "domain": "workspace-onboarding",
+      "description": "A deleted workspace cannot be recreated with the same retained key",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["A deleted workspace cannot be recreated with the same retained key"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_authorization.AuthorizationTests.test_workspace_retry_fails_closed_after_workspace_deletion"}],
+      "sources": ["supabase/migrations/20261106004200_workspace_creation_receipts.sql", "tests/database/test_authorization.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-RECEIPT-LEGACY-UNKNOWN",
+      "domain": "workspace-onboarding",
+      "description": "Unknown legacy creation details fail closed",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["Unknown legacy creation details fail closed"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_authorization.AuthorizationTests.test_legacy_workspace_receipt_unknown_fails_closed"}],
+      "sources": ["supabase/migrations/20261106004200_workspace_creation_receipts.sql", "tests/database/test_authorization.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-RECEIPT-WRITE-ROLLBACK",
+      "domain": "workspace-onboarding",
+      "description": "Receipt failure rolls back workspace and owner creation",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["Receipt failure rolls back workspace and owner creation"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_authorization.AuthorizationTests.test_workspace_receipt_failure_rolls_back_workspace_and_owner"}],
+      "sources": ["supabase/migrations/20261106004200_workspace_creation_receipts.sql", "tests/database/test_authorization.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-RECEIPT-PRIVATE",
+      "domain": "workspace-onboarding",
+      "description": "Application roles cannot access workspace creation receipts",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["Application roles cannot access workspace creation receipts"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_authorization.AuthorizationTests.test_workspace_creation_receipts_are_private"}],
+      "sources": ["supabase/migrations/20261106004200_workspace_creation_receipts.sql", "tests/database/test_authorization.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-RECEIPT-KEY-COMMIT",
+      "domain": "workspace-onboarding",
+      "description": "Conflicting concurrent workspace payload is rejected after first commit",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["Conflicting concurrent workspace payload is rejected after first commit"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_workspace_replay_races.WorkspaceReplayRaceTests.test_changed_payload_waits_for_first_creation_commit"}],
+      "sources": ["supabase/migrations/20261106004200_workspace_creation_receipts.sql", "tests/database/test_workspace_replay_races.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-RECEIPT-KEY-ROLLBACK",
+      "domain": "workspace-onboarding",
+      "description": "Waiting workspace creation may proceed after first rollback",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["Waiting workspace creation may proceed after first rollback"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_workspace_replay_races.WorkspaceReplayRaceTests.test_changed_payload_can_create_after_first_creation_rollback"}],
+      "sources": ["supabase/migrations/20261106004200_workspace_creation_receipts.sql", "tests/database/test_workspace_replay_races.py"]
     }
   ]
 }

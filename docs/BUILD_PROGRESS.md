@@ -1,5 +1,9 @@
 # ParentPlus Build Progress
 
+## Workspace creation receipt local draft — 2026-11-06
+
+Draft migration 042 records the original workspace creation name and type privately for new requests; a valid retry can survive a later rename, while changed payloads and deleted targets fail closed. Existing rows are backfilled as unknown rather than guessing their original names, and their creation retries are unavailable. The draft retains names and identifiers without foreign keys; retention, deletion, old deleted keys, actual migration upgrade, exposure controls and hosted identity remain unresolved. No hosted database was changed.
+
 ## Workspace creation replay access — 2026-11-06
 
 Draft migration 041 requires an active workspace and active creator membership before returning a workspace creation retry or comparing its details. Synthetic tests cover suspended/archived workspaces, suspended/removed/deleted membership, changed payload denial and both lock orderings. The draft still compares current mutable name/type rather than an immutable creation receipt; rename recovery, live identity, hosted privileges, audit and real workspace onboarding remain unresolved. No hosted database was changed.
