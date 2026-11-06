@@ -1,5 +1,13 @@
 # ParentPlus Database Security Review
 
+Local forward draft 044 repairs missing receipts for surviving workspace rows
+without inferring their original details. It disables creation, rejects conflicting
+receipts and preserves existing payloads; an old in-flight body may fail and
+roll back after the new trigger is installed. This is not hosted evidence or a
+repair for keys belonging to already deleted workspaces. Those keys remain
+unrecoverable from surviving rows; access, retention, reconciliation and hosted
+cutover require separate review. Do not enable the feature on this evidence alone.
+
 **Local correction, limited scope:** revised draft 042 locks workspace writes
 during trigger installation and backfill, then records unknown receipts for
 legacy inserts after cutover. Two isolated transaction tests cover an existing

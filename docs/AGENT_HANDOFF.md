@@ -1,5 +1,13 @@
 # ParentPlus — Agent Handoff
 
+## Local forward workspace receipt repair — 2026-11-06
+
+Draft migration 044 reconciles surviving workspaces with unknown missing receipts
+and installs the cutover protection on installations that already ran old 042/043.
+Creation is disabled during repair. Deleted missing keys cannot be reconstructed;
+hosted state, recovery policy and production rollout remain unresolved. Inspect
+fresh verification and independent review before relying on this local draft.
+
 ## Local workspace cutover correction — 2026-11-06
 
 Revised draft 042 drains active workspace writers before backfill and adds a

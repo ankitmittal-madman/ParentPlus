@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORTS = {
-    "unittest-junit.xml": 358,
+    "unittest-junit.xml": 359,
     "concurrency-junit.xml": 4,
 }
 
@@ -65,7 +65,7 @@ for filename, expected in REPORTS.items():
     print(f"PASS: {filename}: {expected} cases")
     total += expected
 
-if total != 362:
+if total != 363:
     raise SystemExit("FAIL: Unexpected total coverage")
 
-print("PASS: All 362 database evidence cases verified")
+print("PASS: All 363 database evidence cases verified")

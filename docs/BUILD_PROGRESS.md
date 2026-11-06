@@ -1,5 +1,14 @@
 # ParentPlus Build Progress
 
+## Workspace receipt forward repair draft — 2026-11-06
+
+Local migration 044 disables workspace creation, installs the cutover safeguard,
+and adds unknown receipts only for surviving workspaces missing one. Existing
+known receipts remain intact; conflicting receipts abort the transaction. A
+synthetic old-042/043 reconstruction also checks an in-flight old call rolls
+back safely. A database already missing receipts for deleted workspaces cannot
+reconstruct those keys; reconciliation and hosted rollout remain release blockers.
+
 ## Workspace cutover race correction — 2026-11-06
 
 The local draft of migration 042 now drains existing workspace writers before

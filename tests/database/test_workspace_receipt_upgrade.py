@@ -121,6 +121,25 @@ SELECT public.create_workspace('New Academy','academy','{NEW_KEY}')::text; COMMI
 """)
             self.assertEqual(result.splitlines()[-1], new_id)
             self.assertEqual(sql(f"SELECT count(*) FROM public.workspaces WHERE created_by='{ACTOR}' AND creation_request_id='{NEW_KEY}';"), '1')
+            stage = 'forward_upgrade'
+            sql((ROOT / 'supabase/migrations/20261106004400_workspace_creation_forward_repair.sql').read_text())
+            self.assertEqual(sql("SELECT enabled FROM public.workspace_creation_controls WHERE id=true;"), 'f')
+            self.assertEqual(sql(f"SELECT workspace_id,original_name,original_type FROM public.workspace_creation_receipts WHERE actor_id='{ACTOR}' AND request_key='{NEW_KEY}';"), f'{new_id}|New Academy|academy')
+            self.assertEqual(sql(f"SELECT workspace_id,original_name IS NULL,original_type IS NULL FROM public.workspace_creation_receipts WHERE actor_id='{ACTOR}' AND request_key='{OLD_KEY}';"), f'{legacy_id}|t|t')
+            self.assertEqual(sql("SELECT has_function_privilege('authenticated','public.create_workspace_unguarded_private(text,text,uuid)','EXECUTE');"), 'f')
+            sql('UPDATE public.workspace_creation_controls SET enabled=true WHERE id=true;')
+            result = sql(f"""
+BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{ACTOR}',true);
+SELECT public.create_workspace('New Academy','academy','{NEW_KEY}')::text; COMMIT;
+""")
+            self.assertEqual(result.splitlines()[-1], new_id)
+            result = sql(f"""
+BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{ACTOR}',true);
+SELECT public.create_workspace('Post Repair Academy','academy','33333333-aaaa-4aaa-8aaa-333333333333')::text; COMMIT;
+""")
+            post_id = result.splitlines()[-1]
+            self.assertRegex(post_id, r'^[0-9a-f-]{36}$')
+            self.assertEqual(sql(f"SELECT original_name,original_type FROM public.workspace_creation_receipts WHERE workspace_id='{post_id}';"), 'Post Repair Academy|academy')
         except Exception as error:
             raise AssertionError(f'UPGRADE_DIAG:{stage}:{type(error).__name__}') from error
         finally:

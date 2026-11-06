@@ -20,7 +20,7 @@ allowed.update(('ParentPlus.Concurrency', name) for name in TESTS)
 upgrade_stages = {'container_precheck', 'container_start', 'container_ready', 'migration_inventory', 'auth_fixture',
                   'old_migrations', 'legacy_creation', 'legacy_rename', 'upgrade_migration',
                   'legacy_state', 'legacy_retry', 'new_retry', 'control_upgrade',
-                  'control_disabled_retry', 'control_enabled_retry', 'cleanup'}
+                  'control_disabled_retry', 'control_enabled_retry', 'forward_upgrade', 'cleanup'}
 upgrade_errors = {'AssertionError', 'CalledProcessError', 'TimeoutExpired', 'JSONDecodeError', 'OSError',
                   'FileNotFoundError', 'RuntimeError'}
 found = False
