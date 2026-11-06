@@ -45,6 +45,49 @@ def run_sql_with_notices(sql):
 
 
 class AuthorizationTests(unittest.TestCase):
+    def test_workspace_replay_requires_current_access_before_payload_comparison(self):
+        changes = {
+            "workspace suspended": "UPDATE public.workspaces SET status='suspended' WHERE id=(SELECT id FROM replay_workspace)",
+            "workspace archived": "UPDATE public.workspaces SET status='archived' WHERE id=(SELECT id FROM replay_workspace)",
+            "membership suspended": "UPDATE public.workspace_memberships SET status='suspended' WHERE workspace_id=(SELECT id FROM replay_workspace) AND user_id='{actor}'",
+            "membership removed": "UPDATE public.workspace_memberships SET status='removed' WHERE workspace_id=(SELECT id FROM replay_workspace) AND user_id='{actor}'",
+            "membership deleted": "DELETE FROM public.workspace_memberships WHERE workspace_id=(SELECT id FROM replay_workspace) AND user_id='{actor}'",
+        }
+        for name, change in changes.items():
+            with self.subTest(name=name):
+                notice = run_sql_with_notices(f"""
+BEGIN;
+CREATE TEMP TABLE replay_workspace(id uuid);
+GRANT SELECT, INSERT ON replay_workspace TO authenticated;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '{MEERA}', true);
+INSERT INTO replay_workspace SELECT public.create_workspace('Example Academy','academy','aaaaaaaa-1111-4111-8111-aaaaaaaaaaaa');
+DO $test$ BEGIN
+  IF public.create_workspace('Example Academy','academy','aaaaaaaa-1111-4111-8111-aaaaaaaaaaaa') IS DISTINCT FROM (SELECT id FROM replay_workspace) THEN
+    RAISE EXCEPTION 'FAIL: valid retry changed ID';
+  END IF;
+END $test$;
+RESET ROLE;
+{change.format(actor=MEERA)};
+SET LOCAL ROLE authenticated;
+DO $test$
+DECLARE denied boolean;
+BEGIN
+  FOR attempt IN 1..2 LOOP
+    denied := false;
+    BEGIN
+      PERFORM public.create_workspace(CASE WHEN attempt=1 THEN 'Example Academy' ELSE 'Changed Academy' END,'academy','aaaaaaaa-1111-4111-8111-aaaaaaaaaaaa');
+    EXCEPTION WHEN OTHERS THEN
+      IF SQLSTATE='42501' AND SQLERRM='Workspace unavailable' THEN denied:=true; ELSE RAISE; END IF;
+    END;
+    IF NOT denied THEN RAISE EXCEPTION 'FAIL: unauthorized replay returned success'; END IF;
+  END LOOP;
+  RAISE NOTICE 'PASS: access denial precedes payload comparison';
+END $test$;
+ROLLBACK;
+""")
+                self.assertIn("PASS: access denial precedes payload comparison", notice)
+
     def test_own_profile_visible(self):
         result = run_sql(f"""
 BEGIN;

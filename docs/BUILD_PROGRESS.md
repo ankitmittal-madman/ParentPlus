@@ -1,5 +1,9 @@
 # ParentPlus Build Progress
 
+## Workspace creation replay access — 2026-11-06
+
+Draft migration 041 requires an active workspace and active creator membership before returning a workspace creation retry or comparing its details. Synthetic tests cover suspended/archived workspaces, suspended/removed/deleted membership, changed payload denial and both lock orderings. The draft still compares current mutable name/type rather than an immutable creation receipt; rename recovery, live identity, hosted privileges, audit and real workspace onboarding remain unresolved. No hosted database was changed.
+
 ## Two-sided MVP direction — 2026-11-06
 
 The founder confirmed that the coach/academy experience must be ready alongside

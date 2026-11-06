@@ -1,6 +1,10 @@
 # ParentPlus Database Security Review
 
 
+## Workspace creation replay access — 2026-11-06
+
+Local migration 041 checks and locks active workspace and membership before a creation retry returns details. This does not establish hosted role behavior or complete onboarding. The request still compares mutable current name/type, so a valid retry after a rename can fail; an immutable receipt and lifecycle/backfill policy remain unresolved. Workspace creation remains directly callable by authenticated database roles in this draft; review exposure and abuse controls before any hosted rollout.
+
 ## Connection RPC exposure — 2026-11-06
 
 Local migration 040 revokes direct execution of the unfinished request and approval functions from public, anonymous and authenticated roles. Migrations 038/039 still expose those functions until 040 is applied: partial rollout is unsafe. Hosted ownership, role inheritance and other RPCs require separate review; no hosted database was modified. Historical tests use temporary synthetic grants, and the default baseline must be verified separately.

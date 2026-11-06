@@ -12514,6 +12514,83 @@
       "scenarios": ["Anonymous and authenticated roles cannot execute connection request or approval functions in the default local schema"],
       "tests": [{"suite": "database", "ref": "tests.database.test_connection_exposure.ConnectionExposureTests.test_unreleased_connection_functions_deny_application_roles"}],
       "sources": ["supabase/migrations/20261106004000_disable_unreleased_connection_rpc.sql", "tests/database/test_connection_exposure.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-REPLAY-ACCESS",
+      "domain": "workspace-onboarding",
+      "description": "Replay checks current access before comparing workspace details",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["Replay checks current access before comparing workspace details"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_authorization.AuthorizationTests.test_workspace_replay_requires_current_access_before_payload_comparison"}],
+      "sources": ["supabase/migrations/20261106004100_workspace_replay_access.sql", "tests/database/test_authorization.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-REPLAY-WORKSPACE-COMMIT",
+      "domain": "workspace-onboarding",
+      "description": "Workspace suspension committed before replay is respected",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["Workspace suspension committed before replay is respected"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_workspace_replay_races.WorkspaceReplayRaceTests.test_workspace_suspension_commits_before_replay"}],
+      "sources": ["supabase/migrations/20261106004100_workspace_replay_access.sql", "tests/database/test_workspace_replay_races.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-REPLAY-WORKSPACE-ROLLBACK",
+      "domain": "workspace-onboarding",
+      "description": "Rolled-back workspace suspension allows authorized replay",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["Rolled-back workspace suspension allows authorized replay"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_workspace_replay_races.WorkspaceReplayRaceTests.test_workspace_suspension_rolls_back_before_replay"}],
+      "sources": ["supabase/migrations/20261106004100_workspace_replay_access.sql", "tests/database/test_workspace_replay_races.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-REPLAY-MEMBERSHIP-COMMIT",
+      "domain": "workspace-onboarding",
+      "description": "Membership suspension committed before replay is respected",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["Membership suspension committed before replay is respected"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_workspace_replay_races.WorkspaceReplayRaceTests.test_membership_suspension_commits_before_replay"}],
+      "sources": ["supabase/migrations/20261106004100_workspace_replay_access.sql", "tests/database/test_workspace_replay_races.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-REPLAY-MEMBERSHIP-ROLLBACK",
+      "domain": "workspace-onboarding",
+      "description": "Rolled-back membership suspension allows authorized replay",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["Rolled-back membership suspension allows authorized replay"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_workspace_replay_races.WorkspaceReplayRaceTests.test_membership_suspension_rolls_back_before_replay"}],
+      "sources": ["supabase/migrations/20261106004100_workspace_replay_access.sql", "tests/database/test_workspace_replay_races.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-REPLAY-WORKSPACE-WAITS",
+      "domain": "workspace-onboarding",
+      "description": "Workspace suspension waits for in-flight authorized replay",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["Workspace suspension waits for in-flight authorized replay"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_workspace_replay_races.WorkspaceReplayRaceTests.test_workspace_suspension_waits_for_replay"}],
+      "sources": ["supabase/migrations/20261106004100_workspace_replay_access.sql", "tests/database/test_workspace_replay_races.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-REPLAY-MEMBERSHIP-WAITS",
+      "domain": "workspace-onboarding",
+      "description": "Membership suspension waits for in-flight authorized replay",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["Membership suspension waits for in-flight authorized replay"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_workspace_replay_races.WorkspaceReplayRaceTests.test_membership_suspension_waits_for_replay"}],
+      "sources": ["supabase/migrations/20261106004100_workspace_replay_access.sql", "tests/database/test_workspace_replay_races.py"]
     }
   ]
 }
