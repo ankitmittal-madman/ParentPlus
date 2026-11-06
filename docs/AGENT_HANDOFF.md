@@ -1,5 +1,14 @@
 # ParentPlus — Agent Handoff
 
+## Blocking workspace migration race — 2026-11-06
+
+An independent isolated 041-to-042 concurrent upgrade reproduction found an
+old uncommitted workspace write can miss the receipt backfill. After privileged
+deletion, a retry with the same key can create another workspace. Keep hosted
+rollout blocked; see the database security review for the unverified quiescent
+rollout option and why a table lock alone is insufficient. The committed-row
+upgrade test does not cover this interleaving.
+
 ## Workspace creation control draft — 2026-11-06
 
 Migration 043 adds a default-off database guard for workspace creation and

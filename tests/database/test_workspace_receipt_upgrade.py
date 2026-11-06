@@ -1,4 +1,4 @@
-"""Real 041-to-042 migration test in a separate, disposable PostgreSQL container."""
+"""Real 041-to-043 migration test in a separate, disposable PostgreSQL container."""
 
 import json
 import subprocess
@@ -14,6 +14,7 @@ ACTOR = '11111111-1111-4111-8111-111111111111'
 OLD_KEY = '11111111-aaaa-4aaa-8aaa-111111111111'
 NEW_KEY = '22222222-aaaa-4aaa-8aaa-222222222222'
 UPGRADE = ROOT / 'supabase/migrations/20261106004200_workspace_creation_receipts.sql'
+CONTROL_UPGRADE = ROOT / 'supabase/migrations/20261106004300_workspace_creation_database_control.sql'
 
 
 def docker(*args, input_text=None, check=True):
@@ -92,10 +93,34 @@ SELECT public.create_workspace('{supplied_name}','academy','{OLD_KEY}'); COMMIT;
             stage = 'new_retry'
             result = sql(f"""
 BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{ACTOR}',true);
-SELECT public.create_workspace('New Academy','academy','{NEW_KEY}') = public.create_workspace('New Academy','academy','{NEW_KEY}');
+SELECT 'NEW:' || public.create_workspace('New Academy','academy','{NEW_KEY}')::text;
+SELECT 'SAME:' || (public.create_workspace('New Academy','academy','{NEW_KEY}') = public.create_workspace('New Academy','academy','{NEW_KEY}'))::text;
 COMMIT;
 """)
-            self.assertEqual(result.splitlines()[-1], 't')
+            new_id = result.split('NEW:')[-1].splitlines()[0].strip()
+            self.assertRegex(new_id, r'^[0-9a-f-]{36}$')
+            self.assertEqual(result.splitlines()[-1], 'SAME:true')
+            stage = 'control_upgrade'
+            sql(CONTROL_UPGRADE.read_text())
+            self.assertEqual(sql("SELECT enabled FROM public.workspace_creation_controls WHERE id=true;"), 'f')
+            self.assertEqual(sql(f"SELECT name FROM public.workspaces WHERE id='{legacy_id}';"), 'Renamed Academy')
+            self.assertEqual(sql(f"SELECT name FROM public.workspaces WHERE id='{new_id}';"), 'New Academy')
+            stage = 'control_disabled_retry'
+            result = docker('exec', '-i', CONTAINER, 'psql', '-X', '-A', '-t', '-q', '-v', 'ON_ERROR_STOP=1',
+                            '-U', USER, '-d', DB, input_text=f"""
+BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{ACTOR}',true);
+SELECT public.create_workspace('New Academy','academy','{NEW_KEY}'); COMMIT;
+""", check=False)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn('Workspace creation unavailable', result.stderr)
+            stage = 'control_enabled_retry'
+            sql('UPDATE public.workspace_creation_controls SET enabled=true WHERE id=true;')
+            result = sql(f"""
+BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{ACTOR}',true);
+SELECT public.create_workspace('New Academy','academy','{NEW_KEY}')::text; COMMIT;
+""")
+            self.assertEqual(result.splitlines()[-1], new_id)
+            self.assertEqual(sql(f"SELECT count(*) FROM public.workspaces WHERE created_by='{ACTOR}' AND creation_request_id='{NEW_KEY}';"), '1')
         except Exception as error:
             raise AssertionError(f'UPGRADE_DIAG:{stage}:{type(error).__name__}') from error
         finally:

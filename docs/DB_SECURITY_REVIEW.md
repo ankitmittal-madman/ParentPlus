@@ -1,5 +1,22 @@
 # ParentPlus Database Security Review
 
+The isolated 041-to-043 test covers committed existing workspaces and retry
+behavior across the default-off control migration. It does not establish safety
+for concurrent writers or hosted cutover; the earlier 042 backfill and later
+043 wrapper require rollout review before production use.
+
+**Blocking: concurrent 041-to-042 upgrade.** An independent isolated test held
+an old workspace creation transaction open, applied 042, and then committed the
+old transaction. The workspace had no receipt; its retry failed closed. After
+privileged deletion of the workspace and membership, the same request key
+created a new workspace because no tombstone existed. This is not a permission
+bypass and does not establish that deletion is available to application users.
+Do not perform a live rollout of this draft. A potential operational mitigation
+is to stop new workspace calls, drain all legacy transactions, apply 042 and 043,
+and verify receipt completeness while keeping the control off. That procedure
+has not been tested as a hosted rollout. A table lock alone does not cover an
+old call that began before migration but reaches its insert after the lock ends.
+
 Local draft migration 043 introduces a private default-off control for the
 workspace-creation RPC and locks it across creation and replay. Its synthetic
 tests do not verify hosted function ownership, role inheritance, existing

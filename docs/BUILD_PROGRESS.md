@@ -1,5 +1,19 @@
 # ParentPlus Build Progress
 
+## Workspace control upgrade check — 2026-11-06
+
+An isolated synthetic upgrade test applies migrations 041, 042 and 043 in
+sequence. It checks an existing renamed workspace remains intact, a newer
+workspace retry is blocked while the new control is disabled, and that retry
+returns the same workspace after test-only enablement. This checks committed
+pre-upgrade records, not concurrent migration cutover, lost request IDs,
+retention or hosted deployment.
+
+An independent synthetic test found that an in-flight 041 workspace creation
+can commit after 042's backfill without a receipt. Following privileged deletion,
+the same request key can create another workspace. This is a release-blocking
+concurrent-upgrade risk; a safe rollout or migration correction remains unverified.
+
 ## Workspace creation database control — 2026-11-06
 
 Local draft migration 043 puts workspace creation and replay behind a private,
