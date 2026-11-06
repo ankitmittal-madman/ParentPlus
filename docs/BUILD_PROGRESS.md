@@ -1,5 +1,9 @@
 # ParentPlus Build Progress
 
+## Workspace receipt legacy upgrade check — 2026-11-06
+
+A separate disposable PostgreSQL container creates and renames a synthetic workspace under migration 041, applies 042, and checks that its name and owner remain while original creation details are marked unknown and retries fail closed. A new post-upgrade workspace retry is also checked. This is one isolated upgrade path, not verification of hosted data, concurrent rollout, recovery policy or receipt retention.
+
 ## Workspace creation receipt local draft — 2026-11-06
 
 Draft migration 042 records the original workspace creation name and type privately for new requests; a valid retry can survive a later rename, while changed payloads and deleted targets fail closed. Existing rows are backfilled as unknown rather than guessing their original names, and their creation retries are unavailable. The draft retains names and identifiers without foreign keys; retention, deletion, old deleted keys, actual migration upgrade, exposure controls and hosted identity remain unresolved. No hosted database was changed.

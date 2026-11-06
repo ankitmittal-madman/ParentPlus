@@ -17,6 +17,7 @@ if str(REPO_ROOT) not in sys.path:
 MODULES = [
     "tests.database.test_authorization",
     "tests.database.test_workspace_replay_races",
+    "tests.database.test_workspace_receipt_upgrade",
     "tests.database.test_scheduling_foundation",
     "tests.database.test_scheduling_authorization_races",
     "tests.database.test_child_authorization",
@@ -107,7 +108,7 @@ def main():
 
     print(f"JUnit evidence written: {output}", flush=True)
 
-    expected_tests = 343
+    expected_tests = 344
     actual_tests = result.testsRun
     recorded_cases = len(group.findall("testcase"))
 
@@ -132,7 +133,7 @@ def main():
         )
         return 1
 
-    print("PASS: All 343 database unit tests verified", flush=True)
+    print("PASS: All 344 database unit tests verified", flush=True)
     return 0
 
 

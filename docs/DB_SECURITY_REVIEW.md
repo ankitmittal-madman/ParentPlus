@@ -3,7 +3,7 @@
 
 ## Workspace creation replay access — 2026-11-06
 
-Local migration 041 checks and locks active workspace and membership before a creation retry returns details. This does not establish hosted role behavior or complete onboarding. Draft migration 042 adds private original-payload receipts for future requests; existing rows are recorded as unknown, so their creation retries are unavailable. It cannot reconstruct records or request keys deleted before migration. Receipt retention, deletion and actual upgrade behavior remain unresolved. Workspace creation remains directly callable by authenticated database roles in this draft; review exposure and abuse controls before any hosted rollout.
+Local migration 041 checks and locks active workspace and membership before a creation retry returns details. This does not establish hosted role behavior or complete onboarding. Draft migration 042 adds private original-payload receipts for future requests; existing rows are recorded as unknown, so their creation retries are unavailable. It cannot reconstruct records or request keys deleted before migration. A synthetic 041-to-042 upgrade now checks one existing renamed workspace; hosted data, concurrent upgrade behavior, receipt retention and deletion remain unresolved. Workspace creation remains directly callable by authenticated database roles in this draft; review exposure and abuse controls before any hosted rollout.
 
 ## Connection RPC exposure — 2026-11-06
 

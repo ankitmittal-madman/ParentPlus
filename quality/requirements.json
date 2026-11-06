@@ -12668,6 +12668,17 @@
       "scenarios": ["Waiting workspace creation may proceed after first rollback"],
       "tests": [{"suite": "database", "ref": "tests.database.test_workspace_replay_races.WorkspaceReplayRaceTests.test_changed_payload_can_create_after_first_creation_rollback"}],
       "sources": ["supabase/migrations/20261106004200_workspace_creation_receipts.sql", "tests/database/test_workspace_replay_races.py"]
+    },
+    {
+      "id": "DB-WORKSPACE-RECEIPT-LEGACY-UPGRADE",
+      "domain": "workspace-onboarding",
+      "description": "Upgrade a renamed synthetic legacy workspace without guessing its original creation payload.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["A 041 workspace renamed before 042 retains its name and owner while legacy creation retry fails closed"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_workspace_receipt_upgrade.WorkspaceReceiptUpgradeTests.test_existing_renamed_workspace_is_preserved_and_legacy_retry_fails_closed"}],
+      "sources": ["supabase/migrations/20261106004100_workspace_replay_access.sql", "supabase/migrations/20261106004200_workspace_creation_receipts.sql", "tests/database/test_workspace_receipt_upgrade.py"]
     }
   ]
 }
