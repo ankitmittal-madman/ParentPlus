@@ -1,5 +1,12 @@
 # ParentPlus Build Progress
 
+## Two-sided MVP direction — 2026-11-06
+
+The founder confirmed that the coach/academy experience must be ready alongside
+the parent experience. The roadmap now records a proposed shared pilot journey
+and explicit exit evidence for both sides. This is planning context, not a claim
+that either end-to-end journey or its hosted deployment is complete.
+
 ## Connection RPC exposure safeguard — 2026-11-06
 
 Local migration 040 revokes application-role execution of the unfinished connection-request and approval RPCs. Baseline privilege tests must verify denial; historical behavior and race tests use temporary grants in isolated fixtures and restore denial. Partial migration rollout, other RPCs, inherited hosted roles, real-provider access and the connection lifecycle remain unverified. No hosted database was changed.
