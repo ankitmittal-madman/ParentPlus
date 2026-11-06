@@ -112,6 +112,16 @@ WHERE id = '{self.request_id}' AND status = 'approved';
             extract_labeled_id(first, "RELATIONSHIP_ID:"),
             extract_labeled_id(second, "RELATIONSHIP_ID:")
         )
+        query(f"""
+UPDATE public.connection_requests
+SET expires_at = pg_catalog.clock_timestamp() - interval '1 second'
+WHERE id = '{self.request_id}';
+""")
+        after_expiry = self.approve()
+        self.assertEqual(
+            extract_labeled_id(first, "RELATIONSHIP_ID:"),
+            extract_labeled_id(after_expiry, "RELATIONSHIP_ID:")
+        )
         state = query(f"""
 SELECT
  (SELECT count(*) FROM public.workspace_children
@@ -138,7 +148,7 @@ SELECT
         blocker = None
         approver = None
         try:
-            # Keep the request initially valid for approximately two seconds.
+            # Keep the request initially valid for approximately eight seconds.
             query(f"""
 UPDATE public.connection_requests
 SET expires_at = pg_catalog.clock_timestamp() + interval '8 seconds'
@@ -227,6 +237,110 @@ WHERE id = '{self.request_id}';
             )
             self.assertIn("Connection request expired", errors)
             self.assert_pending_without_approval()
+
+        finally:
+            for process in (approver, blocker):
+                if process is not None:
+                    close_psql_session(process)
+
+
+    def test_expiry_while_waiting_for_workspace_lock(self):
+        blocker = None
+        approver = None
+        try:
+            # Keep the request initially valid for approximately eight seconds.
+            query(f"""
+UPDATE public.connection_requests
+SET expires_at = pg_catalog.clock_timestamp() + interval '8 seconds'
+WHERE id = '{self.request_id}';
+""")
+
+            blocker_name = "m3_workspace_expiry_blocker_" + uuid.uuid4().hex
+            approver_name = "m3_workspace_expiry_approver_" + uuid.uuid4().hex
+
+            blocker = start_psql_session()
+            blocker.stdin.write(f"""
+BEGIN;
+SET LOCAL lock_timeout = '10s';
+SELECT set_config('application_name', '{blocker_name}', false);
+SELECT id FROM public.workspaces
+WHERE id = '{self.workspace_id}' FOR UPDATE;
+SELECT 'WORKSPACE_LOCKED';
+""")
+            blocker.stdin.flush()
+
+            self.assertTrue(
+                wait_for_session_marker(blocker, "WORKSPACE_LOCKED"),
+                "Workspace row lock not acquired"
+            )
+
+            approver = start_psql_session()
+            approver.stdin.write(f"""
+BEGIN;
+SET LOCAL lock_timeout = '20s';
+SELECT set_config('application_name', '{approver_name}', false);
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '{RAHUL}', true);
+SELECT public.approve_guardian_connection('{self.request_id}');
+COMMIT;
+""")
+            approver.stdin.flush()
+
+            self.assertTrue(
+                wait_for_blocking_relationship(approver_name, blocker_name),
+                "Approval not observed waiting for workspace lock"
+            )
+
+            # Confirm approval is blocked while the request is still valid.
+            remaining = query(f"""
+SELECT pg_catalog.date_part(
+  'epoch',
+  expires_at - pg_catalog.clock_timestamp()
+)
+FROM public.connection_requests
+WHERE id = '{self.request_id}';
+""")
+            self.assertGreater(
+                float(remaining), 0,
+                "Request expired before blocking was verified"
+            )
+
+            # Wait until the actual database expiry deadline has passed.
+            deadline = time.monotonic() + float(remaining) + 0.3
+            while time.monotonic() < deadline:
+                time.sleep(0.1)
+
+            expired = query(f"""
+SELECT expires_at <= pg_catalog.clock_timestamp()
+FROM public.connection_requests
+WHERE id = '{self.request_id}';
+""")
+            self.assertEqual(expired, "t")
+
+            blocker.stdin.write(
+                "COMMIT;\nSELECT 'BLOCKER_COMMITTED';\n"
+            )
+            blocker.stdin.flush()
+
+            self.assertTrue(
+                wait_for_session_marker(blocker, "BLOCKER_COMMITTED"),
+                "Blocker commit not confirmed"
+            )
+
+            approver.stdin.close()
+            approver.stdin = None
+            _, errors = approver.communicate(timeout=15)
+
+            self.assertNotEqual(
+                approver.returncode, 0,
+                "Expired approval unexpectedly succeeded"
+            )
+            self.assertIn("Connection request expired", errors)
+            self.assert_pending_without_approval()
+            self.assertEqual(query(f"""
+SELECT count(*) FROM public.workspace_children
+WHERE workspace_id = '{self.workspace_id}' AND child_id = '{self.child_id}';
+"""), "0")
 
         finally:
             for process in (approver, blocker):

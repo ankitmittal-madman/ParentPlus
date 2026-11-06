@@ -1,6 +1,11 @@
 # ParentPlus Database Security Review
 
 
+## Guardian connection approval and retry — 2026-11-06
+
+Local migration 038 adds a post-lock expiry recheck to the approval draft after a deterministic synthetic workspace-lock test reproduced approval after expiry. This is not hosted verification. An independent source review also found that a second request key that reuses an existing pending connection is not recorded; retrying that key after approval can create another request, and reuse with different payload may not be detected. A durable, payload-bound receipt and its concurrency, lifecycle, retention and privacy rules remain unresolved. Do not connect or release the journey on the basis of the expiry fix alone.
+
+
 ## Parent child-creation journey draft — 2026-11-04
 
 A default-off local draft now provides a parent creation, explicit confirmation and add-another flow backed by an actor-scoped durable intent and request identifier. Migration 035 revokes authenticated access to the legacy direct creation function; historical behaviour tests use temporary synthetic grants, and separate tests verify the real denial. Cross-account recovery, navigation/reload uncertainty, old-profile reconciliation, real provider/JWT behaviour and retention remain release blockers. See [the child creation journey spec](superpowers/specs/2026-11-04-child-creation-journey.md).

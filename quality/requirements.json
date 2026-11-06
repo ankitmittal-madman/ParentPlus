@@ -12415,6 +12415,17 @@
       "scenarios": ["The dashboard identifies sample classes and records and does not offer a fake start action"],
       "tests": [{"suite": "frontend", "ref": "apps/web/src/app/(coach)/page.test.tsx::Coach dashboard > clearly identifies sample data and does not offer a fake class action"}],
       "sources": ["apps/web/src/app/(coach)/page.tsx", "apps/web/src/app/(coach)/page.test.tsx"]
+    },
+    {
+      "id": "DB-APPROVAL-EXPIRY-AFTER-WORKSPACE-LOCK",
+      "domain": "guardian-connection-approval",
+      "description": "Reject approval if a pending connection request expires while awaiting the workspace lock.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": ["An approval waiting on a workspace lock fails after expiry without creating a relationship or approval event"],
+      "tests": [{"suite": "database", "ref": "tests.database.test_approval_safety.ApprovalSafetyTests.test_expiry_while_waiting_for_workspace_lock"}],
+      "sources": ["supabase/migrations/20261106003800_approval_expiry_after_locks.sql", "tests/database/test_approval_safety.py"]
     }
   ]
 }

@@ -1,5 +1,9 @@
 # ParentPlus Build Progress
 
+## Connection approval expiry safeguard — 2026-11-06
+
+A local synthetic test reproduced approval of an expired request after waiting on a workspace lock. Draft migration 038 rechecks expiry after the blocking authorization and relationship locks, before approval writes. The targeted test verifies rejection without a relationship or approval event. This does not resolve connection-request retry receipts, provider identity, hosted migration ownership, audit/retention policy or release readiness; no hosted database was changed.
+
 ## Coach dashboard preview clarity — 2026-11-06
 
 The dashboard identifies its classes and records as example data and replaces the nonfunctional start-class label with an example label. Component and local browser checks cover the preview wording; this is not real class scheduling or persistence.
