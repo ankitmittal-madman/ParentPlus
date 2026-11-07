@@ -1,5 +1,15 @@
 # ParentPlus Build Progress
 
+## Private request lookup for a known workspace — 2026-11-07
+
+Local draft migration 047 can look up a candidate creation request ID for one
+known workspace ID belonging to its creator, after the private recovery status
+rechecks the receipt, active workspace and active membership. The operation
+returns only IDs and is inaccessible to application roles. It cannot discover an
+unknown workspace, prove which submission the owner intended, or make a new
+request safe. Account changes, lost workspace IDs, retention, real identity,
+hosted rollout and the user-facing onboarding journey remain open.
+
 ## Private workspace request fence — 2026-11-06
 
 Draft migration 046 adds an actor-scoped, exact-request fence. After a fence

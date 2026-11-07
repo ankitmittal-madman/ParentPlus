@@ -1,5 +1,13 @@
 # ParentPlus Database Security Review
 
+Local draft 047 adds a private single-workspace request-key lookup. A nonlocking
+initial read is followed by 045's actor/request lock and active workspace,
+membership and receipt rechecks; application roles cannot call it. It returns
+unknown when those checks fail and does not list historical request keys. The
+result is only a candidate for an already-known workspace, not evidence of the
+owner's intended submission or permission to create again. READ COMMITTED is
+required; hosted identity, privileged changes, retention and rollout remain open.
+
 Draft 046 introduces a private exact-key workspace fence and a BEFORE INSERT
 guard sharing creation's actor/key lock. The BEFORE guard performs no writes;
 receipt creation stays AFTER INSERT so conflicting inserts do not add receipts.

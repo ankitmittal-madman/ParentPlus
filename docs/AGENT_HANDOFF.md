@@ -1,5 +1,13 @@
 # ParentPlus — Agent Handoff
 
+## Private known-workspace request lookup — 2026-11-07
+
+Draft 047 looks up a candidate request ID for a known workspace ID after 045's
+private access and receipt rechecks. It has no app-role access or user-facing
+flow. It does not discover unknown workspaces, match an intended submission,
+prove absence or authorise a replacement request. Identity, account changes,
+retention and the full academy onboarding journey remain open.
+
 ## Private exact-request workspace fence — 2026-11-06
 
 Draft 046 introduces a private exact-actor/key fence, with a BEFORE INSERT guard
