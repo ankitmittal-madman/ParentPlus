@@ -2,7 +2,16 @@
 
 ## Problem and current scope
 
-The server-only bridge was initially drafted to call the atomic database operation. The current action remains unused by the practice screen and returns unavailable even when the server flag is enabled; it makes no RPC call. Migration 022 denies app roles execution of the old creation functions. No hosted resource is accessed during tests. This bridge is not the completed application journey.
+The current local draft connects the coach recovery panel to a server-only
+bridge and a versioned reservation protocol. With both app and private database
+controls explicitly enabled, the form creates a course, batch and bounded
+weekly session series in one transaction, recovers pending/completed state, and
+requires acknowledgement before another setup. The founder selected weekly
+sessions through a fixed end date. The form previews the occurrence count and
+uses the academy time zone, which an owner/admin may set once when absent. Local
+time gaps and folds fail closed; schedules are limited to 104 occurrences.
+Controls remain default-off. No hosted resource is accessed during tests. The
+local form is not a production rollout.
 
 ## Contract and threats
 
@@ -59,6 +68,20 @@ A local diagnostic used a fresh network-isolated PostgreSQL database, synthetic 
 This blocks enabling real class-setup writes. A solution must coordinate the decision to begin, advance, complete and recover across relevant managers and devices at the database boundary. It must not use browser storage as the authority, expose another manager's private intent details, confuse an unavailable result with absence, or stop an authorised manager from intentionally creating a separate class after the previous operation is safely resolved. Define lock ordering, release and reconciliation rules before implementing. Direct authenticated RPC calls must obey the same safeguards as the UI. The singleton database control and web flag must remain disabled until the complete protocol is tested and independently reviewed. Workspace coordination alone does not restore the original actor after a reload or account switch; discovery and reconciliation for that separate case also require a reviewed design.
 
 Required regression scenarios include simultaneous and delayed requests from different managers, an original request arriving after a status check, both orders of completion versus retry, account switches and reloads, device changes, unknown or unavailable database responses, permission revocation and workspace suspension, same-name intentional new classes after resolution, privacy of other managers' details, and direct RPC calls. Use real database concurrency tests and, before release, signed-provider and browser-to-database tests. Passing a test that merely reproduces two reservations would document the defect, not resolve it.
+
+## Versioned local workspace guard — draft 048, 2026-11-07
+
+Migration 048 supersedes the unversioned single-pending-intent guard for the
+app-facing begin operation. Each manager reads a workspace generation and
+submits that value with a stable request ID. A shared workspace-version lock
+orders begin against acknowledgement; acknowledgement advances the generation,
+so a delayed request from a pre-acknowledgement screen fails and must refresh.
+Matching request IDs replay their original outcome. The old three-argument app
+begin wrapper is revoked. Local isolated tests cover stale snapshots, refreshed
+intentional setup, idempotent retry and the concurrent acknowledgement-first
+ordering. This is only a database slice. The control and UI remain disabled;
+app integration, signed-provider testing, full identity-loss recovery, retention,
+independent review and hosted rollout remain open.
 
 ## Local workspace guard draft — 2026-11-04
 

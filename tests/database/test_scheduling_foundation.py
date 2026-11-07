@@ -24,6 +24,111 @@ GRANT EXECUTE ON FUNCTION public.create_course_and_batch(uuid,text,text,uuid) TO
 """, 1)
 
 class SchedulingFoundationTests(unittest.TestCase):
+    def class_setup_weekly(self, extra_sql="", call="SELECT * FROM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001', 'e0000000-0000-4000-8000-000000000001', 'Asia/Kolkata', '2026-11-09', '17:30', '2026-11-23', 60);"):
+        return SETUP + f"""
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+INSERT INTO public.class_setup_intents (id, actor_id, workspace_id, course_name, batch_name)
+VALUES ('e0000000-0000-4000-8000-000000000001','11111111-1111-4111-8111-111111111111','a0000000-0000-4000-8000-000000000001','Art Basics','Monday learners');
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+{extra_sql}
+{call}
+"""
+
+    def test_weekly_class_setup_creates_course_batch_and_bounded_sessions_atomically(self):
+        out = run_sql(self.class_setup_weekly("""
+SET ROLE authenticated;
+""") + """
+RESET ROLE;
+SELECT (SELECT count(*) FROM public.courses WHERE name='Art Basics') || ':' ||
+ (SELECT count(*) FROM public.batches WHERE name='Monday learners') || ':' ||
+ (SELECT count(*) FROM public.schedule_sessions WHERE class_setup_intent_id='e0000000-0000-4000-8000-000000000001') || ':' ||
+ (SELECT count(*) FROM public.class_setup_session_series WHERE class_setup_intent_id='e0000000-0000-4000-8000-000000000001') || ':' ||
+ (SELECT count(*) FROM public.schedule_sessions WHERE starts_at IN ('2026-11-09 12:00+00','2026-11-16 12:00+00','2026-11-23 12:00+00'));
+ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], '1:1:3:1:3')
+
+    def test_weekly_class_setup_retry_returns_same_records_and_changed_schedule_fails(self):
+        out = run_sql(self.class_setup_weekly() + """
+CREATE TEMP TABLE first_setup AS SELECT * FROM public.complete_private_class_setup_weekly(
+ 'a0000000-0000-4000-8000-000000000001','e0000000-0000-4000-8000-000000000001','Asia/Kolkata','2026-11-09','17:30','2026-11-23',60);
+SELECT (SELECT course_id FROM first_setup) = (SELECT completed_course_id FROM public.class_setup_intents WHERE id='e0000000-0000-4000-8000-000000000001') AND
+ (SELECT occurrence_count FROM first_setup) = 3;
+DO $$ BEGIN
+ BEGIN PERFORM * FROM public.complete_private_class_setup_weekly('a0000000-0000-4000-8000-000000000001','e0000000-0000-4000-8000-000000000001','Asia/Kolkata','2026-11-09','18:00','2026-11-23',60); RAISE EXCEPTION 'changed schedule retry accepted';
+ EXCEPTION WHEN unique_violation THEN NULL; END;
+END $$;
+SELECT count(*) FROM public.schedule_sessions WHERE class_setup_intent_id='e0000000-0000-4000-8000-000000000001'; ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-2:], ['t', '3'])
+
+    def test_weekly_class_setup_rejects_daylight_saving_gap_and_rolls_back_timezone_and_class(self):
+        out = run_sql(self.class_setup_weekly(call="""
+DO $$ BEGIN
+ BEGIN PERFORM * FROM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001','e0000000-0000-4000-8000-000000000001','America/New_York','2026-03-08','02:30','2026-03-08',60); RAISE EXCEPTION 'nonexistent time accepted';
+ EXCEPTION WHEN invalid_parameter_value THEN NULL; END;
+END $$;
+""") + """
+SELECT (SELECT scheduling_time_zone IS NULL FROM public.workspaces WHERE id='a0000000-0000-4000-8000-000000000001') || ':' ||
+ (SELECT count(*)=0 FROM public.courses WHERE name='Art Basics') || ':' ||
+ (SELECT count(*)=0 FROM public.batches WHERE name='Monday learners') || ':' ||
+ (SELECT count(*)=0 FROM public.schedule_sessions);
+ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], 'true:true:true:true')
+
+    def test_weekly_class_setup_rejects_ambiguous_daylight_saving_time_and_rolls_back(self):
+        out = run_sql(self.class_setup_weekly(call="""
+DO $$ BEGIN
+ BEGIN PERFORM * FROM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001','e0000000-0000-4000-8000-000000000001','America/New_York','2026-11-01','01:30','2026-11-01',60); RAISE EXCEPTION 'ambiguous time accepted';
+ EXCEPTION WHEN invalid_parameter_value THEN NULL; END;
+END $$;
+""") + """
+SELECT (SELECT scheduling_time_zone IS NULL FROM public.workspaces WHERE id='a0000000-0000-4000-8000-000000000001') || ':' ||
+ (SELECT count(*)=0 FROM public.courses WHERE name='Art Basics') || ':' ||
+ (SELECT count(*)=0 FROM public.batches WHERE name='Monday learners') || ':' ||
+ (SELECT count(*)=0 FROM public.schedule_sessions);
+ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], 'true:true:true:true')
+
+    def test_weekly_class_setup_is_private_and_unavailable_when_database_control_is_off(self):
+        out = run_sql("""
+SELECT NOT has_table_privilege('anon','public.class_setup_session_series','SELECT')
+ AND NOT has_table_privilege('authenticated','public.class_setup_session_series','SELECT')
+ AND NOT has_function_privilege('anon','public.app_complete_class_setup_weekly(uuid,uuid,text,date,time,date,integer)','EXECUTE')
+ AND has_function_privilege('authenticated','public.app_complete_class_setup_weekly(uuid,uuid,text,date,time,date,integer)','EXECUTE')
+ AND NOT has_function_privilege('authenticated','public.app_complete_class_setup(uuid,uuid)','EXECUTE')
+ AND NOT has_function_privilege('authenticated','public.complete_private_class_setup_weekly(uuid,uuid,text,date,time,date,integer)','EXECUTE');
+""")
+        self.assertEqual(out, 't')
+        out = run_sql(self.class_setup_weekly(extra_sql="UPDATE public.class_setup_controls SET enabled=false WHERE id=true;", call="""
+DO $$ BEGIN
+ BEGIN PERFORM * FROM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001','e0000000-0000-4000-8000-000000000001','Asia/Kolkata','2026-11-09','17:30','2026-11-23',60); RAISE EXCEPTION 'disabled setup accepted';
+ EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+END $$;
+SELECT count(*) FROM public.schedule_sessions; ROLLBACK;
+"""))
+        self.assertEqual(out.splitlines()[-1], '0')
+
+    def test_legacy_authenticated_completion_cannot_bypass_weekly_sessions(self):
+        out = run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE pending AS SELECT intent_id FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Art Basics','Monday learners');
+DO $$ BEGIN BEGIN
+ PERFORM * FROM public.app_complete_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM pending));
+ RAISE EXCEPTION 'legacy completion RPC remained callable';
+EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+RESET ROLE;
+SELECT (NOT has_function_privilege('authenticated','public.app_complete_class_setup(uuid,uuid)','EXECUTE'))::text || ':' ||
+ (SELECT count(*) FROM public.courses WHERE name='Art Basics') || ':' ||
+ (SELECT count(*) FROM public.batches WHERE name='Monday learners') || ':' ||
+ (SELECT count(*) FROM public.schedule_sessions);
+ROLLBACK;
+""")
+        self.assertEqual(out.splitlines()[-1], 'true:0:0:0')
+
     def test_valid_same_workspace_batch_and_assignment(self):
         out = run_sql(SETUP + """
 INSERT INTO public.batches (id, workspace_id, course_id, name) VALUES
@@ -1233,9 +1338,9 @@ SELECT (SELECT count(*) FROM public.list_private_archived_class_setups('a0000000
         out=run_sql(SETUP + """
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
-CREATE TEMP TABLE prior AS SELECT intent_id AS id FROM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners');
-CREATE TEMP TABLE saved AS SELECT * FROM public.app_complete_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
-SELECT (SELECT course_id FROM saved)=(SELECT course_id FROM public.app_complete_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior)));
+CREATE TEMP TABLE prior AS SELECT intent_id AS id FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Dance','Beginners');
+CREATE TEMP TABLE saved AS SELECT * FROM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'Asia/Kolkata','2026-11-09','17:30','2026-11-23',60);
+SELECT (SELECT course_id FROM saved)=(SELECT course_id FROM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'Asia/Kolkata','2026-11-09','17:30','2026-11-23',60));
 SELECT public.app_acknowledge_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior));
 CREATE TEMP TABLE next_intent AS SELECT public.app_advance_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'e6000000-0000-4000-8000-000000000001','Art','Morning') AS id;
 SELECT state='pending' AND intent_id=(SELECT id FROM next_intent) AND request_id='e6000000-0000-4000-8000-000000000001' FROM public.app_current_class_setup('a0000000-0000-4000-8000-000000000001');
@@ -1248,7 +1353,7 @@ SELECT count(*) FROM public.app_list_archived_class_setups('a0000000-0000-4000-8
         out=run_sql("""
 BEGIN; SET LOCAL ROLE anon; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 DO $$ BEGIN BEGIN PERFORM public.app_reserve_class_setup(gen_random_uuid(),'Dance','Beginners'); RAISE EXCEPTION 'anonymous accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
-DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup(gen_random_uuid(),'Dance','Beginners'); RAISE EXCEPTION 'anonymous begin accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup_v2(gen_random_uuid(),1,gen_random_uuid(),'Dance','Beginners'); RAISE EXCEPTION 'anonymous begin accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
 RESET ROLE; SELECT NOT has_function_privilege('anon','public.app_reserve_class_setup(uuid,text,text)','EXECUTE') AND NOT has_function_privilege('authenticated','public.reserve_private_class_setup(uuid,text,text)','EXECUTE') AND NOT has_table_privilege('authenticated','public.class_setup_intents','SELECT'); ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-1],'t')
@@ -1256,12 +1361,12 @@ RESET ROLE; SELECT NOT has_function_privilege('anon','public.app_reserve_class_s
     def test_app_class_setup_denies_coach_disabled_and_missing_identity(self):
         out=run_sql(SETUP + """
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
-DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners'); RAISE EXCEPTION 'coach allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Dance','Beginners'); RAISE EXCEPTION 'coach allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
 RESET ROLE; UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001'; UPDATE public.class_setup_controls SET enabled=false WHERE id=true;
 SET LOCAL ROLE authenticated;
-DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners'); RAISE EXCEPTION 'disabled allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Dance','Beginners'); RAISE EXCEPTION 'disabled allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
 RESET ROLE; UPDATE public.class_setup_controls SET enabled=true WHERE id=true; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','',true);
-DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners'); RAISE EXCEPTION 'missing identity allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Dance','Beginners'); RAISE EXCEPTION 'missing identity allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
 SELECT 'denied'; ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-1],'denied')
@@ -1271,16 +1376,16 @@ SELECT 'denied'; ROLLBACK;
 UPDATE public.workspace_memberships SET role='owner';
 INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('a0000000-0000-4000-8000-000000000001','22222222-2222-4222-8222-222222222222','admin','active');
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
-CREATE TEMP TABLE prior AS SELECT intent_id AS id FROM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners');
+CREATE TEMP TABLE prior AS SELECT intent_id AS id FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Dance','Beginners');
 SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
-DO $$ BEGIN BEGIN PERFORM public.app_complete_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior)); RAISE EXCEPTION 'other manager accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+DO $$ BEGIN BEGIN PERFORM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'Asia/Kolkata','2026-11-09','17:30','2026-11-23',60); RAISE EXCEPTION 'other manager accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
 SELECT state || ':' || (intent_id IS NULL)::text FROM public.app_current_class_setup('a0000000-0000-4000-8000-000000000001');
 SELECT 'denied'; ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-2:],['unknown:true','denied'])
 
     def test_app_class_setup_denies_legacy_unreserved_paths(self):
-        out=run_sql("SELECT NOT has_function_privilege('authenticated','public.create_course(uuid,text,uuid)','EXECUTE') AND NOT has_function_privilege('authenticated','public.create_batch(uuid,uuid,text,uuid)','EXECUTE') AND NOT has_function_privilege('authenticated','public.create_course_and_batch(uuid,text,text,uuid)','EXECUTE') AND NOT has_function_privilege('authenticated','public.app_reserve_class_setup(uuid,text,text)','EXECUTE');")
+        out=run_sql("SELECT NOT has_function_privilege('authenticated','public.create_course(uuid,text,uuid)','EXECUTE') AND NOT has_function_privilege('authenticated','public.create_batch(uuid,uuid,text,uuid)','EXECUTE') AND NOT has_function_privilege('authenticated','public.create_course_and_batch(uuid,text,text,uuid)','EXECUTE') AND NOT has_function_privilege('authenticated','public.app_reserve_class_setup(uuid,text,text)','EXECUTE') AND NOT has_function_privilege('authenticated','public.app_begin_class_setup(uuid,text,text)','EXECUTE') AND NOT has_function_privilege('authenticated','public.app_complete_class_setup(uuid,uuid)','EXECUTE');")
         self.assertEqual(out,'t')
 
     def test_app_class_setup_all_wrappers_are_gated_when_disabled(self):
@@ -1288,8 +1393,9 @@ SELECT 'denied'; ROLLBACK;
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001'; UPDATE public.class_setup_controls SET enabled=false WHERE id=true;
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 DO $$ BEGIN
- BEGIN PERFORM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners'); RAISE EXCEPTION 'reserve allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END;
- BEGIN PERFORM public.app_complete_class_setup('a0000000-0000-4000-8000-000000000001',gen_random_uuid()); RAISE EXCEPTION 'complete allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+ BEGIN PERFORM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Dance','Beginners'); RAISE EXCEPTION 'reserve allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+ BEGIN PERFORM public.app_class_setup_generation('a0000000-0000-4000-8000-000000000001'); RAISE EXCEPTION 'generation allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+ BEGIN PERFORM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001',gen_random_uuid(),'Asia/Kolkata','2026-11-09','17:30','2026-11-23',60); RAISE EXCEPTION 'complete allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END;
  BEGIN PERFORM public.app_acknowledge_class_setup('a0000000-0000-4000-8000-000000000001',gen_random_uuid()); RAISE EXCEPTION 'ack allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END;
  BEGIN PERFORM public.app_advance_class_setup('a0000000-0000-4000-8000-000000000001',gen_random_uuid(),gen_random_uuid(),'Art','Morning'); RAISE EXCEPTION 'advance allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END;
  BEGIN PERFORM public.app_current_class_setup('a0000000-0000-4000-8000-000000000001'); RAISE EXCEPTION 'current allowed'; EXCEPTION WHEN insufficient_privilege THEN NULL; END;
@@ -1302,9 +1408,9 @@ SELECT 'denied'; ROLLBACK;
 
     def test_app_class_setup_wrapper_privileges_and_owner(self):
         out=run_sql("""
-SELECT count(*)=7 AND bool_and(p.prosecdef AND p.proconfig @> ARRAY['search_path=""'] AND pg_catalog.pg_get_userbyid(p.proowner)=current_user AND (CASE WHEN p.proname='app_reserve_class_setup' THEN NOT has_function_privilege('authenticated',p.oid,'EXECUTE') ELSE has_function_privilege('authenticated',p.oid,'EXECUTE') END) AND NOT has_function_privilege('anon',p.oid,'EXECUTE'))
+SELECT count(*)=11 AND bool_and(p.prosecdef AND p.proconfig @> ARRAY['search_path=""'] AND pg_catalog.pg_get_userbyid(p.proowner)=current_user AND (CASE WHEN p.proname IN ('app_reserve_class_setup','app_complete_class_setup') THEN NOT has_function_privilege('authenticated',p.oid,'EXECUTE') ELSE has_function_privilege('authenticated',p.oid,'EXECUTE') END) AND NOT has_function_privilege('anon',p.oid,'EXECUTE'))
 FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace
-WHERE n.nspname='public' AND p.proname IN ('app_reserve_class_setup','app_complete_class_setup','app_acknowledge_class_setup','app_advance_class_setup','app_current_class_setup','app_archived_class_setup','app_list_archived_class_setups');
+WHERE n.nspname='public' AND p.proname IN ('app_reserve_class_setup','app_complete_class_setup','app_complete_class_setup_weekly','app_acknowledge_class_setup','app_advance_class_setup','app_current_class_setup','app_current_class_setup_v2','app_archived_class_setup','app_list_archived_class_setups','app_class_setup_generation','app_begin_class_setup_v2');
 """)
         self.assertEqual(out,'t')
 
@@ -1314,11 +1420,11 @@ UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-400
 CREATE FUNCTION public.test_reject_app_batch() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'synthetic app batch failure'; END $$;
 CREATE TRIGGER test_reject_app_batch BEFORE INSERT ON public.batches FOR EACH ROW EXECUTE FUNCTION public.test_reject_app_batch();
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
-CREATE TEMP TABLE prior AS SELECT intent_id AS id FROM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners');
-DO $$ BEGIN BEGIN PERFORM public.app_complete_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior)); RAISE EXCEPTION USING ERRCODE='P0002',MESSAGE='expected failure missing'; EXCEPTION WHEN raise_exception THEN IF SQLERRM <> 'synthetic app batch failure' THEN RAISE; END IF; END; END $$;
+CREATE TEMP TABLE prior AS SELECT intent_id AS id FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Dance','Beginners');
+DO $$ BEGIN BEGIN PERFORM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'Asia/Kolkata','2026-11-09','17:30','2026-11-23',60); RAISE EXCEPTION USING ERRCODE='P0002',MESSAGE='expected failure missing'; EXCEPTION WHEN raise_exception THEN IF SQLERRM <> 'synthetic app batch failure' THEN RAISE; END IF; END; END $$;
 RESET ROLE; SELECT (SELECT count(*) FROM public.courses WHERE name='Dance') || ':' || (SELECT count(*) FROM public.class_setup_intents WHERE completed_course_id IS NOT NULL);
 DROP TRIGGER test_reject_app_batch ON public.batches; SET LOCAL ROLE authenticated;
-SELECT count(*) FROM public.app_complete_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior)); ROLLBACK;
+SELECT count(*) FROM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001',(SELECT id FROM prior),'Asia/Kolkata','2026-11-09','17:30','2026-11-23',60); ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-2:],['0:0','1'])
 
@@ -1339,34 +1445,44 @@ SELECT 'denied'; ROLLBACK;
         out=run_sql(SETUP + """
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
-CREATE TEMP TABLE first_begin AS SELECT * FROM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners');
+CREATE TEMP TABLE first_begin AS SELECT * FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,'f1000000-0000-4000-8000-000000000001','Dance','Beginners');
 SELECT disposition || ':' || state FROM first_begin;
-SELECT disposition || ':' || state FROM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001',' Dance ',' Beginners ');
-SELECT count(*) FROM public.app_complete_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM first_begin));
-SELECT disposition || ':' || state FROM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners');
+SELECT disposition || ':' || state FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,'f1000000-0000-4000-8000-000000000001',' Dance ',' Beginners ');
+SELECT count(*) FROM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM first_begin),'Asia/Kolkata','2026-11-09','17:30','2026-11-23',60);
+SELECT disposition || ':' || state FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,'f1000000-0000-4000-8000-000000000001','Dance','Beginners');
 SELECT public.app_acknowledge_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM first_begin));
-SELECT disposition || ':' || state FROM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners'); ROLLBACK;
+SELECT disposition || ':' || state FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,'f1000000-0000-4000-8000-000000000001','Dance','Beginners'); ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-6:],['created:pending','existing:pending','1','existing:completed','t','existing:acknowledged'])
 
     def test_app_begin_class_rejects_changed_names_and_unauthorized(self):
         out=run_sql(SETUP + """
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
-DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners'); RAISE EXCEPTION 'coach accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Dance','Beginners'); RAISE EXCEPTION 'coach accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
 RESET ROLE; UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001'; SET LOCAL ROLE authenticated;
-SELECT * FROM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners');
-DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Advanced'); RAISE EXCEPTION 'changed accepted'; EXCEPTION WHEN unique_violation THEN NULL; END; END $$;
+SELECT * FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Dance','Beginners');
+DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Dance','Advanced'); RAISE EXCEPTION 'changed accepted'; EXCEPTION WHEN object_not_in_prerequisite_state THEN NULL; END; END $$;
 RESET ROLE; UPDATE public.class_setup_controls SET enabled=false WHERE id=true; SET LOCAL ROLE authenticated;
-DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Beginners'); RAISE EXCEPTION 'disabled accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
+DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Dance','Beginners'); RAISE EXCEPTION 'disabled accepted'; EXCEPTION WHEN insufficient_privilege THEN NULL; END; END $$;
 SELECT 'denied'; ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-1],'denied')
 
     def test_app_begin_class_privileges_and_private_state(self):
         out=run_sql("""
-SELECT p.prosecdef AND p.proconfig @> ARRAY['search_path=""'] AND pg_catalog.pg_get_userbyid(p.proowner)=current_user
- AND (CASE WHEN p.proname='app_reserve_class_setup' THEN NOT has_function_privilege('authenticated',p.oid,'EXECUTE') ELSE has_function_privilege('authenticated',p.oid,'EXECUTE') END) AND NOT has_function_privilege('anon',p.oid,'EXECUTE') AND NOT has_table_privilege('authenticated','public.class_setup_intents','SELECT')
-FROM pg_catalog.pg_proc p WHERE p.oid='public.app_begin_class_setup(uuid,text,text)'::regprocedure;
+SELECT count(*)=2 AND bool_and(p.prosecdef AND p.proconfig @> ARRAY['search_path=""']
+ AND pg_catalog.pg_get_userbyid(p.proowner)=current_user
+ AND has_function_privilege('authenticated',p.oid,'EXECUTE')
+ AND NOT has_function_privilege('anon',p.oid,'EXECUTE'))
+ AND NOT has_function_privilege('authenticated','public.app_begin_class_setup(uuid,text,text)','EXECUTE')
+ AND NOT has_function_privilege('authenticated','public.begin_private_class_setup(uuid,bigint,uuid,text,text)','EXECUTE')
+ AND NOT has_function_privilege('authenticated','public.get_private_class_setup_generation(uuid)','EXECUTE')
+ AND NOT has_table_privilege('authenticated','public.class_setup_intents','SELECT')
+ AND NOT has_table_privilege('authenticated','public.class_setup_workspace_versions','SELECT')
+ AND NOT has_table_privilege('authenticated','public.class_setup_begin_requests','SELECT')
+FROM pg_catalog.pg_proc p WHERE p.oid IN (
+ 'public.app_begin_class_setup_v2(uuid,bigint,uuid,text,text)'::regprocedure,
+ 'public.app_class_setup_generation(uuid)'::regprocedure);
 """)
         self.assertEqual(out,'t')
 
@@ -1375,17 +1491,41 @@ FROM pg_catalog.pg_proc p WHERE p.oid='public.app_begin_class_setup(uuid,text,te
 UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
 INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('a0000000-0000-4000-8000-000000000001','22222222-2222-4222-8222-222222222222','admin','active');
 SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
-CREATE TEMP TABLE first_intent AS SELECT intent_id FROM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Morning');
+CREATE TEMP TABLE first_intent AS SELECT intent_id FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Dance','Morning');
 SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
-DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Morning'); RAISE EXCEPTION 'second manager accepted'; EXCEPTION WHEN unique_violation THEN NULL; END; END $$;
+DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Dance','Morning'); RAISE EXCEPTION 'second manager accepted'; EXCEPTION WHEN object_not_in_prerequisite_state THEN NULL; END; END $$;
 SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
-SELECT count(*) FROM public.app_complete_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM first_intent));
+SELECT count(*) FROM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM first_intent),'Asia/Kolkata','2026-11-09','17:30','2026-11-23',60);
 SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
-DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Other','Evening'); RAISE EXCEPTION 'unacknowledged completion allowed'; EXCEPTION WHEN unique_violation THEN NULL; END; END $$;
+DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Other','Evening'); RAISE EXCEPTION 'unacknowledged completion allowed'; EXCEPTION WHEN object_not_in_prerequisite_state THEN NULL; END; END $$;
 SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 SELECT public.app_acknowledge_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM first_intent));
 SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
-SELECT disposition || ':' || state FROM public.app_begin_class_setup('a0000000-0000-4000-8000-000000000001','Dance','Morning');
+SELECT disposition || ':' || state FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',(SELECT generation FROM public.app_class_setup_generation('a0000000-0000-4000-8000-000000000001')),gen_random_uuid(),'Dance','Morning');
 ROLLBACK;
 """)
         self.assertEqual(out.splitlines()[-1], 'created:pending')
+
+    def test_stale_other_manager_begin_is_rejected_after_acknowledgement(self):
+        out=run_sql(SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+INSERT INTO public.workspace_memberships (workspace_id,user_id,role,status) VALUES ('a0000000-0000-4000-8000-000000000001','22222222-2222-4222-8222-222222222222','admin','active');
+SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+CREATE TEMP TABLE first_intent AS SELECT intent_id FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'Dance','Morning');
+SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
+SELECT state FROM public.app_current_class_setup('a0000000-0000-4000-8000-000000000001');
+CREATE TEMP TABLE stale_snapshot AS SELECT * FROM public.app_class_setup_generation('a0000000-0000-4000-8000-000000000001');
+SELECT generation || ':' || available FROM stale_snapshot;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT count(*) FROM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM first_intent),'Asia/Kolkata','2026-11-09','17:30','2026-11-23',60);
+SELECT public.app_acknowledge_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM first_intent));
+SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
+DO $$ BEGIN BEGIN PERFORM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',(SELECT generation FROM stale_snapshot),'f2000000-0000-4000-8000-000000000001','Dance','Morning'); RAISE EXCEPTION 'stale workspace begin accepted'; EXCEPTION WHEN serialization_failure THEN NULL; END; END $$;
+SELECT generation || ':' || available FROM public.app_class_setup_generation('a0000000-0000-4000-8000-000000000001');
+SELECT disposition || ':' || state || ':' || generation FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',(SELECT generation FROM public.app_class_setup_generation('a0000000-0000-4000-8000-000000000001')),'f2000000-0000-4000-8000-000000000002','Dance','Morning');
+RESET ROLE;
+SELECT count(*) FROM public.class_setup_intents WHERE workspace_id='a0000000-0000-4000-8000-000000000001' AND NOT acknowledged;
+ROLLBACK;
+""")
+        observed = [line for line in out.splitlines() if line in {'unknown','1:false','1','t','2:true','created:pending:2'}]
+        self.assertEqual(observed, ['unknown','1:false','1','t','2:true','created:pending:2','1'])

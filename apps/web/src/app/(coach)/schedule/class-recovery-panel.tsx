@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { observeSessionChanges } from "@/lib/auth/session-observer";
 import { listClassWorkspaces } from "@/lib/scheduling/list-class-workspaces";
 import { recoverCurrentClassSetup } from "@/lib/scheduling/recover-current-class-setup";
+import ClassSetupForm from "./class-setup-form";
 
-type Workspace = { id: string; name: string };
+type Workspace = { id: string; name: string; timeZone: string | null };
 type Recovery = Extract<Awaited<ReturnType<typeof recoverCurrentClassSetup>>, { ok: true }>;
 
 export default function ClassRecoveryPanel() {
@@ -76,7 +77,7 @@ export default function ClassRecoveryPanel() {
   return (
     <section aria-labelledby="class-recovery-title" className="mt-8 rounded-2xl bg-white p-5 shadow-sm">
       <h2 id="class-recovery-title" className="text-lg font-bold">Check class setup</h2>
-      <p className="mt-2 text-sm">Review current account data for an academy. This screen does not create or change a class.</p>
+      <p className="mt-2 text-sm">Review or set up a course and batch for an academy. If a previous setup is still being resolved, finish it before starting another.</p>
       {monitor === "checking" && <p role="status">Checking session monitoring…</p>}
       {monitor === "unavailable" && <p role="alert">Session monitoring is unavailable. Class setup cannot be checked.</p>}
       {monitor === "ready" && <>
@@ -96,6 +97,7 @@ export default function ClassRecoveryPanel() {
           <p>{recovery.state === "pending" ? "Setup pending" : recovery.acknowledged ? "Setup completed — acknowledged" : "Setup completed — not yet acknowledged"}</p>
           <p>Course: {recovery.courseName}</p><p>Batch: {recovery.batchName}</p>
         </div>}
+        {recovery && actor && selected && <ClassSetupForm actorId={actor} workspaceId={selected} timeZone={workspaces?.find((workspace) => workspace.id === selected)?.timeZone ?? null} recovery={recovery} refresh={() => selectAcademy(selected)} />}
       </>}
     </section>
   );

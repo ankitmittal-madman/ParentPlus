@@ -2,17 +2,18 @@ import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import ClassRecoveryPanel from "./class-recovery-panel";
 
-const mocks = vi.hoisted(() => ({ list: vi.fn(), recover: vi.fn(), observe: vi.fn() }));
+const mocks = vi.hoisted(() => ({ list: vi.fn(), recover: vi.fn(), observe: vi.fn(), run: vi.fn() }));
 vi.mock("@/lib/scheduling/list-class-workspaces", () => ({ listClassWorkspaces: mocks.list }));
 vi.mock("@/lib/scheduling/recover-current-class-setup", () => ({ recoverCurrentClassSetup: mocks.recover }));
 vi.mock("@/lib/auth/session-observer", () => ({ observeSessionChanges: mocks.observe }));
+vi.mock("@/lib/scheduling/class-setup-operations", () => ({ runClassSetupOperation: mocks.run }));
 const actor="b0000000-0000-4000-8000-000000000001", academy="a0000000-0000-4000-8000-000000000001", second="a0000000-0000-4000-8000-000000000002";
 
 describe("ClassRecoveryPanel", () => {
   beforeEach(() => {
     vi.resetAllMocks(); vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true"); mocks.observe.mockReturnValue(() => {});
-    mocks.list.mockResolvedValue({ok:true,actorId:actor,workspaces:[{id:academy,name:"Badminton Academy"},{id:second,name:"Art Academy"}]});
-    mocks.recover.mockResolvedValue({ok:true,state:"pending",intentId:"e0000000-0000-4000-8000-000000000001",priorIntentId:null,requestId:null,courseName:"Dance",batchName:"Morning"});
+    mocks.list.mockResolvedValue({ok:true,actorId:actor,workspaces:[{id:academy,name:"Badminton Academy",timeZone:"Asia/Kolkata"},{id:second,name:"Art Academy",timeZone:"Asia/Kolkata"}]});
+    mocks.recover.mockResolvedValue({ok:true,state:"pending",intentId:"e0000000-0000-4000-8000-000000000001",priorIntentId:null,requestId:null,courseName:"Dance",batchName:"Morning",schedule:null});
   });
   afterEach(() => { vi.unstubAllEnvs(); vi.restoreAllMocks(); });
   it("loads authorised academies only after a deliberate request", async () => {
@@ -25,7 +26,7 @@ describe("ClassRecoveryPanel", () => {
     render(<ClassRecoveryPanel />);fireEvent.click(await screen.findByRole("button",{name:"Load academies"}));
     await screen.findByRole("option",{name:"Badminton Academy"});
     fireEvent.change(screen.getByLabelText("Academy"),{target:{value:academy}});
-    expect(await screen.findByText(/Dance/)).toBeInTheDocument();
+    expect(await screen.findByText("Course: Dance · Batch: Morning")).toBeInTheDocument();
     expect(mocks.recover).toHaveBeenCalledWith({workspaceId:academy,expectedActorId:actor});
     expect(screen.queryByRole("button",{name:/create/i})).not.toBeInTheDocument();
   });
@@ -34,6 +35,30 @@ describe("ClassRecoveryPanel", () => {
     fireEvent.click(await screen.findByRole("button",{name:"Load academies"}));await screen.findByRole("option",{name:"Badminton Academy"});
     fireEvent.change(screen.getByLabelText("Academy"),{target:{value:academy}});
     expect(await screen.findByText(/cannot confirm the current setup/i)).toBeInTheDocument();
+  });
+  it("connects the selected actor and academy to the versioned create journey", async () => {
+    mocks.recover.mockResolvedValue({ok:true,state:"unknown"});
+    vi.spyOn(crypto,"randomUUID").mockReturnValue("e0000000-0000-4000-8000-000000000002");
+    mocks.run
+      .mockResolvedValueOnce({ok:true,operation:"generation",generation:2,available:true})
+      .mockResolvedValueOnce({ok:true,operation:"reserve",intentId:"e0000000-0000-4000-8000-000000000001",disposition:"created",state:"pending",generation:2})
+      .mockResolvedValueOnce({ok:true,operation:"complete",courseId:"c0000000-0000-4000-8000-000000000001",batchId:"d0000000-0000-4000-8000-000000000001",timeZone:"Asia/Kolkata",startDate:"2026-11-09",startTime:"17:30",endDate:"2026-11-23",durationMinutes:60,occurrenceCount:3});
+    render(<ClassRecoveryPanel />);
+    fireEvent.click(await screen.findByRole("button",{name:"Load academies"}));
+    await screen.findByRole("option",{name:"Badminton Academy"});
+    fireEvent.change(screen.getByLabelText("Academy"),{target:{value:academy}});
+    fireEvent.change(await screen.findByLabelText("Course name"),{target:{value:"Art"}});
+    fireEvent.change(screen.getByLabelText("Batch name"),{target:{value:"Monday learners"}});
+    fireEvent.change(screen.getByLabelText("First session date"),{target:{value:"2026-11-09"}});
+    fireEvent.change(screen.getByLabelText("Local start time"),{target:{value:"17:30"}});
+    fireEvent.change(screen.getByLabelText("Last date for weekly sessions"),{target:{value:"2026-11-23"}});
+    fireEvent.click(screen.getByRole("button",{name:"Create course, batch and weekly sessions"}));
+    await waitFor(()=>expect(mocks.run).toHaveBeenCalledTimes(3));
+    expect(mocks.run).toHaveBeenNthCalledWith(1,{operation:"generation",workspaceId:academy,expectedActorId:actor});
+    expect(mocks.run).toHaveBeenNthCalledWith(2,{
+      operation:"reserve",workspaceId:academy,expectedActorId:actor,generation:2,
+      requestId:"e0000000-0000-4000-8000-000000000002",courseName:"Art",batchName:"Monday learners",
+    });
   });
   it("ignores an earlier academy response after selection changes", async () => {
     let finish!: (x: unknown)=>void; mocks.recover.mockReturnValueOnce(new Promise((resolve)=>{finish=resolve;})).mockResolvedValueOnce({ok:true,state:"unknown"});
@@ -46,8 +71,8 @@ describe("ClassRecoveryPanel", () => {
   it("clears displayed details on an authentication change", async () => {
     let notify!: (event:string)=>void; mocks.observe.mockImplementation((callback)=>{notify=callback;return ()=>{};});
     render(<ClassRecoveryPanel />);fireEvent.click(await screen.findByRole("button",{name:"Load academies"}));await screen.findByRole("option",{name:"Badminton Academy"});
-    fireEvent.change(screen.getByLabelText("Academy"),{target:{value:academy}});await screen.findByText(/Dance/);
-    act(()=>notify("SIGNED_OUT"));expect(screen.queryByText(/Dance/)).not.toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("Academy"),{target:{value:academy}});await screen.findByText("Course: Dance · Batch: Morning");
+    act(()=>notify("SIGNED_OUT"));expect(screen.queryByText("Course: Dance · Batch: Morning")).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Academy")).not.toBeInTheDocument();
   });
   it("fails closed if session observation cannot be installed", async () => {
@@ -68,8 +93,8 @@ describe("ClassRecoveryPanel", () => {
   });
   it("clears sensitive details when the page regains focus", async () => {
     render(<ClassRecoveryPanel />);fireEvent.click(await screen.findByRole("button",{name:"Load academies"}));await screen.findByRole("option",{name:"Badminton Academy"});
-    fireEvent.change(screen.getByLabelText("Academy"),{target:{value:academy}});await screen.findByText(/Dance/);
-    fireEvent.focus(window);await waitFor(()=>expect(screen.queryByText(/Dance/)).not.toBeInTheDocument());
+    fireEvent.change(screen.getByLabelText("Academy"),{target:{value:academy}});await screen.findByText("Course: Dance · Batch: Morning");
+    fireEvent.focus(window);await waitFor(()=>expect(screen.queryByText("Course: Dance · Batch: Morning")).not.toBeInTheDocument());
   });
   it("ignores a pending academy list after an authentication change", async () => {
     let notify!: (event:string)=>void, finish!: (x:unknown)=>void;
@@ -109,11 +134,11 @@ describe("ClassRecoveryPanel", () => {
   it("clears displayed details when the page becomes visible", async () => {
     vi.spyOn(document,"visibilityState","get").mockReturnValue("visible");render(<ClassRecoveryPanel />);
     fireEvent.click(await screen.findByRole("button",{name:"Load academies"}));await screen.findByRole("option",{name:"Badminton Academy"});
-    fireEvent.change(screen.getByLabelText("Academy"),{target:{value:academy}});await screen.findByText(/Dance/);
-    fireEvent(document,new Event("visibilitychange"));expect(screen.queryByText(/Dance/)).not.toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("Academy"),{target:{value:academy}});await screen.findByText("Course: Dance · Batch: Morning");
+    fireEvent(document,new Event("visibilitychange"));expect(screen.queryByText("Course: Dance · Batch: Morning")).not.toBeInTheDocument();
   });
   it("distinguishes an acknowledged completion", async () => {
-    mocks.recover.mockResolvedValue({ok:true,state:"completed",courseName:"Dance",batchName:"Morning",acknowledged:true});
+    mocks.recover.mockResolvedValue({ok:true,state:"completed",courseName:"Dance",batchName:"Morning",acknowledged:true,schedule:null});
     render(<ClassRecoveryPanel />);fireEvent.click(await screen.findByRole("button",{name:"Load academies"}));await screen.findByRole("option",{name:"Badminton Academy"});
     fireEvent.change(screen.getByLabelText("Academy"),{target:{value:academy}});
     expect(await screen.findByText("Setup completed — acknowledged")).toBeInTheDocument();
@@ -125,7 +150,7 @@ describe("ClassRecoveryPanel", () => {
     view.unmount();act(()=>notify("SIGNED_OUT"));expect(unsubscribe).toHaveBeenCalledTimes(1);
   });
   it("shows completed state without assuming it was acknowledged", async () => {
-    mocks.recover.mockResolvedValue({ok:true,state:"completed",courseName:"Dance",batchName:"Morning",acknowledged:false});
+    mocks.recover.mockResolvedValue({ok:true,state:"completed",courseName:"Dance",batchName:"Morning",acknowledged:false,schedule:null});
     render(<ClassRecoveryPanel />);fireEvent.click(await screen.findByRole("button",{name:"Load academies"}));await screen.findByRole("option",{name:"Badminton Academy"});
     fireEvent.change(screen.getByLabelText("Academy"),{target:{value:academy}});
     expect(await screen.findByText("Setup completed — not yet acknowledged")).toBeInTheDocument();

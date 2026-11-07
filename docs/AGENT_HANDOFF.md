@@ -1,12 +1,50 @@
 # ParentPlus — Agent Handoff
 
+## Class setup with bounded weekly sessions — 2026-11-07
+
+Current checkout is branch `work` with the weekly class setup commit and the
+remote coach-menu commit being reconciled before branch synchronization.
+Migration 048 fences stale workspace setup
+generations; migration 049 creates course, batch and up to 104 weekly sessions
+atomically in the selected academy time zone. The coach form previews the
+bounded session count, recovers a completed schedule after reload, and requires
+explicit acknowledgement. It requires an explicit academy-zone selection
+when none is configured; the legacy authenticated partial-completion RPC is
+revoked. Fresh isolated PostgreSQL 17 checks passed 421 unit tests, four
+standalone concurrency scenarios, all 425 JUnit cases and cleanup. The frontend
+suite passed 283 tests across 29 files; lint and typecheck passed. No hosted
+database was contacted or changed; class setup remains default-off. Independent
+review found and this patch fixes the old RPC bypass and silent browser-zone
+default; follow-up review is pending. The enabled synthetic-provider browser
+journey is blocked because this environment cannot safely create its required
+network namespace, and signed-provider behaviour is unverified. Schedule
+edit/cancel behaviour and long-term retention are also open. Treat both
+migrations as local drafts; do not enable or deploy them.
+Next action: finish follow-up review and run enabled browser evidence in a safe
+supported environment before checkpointing.
+
 ## Coach menu and founder preview feedback — 2026-11-07
 
-The founder confirmed the deployed dashboard is sample data, the header icon
-did not open a menu, the class form only previews entries, and posts, students
-and fees are placeholders. A local header menu now links to existing pages; it
-does not complete the underlying journeys. Live Supabase sign-in, safe hosted
-database setup and real class creation remain unverified and unfinished.
+The founder confirmed the deployed dashboard uses sample data and its header
+menu icon did not open. The header now has a native expandable menu linking to
+Today, Schedule and Sign in, with component coverage for its open state and
+links. This does not make sample classes, students, posts or fees functional.
+The previous remote mobile browser scenario assumed an unauthenticated coach
+route; it was superseded by coach-route protection and was not carried forward.
+
+## Coach route protection — 2026-11-07
+
+Current branch is based on the latest fetched `origin/main`. This local slice
+adds a signed-user and active workspace-membership gate for coach route-group
+pages, a no-membership recovery page, and anonymous browser coverage. Local
+synthetic checks validate actor and workspace filters; they do not establish
+real-provider JWT behavior. Weekly course and batch setup now exists locally,
+but its control remains default-off pending enabled browser and hosted checks.
+Preserve the
+pre-integration draft in `stash@{0}`; it includes a direct course/batch creation
+migration that conflicts with current main's controlled reservation boundary
+and must not be reapplied as-is. No hosted data or migrations were changed.
+See [the coach route access spec](superpowers/specs/2026-11-07-coach-route-access.md).
 
 ## Private known-workspace request lookup — 2026-11-07
 

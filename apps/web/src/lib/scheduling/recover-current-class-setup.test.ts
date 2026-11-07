@@ -10,8 +10,9 @@ const prior = "e0000000-0000-4000-8000-000000000002";
 const request = "e0000000-0000-4000-8000-000000000003";
 const course = "c0000000-0000-4000-8000-000000000001";
 const batch = "d0000000-0000-4000-8000-000000000001";
-const pending = { state: "pending", intent_id: intent, prior_intent_id: prior, request_id: request, course_name: "Art", batch_name: "Morning", course_id: null, batch_id: null, acknowledged: false };
-const unknown = { state: "unknown", intent_id: null, prior_intent_id: null, request_id: null, course_name: null, batch_name: null, course_id: null, batch_id: null, acknowledged: null };
+const scheduleFields = { time_zone: null, start_date: null, start_time: null, end_date: null, duration_minutes: null, occurrence_count: null };
+const pending = { state: "pending", intent_id: intent, prior_intent_id: prior, request_id: request, course_name: "Art", batch_name: "Morning", course_id: null, batch_id: null, acknowledged: false, ...scheduleFields };
+const unknown = { state: "unknown", intent_id: null, prior_intent_id: null, request_id: null, course_name: null, batch_name: null, course_id: null, batch_id: null, acknowledged: null, ...scheduleFields };
 const input = { workspaceId: workspace, expectedActorId: actor };
 
 describe("recoverCurrentClassSetup", () => {
@@ -46,8 +47,8 @@ describe("recoverCurrentClassSetup", () => {
     expect(mocks.rpc).not.toHaveBeenCalled();
   });
   it("returns a sanitized pending request and sends only the workspace", async () => {
-    expect(await recoverCurrentClassSetup({ ...input, actorId: "untrusted" })).toEqual({ ok: true, state: "pending", intentId: intent, priorIntentId: prior, requestId: request, courseName: "Art", batchName: "Morning" });
-    expect(mocks.rpc).toHaveBeenCalledWith("app_current_class_setup", { p_workspace_id: workspace });
+    expect(await recoverCurrentClassSetup({ ...input, actorId: "untrusted" })).toEqual({ ok: true, state: "pending", intentId: intent, priorIntentId: prior, requestId: request, courseName: "Art", batchName: "Morning", schedule: null });
+    expect(mocks.rpc).toHaveBeenCalledWith("app_current_class_setup_v2", { p_workspace_id: workspace });
   });
   it("keeps unknown distinct from failure or absence", async () => {
     mocks.rpc.mockResolvedValue({ data: [unknown], error: null });
@@ -55,7 +56,11 @@ describe("recoverCurrentClassSetup", () => {
   });
   it("returns a valid completed result with acknowledgement state", async () => {
     mocks.rpc.mockResolvedValue({ data: [{ ...pending, state: "completed", course_id: course, batch_id: batch, acknowledged: true }], error: null });
-    expect(await recoverCurrentClassSetup(input)).toEqual({ ok: true, state: "completed", intentId: intent, priorIntentId: prior, requestId: request, courseName: "Art", batchName: "Morning", courseId: course, batchId: batch, acknowledged: true });
+    expect(await recoverCurrentClassSetup(input)).toEqual({ ok: true, state: "completed", intentId: intent, priorIntentId: prior, requestId: request, courseName: "Art", batchName: "Morning", courseId: course, batchId: batch, acknowledged: true, schedule: null });
+  });
+  it("recovers a completed weekly schedule after a lost response or reload", async () => {
+    mocks.rpc.mockResolvedValue({ data: [{ ...pending, state: "completed", course_id: course, batch_id: batch, acknowledged: false, time_zone: "Asia/Kolkata", start_date: "2026-11-09", start_time: "17:30:00", end_date: "2026-11-23", duration_minutes: 60, occurrence_count: 3 }], error: null });
+    expect(await recoverCurrentClassSetup(input)).toMatchObject({ ok: true, state: "completed", schedule: { timeZone: "Asia/Kolkata", startDate: "2026-11-09", startTime: "17:30", endDate: "2026-11-23", durationMinutes: 60, occurrenceCount: 3 } });
   });
   it("rejects inconsistent or malformed provider results without claiming success", async () => {
     for (const data of [null, [], [pending,pending], [{ ...unknown, intent_id: intent }], [{ ...pending, request_id: null }], [{ ...pending, acknowledged: true }], [{ ...pending, course_id: course }], [{ ...pending, state: "completed", course_id: course, batch_id: "bad" }], [{ ...pending, state: "mystery" }]]) {

@@ -14,7 +14,7 @@ describe("listClassWorkspaces", () => {
     mocks.createClient.mockResolvedValue({ auth: { getUser: mocks.getUser }, from: mocks.from });
     mocks.getUser.mockResolvedValue({ data: { user: { id: actor } }, error: null });
     mocks.from.mockReturnValue(query); mocks.select.mockReturnValue(query); mocks.eq.mockReturnValue(query);
-    mocks.in.mockResolvedValue({ data: [{ workspace_id: workspace, workspaces: { id: workspace, name: "Badminton Academy", status: "active" } }], error: null });
+    mocks.in.mockResolvedValue({ data: [{ workspace_id: workspace, workspaces: { id: workspace, name: "Badminton Academy", status: "active", scheduling_time_zone: null } }], error: null });
   });
   afterEach(() => vi.unstubAllEnvs());
 
@@ -29,7 +29,7 @@ describe("listClassWorkspaces", () => {
     expect(mocks.from).not.toHaveBeenCalled();
   });
   it("filters own active manager memberships and active workspaces", async () => {
-    expect(await listClassWorkspaces()).toEqual({ ok: true, actorId: actor, workspaces: [{ id: workspace, name: "Badminton Academy" }] });
+    expect(await listClassWorkspaces()).toEqual({ ok: true, actorId: actor, workspaces: [{ id: workspace, name: "Badminton Academy", timeZone: null }] });
     expect(mocks.from).toHaveBeenCalledWith("workspace_memberships");
     expect(mocks.eq).toHaveBeenCalledWith("user_id", actor);
     expect(mocks.eq).toHaveBeenCalledWith("status", "active");
@@ -41,7 +41,7 @@ describe("listClassWorkspaces", () => {
     expect(await listClassWorkspaces()).toEqual({ ok: true, actorId: actor, workspaces: [] });
   });
   it("fails closed on malformed workspace data", async () => {
-    mocks.in.mockResolvedValue({ data: [{ workspace_id: workspace, workspaces: { id: "different", name: "Secret", status: "active" } }], error: null });
+    mocks.in.mockResolvedValue({ data: [{ workspace_id: workspace, workspaces: { id: "different", name: "Secret", status: "active", scheduling_time_zone: null } }], error: null });
     expect(await listClassWorkspaces()).toEqual({ ok: false, error: "Unable to load academies." });
   });
   it("redacts provider errors", async () => {
