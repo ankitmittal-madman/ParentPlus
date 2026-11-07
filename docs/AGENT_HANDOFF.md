@@ -1,5 +1,63 @@
 # ParentPlus — Agent Handoff
 
+## Private known-workspace request lookup — 2026-11-07
+
+Draft 047 looks up a candidate request ID for a known workspace ID after 045's
+private access and receipt rechecks. It has no app-role access or user-facing
+flow. It does not discover unknown workspaces, match an intended submission,
+prove absence or authorise a replacement request. Identity, account changes,
+retention and the full academy onboarding journey remain open.
+
+## Private exact-request workspace fence — 2026-11-06
+
+Draft 046 introduces a private exact-actor/key fence, with a BEFORE INSERT guard
+for legacy and current creation paths. It rejects future same-key creation after
+the fence commits but does not prove historical absence or permit another key.
+It is not app-accessible and does not recover lost identifiers. Retention,
+rollout and the full onboarding recovery journey remain open; inspect fresh
+evidence and review before relying on this local draft.
+
+## Private workspace recovery status — 2026-11-06
+
+Draft migration 045 adds a private, controlled, actor/request-scoped lookup for
+known workspace creation outcomes. It is not app-accessible or an onboarding UI.
+Unknown can precede a delayed request and must not unlock a replacement request.
+Check fresh evidence and independent review. Lost-key discovery, historical
+retention, identity, rollout and the full academy journey remain incomplete.
+
+## Local forward workspace receipt repair — 2026-11-06
+
+Draft migration 044 reconciles surviving workspaces with unknown missing receipts
+and installs the cutover protection on installations that already ran old 042/043.
+Creation is disabled during repair. Deleted missing keys cannot be reconstructed;
+hosted state, recovery policy and production rollout remain unresolved. Inspect
+fresh verification and independent review before relying on this local draft.
+
+## Local workspace cutover correction — 2026-11-06
+
+Revised draft 042 drains active workspace writers before backfill and adds a
+private tombstone trigger for legacy calls reaching insertion after cutover.
+Synthetic race tests cover both timings and retained-key rejection. This does
+not repair an installation that already ran the earlier 042, nor reconstruct
+previously deleted keys; review a forward repair and hosted cutover separately.
+
+## Blocking workspace migration race — 2026-11-06
+
+An independent isolated 041-to-042 concurrent upgrade reproduction found an
+old uncommitted workspace write can miss the receipt backfill. After privileged
+deletion, a retry with the same key can create another workspace. Keep hosted
+rollout blocked; see the database security review for the unverified quiescent
+rollout option and why a table lock alone is insufficient. The committed-row
+upgrade test does not cover this interleaving.
+
+## Workspace creation control draft — 2026-11-06
+
+Migration 043 adds a default-off database guard for workspace creation and
+replay, with synthetic concurrency and access tests. The isolated suite must
+enable it for older behavior tests and restore it afterward. Inspect current
+Git and fresh quality evidence before relying on this draft. Hosted cutover,
+real identity, receipt retention, rate limits and full onboarding remain open.
+
 
 ## Parent child-creation journey draft — 2026-11-04
 

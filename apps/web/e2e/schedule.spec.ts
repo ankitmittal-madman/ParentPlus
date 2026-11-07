@@ -62,4 +62,7 @@ test("supports coach navigation at a narrow phone width", async ({ page }) => {
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/\/students$/);
   await expect(nav.getByRole("link", { name: "Students" })).toHaveAttribute("aria-current", "page");
+  await nav.getByRole("link", { name: "Today" }).click();
+  await expect(page.getByText(/example data.*not real classes or records/i)).toBeVisible();
+  await expect(page.getByText("Start class")).toHaveCount(0);
 });

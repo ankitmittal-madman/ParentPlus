@@ -1,5 +1,86 @@
 # ParentPlus Database Security Review
 
+Local draft 047 adds a private single-workspace request-key lookup. A nonlocking
+initial read is followed by 045's actor/request lock and active workspace,
+membership and receipt rechecks; application roles cannot call it. It returns
+unknown when those checks fail and does not list historical request keys. The
+result is only a candidate for an already-known workspace, not evidence of the
+owner's intended submission or permission to create again. READ COMMITTED is
+required; hosted identity, privileged changes, retention and rollout remain open.
+
+Draft 046 introduces a private exact-key workspace fence and a BEFORE INSERT
+guard sharing creation's actor/key lock. The BEFORE guard performs no writes;
+receipt creation stays AFTER INSERT so conflicting inserts do not add receipts.
+Fencing does not establish that a workspace never existed or authorise a new
+key. Fences retain actor and request identifiers with no expiry; retention,
+erasure, abuse controls, hosted ownership and rollout remain release blockers.
+The fence and new workspace inserts fail closed outside READ COMMITTED; a
+stale REPEATABLE READ or SERIALIZABLE snapshot cannot be relied on after an
+advisory-lock wait. READ UNCOMMITTED is also rejected conservatively. Existing
+receipt-only replay paths are not covered by this insert restriction.
+
+Local draft 045 adds a private workspace creation status lookup. It shares the
+creation control and actor/request lock; it locks workspace and membership before
+rechecking the receipt. Application roles have no execute privilege. An unknown
+response is not an absence proof, including for delayed legacy calls or snapshots
+under stricter isolation. Returning an ID does not verify legal ownership or
+authorise child, class or enrollment access. Hosted identity, maintenance lock
+ordering, receipt retention and any eventual app exposure still require review.
+
+Local forward draft 044 repairs missing receipts for surviving workspace rows
+without inferring their original details. It disables creation, rejects conflicting
+receipts and preserves existing payloads; an old in-flight body may fail and
+roll back after the new trigger is installed. This is not hosted evidence or a
+repair for keys belonging to already deleted workspaces. Those keys remain
+unrecoverable from surviving rows; access, retention, reconciliation and hosted
+cutover require separate review. Do not enable the feature on this evidence alone.
+
+**Local correction, limited scope:** revised draft 042 locks workspace writes
+during trigger installation and backfill, then records unknown receipts for
+legacy inserts after cutover. Two isolated transaction tests cover an existing
+uncommitted writer and an old call paused before insertion; retained keys reject
+replacement. This does not repair databases that already applied the old 042,
+reconstruct deleted missing keys, validate real hosted privileges or establish a
+production rollout. The historical race reproduction below remains relevant to
+those installations and hosted rollout stays blocked.
+
+The isolated 041-to-043 test covers committed existing workspaces and retry
+behavior across the default-off control migration. It does not establish safety
+for concurrent writers or hosted cutover; the earlier 042 backfill and later
+043 wrapper require rollout review before production use.
+
+**Blocking: concurrent 041-to-042 upgrade.** An independent isolated test held
+an old workspace creation transaction open, applied 042, and then committed the
+old transaction. The workspace had no receipt; its retry failed closed. After
+privileged deletion of the workspace and membership, the same request key
+created a new workspace because no tombstone existed. This is not a permission
+bypass and does not establish that deletion is available to application users.
+Do not perform a live rollout of this draft. A potential operational mitigation
+is to stop new workspace calls, drain all legacy transactions, apply 042 and 043,
+and verify receipt completeness while keeping the control off. That procedure
+has not been tested as a hosted rollout. A table lock alone does not cover an
+old call that began before migration but reaches its insert after the lock ends.
+
+Local draft migration 043 introduces a private default-off control for the
+workspace-creation RPC and locks it across creation and replay. Its synthetic
+tests do not verify hosted function ownership, role inheritance, existing
+dependencies, or in-flight operations during a hosted cutover. Migration 042
+is still exposed before 043 is applied; review the full rollout before use.
+Receipt retention, account lifecycle, rate limiting and real identity remain open.
+
+
+## Workspace creation replay access — 2026-11-06
+
+Local migration 041 checks and locks active workspace and membership before a creation retry returns details. This does not establish hosted role behavior or complete onboarding. Draft migration 042 adds private original-payload receipts for future requests; existing rows are recorded as unknown, so their creation retries are unavailable. It cannot reconstruct records or request keys deleted before migration. A synthetic 041-to-042 upgrade now checks one existing renamed workspace; hosted data, concurrent upgrade behavior, receipt retention and deletion remain unresolved. Workspace creation remains directly callable by authenticated database roles in this draft; review exposure and abuse controls before any hosted rollout.
+
+## Connection RPC exposure — 2026-11-06
+
+Local migration 040 revokes direct execution of the unfinished request and approval functions from public, anonymous and authenticated roles. Migrations 038/039 still expose those functions until 040 is applied: partial rollout is unsafe. Hosted ownership, role inheritance and other RPCs require separate review; no hosted database was modified. Historical tests use temporary synthetic grants, and the default baseline must be verified separately.
+
+## Guardian connection approval and retry — 2026-11-06
+
+Local migration 038 adds a post-lock expiry recheck to the approval draft after a deterministic synthetic workspace-lock test reproduced approval after expiry. This is not hosted verification. An independent source review also found that a second request key that reuses an existing pending connection is not recorded; retrying that key after approval can create another request, and reuse with different payload may not be detected. Draft migration 039 adds a local payload-bound receipt for future successful keys and backfills original keys only; synthetic tests are required for each claimed behavior. Previously unrecorded reused keys cannot be reconstructed. Receipt retention, erasure, abuse controls, migration compatibility and privacy rules remain unresolved. Do not connect or release the journey on the basis of the expiry fix alone.
+
 
 ## Parent child-creation journey draft — 2026-11-04
 

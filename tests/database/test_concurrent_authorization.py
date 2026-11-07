@@ -108,6 +108,7 @@ WHERE connection_request_id IN (
   SELECT id FROM public.connection_requests
   WHERE child_id = '{child_id}'
 );
+DELETE FROM public.connection_request_receipts WHERE child_id = '{child_id}';
 DELETE FROM public.connection_requests
 WHERE child_id = '{child_id}';
 DELETE FROM public.guardianships
@@ -132,6 +133,7 @@ WHERE id = '{child_id}';
 BEGIN;
 DELETE FROM public.workspace_memberships
 WHERE workspace_id = '{workspace_id}';
+DELETE FROM public.workspace_creation_receipts WHERE workspace_id = '{workspace_id}';
 DELETE FROM public.workspaces
 WHERE id = '{workspace_id}';
 COMMIT;
@@ -267,6 +269,11 @@ def close_psql_session(process):
 
 
 class ConcurrentAuthorizationTests(unittest.TestCase):
+
+    def setUp(self):
+        from tests.database.connection_test_access import grant_connection_test_access, revoke_connection_test_access
+        grant_connection_test_access()
+        self.addCleanup(revoke_connection_test_access)
 
     def test_revocation_commits_before_authorization(self):
         workspace_id = None

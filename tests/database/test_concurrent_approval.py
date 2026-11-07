@@ -43,7 +43,7 @@ COMMIT;
     return output.splitlines()[-1]
 
 
-def main():
+def _run_test():
     workspace_id = None
     child_id = None
 
@@ -119,6 +119,7 @@ OR workspace_child_id IN (
   SELECT id FROM public.workspace_children
   WHERE child_id = '{child_id}'
 );
+DELETE FROM public.connection_request_receipts WHERE child_id = '{child_id}';
 DELETE FROM public.connection_requests
 WHERE child_id = '{child_id}';
 DELETE FROM public.workspace_children
@@ -135,12 +136,22 @@ COMMIT;
 BEGIN;
 DELETE FROM public.workspace_memberships
 WHERE workspace_id = '{workspace_id}';
+DELETE FROM public.workspace_creation_receipts WHERE workspace_id = '{workspace_id}';
 DELETE FROM public.workspaces
 WHERE id = '{workspace_id}';
 COMMIT;
 """)
 
         print("PASS: Test cleanup completed")
+
+
+def main():
+    from tests.database.connection_test_access import grant_connection_test_access, revoke_connection_test_access
+    grant_connection_test_access()
+    try:
+        _run_test()
+    finally:
+        revoke_connection_test_access()
 
 
 if __name__ == "__main__":

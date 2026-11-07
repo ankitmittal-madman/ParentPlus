@@ -1,0 +1,153 @@
+"""Real 041-to-043 migration test in a separate, disposable PostgreSQL container."""
+
+import json
+import subprocess
+import time
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+CONTAINER = 'parentplus-workspace-upgrade-ci'
+USER = 'parentplus_test'
+DB = 'parentplus_test'
+ACTOR = '11111111-1111-4111-8111-111111111111'
+OLD_KEY = '11111111-aaaa-4aaa-8aaa-111111111111'
+NEW_KEY = '22222222-aaaa-4aaa-8aaa-222222222222'
+UPGRADE = ROOT / 'supabase/migrations/20261106004200_workspace_creation_receipts.sql'
+CONTROL_UPGRADE = ROOT / 'supabase/migrations/20261106004300_workspace_creation_database_control.sql'
+
+
+def docker(*args, input_text=None, check=True):
+    return subprocess.run(['docker', *args], input=input_text, text=True, capture_output=True, check=check, timeout=60)
+
+
+def sql(text):
+    return docker('exec', '-i', CONTAINER, 'psql', '-X', '-A', '-t', '-q', '-v', 'ON_ERROR_STOP=1',
+                  '-U', USER, '-d', DB, input_text=text).stdout.strip()
+
+
+class WorkspaceReceiptUpgradeTests(unittest.TestCase):
+    def test_existing_renamed_workspace_is_preserved_and_legacy_retry_fails_closed(self):
+        created = False
+        created_volumes = []
+        stage = 'container_precheck'
+        try:
+            if docker('container', 'inspect', CONTAINER, check=False).returncode == 0:
+                self.fail('STOP: upgrade test container already exists')
+            stage = 'container_start'
+            docker('run', '-d', '--pull=never', '--name', CONTAINER, '--network', 'none', '--tmpfs', '/var/lib/postgresql',
+                   '--tmpfs', '/tmp', '-e', 'POSTGRES_USER=parentplus_test', '-e', 'POSTGRES_DB=parentplus_test',
+                   '-e', 'POSTGRES_PASSWORD=parentplus_local_only', '-e', 'PGDATA=/var/lib/postgresql/pgdata', 'postgres:17')
+            created = True
+            mounts = json.loads(docker('inspect', CONTAINER, '--format', '{{json .Mounts}}').stdout)
+            created_volumes = [mount['Name'] for mount in mounts if mount['Type'] == 'volume']
+            stage = 'container_ready'
+            for _ in range(100):
+                # The image starts a temporary socket-only server during initialization.
+                # Wait for the final server's loopback listener before loading fixtures.
+                if docker('exec', CONTAINER, 'pg_isready', '-h', '127.0.0.1', '-U', USER, '-d', DB, check=False).returncode == 0:
+                    break
+                time.sleep(0.2)
+            else:
+                self.fail('STOP: disposable upgrade database did not become ready')
+            self.assertEqual(docker('inspect', CONTAINER, '--format', '{{.HostConfig.NetworkMode}}').stdout.strip(), 'none')
+            self.assertEqual(docker('port', CONTAINER).stdout.strip(), '')
+            stage = 'migration_inventory'
+            migrations = sorted(path for path in (ROOT / 'supabase/migrations').glob('*.sql') if path.name < UPGRADE.name)
+            self.assertEqual(len(migrations), 41)
+            self.assertTrue(UPGRADE.is_file())
+            stage = 'auth_fixture'
+            sql((ROOT / 'tests/database/supabase_auth_fixture.sql').read_text())
+            stage = 'old_migrations'
+            for migration in migrations:
+                sql(migration.read_text())
+            stage = 'legacy_creation'
+            legacy_id = sql(f"""
+BEGIN; SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','{ACTOR}',true);
+SELECT 'LEGACY:' || public.create_workspace('Original Academy','academy','{OLD_KEY}')::text;
+COMMIT;
+""").split('LEGACY:')[-1].strip()
+            self.assertRegex(legacy_id, r'^[0-9a-f-]{36}$')
+            stage = 'legacy_rename'
+            sql(f"UPDATE public.workspaces SET name='Renamed Academy' WHERE id='{legacy_id}';")
+            stage = 'upgrade_migration'
+            sql(UPGRADE.read_text())
+            stage = 'legacy_state'
+            self.assertEqual(sql(f"""
+SELECT w.name, m.role, m.status, (r.original_name IS NULL), (r.original_type IS NULL)
+FROM public.workspaces w JOIN public.workspace_memberships m ON m.workspace_id=w.id
+JOIN public.workspace_creation_receipts r ON r.workspace_id=w.id
+WHERE w.id='{legacy_id}' AND m.user_id='{ACTOR}' AND r.actor_id='{ACTOR}' AND r.request_key='{OLD_KEY}';
+"""), 'Renamed Academy|owner|active|t|t')
+            stage = 'legacy_retry'
+            for supplied_name in ('Original Academy', 'Renamed Academy'):
+                result = docker('exec', '-i', CONTAINER, 'psql', '-X', '-A', '-t', '-q', '-v', 'ON_ERROR_STOP=1',
+                                '-U', USER, '-d', DB, input_text=f"""
+BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{ACTOR}',true);
+SELECT public.create_workspace('{supplied_name}','academy','{OLD_KEY}'); COMMIT;
+""", check=False)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn('Workspace creation recovery unavailable', result.stderr)
+            self.assertEqual(sql(f"SELECT count(*) FROM public.workspaces WHERE created_by='{ACTOR}' AND creation_request_id='{OLD_KEY}';"), '1')
+            stage = 'new_retry'
+            result = sql(f"""
+BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{ACTOR}',true);
+SELECT 'NEW:' || public.create_workspace('New Academy','academy','{NEW_KEY}')::text;
+SELECT 'SAME:' || (public.create_workspace('New Academy','academy','{NEW_KEY}') = public.create_workspace('New Academy','academy','{NEW_KEY}'))::text;
+COMMIT;
+""")
+            new_id = result.split('NEW:')[-1].splitlines()[0].strip()
+            self.assertRegex(new_id, r'^[0-9a-f-]{36}$')
+            self.assertEqual(result.splitlines()[-1], 'SAME:true')
+            stage = 'control_upgrade'
+            sql(CONTROL_UPGRADE.read_text())
+            self.assertEqual(sql("SELECT enabled FROM public.workspace_creation_controls WHERE id=true;"), 'f')
+            self.assertEqual(sql(f"SELECT name FROM public.workspaces WHERE id='{legacy_id}';"), 'Renamed Academy')
+            self.assertEqual(sql(f"SELECT name FROM public.workspaces WHERE id='{new_id}';"), 'New Academy')
+            stage = 'control_disabled_retry'
+            result = docker('exec', '-i', CONTAINER, 'psql', '-X', '-A', '-t', '-q', '-v', 'ON_ERROR_STOP=1',
+                            '-U', USER, '-d', DB, input_text=f"""
+BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{ACTOR}',true);
+SELECT public.create_workspace('New Academy','academy','{NEW_KEY}'); COMMIT;
+""", check=False)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn('Workspace creation unavailable', result.stderr)
+            stage = 'control_enabled_retry'
+            sql('UPDATE public.workspace_creation_controls SET enabled=true WHERE id=true;')
+            result = sql(f"""
+BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{ACTOR}',true);
+SELECT public.create_workspace('New Academy','academy','{NEW_KEY}')::text; COMMIT;
+""")
+            self.assertEqual(result.splitlines()[-1], new_id)
+            self.assertEqual(sql(f"SELECT count(*) FROM public.workspaces WHERE created_by='{ACTOR}' AND creation_request_id='{NEW_KEY}';"), '1')
+            stage = 'forward_upgrade'
+            sql((ROOT / 'supabase/migrations/20261106004400_workspace_creation_forward_repair.sql').read_text())
+            self.assertEqual(sql("SELECT enabled FROM public.workspace_creation_controls WHERE id=true;"), 'f')
+            self.assertEqual(sql(f"SELECT workspace_id,original_name,original_type FROM public.workspace_creation_receipts WHERE actor_id='{ACTOR}' AND request_key='{NEW_KEY}';"), f'{new_id}|New Academy|academy')
+            self.assertEqual(sql(f"SELECT workspace_id,original_name IS NULL,original_type IS NULL FROM public.workspace_creation_receipts WHERE actor_id='{ACTOR}' AND request_key='{OLD_KEY}';"), f'{legacy_id}|t|t')
+            self.assertEqual(sql("SELECT has_function_privilege('authenticated','public.create_workspace_unguarded_private(text,text,uuid)','EXECUTE');"), 'f')
+            sql('UPDATE public.workspace_creation_controls SET enabled=true WHERE id=true;')
+            result = sql(f"""
+BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{ACTOR}',true);
+SELECT public.create_workspace('New Academy','academy','{NEW_KEY}')::text; COMMIT;
+""")
+            self.assertEqual(result.splitlines()[-1], new_id)
+            result = sql(f"""
+BEGIN; SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claim.sub','{ACTOR}',true);
+SELECT public.create_workspace('Post Repair Academy','academy','33333333-aaaa-4aaa-8aaa-333333333333')::text; COMMIT;
+""")
+            post_id = result.splitlines()[-1]
+            self.assertRegex(post_id, r'^[0-9a-f-]{36}$')
+            self.assertEqual(sql(f"SELECT original_name,original_type FROM public.workspace_creation_receipts WHERE workspace_id='{post_id}';"), 'Post Repair Academy|academy')
+        except Exception as error:
+            raise AssertionError(f'UPGRADE_DIAG:{stage}:{type(error).__name__}') from error
+        finally:
+            if created:
+                try:
+                    docker('rm', '-f', '-v', CONTAINER)
+                    for volume in created_volumes:
+                        self.assertNotEqual(docker('volume', 'inspect', volume, check=False).returncode, 0,
+                                            'Disposable upgrade volume was not removed')
+                except Exception as error:
+                    raise AssertionError(f'UPGRADE_DIAG:cleanup:{type(error).__name__}') from error

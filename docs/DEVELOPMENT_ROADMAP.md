@@ -31,6 +31,34 @@ foundation code does not establish complete auth, hosted deployment or release.
 | M6 | AI and notifications | AI drafting, redaction, reminders | Quality, privacy and delivery checks pass | Planned |
 | M7 | Pilot readiness | Security, performance, monitoring, deployment | Founder approves pilot readiness gate | Planned |
 
+## Two-sided MVP pilot journey
+
+The founder confirmed that the MVP must support both the parent and the
+independent-coach/academy experience. A preview or an isolated database test on
+either side does not satisfy this objective. The proposed first complete journey
+is: coach or academy signs in and sets up a workspace and class; parent signs in
+and creates a child profile; an authorised connection is established; the child
+is enrolled in the class; the coach records attendance; and the authorised parent
+can see it. The exact pilot scope and any additional learning-update requirements
+remain to be confirmed; this journey does not authorise real-data use or deployment.
+
+| Area | Required capability for the proposed journey | Current state | Completion evidence |
+|---|---|---|---|
+| Shared identity | Real email sign-in and account recovery for both sides | Local simulated draft; live delivery and signed sessions unverified | Real test accounts exercise success, invalid/expired code, recovery, sign-out and account switching |
+| Coach / academy workspace | Independent coach or academy creates or accesses the right workspace | Local database foundation; no complete onboarding journey | Owner/admin/coach roles, multiple workspaces, suspension and cross-workspace denial verified end to end |
+| Coach class management | Authorised coach creates and manages a course, batch and sessions | Practice-only screen and disabled local foundations | Saved class and session journey, assigned-coach checks, retries and concurrent changes verified |
+| Parent and child | Parent creates and recovers a child profile and sees permitted records | Default-off local draft with synthetic provider tests | Real identity, duplicate and interrupted requests, account change, revoked/disputed access and safe recovery verified |
+| Connection and enrollment | Parent and workspace establish an authorised connection; child is enrolled separately | Local draft; application-role connection writes disabled by migration 040 | Request/approval and enrollment work for authorised users; expiry, retry, revocation, wrong workspace and audit checks pass |
+| Coach attendance | Authorised coach records and corrects attendance for an enrolled child | Planned | Session, enrollment and coach authorization, concurrent edits and correction/audit scenarios pass |
+| Parent visibility | Authorised parent sees the agreed attendance or learning outcome | Planned | Correct guardian sees the correct child's permitted data; wrong/revoked guardian and cross-workspace access denied |
+| Pilot operations | A controlled pilot works on real devices with support and recovery | Planned | Real-provider E2E, privacy/security review, mobile testing, monitoring, backup/restore and founder approval completed |
+
+Coach and academy workflows must be tested as complete user journeys, including
+negative, interrupted and concurrent cases; parent-side success cannot substitute
+for coach-side completion. Results must distinguish simulated checks from real
+provider and hosted evidence. No calendar launch date is established until scope,
+dependencies and remaining work are estimated against a verified baseline.
+
 ## Historical checkpoint policy
 
 The bullets below retain the earlier checkpoint convention. They are not current

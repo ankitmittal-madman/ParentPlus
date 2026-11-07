@@ -30,6 +30,16 @@ fi
 docker exec "$CONTAINER" \
   pg_isready -U "$USER" -d "$DB"
 
+# Enable only in this isolated synthetic fixture so legacy behavior and real
+# concurrent callers remain exercised. Migration initialization checks default-off.
+reset_workspace_control() {
+  docker exec "$CONTAINER" psql -X -q -v ON_ERROR_STOP=1 -U "$USER" -d "$DB" \
+    -c 'UPDATE public.workspace_creation_controls SET enabled=false WHERE id=true' >/dev/null
+}
+trap reset_workspace_control EXIT
+docker exec "$CONTAINER" psql -X -q -v ON_ERROR_STOP=1 -U "$USER" -d "$DB" \
+  -c 'UPDATE public.workspace_creation_controls SET enabled=true WHERE id=true'
+
 echo "=== RUN DATABASE UNITTEST SUITES ==="
 
 python3 scripts/ci/database_junit.py
@@ -38,6 +48,8 @@ echo "=== RUN STANDALONE CONCURRENCY TESTS ==="
 
 python3 scripts/ci/concurrency_junit.py
 
+reset_workspace_control
+trap - EXIT
 echo "=== VERIFY DATABASE CLEANUP ==="
 
 docker exec -i "$CONTAINER" \
@@ -48,11 +60,14 @@ DECLARE
   v_remaining bigint;
 BEGIN
   SELECT
+    (SELECT count(*) FROM public.workspace_creation_receipts) +
+    (SELECT count(*) FROM public.workspace_creation_fences) +
     (SELECT count(*) FROM public.workspaces) +
     (SELECT count(*) FROM public.workspace_memberships) +
     (SELECT count(*) FROM public.children) +
     (SELECT count(*) FROM public.guardianships) +
     (SELECT count(*) FROM public.workspace_children) +
+    (SELECT count(*) FROM public.connection_request_receipts) +
     (SELECT count(*) FROM public.connection_requests) +
     (SELECT count(*) FROM public.connection_events) +
     (SELECT count(*) FROM public.courses) +
@@ -71,9 +86,13 @@ BEGIN
     (SELECT count(*) FROM (VALUES ('anon'),('authenticated')) r(role_name)
       CROSS JOIN (VALUES ('public.create_course(uuid,text,uuid)'),('public.create_batch(uuid,uuid,text,uuid)'),('public.create_course_and_batch(uuid,text,text,uuid)')) f(signature)
       WHERE has_function_privilege(r.role_name, f.signature, 'EXECUTE')) +
+    (SELECT count(*) FROM (VALUES ('anon'),('authenticated')) r(role_name)
+      CROSS JOIN (VALUES ('public.request_workspace_connection(uuid,uuid,uuid)'),('public.approve_guardian_connection(uuid)')) f(signature)
+      WHERE has_function_privilege(r.role_name, f.signature, 'EXECUTE')) +
     (SELECT count(*) FROM public.class_setup_controls WHERE enabled) +
     (SELECT count(*) FROM public.parent_child_read_controls WHERE enabled) +
-    (SELECT CASE WHEN count(*)=1 AND bool_and(id AND NOT enabled) THEN 0 ELSE 1 END FROM public.child_creation_controls)
+    (SELECT CASE WHEN count(*)=1 AND bool_and(id AND NOT enabled) THEN 0 ELSE 1 END FROM public.child_creation_controls) +
+    (SELECT CASE WHEN count(*)=1 AND bool_and(id AND NOT enabled) THEN 0 ELSE 1 END FROM public.workspace_creation_controls)
   INTO v_remaining;
 
   IF v_remaining <> 0 THEN

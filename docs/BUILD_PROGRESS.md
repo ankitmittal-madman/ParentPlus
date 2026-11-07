@@ -1,5 +1,118 @@
 # ParentPlus Build Progress
 
+## Private request lookup for a known workspace — 2026-11-07
+
+Local draft migration 047 can look up a candidate creation request ID for one
+known workspace ID belonging to its creator, after the private recovery status
+rechecks the receipt, active workspace and active membership. The operation
+returns only IDs and is inaccessible to application roles. It cannot discover an
+unknown workspace, prove which submission the owner intended, or make a new
+request safe. Account changes, lost workspace IDs, retention, real identity,
+hosted rollout and the user-facing onboarding journey remain open.
+
+## Private workspace request fence — 2026-11-06
+
+Draft migration 046 adds an actor-scoped, exact-request fence. After a fence
+commits, a later guarded or legacy workspace insert using that same key is
+rejected. Existing receipts or surviving workspaces yield unknown instead of a
+fenced claim. The private operation is disabled for app roles and requires the
+default-off database control. This does not prove historical absence, recover a
+lost key, prevent another key, or by itself permit a new request. Indefinite
+fence retention, account changes, rate limits, hosted rollout and the full
+onboarding journey remain unresolved.
+New workspace inserts and the private fence operation conservatively reject
+transaction isolation levels other than READ COMMITTED, because an older
+snapshot could miss a committed fence; this includes READ UNCOMMITTED.
+
+## Private workspace recovery status — 2026-11-06
+
+Draft migration 045 adds a private, read-only lookup for an actor's exact
+workspace creation request. It returns a known workspace ID only when its
+receipt, workspace and creator membership remain valid; otherwise it returns
+unknown. It uses the database control and request lock, and application roles
+cannot call it. A status is a snapshot: unknown does not prove that a delayed
+request cannot arrive and never authorises a replacement key. Lost keys,
+retention, actual identity, a reviewed app journey and hosted use remain open.
+
+## Workspace receipt forward repair draft — 2026-11-06
+
+Local migration 044 disables workspace creation, installs the cutover safeguard,
+and adds unknown receipts only for surviving workspaces missing one. Existing
+known receipts remain intact; conflicting receipts abort the transaction. A
+synthetic old-042/043 reconstruction also checks an in-flight old call rolls
+back safely. A database already missing receipts for deleted workspaces cannot
+reconstruct those keys; reconciliation and hosted rollout remain release blockers.
+
+## Workspace cutover race correction — 2026-11-06
+
+The local draft of migration 042 now drains existing workspace writers before
+backfill and installs a trigger to retain an unknown receipt for legacy calls
+that insert after cutover. Synthetic tests exercise both transaction orderings
+and reject reuse of a retained key after privileged deletion. This change only
+affects databases that apply the revised migration; installations that already
+ran the old 042 need a separately designed forward repair. Deleted pre-existing
+keys cannot be reconstructed. Hosted cutover and receipt retention remain open.
+
+## Workspace control upgrade check — 2026-11-06
+
+An isolated synthetic upgrade test applies migrations 041, 042 and 043 in
+sequence. It checks an existing renamed workspace remains intact, a newer
+workspace retry is blocked while the new control is disabled, and that retry
+returns the same workspace after test-only enablement. This checks committed
+pre-upgrade records, not concurrent migration cutover, lost request IDs,
+retention or hosted deployment.
+
+An independent synthetic test found that an in-flight 041 workspace creation
+can commit after 042's backfill without a receipt. Following privileged deletion,
+the same request key can create another workspace. This is a release-blocking
+concurrent-upgrade risk; a safe rollout or migration correction remains unverified.
+
+## Workspace creation database control — 2026-11-06
+
+Local draft migration 043 puts workspace creation and replay behind a private,
+default-off database control. It locks the control during each call and keeps
+the prior creation implementation inaccessible to application roles. Synthetic
+tests exercise disabled and missing controls, retry, private access and both
+orders of disable-versus-creation/replay. The isolated test runner explicitly
+enables the control for existing behavior checks and restores it afterward.
+This is not a complete onboarding journey: hosted migration cutover, real
+identity, receipt retention, rate limiting, rollout and recovery remain open.
+
+## Workspace receipt legacy upgrade check — 2026-11-06
+
+A separate disposable PostgreSQL container creates and renames a synthetic workspace under migration 041, applies 042, and checks that its name and owner remain while original creation details are marked unknown and retries fail closed. A new post-upgrade workspace retry is also checked. This is one isolated upgrade path, not verification of hosted data, concurrent rollout, recovery policy or receipt retention.
+
+## Workspace creation receipt local draft — 2026-11-06
+
+Draft migration 042 records the original workspace creation name and type privately for new requests; a valid retry can survive a later rename, while changed payloads and deleted targets fail closed. Existing rows are backfilled as unknown rather than guessing their original names, and their creation retries are unavailable. The draft retains names and identifiers without foreign keys; retention, deletion, old deleted keys, actual migration upgrade, exposure controls and hosted identity remain unresolved. No hosted database was changed.
+
+## Workspace creation replay access — 2026-11-06
+
+Draft migration 041 requires an active workspace and active creator membership before returning a workspace creation retry or comparing its details. Synthetic tests cover suspended/archived workspaces, suspended/removed/deleted membership, changed payload denial and both lock orderings. The draft still compares current mutable name/type rather than an immutable creation receipt; rename recovery, live identity, hosted privileges, audit and real workspace onboarding remain unresolved. No hosted database was changed.
+
+## Two-sided MVP direction — 2026-11-06
+
+The founder confirmed that the coach/academy experience must be ready alongside
+the parent experience. The roadmap now records a proposed shared pilot journey
+and explicit exit evidence for both sides. This is planning context, not a claim
+that either end-to-end journey or its hosted deployment is complete.
+
+## Connection RPC exposure safeguard — 2026-11-06
+
+Local migration 040 revokes application-role execution of the unfinished connection-request and approval RPCs. Baseline privilege tests must verify denial; historical behavior and race tests use temporary grants in isolated fixtures and restore denial. Partial migration rollout, other RPCs, inherited hosted roles, real-provider access and the connection lifecycle remain unverified. No hosted database was changed.
+
+## Connection-request retry receipt local draft — 2026-11-06
+
+Draft migration 039 records each successful request key, including keys that reuse a pending request, to prevent a retry after approval creating a second request. A synthetic lock-race test also checks that an expired pending request is not reused after waiting. UUID-only receipts are retained without foreign keys so a missing request fails closed; historical reused keys cannot be reconstructed. Retention, erasure, abuse controls, live provider identity, legacy migration, database exposure controls and full lifecycle review remain release blockers. The existing authenticated RPC is directly callable when deployed; no hosted database was changed.
+
+## Connection approval expiry safeguard — 2026-11-06
+
+A local synthetic test reproduced approval of an expired request after waiting on a workspace lock. Draft migration 038 rechecks expiry after the blocking authorization and relationship locks, before approval writes. The targeted test verifies rejection without a relationship or approval event. This does not resolve connection-request retry receipts, provider identity, hosted migration ownership, audit/retention policy or release readiness; no hosted database was changed.
+
+## Coach dashboard preview clarity — 2026-11-06
+
+The dashboard identifies its classes and records as example data and replaces the nonfunctional start-class label with an example label. Component and local browser checks cover the preview wording; this is not real class scheduling or persistence.
+
 ## Coach navigation browser check — 2026-11-05
 
 An automated Chromium scenario checks the five coach navigation links at a 320-pixel viewport: visible and non-overlapping 44-pixel targets, centre hit testing, keyboard traversal, navigation and current-page indication. This is one synthetic browser viewport, not physical-device, touch, screen-reader, contrast or full accessibility verification.

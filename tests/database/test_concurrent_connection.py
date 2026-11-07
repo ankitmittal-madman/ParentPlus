@@ -77,7 +77,7 @@ SELECT public.request_workspace_connection(
     return output.splitlines()[-1]
 
 
-def main():
+def _run_test():
     workspace_request_id = str(uuid.uuid4())
     child_request_id = str(uuid.uuid4())
     request_ids = [str(uuid.uuid4()), str(uuid.uuid4())]
@@ -111,7 +111,10 @@ SELECT
      ON r.id = e.connection_request_id
    WHERE r.workspace_id = '{workspace_id}'
      AND r.child_id = '{child_id}'
-     AND e.event_type = 'requested');
+     AND e.event_type = 'requested'),
+  (SELECT count(*) FROM public.connection_request_receipts
+   WHERE actor_id = '{MEERA}' AND child_id = '{child_id}'
+     AND request_key IN ('{request_ids[0]}', '{request_ids[1]}'));
 """).split("|")
 
         print("Returned request IDs:", results)
@@ -119,7 +122,7 @@ SELECT
         print("Requested audit events:", counts[1])
 
         assert len(set(results)) == 1
-        assert counts == ["1", "1"]
+        assert counts == ["1", "1", "2"]
 
         print("PASS: Concurrent connection initiation")
 
@@ -132,6 +135,7 @@ WHERE connection_request_id IN (
   SELECT id FROM public.connection_requests
   WHERE child_id = '{child_id}'
 );
+DELETE FROM public.connection_request_receipts WHERE child_id = '{child_id}';
 DELETE FROM public.connection_requests
 WHERE child_id = '{child_id}';
 DELETE FROM public.guardianships
@@ -147,11 +151,21 @@ COMMIT;
 BEGIN;
 DELETE FROM public.workspace_memberships
 WHERE workspace_id = '{workspace_id}';
+DELETE FROM public.workspace_creation_receipts WHERE workspace_id = '{workspace_id}';
 DELETE FROM public.workspaces
 WHERE id = '{workspace_id}';
 COMMIT;
 """)
             print("PASS: Workspace test records cleaned up")
+
+
+def main():
+    from tests.database.connection_test_access import grant_connection_test_access, revoke_connection_test_access
+    grant_connection_test_access()
+    try:
+        _run_test()
+    finally:
+        revoke_connection_test_access()
 
 
 if __name__ == "__main__":

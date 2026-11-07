@@ -77,6 +77,7 @@ WHERE workspace_id IN (
     AND name = 'Meera Concurrent Test'
 );
 
+DELETE FROM public.workspace_creation_receipts WHERE actor_id = '{USER_ID}' AND request_key = '{request_id}';
 DELETE FROM public.workspaces
 WHERE created_by = '{USER_ID}'
   AND creation_request_id = '{request_id}'

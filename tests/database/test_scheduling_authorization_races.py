@@ -52,6 +52,7 @@ DELETE FROM public.batch_coach_assignments WHERE workspace_id = '{self.workspace
 DELETE FROM public.batches WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.courses WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.workspace_memberships WHERE workspace_id = '{self.workspace}';
+DELETE FROM public.workspace_creation_receipts WHERE workspace_id = '{self.workspace}';
 DELETE FROM public.workspaces WHERE id = '{self.workspace}';
 UPDATE public.class_setup_controls SET enabled=false WHERE id=true;
 REVOKE EXECUTE ON FUNCTION public.create_course(uuid,text,uuid) FROM authenticated;

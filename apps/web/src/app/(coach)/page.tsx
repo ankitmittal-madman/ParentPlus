@@ -9,6 +9,7 @@ export default function Home() {
         <CoachHeader />
 
         <section className="px-5 pt-8">
+          <p className="mb-4 rounded-xl bg-[#E3F1EF] p-3 text-sm font-semibold text-[#1F6F6B]">Example data only — these are not real classes or records.</p>
           <h1 className="text-3xl font-extrabold tracking-tight">Good morning, Meera</h1>
           <p className="mt-1 text-sm text-[#5C6B73]">Here is what needs your attention today.</p>
           <DashboardStats />
@@ -19,7 +20,7 @@ export default function Home() {
             <p className="text-xs text-white/80">Next class · 5:00 PM · Room 2</p>
             <div className="mt-1 flex items-center justify-between">
               <h2 className="text-lg font-bold">Clay Juniors</h2>
-              <span className="rounded-xl bg-white px-3 py-2 text-xs font-bold text-[#1F6F6B]">Start class</span>
+              <span className="rounded-xl bg-white px-3 py-2 text-xs font-bold text-[#1F6F6B]">Example class</span>
             </div>
           </div>
         </section>
@@ -34,7 +35,6 @@ export default function Home() {
                   <p className="text-sm font-bold">{task.title}</p>
                   <p className="text-xs text-[#5C6B73]">{task.detail}</p>
                 </div>
-                <span className="text-[#8A979D]">›</span>
               </div>
             ))}
           </div>

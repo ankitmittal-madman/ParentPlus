@@ -22,6 +22,11 @@ from tests.database.test_concurrent_authorization import (
 class ApprovalAuthorizationRaceTests(unittest.TestCase):
     """Deterministic approval-versus-permission-change tests."""
 
+    def setUp(self):
+        from tests.database.connection_test_access import grant_connection_test_access, revoke_connection_test_access
+        grant_connection_test_access()
+        self.addCleanup(revoke_connection_test_access)
+
     def test_guardian_revocation_first(self):
         import uuid
 
@@ -159,6 +164,7 @@ OR workspace_child_id IN (
   SELECT id FROM public.workspace_children
   WHERE child_id = '{child_id}'
 );
+DELETE FROM public.connection_request_receipts WHERE child_id = '{child_id}';
 DELETE FROM public.connection_requests
 WHERE child_id = '{child_id}';
 DELETE FROM public.workspace_children
@@ -175,6 +181,7 @@ COMMIT;
 BEGIN;
 DELETE FROM public.workspace_memberships
 WHERE workspace_id = '{workspace_id}';
+DELETE FROM public.workspace_creation_receipts WHERE workspace_id = '{workspace_id}';
 DELETE FROM public.workspaces
 WHERE id = '{workspace_id}';
 COMMIT;
@@ -314,6 +321,7 @@ OR workspace_child_id IN (
   SELECT id FROM public.workspace_children
   WHERE child_id = '{child_id}'
 );
+DELETE FROM public.connection_request_receipts WHERE child_id = '{child_id}';
 DELETE FROM public.connection_requests WHERE child_id = '{child_id}';
 DELETE FROM public.workspace_children WHERE child_id = '{child_id}';
 DELETE FROM public.guardianships WHERE child_id = '{child_id}';
@@ -326,6 +334,7 @@ COMMIT;
 BEGIN;
 DELETE FROM public.workspace_memberships
 WHERE workspace_id = '{workspace_id}';
+DELETE FROM public.workspace_creation_receipts WHERE workspace_id = '{workspace_id}';
 DELETE FROM public.workspaces WHERE id = '{workspace_id}';
 COMMIT;
 """)
@@ -467,6 +476,7 @@ OR workspace_child_id IN (
   SELECT id FROM public.workspace_children
   WHERE child_id = '{child_id}'
 );
+DELETE FROM public.connection_request_receipts WHERE child_id = '{child_id}';
 DELETE FROM public.connection_requests WHERE child_id = '{child_id}';
 DELETE FROM public.workspace_children WHERE child_id = '{child_id}';
 DELETE FROM public.guardianships WHERE child_id = '{child_id}';
@@ -479,6 +489,7 @@ COMMIT;
 BEGIN;
 DELETE FROM public.workspace_memberships
 WHERE workspace_id = '{workspace_id}';
+DELETE FROM public.workspace_creation_receipts WHERE workspace_id = '{workspace_id}';
 DELETE FROM public.workspaces WHERE id = '{workspace_id}';
 COMMIT;
 """)
@@ -609,6 +620,7 @@ OR workspace_child_id IN (
   SELECT id FROM public.workspace_children
   WHERE child_id = '{child_id}'
 );
+DELETE FROM public.connection_request_receipts WHERE child_id = '{child_id}';
 DELETE FROM public.connection_requests WHERE child_id = '{child_id}';
 DELETE FROM public.workspace_children WHERE child_id = '{child_id}';
 DELETE FROM public.guardianships WHERE child_id = '{child_id}';
@@ -621,6 +633,7 @@ COMMIT;
 BEGIN;
 DELETE FROM public.workspace_memberships
 WHERE workspace_id = '{workspace_id}';
+DELETE FROM public.workspace_creation_receipts WHERE workspace_id = '{workspace_id}';
 DELETE FROM public.workspaces WHERE id = '{workspace_id}';
 COMMIT;
 """)
@@ -753,6 +766,7 @@ OR workspace_child_id IN (
   SELECT id FROM public.workspace_children
   WHERE child_id = '{child_id}'
 );
+DELETE FROM public.connection_request_receipts WHERE child_id = '{child_id}';
 DELETE FROM public.connection_requests WHERE child_id = '{child_id}';
 DELETE FROM public.workspace_children WHERE child_id = '{child_id}';
 DELETE FROM public.guardianships WHERE child_id = '{child_id}';
@@ -765,6 +779,7 @@ COMMIT;
 BEGIN;
 DELETE FROM public.workspace_memberships
 WHERE workspace_id = '{workspace_id}';
+DELETE FROM public.workspace_creation_receipts WHERE workspace_id = '{workspace_id}';
 DELETE FROM public.workspaces WHERE id = '{workspace_id}';
 COMMIT;
 """)
@@ -911,6 +926,7 @@ OR workspace_child_id IN (
   SELECT id FROM public.workspace_children
   WHERE child_id = '{child_id}'
 );
+DELETE FROM public.connection_request_receipts WHERE child_id = '{child_id}';
 DELETE FROM public.connection_requests WHERE child_id = '{child_id}';
 DELETE FROM public.workspace_children WHERE child_id = '{child_id}';
 DELETE FROM public.guardianships WHERE child_id = '{child_id}';
@@ -923,6 +939,7 @@ COMMIT;
 BEGIN;
 DELETE FROM public.workspace_memberships
 WHERE workspace_id = '{workspace_id}';
+DELETE FROM public.workspace_creation_receipts WHERE workspace_id = '{workspace_id}';
 DELETE FROM public.workspaces WHERE id = '{workspace_id}';
 COMMIT;
 """)
