@@ -31,6 +31,12 @@ test("does not claim email delivery when live OTP is disabled", async ({ page })
   await expect(page.getByLabel("Verification code")).toHaveCount(0);
 });
 
+test("redirects an anonymous visitor away from the coach home", async ({ page }) => {
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(page.getByRole("heading", { name: "Welcome to Parent Plus" })).toBeVisible();
+});
+
 test("keeps parent profiles unavailable when disabled", async ({ page }) => {
   const writes: string[] = [];
   const external: string[] = [];

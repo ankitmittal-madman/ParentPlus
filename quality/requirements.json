@@ -12747,6 +12747,55 @@
     {"id": "DB-WORKSPACE-REQUEST-LOOKUP-LOOKUP-HOLDS-WORKSPACE-UNTIL-COMMIT", "domain": "workspace-onboarding", "description": "Lookup holds workspace until commit.", "status": "implemented", "risk": "critical", "coverage": "covered", "scenarios": ["lookup holds workspace until commit"], "tests": [{"suite": "database", "ref": "tests.database.test_workspace_request_lookup.WorkspaceRequestLookupTests.test_lookup_holds_workspace_until_commit"}], "sources": ["supabase/migrations/20261107004700_private_workspace_request_lookup.sql", "tests/database/test_workspace_request_lookup.py"]},
     {"id": "DB-WORKSPACE-REQUEST-LOOKUP-CONTROL-DISABLE-COMMIT-BEFORE-LOOKUP", "domain": "workspace-onboarding", "description": "Control disable commit before lookup.", "status": "implemented", "risk": "critical", "coverage": "covered", "scenarios": ["control disable commit before lookup"], "tests": [{"suite": "database", "ref": "tests.database.test_workspace_request_lookup.WorkspaceRequestLookupTests.test_control_disable_commit_before_lookup"}], "sources": ["supabase/migrations/20261107004700_private_workspace_request_lookup.sql", "tests/database/test_workspace_request_lookup.py"]},
     {"id": "DB-WORKSPACE-REQUEST-LOOKUP-CONTROL-DISABLE-ROLLBACK-BEFORE-LOOKUP", "domain": "workspace-onboarding", "description": "Control disable rollback before lookup.", "status": "implemented", "risk": "critical", "coverage": "covered", "scenarios": ["control disable rollback before lookup"], "tests": [{"suite": "database", "ref": "tests.database.test_workspace_request_lookup.WorkspaceRequestLookupTests.test_control_disable_rollback_before_lookup"}], "sources": ["supabase/migrations/20261107004700_private_workspace_request_lookup.sql", "tests/database/test_workspace_request_lookup.py"]},
-    {"id": "DB-WORKSPACE-REQUEST-LOOKUP-LOOKUP-HOLDS-CONTROL-UNTIL-COMMIT", "domain": "workspace-onboarding", "description": "Lookup holds control until commit.", "status": "implemented", "risk": "critical", "coverage": "covered", "scenarios": ["lookup holds control until commit"], "tests": [{"suite": "database", "ref": "tests.database.test_workspace_request_lookup.WorkspaceRequestLookupTests.test_lookup_holds_control_until_commit"}], "sources": ["supabase/migrations/20261107004700_private_workspace_request_lookup.sql", "tests/database/test_workspace_request_lookup.py"]}
+    {"id": "DB-WORKSPACE-REQUEST-LOOKUP-LOOKUP-HOLDS-CONTROL-UNTIL-COMMIT", "domain": "workspace-onboarding", "description": "Lookup holds control until commit.", "status": "implemented", "risk": "critical", "coverage": "covered", "scenarios": ["lookup holds control until commit"], "tests": [{"suite": "database", "ref": "tests.database.test_workspace_request_lookup.WorkspaceRequestLookupTests.test_lookup_holds_control_until_commit"}], "sources": ["supabase/migrations/20261107004700_private_workspace_request_lookup.sql", "tests/database/test_workspace_request_lookup.py"]},
+    {
+      "id": "AUTH-COACH-ROUTE-ACTIVE-MEMBERSHIP",
+      "domain": "authorization",
+      "description": "Coach route requires the signed-in user to hold an active membership in an active workspace.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "anonymous users are redirected to sign-in",
+        "users without an active workspace membership are redirected to access recovery",
+        "eligible owner admin and coach roles may enter",
+        "provider and malformed membership failures fail closed"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/require-coach-access.test.ts::requireCoachAccess > sends anonymous users to sign in without querying memberships"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/require-coach-access.test.ts::requireCoachAccess > allows only an active workspace membership"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/require-coach-access.test.ts::requireCoachAccess > sends users without active memberships to the access page"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/require-coach-access.test.ts::requireCoachAccess > fails closed when identity or membership lookup fails"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/auth/require-coach-access.test.ts::requireCoachAccess > fails closed on malformed membership rows even when another row is valid"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/coach-access/page.test.tsx::coach access recovery > explains what the user needs and signs out to login"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/coach-access/page.test.tsx::coach access recovery > shows a safe error when sign-out cannot be confirmed"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/auth/require-coach-access.ts",
+        "docs/superpowers/specs/2026-11-07-coach-route-access.md",
+        "supabase/migrations/20261101000300_initial_rls.sql"
+      ]
+    }
   ]
 }

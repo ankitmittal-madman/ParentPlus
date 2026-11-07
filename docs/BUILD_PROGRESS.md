@@ -1,5 +1,16 @@
 # ParentPlus Build Progress
 
+## Coach route protection — 2026-11-07
+
+Coach route-group pages now require a verified user with an active membership
+in an active workspace. Owner, admin and coach roles are eligible. Signed-in
+users without an eligible membership get an access explanation and a sign-out
+recovery action. Unit/UI and anonymous browser coverage verify the gate. This
+does not prove real provider identity or authorization for future write APIs.
+Course + recurring batch creation remains unavailable because the existing
+cross-manager reservation/recovery race is unresolved; no hosted data or
+migration was changed. See [the coach route access spec](superpowers/specs/2026-11-07-coach-route-access.md).
+
 ## Private request lookup for a known workspace — 2026-11-07
 
 Local draft migration 047 can look up a candidate creation request ID for one

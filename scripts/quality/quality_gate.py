@@ -308,8 +308,9 @@ BROWSER_CASES = {
     'login.spec.ts::rejects an invalid email in the browser',
     'login.spec.ts::does not claim email delivery when live OTP is disabled',
     'login.spec.ts::keeps parent profiles unavailable when disabled',
-    'schedule.spec.ts::shows a clearly labelled example schedule',
-    'schedule.spec.ts::supports coach navigation at a narrow phone width',
+    'login.spec.ts::redirects an anonymous visitor away from the coach home',
+    'schedule.spec.ts::redirects anonymous visitors away from the protected schedule',
+    'schedule.spec.ts::keeps the protected schedule behind sign-in at a narrow phone width',
 }
 
 BROWSER_ENABLED_CASES = {

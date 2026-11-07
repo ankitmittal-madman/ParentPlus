@@ -5,6 +5,25 @@ not a replacement for raw results, the requirements registry or historical audit
 Update after quality checks. Distinguish a plan, an execution, an approval, a local
 commit and a hosted result. No connector or CI result is inferred from a document.
 
+## Coach route access — local verification, 2026-11-07
+
+Against the current local integration source, the web suite passed 273 tests
+across 28 files; ESLint, Next.js type generation/typecheck and the production
+build passed. Six Chromium browser cases passed with live OTP disabled, including
+anonymous redirects from the coach home and schedule. The quality-gate self-test
+passed 58 cases. Isolated PostgreSQL applied all 47 migrations, passed 412
+database unit tests and four concurrency scenarios, and verified cleanup. The
+database suite includes a check that app roles cannot create unreserved
+courses/batches even if the old flag is enabled.
+
+The isolated synthetic-provider browser runner did not run because user/network
+namespace creation is unavailable in this environment; its safety checks were
+not bypassed. Therefore a complete frontend execution receipt and full gate
+verification are unavailable. Live email delivery, a real signed JWT/provider,
+hosted CI, hosted migrations and deployment were not verified. An independent
+code reviewer was not available in this session. The class setup flow remains
+disabled pending the documented cross-manager reservation/recovery race fix.
+
 ## Recorded local implementation verification
 
 | Field | Recorded value |

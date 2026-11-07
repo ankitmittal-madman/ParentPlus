@@ -1,5 +1,18 @@
 # ParentPlus — Agent Handoff
 
+## Coach route protection — 2026-11-07
+
+Current branch is based on the latest fetched `origin/main`. This local slice
+adds a signed-user and active workspace-membership gate for coach route-group
+pages, a no-membership recovery page, and anonymous browser coverage. Local
+synthetic checks validate actor and workspace filters; they do not establish
+real-provider JWT behavior. The class setup flow remains disabled until the
+known cross-manager reservation/recovery race has a verified fix. Preserve the
+pre-integration draft in `stash@{0}`; it includes a direct course/batch creation
+migration that conflicts with current main's controlled reservation boundary
+and must not be reapplied as-is. No hosted data or migrations were changed.
+See [the coach route access spec](superpowers/specs/2026-11-07-coach-route-access.md).
+
 ## Private known-workspace request lookup — 2026-11-07
 
 Draft 047 looks up a candidate request ID for a known workspace ID after 045's
