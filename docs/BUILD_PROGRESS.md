@@ -1,5 +1,27 @@
 # ParentPlus Build Progress
 
+## Class setup with bounded weekly sessions — 2026-11-07
+
+Local draft migration 048 adds a private per-workspace generation and a
+request-key receipt for the app-facing begin operation. The generation advances
+when a setup is acknowledged; an older manager view is rejected after it waits
+for the acknowledgement lock. The old unversioned app begin RPC is revoked.
+A local coach form checks availability, reserves with a stable request key,
+creates a course, batch and bounded weekly sessions in one transaction, recovers
+the saved schedule, and requires explicit acknowledgement before another setup.
+The manager previews the session count and uses the academy time zone. An owner
+or admin chooses that zone once if it is unset. DST gaps and repeated local
+times fail closed; the series is limited to 104 sessions. The previous
+authenticated completion RPC is revoked so it cannot skip weekly-session
+creation. All controls remain default-off. Fresh isolated PostgreSQL checks
+passed 421 unit tests, four standalone concurrency cases, all 425 JUnit cases
+and cleanup. The frontend suite passed 282 tests. No hosted migration was
+applied. An independent review found and this patch fixes the old RPC bypass and
+silent browser-time-zone default; follow-up review remains. Enabled browser
+evidence, schedule edit/cancel policy and an approved hosted rollout remain
+open. See the
+[class setup boundary spec](superpowers/specs/2026-11-03-class-setup-server-boundary.md).
+
 ## Coach route protection — 2026-11-07
 
 Coach route-group pages now require a verified user with an active membership

@@ -1840,6 +1840,48 @@
       ]
     },
     {
+      "id": "DB-CLASS-SETUP-GENERATION-STALE-SNAPSHOT",
+      "domain": "class-setup-generation-fence",
+      "description": "An old manager snapshot cannot start a new workspace class setup after another manager acknowledges the prior setup.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "stale generation is rejected after acknowledgement while a refreshed generation can begin"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_stale_other_manager_begin_is_rejected_after_acknowledgement"
+        }
+      ],
+      "sources": [
+        "supabase/migrations/20261107004800_versioned_class_setup_generation.sql",
+        "tests/database/test_scheduling_foundation.py"
+      ]
+    },
+    {
+      "id": "DB-CLASS-SETUP-GENERATION-ACK-LOCK-RACE",
+      "domain": "class-setup-generation-fence",
+      "description": "A delayed class setup begin waits for acknowledgement and then rejects the stale workspace generation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "acknowledgement commit wins before stale manager begin and no second unresolved intent remains"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_stale_manager_begin_waits_for_ack_then_rejects_old_generation"
+        }
+      ],
+      "sources": [
+        "supabase/migrations/20261107004800_versioned_class_setup_generation.sql",
+        "tests/database/test_scheduling_authorization_races.py"
+      ]
+    },
+    {
       "id": "DB-CLASS-COMPLETION-01",
       "domain": "class-setup-completion-private",
       "description": "test reserved setup completion retries return same records.",
@@ -4348,6 +4390,80 @@
       "sources": [
         "tests/database/test_scheduling_authorization_races.py",
         "supabase/migrations/20261103001800_atomic_class_setup_draft.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-VERSIONED-GENERATION-01",
+      "domain": "class-setup-generation-fence",
+      "description": "The server action reads only the authorised workspace generation and availability.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "generation lookup returns only a valid positive generation and availability flag"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/class-setup-operations.test.ts::runClassSetupOperation > reads only the current workspace generation and availability"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/scheduling/class-setup-operations.ts",
+        "apps/web/src/lib/scheduling/class-setup-operations.test.ts",
+        "supabase/migrations/20261107004800_versioned_class_setup_generation.sql"
+      ]
+    },
+    {
+      "id": "FE-CLASS-SETUP-VERSIONED-FLOW-01",
+      "domain": "class-setup-generation-fence",
+      "description": "The default-off coach setup screen creates a bounded weekly batch in the academy time zone and recovers the saved schedule before acknowledgement.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "weekly dates and count are previewed before submission",
+        "another manager's unresolved setup prevents a new request without revealing its details",
+        "a recovered pending setup can finish without creating a second reservation",
+        "daylight-saving gaps fail before a write",
+        "a completed weekly schedule is displayed and explicitly acknowledged"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-setup-form.test.tsx::ClassSetupForm > reserves and atomically completes a weekly course and batch schedule"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-setup-form.test.tsx::ClassSetupForm > does not begin when another academy setup is still unresolved"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-setup-form.test.tsx::ClassSetupForm > finishes a recovered pending setup without reserving a second class"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-setup-form.test.tsx::ClassSetupForm > asks the manager to choose another local time across a clock change"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-setup-form.test.tsx::ClassSetupForm > requires explicit acknowledgement after the saved weekly schedule is recovered"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/schedule/class-recovery-panel.test.tsx::ClassRecoveryPanel > connects the selected actor and academy to the versioned create journey"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/scheduling/recover-current-class-setup.test.ts::recoverCurrentClassSetup > recovers a completed weekly schedule after a lost response or reload"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/(coach)/schedule/class-setup-form.tsx",
+        "apps/web/src/app/(coach)/schedule/class-setup-form.test.tsx",
+        "apps/web/src/app/(coach)/schedule/class-recovery-panel.tsx",
+        "apps/web/src/lib/scheduling/class-setup-operations.ts",
+        "supabase/migrations/20261107004900_weekly_class_setup_sessions.sql"
       ]
     },
     {
@@ -12795,6 +12911,39 @@
         "apps/web/src/lib/auth/require-coach-access.ts",
         "docs/superpowers/specs/2026-11-07-coach-route-access.md",
         "supabase/migrations/20261101000300_initial_rls.sql"
+      ]
+    },
+    {
+      "id": "DB-CLASS-SETUP-WEEKLY-ATOMIC-01",
+      "domain": "class-setup-weekly-schedule",
+      "description": "A bounded weekly schedule, course and batch are committed atomically and retries preserve the original schedule.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "creates every weekly session in the academy time zone with class records",
+        "same schedule retry returns the existing course, batch and session series",
+        "changed schedule retry is denied without duplicating sessions",
+        "daylight-saving gap rolls back the zone, class records and every session",
+        "ambiguous daylight-saving time rolls back the zone, class records and every session",
+        "application roles cannot read private series or call the private function and disabled setup fails closed",
+        "the previous authenticated completion RPC cannot complete a course without weekly sessions",
+        "a manager must explicitly select the academy time zone when it is not configured",
+        "concurrent weekly completion retries return one saved course, batch and session series"
+      ],
+      "tests": [
+        {"suite": "database", "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_weekly_class_setup_creates_course_batch_and_bounded_sessions_atomically"},
+        {"suite": "database", "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_weekly_class_setup_retry_returns_same_records_and_changed_schedule_fails"},
+        {"suite": "database", "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_weekly_class_setup_rejects_daylight_saving_gap_and_rolls_back_timezone_and_class"},
+        {"suite": "database", "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_weekly_class_setup_rejects_ambiguous_daylight_saving_time_and_rolls_back"},
+        {"suite": "database", "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_weekly_class_setup_is_private_and_unavailable_when_database_control_is_off"},
+        {"suite": "database", "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_legacy_authenticated_completion_cannot_bypass_weekly_sessions"},
+        {"suite": "frontend", "ref": "apps/web/src/app/(coach)/schedule/class-setup-form.test.tsx::ClassSetupForm > requires an explicit academy time zone when one is not configured"},
+        {"suite": "database", "ref": "tests.database.test_scheduling_authorization_races.SchedulingAuthorizationRaceTests.test_concurrent_weekly_class_setup_completion_returns_one_series"}
+      ],
+      "sources": [
+        "supabase/migrations/20261107004900_weekly_class_setup_sessions.sql",
+        "tests/database/test_scheduling_foundation.py"
       ]
     }
   ]

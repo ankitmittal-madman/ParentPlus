@@ -1,5 +1,27 @@
 # ParentPlus — Agent Handoff
 
+## Class setup with bounded weekly sessions — 2026-11-07
+
+Current checkout is branch `work` at `4a7ac3bcb43fa0cae2a8dd09fabedb37fe101229`;
+the local changes are uncommitted. Migration 048 fences stale workspace setup
+generations; migration 049 creates course, batch and up to 104 weekly sessions
+atomically in the selected academy time zone. The coach form previews the
+bounded session count, recovers a completed schedule after reload, and requires
+explicit acknowledgement. It requires an explicit academy-zone selection
+when none is configured; the legacy authenticated partial-completion RPC is
+revoked. Fresh isolated PostgreSQL 17 checks passed 421 unit tests, four
+standalone concurrency scenarios, all 425 JUnit cases and cleanup. The frontend
+suite passed 282 tests across 29 files; lint and typecheck passed. No hosted
+database was contacted or changed; class setup remains default-off. Independent
+review found and this patch fixes the old RPC bypass and silent browser-zone
+default; follow-up review is pending. The enabled synthetic-provider browser
+journey is blocked because this environment cannot safely create its required
+network namespace, and signed-provider behaviour is unverified. Schedule
+edit/cancel behaviour and long-term retention are also open. Treat both
+migrations as local drafts; do not enable or deploy them.
+Next action: finish follow-up review and run enabled browser evidence in a safe
+supported environment before checkpointing.
+
 ## Coach route protection — 2026-11-07
 
 Current branch is based on the latest fetched `origin/main`. This local slice

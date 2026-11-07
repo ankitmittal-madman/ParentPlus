@@ -79,6 +79,9 @@ BEGIN
     (SELECT count(*) FROM public.class_setup_intents) +
     (SELECT count(*) FROM public.class_setup_next_requests) +
     (SELECT count(*) FROM public.class_setup_intent_history) +
+    (SELECT count(*) FROM public.class_setup_workspace_versions) +
+    (SELECT count(*) FROM public.class_setup_begin_requests) +
+    (SELECT count(*) FROM public.class_setup_session_series) +
     (SELECT count(*) FROM public.child_creation_intents) +
     (SELECT count(*) FROM public.child_creation_fences) +
     (SELECT count(*) FROM public.child_creation_history) +

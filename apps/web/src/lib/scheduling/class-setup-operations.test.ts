@@ -7,6 +7,8 @@ const actor="b0000000-0000-4000-8000-000000000001", workspace="a0000000-0000-400
 const intent="e0000000-0000-4000-8000-000000000001", request="e0000000-0000-4000-8000-000000000002";
 const course="c0000000-0000-4000-8000-000000000001", batch="d0000000-0000-4000-8000-000000000001";
 const base={workspaceId:workspace,expectedActorId:actor};
+const schedule={timeZone:"Asia/Kolkata",startDate:"2026-11-03",startTime:"17:30",endDate:"2026-11-17",durationMinutes:60};
+const completedSchedule={course_id:course,batch_id:batch,time_zone:schedule.timeZone,start_date:schedule.startDate,start_time:"17:30:00",end_date:schedule.endDate,duration_minutes:schedule.durationMinutes,occurrence_count:3};
 
 describe("runClassSetupOperation", () => {
   beforeEach(() => {
@@ -22,40 +24,45 @@ describe("runClassSetupOperation", () => {
     expect(mocks.createClient).not.toHaveBeenCalled();
   });
   it("rejects invalid inputs and operation-specific identifiers before provider access", async () => {
-    for (const x of [null,{...base,operation:"unknown"},{...base,operation:{toString:()=>{throw new Error("invalid");}}},{...base,operation:"complete",intentId:"bad"},{...base,operation:"advance",priorIntentId:intent,requestId:"bad",courseName:"Art",batchName:"Morning"},{...base,operation:"reserve",courseName:" ",batchName:"Morning"},{...base,operation:"reserve",courseName:"x".repeat(121),batchName:"Morning"},{...base,operation:"acknowledge",intentId:intent,workspaceId:"bad"}]) {
+    for (const x of [null,{...base,operation:"unknown"},{...base,operation:{toString:()=>{throw new Error("invalid");}}},{...base,operation:"complete",intentId:"bad",schedule},{...base,operation:"complete",intentId:intent,schedule:{...schedule,durationMinutes:0}},{...base,operation:"advance",priorIntentId:intent,requestId:"bad",courseName:"Art",batchName:"Morning"},{...base,operation:"reserve",courseName:" ",batchName:"Morning"},{...base,operation:"reserve",courseName:"x".repeat(121),batchName:"Morning"},{...base,operation:"acknowledge",intentId:intent,workspaceId:"bad"}]) {
       expect(await runClassSetupOperation(x)).toEqual({ok:false,error:"Check the class setup details."});
     }
     expect(mocks.createClient).not.toHaveBeenCalled();
   });
   it("rejects missing or changed identities before any write", async () => {
     mocks.getUser.mockResolvedValueOnce({data:{user:null},error:null}).mockResolvedValue({data:{user:{id:request}},error:null});
-    expect(await runClassSetupOperation({...base,operation:"complete",intentId:intent})).toEqual({ok:false,error:"Please sign in to continue."});
+    expect(await runClassSetupOperation({...base,operation:"complete",intentId:intent,schedule})).toEqual({ok:false,error:"Please sign in to continue."});
     for (const x of [
-      {...base,operation:"reserve",courseName:"Art",batchName:"Morning"},
-      {...base,operation:"complete",intentId:intent},
+      {...base,operation:"reserve",generation:1,requestId:request,courseName:"Art",batchName:"Morning"},
+      {...base,operation:"complete",intentId:intent,schedule},
       {...base,operation:"acknowledge",intentId:intent},
       {...base,operation:"advance",priorIntentId:intent,requestId:request,courseName:"Art",batchName:"Morning"},
     ]) expect(await runClassSetupOperation(x)).toEqual({ok:false,error:"Your account has changed. Sign in to the original account before continuing."});
     expect(mocks.rpc).not.toHaveBeenCalled();
   });
   it("reserves normalized names without sending a caller-supplied actor", async () => {
-    mocks.rpc.mockResolvedValue({data:[{intent_id:intent,disposition:"created",state:"pending"}],error:null});
-    expect(await runClassSetupOperation({...base,operation:"reserve",courseName:" Art ",batchName:" Morning ",actorId:"untrusted"})).toEqual({ok:true,operation:"reserve",intentId:intent,disposition:"created",state:"pending"});
-    expect(mocks.rpc).toHaveBeenCalledWith("app_begin_class_setup",{p_workspace_id:workspace,p_course_name:"Art",p_batch_name:"Morning"});
+    mocks.rpc.mockResolvedValue({data:[{intent_id:intent,disposition:"created",state:"pending",generation:1}],error:null});
+    expect(await runClassSetupOperation({...base,operation:"reserve",generation:1,requestId:request,courseName:" Art ",batchName:" Morning ",actorId:"untrusted"})).toEqual({ok:true,operation:"reserve",intentId:intent,disposition:"created",state:"pending",generation:1});
+    expect(mocks.rpc).toHaveBeenCalledWith("app_begin_class_setup_v2",{p_workspace_id:workspace,p_expected_generation:1,p_request_id:request,p_course_name:"Art",p_batch_name:"Morning"});
+  });
+  it("reads only the current workspace generation and availability", async () => {
+    mocks.rpc.mockResolvedValue({data:[{generation:3,available:true}],error:null});
+    expect(await runClassSetupOperation({...base,operation:"generation"})).toEqual({ok:true,operation:"generation",generation:3,available:true});
+    expect(mocks.rpc).toHaveBeenCalledWith("app_class_setup_generation",{p_workspace_id:workspace});
   });
   it("returns existing reservation status without completing it", async () => {
-    mocks.rpc.mockResolvedValue({data:[{intent_id:intent,disposition:"existing",state:"completed"}],error:null});
-    expect(await runClassSetupOperation({...base,operation:"reserve",courseName:"Art",batchName:"Morning"})).toEqual({ok:true,operation:"reserve",intentId:intent,disposition:"existing",state:"completed"});
+    mocks.rpc.mockResolvedValue({data:[{intent_id:intent,disposition:"existing",state:"completed",generation:1}],error:null});
+    expect(await runClassSetupOperation({...base,operation:"reserve",generation:1,requestId:request,courseName:"Art",batchName:"Morning"})).toEqual({ok:true,operation:"reserve",intentId:intent,disposition:"existing",state:"completed",generation:1});
     expect(mocks.rpc).toHaveBeenCalledTimes(1);
   });
   it("rejects contradictory new reservation status", async () => {
-    mocks.rpc.mockResolvedValue({data:[{intent_id:intent,disposition:"created",state:"completed"}],error:null});
-    expect(await runClassSetupOperation({...base,operation:"reserve",courseName:"Art",batchName:"Morning"})).toEqual({ok:false,error:"Unable to confirm class setup. Check its status before retrying."});
+    mocks.rpc.mockResolvedValue({data:[{intent_id:intent,disposition:"created",state:"completed",generation:1}],error:null});
+    expect(await runClassSetupOperation({...base,operation:"reserve",generation:1,requestId:request,courseName:"Art",batchName:"Morning"})).toEqual({ok:false,error:"Unable to confirm class setup. Check its status before retrying."});
   });
   it("completes a reservation and validates returned identifiers", async () => {
-    mocks.rpc.mockResolvedValue({data:[{course_id:course,batch_id:batch}],error:null});
-    expect(await runClassSetupOperation({...base,operation:"complete",intentId:intent})).toEqual({ok:true,operation:"complete",courseId:course,batchId:batch});
-    expect(mocks.rpc).toHaveBeenCalledWith("app_complete_class_setup",{p_workspace_id:workspace,p_intent_id:intent});
+    mocks.rpc.mockResolvedValue({data:[completedSchedule],error:null});
+    expect(await runClassSetupOperation({...base,operation:"complete",intentId:intent,schedule})).toEqual({ok:true,operation:"complete",courseId:course,batchId:batch,timeZone:schedule.timeZone,startDate:schedule.startDate,startTime:schedule.startTime,endDate:schedule.endDate,durationMinutes:60,occurrenceCount:3});
+    expect(mocks.rpc).toHaveBeenCalledWith("app_complete_class_setup_weekly",{p_workspace_id:workspace,p_intent_id:intent,p_time_zone:schedule.timeZone,p_start_date:schedule.startDate,p_start_time:schedule.startTime,p_end_date:schedule.endDate,p_duration_minutes:60});
   });
   it("acknowledges only an explicit successful acknowledgement", async () => {
     mocks.rpc.mockResolvedValue({data:true,error:null});
@@ -67,7 +74,7 @@ describe("runClassSetupOperation", () => {
     expect(mocks.rpc).toHaveBeenCalledWith("app_advance_class_setup",{p_workspace_id:workspace,p_prior_intent_id:intent,p_request_id:request,p_course_name:"Art",p_batch_name:"Morning"});
   });
   it("treats RPC errors and thrown calls as uncertain without retrying", async () => {
-    const x={...base,operation:"reserve",courseName:"Art",batchName:"Morning"};
+    const x={...base,operation:"reserve",generation:1,requestId:request,courseName:"Art",batchName:"Morning"};
     mocks.rpc.mockResolvedValueOnce({data:null,error:{message:"private"}}).mockRejectedValueOnce(new Error("private"));
     for (let n=0;n<2;n++) expect(await runClassSetupOperation(x)).toEqual({ok:false,error:"Unable to confirm class setup. Check its status before retrying."});
     expect(mocks.rpc).toHaveBeenCalledTimes(2);
@@ -75,7 +82,7 @@ describe("runClassSetupOperation", () => {
   it("does not claim success for malformed operation results", async () => {
     for (const [operation,data] of [["reserve","bad"],["advance",null],["acknowledge",false],["complete",[]],["complete",[{course_id:course,batch_id:"bad"}]]]) {
       mocks.rpc.mockResolvedValue({data,error:null});
-      const x={...base,operation,courseName:"Art",batchName:"Morning",intentId:intent,priorIntentId:intent,requestId:request};
+      const x={...base,operation,generation:1,courseName:"Art",batchName:"Morning",intentId:intent,priorIntentId:intent,requestId:request,schedule};
       expect(await runClassSetupOperation(x)).toEqual({ok:false,error:"Unable to confirm class setup. Check its status before retrying."});
     }
   });

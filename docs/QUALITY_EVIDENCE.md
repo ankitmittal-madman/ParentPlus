@@ -5,9 +5,33 @@ not a replacement for raw results, the requirements registry or historical audit
 Update after quality checks. Distinguish a plan, an execution, an approval, a local
 commit and a hosted result. No connector or CI result is inferred from a document.
 
+## Class setup with weekly sessions — local verification, 2026-11-07
+
+Fresh network-isolated PostgreSQL 17 initialization applied all 49 migrations.
+The full database suite passed 421 unit tests and four standalone concurrency
+scenarios; JUnit validation passed all 425 cases and the cleanup audit found
+zero residual records. Coverage includes bounded weekly creation in the
+academy time zone, explicit zone selection, atomic rollback for daylight-saving
+gaps and folds, denial of the legacy partial-completion RPC, permission and
+default-off checks, same-schedule retry, and concurrent duplicate completion.
+The frontend suite passed 282 tests across 29 files. ESLint, Next.js route type
+generation/typecheck, production build and six standard Chromium browser cases
+passed. Quality-gate self-test passed 58 cases.
+
+The enabled synthetic-provider browser runner was attempted with local
+Chromium, but this environment cannot safely create the required network
+namespace. Therefore the source-bound full frontend receipt cannot be
+generated. These are local synthetic checks; no hosted migration or data was
+changed, and class setup remains default-off. An independent review found the
+legacy completion RPC bypass and silent browser-time-zone default; this patch
+revokes the old RPC, requires explicit zone selection, and adds regression
+tests. Follow-up review is pending. Schedule editing/cancellation and retention
+policy remain open. Raw JUnit files are ignored local artefacts under
+`test-results/database/` and `apps/web/test-results/`.
+
 ## Coach route access — local verification, 2026-11-07
 
-Against the current local integration source, the web suite passed 273 tests
+Against its earlier local integration source, the web suite passed 273 tests
 across 28 files; ESLint, Next.js type generation/typecheck and the production
 build passed. Six Chromium browser cases passed with live OTP disabled, including
 anonymous redirects from the coach home and schedule. The quality-gate self-test

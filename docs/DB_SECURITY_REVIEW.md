@@ -1,5 +1,45 @@
 # ParentPlus Database Security Review
 
+## Class setup workspace generation and weekly schedule — local draft, 2026-11-07
+
+Migration 048 adds a private workspace-version row and actor/request-key
+receipts. The new authenticated generation lookup returns only a workspace
+generation and whether a setup is available; the versioned begin wrapper accepts
+that observed generation and a stable request ID. Begin locks the workspace
+version before checking its receipt or current intent. A completed setup's
+acknowledgement takes the same lock and advances the generation once. Therefore
+a delayed begin that waits behind acknowledgement sees the changed generation
+and fails with a refresh-required error. The old unversioned authenticated begin
+RPC is revoked. Intent data and request receipts remain unavailable for direct
+app-role table reads.
+
+Migration 049 adds a private weekly-session series record and links generated
+session rows to it. The authenticated completion wrapper creates course, batch,
+academy time-zone configuration and up to 104 weekly sessions in one
+transaction. The private function validates the fixed end date and duration,
+uses the workspace time zone, and calls the existing DST gap/fold rejection
+logic for every occurrence. A retry with the same intent and schedule returns
+the same records; changed schedule details fail closed. Application roles
+cannot read series rows or execute the private helper. The operation is gated
+by the existing default-off class-setup control.
+
+The previous authenticated completion RPC is revoked because it could create
+a course and batch without the weekly series. When the academy zone is unset,
+the coach must explicitly choose it; the browser's local zone is not silently
+persisted.
+
+Fresh network-isolated PostgreSQL evidence applied all 49 migrations, passed
+421 database unit cases and four standalone concurrency scenarios, validated
+all 425 JUnit cases, and confirmed cleanup. This includes a concurrent
+duplicate-completion check and rollback of the workspace zone, course and batch
+when a weekly occurrence falls in either a DST gap or fold. Regression checks
+also confirm the legacy completion RPC cannot create a partial setup. This proves only the tested local
+database contract; it does not establish hosted role ownership, signed-provider
+identity, deployment, schedule editing/cancellation or retention. The feature
+remains default-off. An independent review found and the current patch fixes the
+legacy RPC bypass and silent browser-time-zone default; follow-up review is
+pending. Do not enable or apply these migrations to hosted data on local evidence.
+
 Local draft 047 adds a private single-workspace request-key lookup. A nonlocking
 initial read is followed by 045's actor/request lock and active workspace,
 membership and receipt rechecks; application roles cannot call it. It returns
