@@ -12945,6 +12945,7 @@
         "supabase/migrations/20261107004900_weekly_class_setup_sessions.sql",
         "tests/database/test_scheduling_foundation.py"
       ]
-    }
+    },
+    {"id": "UI-COACH-HEADER-MENU-LINKS", "domain": "coach-navigation", "description": "Coach can open the header menu and access available pages.", "status": "implemented", "risk": "low", "coverage": "covered", "scenarios": ["Coach opens the menu and finds links to existing pages"], "tests": [{"suite": "frontend", "ref": "apps/web/src/ui/components/coach-header.test.tsx::CoachHeader > opens a menu with links to existing pages"}], "sources": ["apps/web/src/ui/components/coach-header.tsx", "apps/web/src/ui/components/coach-header.test.tsx"]}
   ]
 }

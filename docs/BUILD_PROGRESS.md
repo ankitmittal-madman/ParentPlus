@@ -1,5 +1,14 @@
 # ParentPlus Build Progress
 
+## Coach menu — 2026-11-07
+
+The coach dashboard header now has a native expandable menu linking to Today,
+Schedule and Sign in. Component tests cover opening it and its available links.
+This makes the previously decorative menu icon usable; the example dashboard,
+students, posts and fees remain placeholders. The stale remote mobile browser
+scenario expected access to an unauthenticated coach route and was not retained
+after route protection was merged.
+
 ## Class setup with bounded weekly sessions — 2026-11-07
 
 Local draft migration 048 adds a private per-workspace generation and a
@@ -15,7 +24,7 @@ times fail closed; the series is limited to 104 sessions. The previous
 authenticated completion RPC is revoked so it cannot skip weekly-session
 creation. All controls remain default-off. Fresh isolated PostgreSQL checks
 passed 421 unit tests, four standalone concurrency cases, all 425 JUnit cases
-and cleanup. The frontend suite passed 282 tests. No hosted migration was
+and cleanup. The frontend suite passed 283 tests. No hosted migration was
 applied. An independent review found and this patch fixes the old RPC bypass and
 silent browser-time-zone default; follow-up review remains. Enabled browser
 evidence, schedule edit/cancel policy and an approved hosted rollout remain
@@ -29,8 +38,8 @@ in an active workspace. Owner, admin and coach roles are eligible. Signed-in
 users without an eligible membership get an access explanation and a sign-out
 recovery action. Unit/UI and anonymous browser coverage verify the gate. This
 does not prove real provider identity or authorization for future write APIs.
-Course + recurring batch creation remains unavailable because the existing
-cross-manager reservation/recovery race is unresolved; no hosted data or
+Weekly course + recurring batch creation is implemented locally but remains
+default-off pending enabled browser and hosted checks; no hosted data or
 migration was changed. See [the coach route access spec](superpowers/specs/2026-11-07-coach-route-access.md).
 
 ## Private request lookup for a known workspace — 2026-11-07

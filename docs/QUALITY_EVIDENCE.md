@@ -14,7 +14,7 @@ zero residual records. Coverage includes bounded weekly creation in the
 academy time zone, explicit zone selection, atomic rollback for daylight-saving
 gaps and folds, denial of the legacy partial-completion RPC, permission and
 default-off checks, same-schedule retry, and concurrent duplicate completion.
-The frontend suite passed 282 tests across 29 files. ESLint, Next.js route type
+The frontend suite passed 283 tests across 29 files. ESLint, Next.js route type
 generation/typecheck, production build and six standard Chromium browser cases
 passed. Quality-gate self-test passed 58 cases.
 
