@@ -1,5 +1,13 @@
 # ParentPlus Build Progress
 
+## Coach menu — 2026-11-07
+
+The coach dashboard header now has a native expandable menu linking to Today,
+Schedule and Sign in. This makes the previously decorative menu icon usable;
+it does not make the example dashboard, practice class setup, students, posts
+or fees functional. Review current Git and deployment status before relying on
+this local change.
+
 ## Private request lookup for a known workspace — 2026-11-07
 
 Local draft migration 047 can look up a candidate creation request ID for one

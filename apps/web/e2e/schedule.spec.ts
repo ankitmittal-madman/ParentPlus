@@ -65,4 +65,15 @@ test("supports coach navigation at a narrow phone width", async ({ page }) => {
   await nav.getByRole("link", { name: "Today" }).click();
   await expect(page.getByText(/example data.*not real classes or records/i)).toBeVisible();
   await expect(page.getByText("Start class")).toHaveCount(0);
+  const menuTrigger = page.locator("summary").filter({ hasText: "Open menu" });
+  await menuTrigger.click();
+  const menu = page.getByRole("navigation", { name: "Coach menu" });
+  await expect(menu.getByRole("link", { name: "Schedule" })).toBeVisible();
+  await menuTrigger.click();
+  await expect(menu).toBeHidden();
+  await menuTrigger.focus();
+  await page.keyboard.press("Enter");
+  await expect(menu).toBeVisible();
+  await menu.getByRole("link", { name: "Sign in" }).click();
+  await expect(page).toHaveURL(/\/login$/);
 });

@@ -1,5 +1,13 @@
 # ParentPlus — Agent Handoff
 
+## Coach menu and founder preview feedback — 2026-11-07
+
+The founder confirmed the deployed dashboard is sample data, the header icon
+did not open a menu, the class form only previews entries, and posts, students
+and fees are placeholders. A local header menu now links to existing pages; it
+does not complete the underlying journeys. Live Supabase sign-in, safe hosted
+database setup and real class creation remain unverified and unfinished.
+
 ## Private known-workspace request lookup — 2026-11-07
 
 Draft 047 looks up a candidate request ID for a known workspace ID after 045's
