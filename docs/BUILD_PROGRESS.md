@@ -1,5 +1,13 @@
 # ParentPlus Build Progress
 
+## Hosted database continuity — 2026-11-07
+
+The founder intends to retain the selected ParentPlus Supabase project for test
+accounts and eventual real family data. It must not be treated as a disposable
+test database. The connected project's schema, migration state, permissions,
+identity configuration, backup and real-data readiness are not yet verified.
+See [DEC-020](DECISION_LOG.md#dec-020-continuity-of-the-selected-supabase-project).
+
 ## Coach menu — 2026-11-07
 
 The coach dashboard header now has a native expandable menu linking to Today,

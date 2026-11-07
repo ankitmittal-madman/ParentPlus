@@ -249,3 +249,20 @@ Scope: ParentPlus class scheduling
 - Use the workspace time zone; ask the user to resolve ambiguous or nonexistent local times caused by a daylight-saving transition.
 
 These choices do not approve hosted changes, define every retention/visibility rule or establish that scheduling is implemented.
+
+## DEC-020: Continuity of the selected Supabase project
+Status: Confirmed by founder
+Date: 2026-11-07
+Scope: ParentPlus hosted database
+
+- The founder intends the currently selected ParentPlus Supabase project to be
+  used for test accounts now and for real family data later.
+- Treat the selected project as a long-lived database, not a disposable test
+  database. Preserve data and migration history; do not reset or replace it as
+  a routine testing step.
+- Use fictional data for testing. Test-only data cleanup, backup and recovery,
+  retention and consent controls must be designed before any real family data is
+  introduced. Keep destructive and concurrency tests in isolated databases.
+- This decision does not establish that hosted migrations, identity, access
+  policies or privacy controls have been verified, and does not authorise real
+  family data before the applicable security and pilot readiness checks.
