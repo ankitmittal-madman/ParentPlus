@@ -6,7 +6,8 @@ Reference decisions: DEC-005 through DEC-010
 
 ## Current enrolment contract — 10 November 2026
 
-Local migration052 adds private enrolments, actor/payload-bound receipts and events.
+Migration052, applied locally and to the existing founder-selected TEST backend,
+adds private enrolments, actor/payload-bound receipts and events.
 Six scoped authenticated RPCs expose manager writes, manager/assigned-coach batch
 reads and own-child parent classes. Version checks prevent stale edits; natural
 keys prevent duplicate child/batch registration. Current connection/permissions are

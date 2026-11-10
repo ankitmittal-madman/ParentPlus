@@ -1,24 +1,32 @@
 # ParentPlus — Agent Handoff
 
-## Continuous development loop — in progress, 10 November 2026
+## Continuous development loop — enrolment verified, 10 November 2026
 
-Founder requests continued entire-app development with short updates, using the
-kit for requirements and Coach/Tutor HTML for primary visual direction. Codex
-chooses engineering. Do not stop after each slice or ask routine permission.
-Existing commit/push/merge/testing-backend authority persists. Preserve data/stash;
-no new worktree/account/paid service.
+User requests entire-app development using founder kit for requirements and the
+Coach/Tutor HTML for visual direction. Continue routine loops autonomously; do not
+stop after this slice. Commit/push/merge/existing TEST-backend authorisation persists.
+Preserve all data, originals and pre-recovery stash; no new worktree/account/paid service.
 
-Preparation HEAD9245349 onwork; enrolment052/UI/app-shell/ops changes are staged+
-unstaged deliberately. Task1 review PASS; Task2 I1 fix/scoped review PASS. Originals
-unchanged. Local052 is applied with original records preserved; hosted remains051.
-See Quality Evidence for focused results/limits and retained ignored
-.superpowers/sdd/2026-11-10-enrolment/progress.md for owners/reports. Full gate and
-publication remain pending; inspect actual Git state rather than older checkpoints.
+Local code commit8f0ae0ef178e8e1909504fdb8c5d27430ac34c48 records51 reviewed files.
+Full final-v6 gate and source-matched86/86 browser report passed (see Quality
+Evidence); M1 minor fixture improvement remains. Local/hosted schemas are052.
+Hosted original31 public-table/Auth snapshots preserved, including a post-control
+activation check;52 ordered receipts/34 tables verified. Private current upgrade
+receipt includes immutable code commit; previous receipt preserved. This following
+documentation commit is separate evidence. Push/PR/CI/merge/Vercel still pending at
+preparation; inspect actual Git state and hosted outcomes, never infer deployment.
 
-After verified enrolment publication CONTINUE Today/attendance/signals/typed items
-(planned design in docs/superpowers/specs). Deploy from immutable Git archive bundles
-of verified commits so later uncommitted migrations cannot enter an earlier upgrade.
-Continue engineering while independent CI runs once the preceding source is frozen.
+Next: publish frozen checkpoint through work→main after actual checks; old remote
+branch histories were already contained in main, retain branch names/stash.
+Use native git/gh; Vercel connector remains disabled. Immutable052 deployment
+bundle is ignored work/deploy-8f0ae0ef178e8e1909504fdb8c5d27430ac34c48/ so later053
+source cannot enter this upgrade. After documentation/push, implement Today/
+attendance/signals/typed parent items while CI runs, then continue diary/feed,
+media/consent and remaining founder features. Do not end merely to ask go-ahead.
+
+The expanded next-loop planning drafts are ignored work/attendance-planning/;
+integrate canonical spec/plan and preflight before implementation. Source ledger
+.superpowers/sdd/2026-11-10-enrolment/progress.md retains owners/reviews/failure logs.
 
 ## Verified academy invitation checkpoint — 2026-11-10
 

@@ -1,5 +1,46 @@
 # ParentPlus — Quality Evidence Index
 
+## Verified enrolment checkpoint — 10 November 2026
+
+Code commit `8f0ae0ef178e8e1909504fdb8c5d27430ac34c48` records the reviewed51-file
+change. Pre-commit final-v6 source fingerprint
+`3055e142afc0d08958b7e6d95633fce549995bc07f41aaf16db0084e83b52a0c`
+passed the combined source-bound gate; this documentation follow-up is separate.
+Reports: ignored `test-results/quality/enrolment-final-v6/` (plan),
+`enrolment-verified-v6/` (passed gate) and
+`test-results/evidence/enrolment-final-v6/` (current reports/receipts).
+
+| Executed check | Result |
+|---|---|
+| Frontend |384 cases/43 files; lint, TypeScript and production build passed|
+| Isolated PostgreSQL |490 unit/integration +4 standalone =494; zero failed/error/skipped; cleanup verified|
+| Complete real-local browser report |43 scenarios ×2 viewports =86/86;99 mapped controls; zero action gaps;86 embedded screenshots|
+| Other browsers |6 signed-out +6 isolated synthetic-provider +3 real-local email OTP +1 dummy-OTP founder journey passed|
+| Tooling |58 engine,17 offline operations,3 browser observer cases passed; workbook ZIP/XML integrity passed|
+
+Full founder report `run-20261110T125133Z-daf7fd` has the same source fingerprint
+as final-v6; HTML/Excel/summary copies are in ignored
+`work/deliverables/parentplus-enrolment/`. Prior83/86 and85/86 reports remain failed
+evidence. Their defects were ambiguous student text, premature founder navigation
+and a first-POST fault targeting a background read; the corrected tests retain
+actual clicks and immutable retry payload/UUID assertions. Namespace failures
+were corrected with an exact synthetic-provider read allowlist and explicit class
+refresh. Actual hosted metadata preflight stopped before writes because PG arrays
+arrived as text; jsonb_agg plus strict validation reproduced RED and passed17 ops
+and a fresh read-only hosted inspect. No assertions, case minima or skips were
+weakened. Independent final/scoped reviews passed with no blocking finding.
+M1 remains a nonblocking frontend fixture improvement: use unique IDs to isolate
+50/100 output-limit proof; SQL bounds are covered and production guards remain.
+
+Migration052 was deployed from an immutable archive of code8f0ae0e to the existing
+founder-selected TEST project. All52 history entries and34 public tables were
+verified. Original31 public-table and Auth(id/email/created_at) snapshots matched
+before/after and again after feature-control activation. Prior receipt preserved;
+current private receipt `work/hosted-testing-upgrade-report.json` includes source
+commit and post-activation preservation. No reset or existing record rewrite.
+GitHub push/CI/merge/Vercel are pending at this entry's preparation; no hosted
+browser, real-device install, offline cache or full-app completion is claimed.
+
 ## Enrolment loop — focused verification before full gate, 10 November 2026
 
 Backend:49 focused enrolment cases passed on fresh052, with observed blocking

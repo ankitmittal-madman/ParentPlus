@@ -1,6 +1,6 @@
 # ParentPlus Build Progress
 
-## Enrolment and app-shell loop — local implementation, 10 November 2026
+## Enrolment and app-shell loop — verified checkpoint, 10 November 2026
 
 This loop adds migration052 and explicit child-to-batch enrolment, pause/resume/
 completion/withdrawal, parent class visibility and a batch-filtered manager list.
@@ -12,9 +12,12 @@ rounded cards and batch chips. Public standalone manifest/PNG/Apple metadata loa
 in desktop/mobile tests. No service worker/private-data cache is added; real-device
 installation and offline capture remain separate verification/features.
 
-Focused results/review fixes are in Quality Evidence. Full integrated gate and
-publication are pending at preparation. The next dependent loop is Today,
-attendance, parent signals and typed parent items; its design is planned only.
+Code8f0ae0e passed the full source-bound gate and86/86 real-local browser
+executions with zero action gaps. Migration052 is applied locally and to the
+existing founder-selected TEST backend with original records preserved. See
+Quality Evidence for exact reports/limits. GitHub publication remains pending at
+preparation. Continue Today, attendance, parent signals and typed parent items;
+that next design is planned only.
 
 ## Continuous development loop — founder direction, 10 November 2026
 
@@ -41,7 +44,7 @@ roadmap alongside this catalogue. The original documents remain unchanged.
 |---|---|---|---|---|
 | M2-01 | Batches and recurring schedule | P0 | 1 Class setup | Partial: course, batch and one-weekday series saved; richer recurrence/venue/holiday management remains. |
 | M2-02 | Guardians and multi-child families | P0 | 1 Class setup | Partial: own child profiles and single-use academy invitations; second guardians and full permissions remain. |
-| M2-03 | Enrolment lifecycle (trial, active, paused, left) | P1 | 1 Class setup | Local active/pause/resume/complete/withdraw with versioned recovery; trial/re-entry remain. Integrated gate/publication pending. |
+| M2-03 | Enrolment lifecycle (trial, active, paused, left) | P1 | 1 Class setup | Verified active/pause/resume/complete/withdraw with versioned recovery; final v6 gate passed and TEST052 applied with existing data preserved. Trial/re-entry remain; GitHub publication pending at preparation. |
 | M2-04 | Next-class reminder (auto-drafted) | P0 | 6 Reminders/schedules | Not implemented; queued in dependency order. |
 | M2-05 | Schedule changes (cancel, restore, move, extra class, holiday) | P0 | 6 Reminders/schedules | Not implemented; queued in dependency order. |
 | M2-06 | Parent quick signals (running late, missing today, dropped off) | P0 | 2 Attendance/Today | Not implemented; queued in dependency order. |
