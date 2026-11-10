@@ -327,3 +327,13 @@ rollover tests may replace it only inside an isolated owner-controlled fixture
 and restore it. This is synthetic boundary evidence, not a natural provider
 midnight observation. These choices preserve a usable testing app with real DB
 flows and explicit permissions; multi-guardian expansion is a separate flow.
+
+### DEC-024 implementation reconciliation: attendance item spelling
+
+Immutable053 persists parent items as `type=attendance`; the original founder
+contract uses `attendance_record`. Preserve existing records/writes. The parent
+renderer recognizes both as v1 read aliases with identical strict payload
+validation; unknown versions or malformed payloads use safe fallback. This adds
+no writer, duplicate item or data permission. The maintenance cost is retaining
+two recognised spellings. Future producers must deliberately preserve or migrate
+the canonical storage identity rather than emit duplicate items for a session.

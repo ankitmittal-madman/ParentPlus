@@ -1,5 +1,7 @@
+import { Suspense, type ReactElement } from "react";
+import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { ParentChildrenGate } from "./page";
+import ParentChildrenPage, { ParentChildrenGate } from "./page";
 import ParentClassesPanel from "@/modules/enrollments/parent-classes-panel";
 import CreatedChildrenPanel from "./created-children-panel";
 import ChildCreationPanel from "./child-creation-panel";
@@ -12,6 +14,12 @@ describe("ParentChildrenPage", () => {
   afterEach(() => {
     vi.unstubAllEnvs();
     vi.clearAllMocks();
+  });
+  it("links profiles back to parent home while preserving request-gated management", () => {
+    const page = ParentChildrenPage();
+    render(<>{page.props.children.filter((child: ReactElement) => child.type !== Suspense)}</>);
+    expect(screen.getByRole("link", { name: "Parent home" })).toHaveAttribute("href", "/parent");
+    expect(screen.getByRole("heading", { name: "Parent profiles" })).toBeVisible();
   });
   it("uses request-time configuration and hides the panel by default", async () => {
     vi.stubEnv("PARENTPLUS_ENABLE_PARENT_CHILD_LIST", "false");

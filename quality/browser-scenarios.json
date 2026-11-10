@@ -730,6 +730,107 @@
       "expected": "Unknown status preserves the full operation; retry persists the original request and clears pending only on confirmed success.",
       "status": "automated",
       "kind": "real local backend"
+    },
+    {
+      "id": "PARENTATTEND-001",
+      "feature": "Parent attendance home",
+      "persona": "Separate coach and parent accounts",
+      "title": "Saved attendance, four parent reports, correction, pause and cross-family denial",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Create a real UTC-today class; separate parent creates and connects a child; coach enrols and saves Present",
+        "Open Parent home from login; verify saved feed and weekly counts through reload and profile navigation",
+        "Change session date and return using the date strip",
+        "Send all four report types; Missing today requires a reason; confirmed attendance and counts stay unchanged",
+        "Coach reads the report and corrects attendance to Late; parent sees one corrected item",
+        "Pause enrolment; coach roster and parent reporting stop while history remains",
+        "Different signed parent cannot read the victim child through UI or authenticated private RPC",
+        "Switch Parent home to Hindi; click Refresh, Home and Profiles; return to saved Hindi facts, capture screenshot and restore English"
+      ],
+      "expected": "Only actual coach saves change attendance. Reports persist separately; scoped history survives pause and cross-family reads return 42501.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "PARENTATTEND-002",
+      "feature": "Parent attendance home",
+      "persona": "Separate coach and parent accounts",
+      "title": "Committed parent report with lost response recovers after reload",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Create a real active enrolled session; parent opens report",
+        "Allow server submission to commit then drop its response",
+        "Compare durable operation bytes across reload and check the original saved result",
+        "Verify one receipt and signal, zero attendance or parent feed records, including after another reload"
+      ],
+      "expected": "Original request resolves without duplicate reports or invented attendance.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "PARENTATTEND-003",
+      "feature": "Parent attendance home",
+      "persona": "Separate coach and parent accounts",
+      "title": "Uncommitted parent report checks unknown then retries the same operation",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Create a real active enrolled session; parent opens report",
+        "Drop first submission before forwarding and verify no database writes",
+        "Check unknown result; full pending operation remains byte-identical",
+        "Retry same report; verify original receipt and one signal survive reload without attendance"
+      ],
+      "expected": "Unknown outcome preserves the request; same-operation retry persists one report and never confirms attendance.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "PARENTATTEND-004",
+      "feature": "Parent attendance home",
+      "persona": "Parent",
+      "title": "Anonymous parent home links to working sign-in",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Open Parent home anonymously",
+        "Verify private feed is absent",
+        "Click Sign in and see the email form",
+        "Repeat sign-in navigation with the saved Hindi language preference"
+      ],
+      "expected": "Anonymous users receive a usable sign-in route without private saved updates.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "PARENTATTEND-005",
+      "feature": "Parent attendance home",
+      "persona": "Parent",
+      "title": "Future item from real local DB renders escaped fallback and safe own-child action",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Create and save actual attendance through coach UI; parent reads it",
+        "Temporarily replace only that synthetic item with a future type/version and an unsafe action",
+        "Verify HTML-like body stays text, no image/script or unsafe link appears",
+        "Replace the fixture action with an own-child profile route; click it",
+        "Restore actual coach item and verify Present again"
+      ],
+      "expected": "Unknown parcels remain readable; unsafe actions are absent; the approved link does not bypass destination checks.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "PARENTATTEND-006",
+      "feature": "Parent attendance home",
+      "persona": "One parent and two academy coaches",
+      "title": "One child's academy switch isolates saved attendance and week counts",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "First coach creates class, connects/enrols parent child and saves Present",
+        "Second coach uses a separate browser, creates a class; same parent connects the same child; second coach enrols and saves Absent",
+        "Parent switches academy selectors; each shows only its own item and exact weekly counts",
+        "Refresh retains the second academy and class; first academy attendance does not appear"
+      ],
+      "expected": "Cross-academy views remain separate; one child can belong to multiple permitted academies without merged attendance facts.",
+      "status": "automated",
+      "kind": "real local backend"
     }
   ],
   "actions": [
@@ -1611,6 +1712,152 @@
         "ATTEND-002",
         "ATTEND-003"
       ]
+    },
+    {
+      "route": "/login",
+      "name": "Parent home",
+      "scenarios": [
+        "PARENTATTEND-001"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "Parent home",
+      "scenarios": [
+        "PARENTATTEND-001",
+        "PARENTATTEND-005"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "Home",
+      "scenarios": [
+        "PARENTATTEND-001"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "Profiles and connections",
+      "scenarios": [
+        "PARENTATTEND-001"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "Refresh parent home",
+      "scenarios": [
+        "PARENTATTEND-001"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "Select parent session date",
+      "scenarios": [
+        "PARENTATTEND-001"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "Open parent report",
+      "scenarios": [
+        "PARENTATTEND-001",
+        "PARENTATTEND-002",
+        "PARENTATTEND-003"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "Running late",
+      "scenarios": [
+        "PARENTATTEND-001"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "Missing today",
+      "scenarios": [
+        "PARENTATTEND-001"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "Dropped off",
+      "scenarios": [
+        "PARENTATTEND-001"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "Picked up",
+      "scenarios": [
+        "PARENTATTEND-001"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "Send report",
+      "scenarios": [
+        "PARENTATTEND-001",
+        "PARENTATTEND-002",
+        "PARENTATTEND-003"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "Check report result",
+      "scenarios": [
+        "PARENTATTEND-002",
+        "PARENTATTEND-003"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "Retry same report",
+      "scenarios": [
+        "PARENTATTEND-003"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "Sign in",
+      "scenarios": [
+        "PARENTATTEND-004"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "Open saved profile",
+      "scenarios": [
+        "PARENTATTEND-005"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "\u0905\u092d\u093f\u092d\u093e\u0935\u0915 \u0939\u094b\u092e \u0930\u0940\u092b\u093c\u094d\u0930\u0947\u0936 \u0915\u0930\u0947\u0902",
+      "scenarios": [
+        "PARENTATTEND-001"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "\u0939\u094b\u092e",
+      "scenarios": [
+        "PARENTATTEND-001"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "\u092a\u094d\u0930\u094b\u092b\u093c\u093e\u0907\u0932 \u0914\u0930 \u0915\u0928\u0947\u0915\u094d\u0936\u0928",
+      "scenarios": [
+        "PARENTATTEND-001"
+      ]
+    },
+    {
+      "route": "/parent",
+      "name": "\u0938\u093e\u0907\u0928 \u0907\u0928 \u0915\u0930\u0947\u0902",
+      "scenarios": [
+        "PARENTATTEND-004"
+      ]
     }
   ],
   "gaps": [
@@ -1622,7 +1869,7 @@
     {
       "feature": "Attendance",
       "status": "partly built",
-      "next": "Coach saves/corrections/recovery and private backend implemented; parent home/signals/feed UI and full cross-persona attendance journey remain."
+      "next": "Coach and parent attendance/report flows are implemented; full current browser verification and review are in progress. Pattern alerts, richer Needs you and verified handover remain."
     },
     {
       "feature": "Diary and media",

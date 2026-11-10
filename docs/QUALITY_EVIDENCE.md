@@ -1,5 +1,56 @@
 # ParentPlus — Quality Evidence Index
 
+## Parent attendance checkpoint — 10 November 2026
+
+Current application code passed528 frontend/602 isolated DB cases, lint/types/build,
+6 disabled/6 isolated enabled browser cases,58 engine/25 ops/5 observer checks.
+The real-local full run executed104/104 successfully but reporting found one
+Hindi Sign in action gap. The scenario/mapping fix then passed2/2 viewport cases;
+that focused run is not a new full104 pass. Final-head GitHub quality/browser
+checks are required before merge. Prior receipts retain their actual44c source
+identity; QA/docs changes are not certified by reissuing old receipts.
+
+[Detailed evidence and limits](quality/2026-11-10-parent-attendance-checkpoint.md)
+include reconstruction provenance, independent review and pending360 capture.
+Earlier entries below are historical preparation records.
+
+
+## Parent Home recovery — current verification preparation, 10 November 2026
+
+The replacement environment initially exposed clean work@ff41e3b, missing earlier
+uncommitted parent changes/logs/stash. After reporting that gap, the existing
+checkout fast-forwarded to published main c5f2d7a. The original implementer
+reconstructed19parent paths and49exact test references; this is equivalent
+reconstruction, not byte-identical recovery. Historical524/525parent results
+and lost reports are not current proof.
+
+Fresh pre-review source passed526frontend tests, lint, typecheck and production
+build. Independent Task3 review found Refresh during pending class bootstrap and
+first-click recovered-report Check during automatic scope loading. Both have
+fresh failing regressions and focused fixes; final re-review/full regression are
+still required at this preparation point. The first actual local diagnostic
+run-20261110T180104Z-254648 passed4of6executed cases: complete parent/coach flow
+and unknown-report retry passed desktop/mobile; committed-report reload recovery
+failed bothviewports. That failed evidence is retained, with saved1receipt/1signal
+and0attendance writes. A diagnostic subset leaves other scenarios NOT RUN;
+its incomplete report is not a complete browser release result.
+
+Current local Supabase was freshly started with53migrations/41public tables;
+Auth health returned200. The launcher restored all four previously-disabled
+local controls after the diagnostic. No hosted database changes were made during
+recovery. Locked npm ci succeeded; no dependency changes. New real-local browser
+coverage includes four report types, corrections/history after pause, authenticated
+cross-family RPC denial, lost-response recovery, Hindi, anonymous routing, future
+item fallback and two-academy isolation. Added cases remain unverified until the
+current execution finishes; final HTML/Excel/screenshots must name their run.
+
+Published PR6 mergedc5f2d7a: main quality42845612938 and browser42845612897 were
+observed successful; report artifact13777408009 was uploaded/nonexpired and Vercel
+reported success for that commit. Those results do not prove the new parent
+source or a hosted browser journey. Earlier TEST053 application remains historical
+preservation evidence; it was not reapplied during this recovery.
+
+
 ## Verified coach/database source checkpoint e441a3e — 10 November 2026
 
 Code commit `e441a3e365e13fd0a4c0b7901a527f7619305d74` contains59reviewed paths.

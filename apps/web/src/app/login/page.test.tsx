@@ -164,6 +164,17 @@ describe("LoginPage", () => {
     expect(screen.queryByRole("link", { name: "Continue to coach area" })).not.toBeInTheDocument();
   });
 
+  it("links parent home only for a confirmed session and removes it during sign-out", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
+    mocks.getSessionStatus.mockResolvedValue({ state: "signed-in" });
+    mocks.signOut.mockResolvedValue({ success: true, error: null });
+    render(<LoginPage />);
+    expect(await screen.findByRole("link", { name: "Parent home" })).toHaveAttribute("href", "/parent");
+    fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    expect(screen.queryByRole("link", { name: "Parent home" })).not.toBeInTheDocument();
+    await screen.findByLabelText("Email address");
+  });
+
   it("links a confirmed signed-in user to parent profiles and removes the link on sign-out", async () => {
     vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
     vi.stubEnv("NEXT_PUBLIC_ENABLE_PARENT_PROFILE_LINK", "true");

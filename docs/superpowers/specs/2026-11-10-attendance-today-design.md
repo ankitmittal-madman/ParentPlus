@@ -355,6 +355,11 @@ claim of cross-device/new-tab recovery. No provider secrets enter storage.
 
 Envelope exactly matches founder contract:
 `{id,type,schema_version,child_id,class_id,priority,created_at,expires_at,payload}`.
+Immutable053 writes `type=attendance`. The parent renderer also accepts the founder
+contract spelling `attendance_record` as a read-compatible v1 alias, with identical
+strict payload validation. This adds no writer or access permission; writes in this
+slice keep `attendance` so a correction updates the same item. Unknown versions or
+malformed recognized payloads still use the safe fallback.
 Attendance v1 payload is exactly `{session_id,date,status,confirmed_at,
 title:'Attendance recorded',body:<bounded status/date text>}`. date is the
 session start's academy-local ISO date. No auth IDs, guardian details, private
