@@ -1,5 +1,52 @@
 # ParentPlus — Agent Handoff
 
+## Parent attendance Git checkpoint — 10 November 2026
+
+The founder explicitly requested commit, push, merge, branch synchronisation and
+removal of idle branches. Parent source is reviewed and frozen; 528 frontend and
+602 database checks passed, and all 104 real-local browser executions passed.
+A single Hindi Sign in action-coverage gap was fixed and its two viewport cases
+passed. Final-head GitHub quality/full browser results and exact360 capture must
+be checked before merge. No hosted database change is needed for this checkpoint.
+
+Read [the checkpoint evidence](quality/2026-11-10-parent-attendance-checkpoint.md)
+for source identity, preserved failure history, review fixes and remaining scope.
+Earlier recovery/preparation entries below are historical. Existing branch work
+must be included in main before its ref is deleted; preserve any unique commits.
+Local source/log backups remain ignored and are not durable Git evidence.
+
+
+## Workspace recovery and missing parent WIP — 10 November 2026
+
+After the environment disconnected, the accessible checkout returned at clean
+`work@ff41e3b`. Uncommitted parent modules/actions/route/link changes,48new test
+mappings, the root AT13 browser draft, local setup files/logs and the earlier
+local stash were absent. They were reported missing before any source change.
+The existing checkout was safely fast-forwarded to GitHub main
+`c5f2d7af243ee6a988187cb6bf8bd82fcf2a54a4`; PR6's merged state was rechecked.
+No reset, worktree, hosted database change or deletion of existing work occurred.
+
+Parent Task3 was reconstructed by the original implementer from retained
+context. It is equivalent reconstruction, not a verified byte-identical recovery.
+Earlier parent524/46focused results are historical; final525results were never
+confirmed before disconnection. Current-source tests, hashes, formal review and
+real parent–coach browser verification must be produced again. Fresh pre-review
+526frontend/lint/types/build passed; review found two loading/recovery defects.
+Both have RED→GREEN regressions,49parent tests/lint/types pass; collection is now
+528 with51new refs. Scoped re-review and full current checks remain pending.
+The initial parent browser diagnostic passed4/6 and retained both002reload
+failures; second diagnostic is running the unchanged reproduction plus anonymous,
+future-item/Hindi/two-academy checks. Do not call either subset a full QA pass.
+The committed
+coach/database checkpoint remains complete; do not redo Tasks1/2 implementation.
+
+Root owns local stack/dependency setup, QA draft and canonical docs; parent worker
+owns its19app/message/registry paths. Preserve those concurrent edits. The new
+plan ledger under .superpowers/sdd/2026-11-10-attendance-today/ explicitly records
+lost evidence and recovery. Existing user continuation/Git/testing permissions
+remain; no new accounts/services/dependencies/worktree or routine approval pause.
+
+
 ## Coach checkpoint committed; publication next — 10 November 2026
 
 Local work HEAD `e441a3e365e13fd0a4c0b7901a527f7619305d74` records59paths and

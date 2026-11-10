@@ -1,3 +1,5 @@
+import Link from "next/link";
+import en from "../../../../messages/en.json";
 import { Suspense } from "react";
 import { connection } from "next/server";
 import ParentConnectionsPanel from "@/modules/families/parent-connections-panel";
@@ -31,6 +33,7 @@ export async function ParentChildrenGate() {
 export default function ParentChildrenPage() {
   return (
     <main className="mx-auto min-h-screen max-w-md bg-[#F3F5F1] px-5 py-8 text-[#22303A]">
+      <Link href="/parent" className="mb-4 inline-flex min-h-11 items-center font-semibold text-[#1F6F6B] underline">{en.parentFeed.title}</Link>
       <h1 className="text-3xl font-extrabold">Parent profiles</h1>
       <Suspense fallback={<p className="mt-4">Checking availability…</p>}>
         <ParentChildrenGate />

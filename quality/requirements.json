@@ -19305,6 +19305,1130 @@
         "apps/web/src/lib/attendance/actions.ts",
         "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
       ]
+    },
+    {
+      "id": "FE-PARENTFEED-LOGINPAGE-LINKS-PARENT-HOME-ONLY-FOR-A-CONFIRMED-SESSION-AND-REMOVES-IT-DURING-SIGN-OUT",
+      "domain": "parent-feed",
+      "description": "links parent home only for a confirmed session and removes it during sign-out.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "links parent home only for a confirmed session and removes it during sign-out"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > links parent home only for a confirmed session and removes it during sign-out"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.test.tsx",
+        "apps/web/src/app/login/page.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-MAPS-FIRST-CHILD-READ-THROUGH-EXPECTED-ACTOR-VERIFICATION-AND-BOUNDED-ORDINARY-PROFILE-RPC",
+      "domain": "parent-feed",
+      "description": "maps first child read through expected-actor verification and bounded ordinary profile RPC.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "maps first child read through expected-actor verification and bounded ordinary profile RPC"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent-feed/actions.test.ts::maps first child read through expected-actor verification and bounded ordinary profile RPC"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent-feed/actions.test.ts",
+        "apps/web/src/lib/parent-feed/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-MAPS-DEDICATED-PARENT-ACADEMIES-BATCHES-SESSIONS-ITEMS-AND-WEEK-RPC-ARGUMENTS-AND-PROJECTIONS",
+      "domain": "parent-feed",
+      "description": "maps dedicated parent academies batches sessions items and week RPC arguments and projections.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "maps dedicated parent academies batches sessions items and week RPC arguments and projections"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent-feed/actions.test.ts::maps dedicated parent academies batches sessions items and week RPC arguments and projections"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent-feed/actions.test.ts",
+        "apps/web/src/lib/parent-feed/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-MAPS-CANONICAL-SIGNAL-SEND-AND-COMPLETE-ORIGINAL-PAYLOAD-RECOVERY-WITHOUT-ATTENDANCE-WRITES",
+      "domain": "parent-feed",
+      "description": "maps canonical signal send and complete original-payload recovery without attendance writes.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "maps canonical signal send and complete original-payload recovery without attendance writes"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent-feed/actions.test.ts::maps canonical signal send and complete original-payload recovery without attendance writes"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent-feed/actions.test.ts",
+        "apps/web/src/lib/parent-feed/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-FENCES-EVERY-PARENT-RPC-INCLUDING-FIRST-CHILD-READ-AGAINST-ANOTHER-VERIFIED-ACTOR",
+      "domain": "parent-feed",
+      "description": "fences every parent RPC including first child read against another verified actor.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "fences every parent RPC including first child read against another verified actor"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent-feed/actions.test.ts::fences every parent RPC including first child read against another verified actor"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent-feed/actions.test.ts",
+        "apps/web/src/lib/parent-feed/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-KEEPS-RETRYABLE-AUTH-503-THROTTLING-AND-MALFORMED-PREFLIGHT-ERRORS-UNKNOWN-WITHOUT-RPC",
+      "domain": "parent-feed",
+      "description": "keeps retryable auth 503 throttling and malformed preflight errors unknown without RPC.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "keeps retryable auth 503 throttling and malformed preflight errors unknown without RPC"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent-feed/actions.test.ts::keeps retryable auth 503 throttling and malformed preflight errors unknown without RPC"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent-feed/actions.test.ts",
+        "apps/web/src/lib/parent-feed/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-CLASSIFIES-DEFINITIVE-AUTH-AND-SQL-DENIAL-WHILE-REDACTING-ALL-SERVER-MESSAGES",
+      "domain": "parent-feed",
+      "description": "classifies definitive auth and SQL denial while redacting all server messages.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "classifies definitive auth and SQL denial while redacting all server messages"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent-feed/actions.test.ts::classifies definitive auth and SQL denial while redacting all server messages"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent-feed/actions.test.ts",
+        "apps/web/src/lib/parent-feed/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-REJECTS-MALFORMED-INPUT-FULL-CURSOR-PAIRS-INVALID-DATES-AND-INVALID-SIGNAL-REASON-BEFORE-CLIENT",
+      "domain": "parent-feed",
+      "description": "rejects malformed input full cursor pairs invalid dates and invalid signal reason before client.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "rejects malformed input full cursor pairs invalid dates and invalid signal reason before client"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent-feed/actions.test.ts::rejects malformed input full cursor pairs invalid dates and invalid signal reason before client"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent-feed/actions.test.ts",
+        "apps/web/src/lib/parent-feed/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-REJECTS-MALFORMED-REPLIES-AND-MISMATCHED-SIGNAL-RECEIPTS-BUT-PRESERVES-UNKNOWN-RECOVERY",
+      "domain": "parent-feed",
+      "description": "rejects malformed replies and mismatched signal receipts but preserves unknown recovery.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "rejects malformed replies and mismatched signal receipts but preserves unknown recovery"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent-feed/actions.test.ts::rejects malformed replies and mismatched signal receipts but preserves unknown recovery"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent-feed/actions.test.ts",
+        "apps/web/src/lib/parent-feed/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-REJECTS-FOREIGN-CHILD-FEED-AND-FOREIGN-ACTOR-SIGNAL-EVEN-IN-OTHERWISE-VALID-PARENT-REPLIES",
+      "domain": "parent-feed",
+      "description": "rejects foreign child feed and foreign actor signal even in otherwise valid parent replies.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "rejects foreign child feed and foreign actor signal even in otherwise valid parent replies"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent-feed/actions.test.ts::rejects foreign child feed and foreign actor signal even in otherwise valid parent replies"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent-feed/actions.test.ts",
+        "apps/web/src/lib/parent-feed/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-RESPECTS-DISABLED-ORDINARY-CHILD-LIST-CONTROL-AND-VALIDATES-BOUNDED-DUPLICATE-PROFILES",
+      "domain": "parent-feed",
+      "description": "respects disabled ordinary child-list control and validates bounded duplicate profiles.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "respects disabled ordinary child-list control and validates bounded duplicate profiles"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent-feed/actions.test.ts::respects disabled ordinary child-list control and validates bounded duplicate profiles"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent-feed/actions.test.ts",
+        "apps/web/src/lib/parent-feed/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-PASSES-INDEPENDENT-COMPLETE-CURSOR-PAIRS-AND-REJECTS-NONADVANCING-PARENT-PAGES",
+      "domain": "parent-feed",
+      "description": "passes independent complete cursor pairs and rejects nonadvancing parent pages.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "passes independent complete cursor pairs and rejects nonadvancing parent pages"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/parent-feed/actions.test.ts::passes independent complete cursor pairs and rejects nonadvancing parent pages"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/parent-feed/actions.test.ts",
+        "apps/web/src/lib/parent-feed/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-DECODES-DEDICATED-BATCH-IDS-AND-RETAINED-ENROLMENT-STATES-WITHOUT-RELATIONSHIP-ALIASES",
+      "domain": "parent-feed",
+      "description": "decodes dedicated batch IDs and retained enrolment states without relationship aliases.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "decodes dedicated batch IDs and retained enrolment states without relationship aliases"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/contracts.test.ts::decodes dedicated batch IDs and retained enrolment states without relationship aliases"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/contracts.test.ts",
+        "apps/web/src/modules/parent-feed/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-VALIDATES-PARENT-SESSION-BOUNDS-CHRONOLOGY-LOCAL-DATE-ELIGIBILITY-AND-OWN-REPORT-PROJECTION",
+      "domain": "parent-feed",
+      "description": "validates parent session bounds chronology local date eligibility and own report projection.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "validates parent session bounds chronology local date eligibility and own report projection"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/contracts.test.ts::validates parent session bounds chronology local date eligibility and own report projection"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/contracts.test.ts",
+        "apps/web/src/modules/parent-feed/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-RETAINS-UNKNOWN-TYPED-ENVELOPES-WHILE-REJECTING-MALFORMED-BOUNDS-DUPLICATES-AND-CURSORS",
+      "domain": "parent-feed",
+      "description": "retains unknown typed envelopes while rejecting malformed bounds duplicates and cursors.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "retains unknown typed envelopes while rejecting malformed bounds duplicates and cursors"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/contracts.test.ts::retains unknown typed envelopes while rejecting malformed bounds duplicates and cursors"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/contracts.test.ts",
+        "apps/web/src/modules/parent-feed/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-ORDERS-FEED-TIMESTAMPS-AT-FULL-UTC-MICROSECOND-PRECISION-AND-REJECTS-ASCENDING-PAGES",
+      "domain": "parent-feed",
+      "description": "orders feed timestamps at full UTC microsecond precision and rejects ascending pages.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "orders feed timestamps at full UTC microsecond precision and rejects ascending pages"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/contracts.test.ts::orders feed timestamps at full UTC microsecond precision and rejects ascending pages"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/contracts.test.ts",
+        "apps/web/src/modules/parent-feed/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-KEEPS-EXACT-WEEKLY-COUNTS-INDEPENDENT-OF-CAPPED-DETAIL-AND-VALIDATES-MONDAY-WINDOW",
+      "domain": "parent-feed",
+      "description": "keeps exact weekly counts independent of capped detail and validates Monday window.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "keeps exact weekly counts independent of capped detail and validates Monday window"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/contracts.test.ts::keeps exact weekly counts independent of capped detail and validates Monday window"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/contracts.test.ts",
+        "apps/web/src/modules/parent-feed/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-REBUILDS-ONLY-EXACT-OWN-CHILD-PARENT-ACTIONS-WITH-BOUNDED-PLAIN-LABELS",
+      "domain": "parent-feed",
+      "description": "rebuilds only exact own-child parent actions with bounded plain labels.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "rebuilds only exact own-child parent actions with bounded plain labels"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/contracts.test.ts::rebuilds only exact own-child parent actions with bounded plain labels"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/contracts.test.ts",
+        "apps/web/src/modules/parent-feed/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-DENIES-EXTERNAL-ENCODED-TRAVERSAL-CONTROL-FRAGMENT-DUPLICATE-AND-OTHER-CHILD-ACTION-TRICKS",
+      "domain": "parent-feed",
+      "description": "denies external encoded traversal control fragment duplicate and other-child action tricks.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "denies external encoded traversal control fragment duplicate and other-child action tricks"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/contracts.test.ts::denies external encoded traversal control fragment duplicate and other-child action tricks"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/contracts.test.ts",
+        "apps/web/src/modules/parent-feed/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-REQUIRES-EXACT-FIFTY-ROW-CONTINUATION-ANCHORS-FOR-DEDICATED-BATCHES-SESSIONS-AND-FEED",
+      "domain": "parent-feed",
+      "description": "requires exact fifty-row continuation anchors for dedicated batches sessions and feed.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "requires exact fifty-row continuation anchors for dedicated batches sessions and feed"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/contracts.test.ts::requires exact fifty-row continuation anchors for dedicated batches sessions and feed"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/contracts.test.ts",
+        "apps/web/src/modules/parent-feed/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-AUTOLOADS-OWN-CHILD-DEDICATED-ACADEMY-CLASS-FEED-AND-EXACT-WEEK-USING-ACADEMY-LOCAL-TODAY",
+      "domain": "parent-feed",
+      "description": "autoloads own child dedicated academy class feed and exact week using academy-local today.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "autoloads own child dedicated academy class feed and exact week using academy-local today"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::autoloads own child dedicated academy class feed and exact week using academy-local today"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-KEEPS-INDEPENDENT-ACADEMY-CLASS-SESSION-AND-FEED-PAGINATION-CURSORS",
+      "domain": "parent-feed",
+      "description": "keeps independent academy class session and feed pagination cursors.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "keeps independent academy class session and feed pagination cursors"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::keeps independent academy class session and feed pagination cursors"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-CLEARS-DEPENDENT-PRIVATE-FACTS-AND-DISCARDS-STALE-CHILD-ACADEMY-DATE-AND-CLASS-READS",
+      "domain": "parent-feed",
+      "description": "clears dependent private facts and discards stale child academy date and class reads.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "clears dependent private facts and discards stale child academy date and class reads"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::clears dependent private facts and discards stale child academy date and class reads"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-DOES-NOT-ACCEPT-A-STALE-INITIAL-CHILD-LIST-AFTER-ACCOUNT-SWITCH-OR-UNMOUNT",
+      "domain": "parent-feed",
+      "description": "does not accept a stale initial child list after account switch or unmount.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "does not accept a stale initial child list after account switch or unmount"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::does not accept a stale initial child list after account switch or unmount"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-OWNS-LOADING-AND-ERROR-STATE-BY-CURRENT-SCOPE-WHEN-OBSOLETE-REQUESTS-FINISH-LAST",
+      "domain": "parent-feed",
+      "description": "owns loading and error state by current scope when obsolete requests finish last.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "owns loading and error state by current scope when obsolete requests finish last"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::owns loading and error state by current scope when obsolete requests finish last"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-CLEARS-PRIVATE-VIEWS-ON-FOCUS-AND-REVOKED-ACCESS-WHILE-RETAINING-DURABLE-RECOVERY-BYTES",
+      "domain": "parent-feed",
+      "description": "clears private views on focus and revoked access while retaining durable recovery bytes.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "clears private views on focus and revoked access while retaining durable recovery bytes"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::clears private views on focus and revoked access while retaining durable recovery bytes"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-SHOWS-HONEST-NO-CHILD-NO-ACADEMY-NO-CLASS-EMPTY-AND-INVALID-ZONE-VIEWS",
+      "domain": "parent-feed",
+      "description": "shows honest no-child no-academy no-class empty and invalid-zone views.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "shows honest no-child no-academy no-class empty and invalid-zone views"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::shows honest no-child no-academy no-class empty and invalid-zone views"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-RETAINS-PAUSED-COMPLETED-CANCELLED-HISTORY-AND-EXPOSES-REPORTS-ONLY-FOR-ELIGIBLE-ACTIVE-SESSIONS",
+      "domain": "parent-feed",
+      "description": "retains paused completed cancelled history and exposes reports only for eligible active sessions.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "retains paused completed cancelled history and exposes reports only for eligible active sessions"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::retains paused completed cancelled history and exposes reports only for eligible active sessions"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-PERSISTS-EXACT-UNKNOWN-REPORT-BEFORE-SEND-AND-NEVER-CHANGES-SAVED-ATTENDANCE-OR-WEEKLY-COUNTS-OPTIMISTICALLY",
+      "domain": "parent-feed",
+      "description": "persists exact unknown report before send and never changes saved attendance or weekly counts optimistically.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "persists exact unknown report before send and never changes saved attendance or weekly counts optimistically"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::persists exact unknown report before send and never changes saved attendance or weekly counts optimistically"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-RESTORES-ORIGINAL-SIGNAL-UUID-AND-PAYLOAD-AFTER-RELOAD-AND-REFRESHES-LATEST-FACTS-ON-KNOWN-RECOVERY",
+      "domain": "parent-feed",
+      "description": "restores original signal UUID and payload after reload and refreshes latest facts on known recovery.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "restores original signal UUID and payload after reload and refreshes latest facts on known recovery"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::restores original signal UUID and payload after reload and refreshes latest facts on known recovery"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-RETAINS-UNKNOWN-REPORT-THROUGH-TRANSIENT-STATUS-FAILURE-AND-RETRIES-THE-SAME-FULL-IDENTITY",
+      "domain": "parent-feed",
+      "description": "retains unknown report through transient status failure and retries the same full identity.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "retains unknown report through transient status failure and retries the same full identity"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::retains unknown report through transient status failure and retries the same full identity"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-BLOCKS-REPLACEMENT-REPORTS-FOR-CORRUPT-RECOVERY-AND-DOES-NOT-REPLAY-ANOTHER-ACCOUNT-OPERATION",
+      "domain": "parent-feed",
+      "description": "blocks replacement reports for corrupt recovery and does not replay another account operation.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "blocks replacement reports for corrupt recovery and does not replay another account operation"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::blocks replacement reports for corrupt recovery and does not replay another account operation"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-RENDERS-HINDI-CONTROLS-STATUSES-AND-DATE-LABELS-WITHOUT-EXPOSING-CONTACT-PROVENANCE",
+      "domain": "parent-feed",
+      "description": "renders Hindi controls statuses and date labels without exposing contact provenance.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "renders Hindi controls statuses and date labels without exposing contact provenance"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::renders Hindi controls statuses and date labels without exposing contact provenance"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-DISCARDS-OBSOLETE-ACADEMY-AND-BATCH-PAGES-WITHOUT-STICKING-NEW-SCOPE-LOADING-OWNERSHIP",
+      "domain": "parent-feed",
+      "description": "discards obsolete academy and batch pages without sticking new-scope loading ownership.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "discards obsolete academy and batch pages without sticking new-scope loading ownership"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::discards obsolete academy and batch pages without sticking new-scope loading ownership"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-REMOVES-AN-OPEN-REPORT-FORM-WHEN-VISIBLE-POLLING-MAKES-THE-SESSION-INELIGIBLE",
+      "domain": "parent-feed",
+      "description": "removes an open report form when visible polling makes the session ineligible.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "removes an open report form when visible polling makes the session ineligible"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::removes an open report form when visible polling makes the session ineligible"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-KEEPS-AN-ORIGINAL-REPORT-PENDING-WHEN-ITS-REPLY-ARRIVES-AFTER-CHILD-SELECTION-CHANGES",
+      "domain": "parent-feed",
+      "description": "keeps an original report pending when its reply arrives after child selection changes.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "keeps an original report pending when its reply arrives after child selection changes"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::keeps an original report pending when its reply arrives after child selection changes"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-RETAINS-VOLATILE-RECOVERY-WHEN-STORAGE-FAILS-AND-RESOLVES-IT-WITHOUT-CLAIMING-DURABLE-STORAGE",
+      "domain": "parent-feed",
+      "description": "retains volatile recovery when storage fails and resolves it without claiming durable storage.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "retains volatile recovery when storage fails and resolves it without claiming durable storage"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::retains volatile recovery when storage fails and resolves it without claiming durable storage"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-CLEARS-ONLY-DEFINITIVELY-REJECTED-ORIGINAL-REPORT-AND-RELOADS-FACTUAL-DATA",
+      "domain": "parent-feed",
+      "description": "clears only definitively rejected original report and reloads factual data.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "clears only definitively rejected original report and reloads factual data"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::clears only definitively rejected original report and reloads factual data"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-REFRESHES-THE-SELECTED-CHILD-ACADEMY-CLASS-AND-DATE-INSTEAD-OF-RETURNING-TO-THE-FIRST-SELECTION",
+      "domain": "parent-feed",
+      "description": "refreshes the selected child academy class and date instead of returning to the first selection.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "refreshes the selected child academy class and date instead of returning to the first selection"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::refreshes the selected child academy class and date instead of returning to the first selection"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-FOCUSES-THE-REPORT-FORM-AFTER-EXPLICIT-SELECTION-AND-SUBMITS-OTHER-REPORT-TYPES-WITH-NULL-REASON",
+      "domain": "parent-feed",
+      "description": "focuses the report form after explicit selection and submits other report types with null reason.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "focuses the report form after explicit selection and submits other report types with null reason"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::focuses the report form after explicit selection and submits other report types with null reason"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-REFRESHES-SAVED-FEED-AND-EXACT-WEEKLY-FACTS-WITH-VISIBLE-SESSION-POLLING-AFTER-A-COACH-CORRECTION",
+      "domain": "parent-feed",
+      "description": "refreshes saved feed and exact weekly facts with visible session polling after a coach correction.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "refreshes saved feed and exact weekly facts with visible session polling after a coach correction"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::refreshes saved feed and exact weekly facts with visible session polling after a coach correction"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-RENDERS-VALID-SAVED-ATTENDANCE-WITH-LOCALIZED-FACTUAL-STATUS-AND-DATE",
+      "domain": "parent-feed",
+      "description": "renders valid saved attendance with localized factual status and date.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "renders valid saved attendance with localized factual status and date"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-item-card.test.tsx::renders valid saved attendance with localized factual status and date"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-item-card.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-item-card.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-RENDERS-UNKNOWN-VERSION-AND-MALFORMED-KNOWN-PAYLOAD-AS-ESCAPED-GENERIC-TEXT",
+      "domain": "parent-feed",
+      "description": "renders unknown version and malformed known payload as escaped generic text.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "renders unknown version and malformed known payload as escaped generic text"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-item-card.test.tsx::renders unknown version and malformed known payload as escaped generic text"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-item-card.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-item-card.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-BOUNDS-FALLBACK-TITLE-BODY-AND-IGNORES-ACTION-ARRAYS-AND-EXTRA-FIELDS",
+      "domain": "parent-feed",
+      "description": "bounds fallback title body and ignores action arrays and extra fields.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "bounds fallback title body and ignores action arrays and extra fields"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-item-card.test.tsx::bounds fallback title body and ignores action arrays and extra fields"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-item-card.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-item-card.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-RENDERS-IMMUTABLE-ATTENDANCE-WRITER-AND-FOUNDER-ATTENDANCE-RECORD-ALIAS-THROUGH-THE-SAME-V1-CONTRACT",
+      "domain": "parent-feed",
+      "description": "renders immutable attendance writer and founder attendance_record alias through the same v1 contract.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "renders immutable attendance writer and founder attendance_record alias through the same v1 contract"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-item-card.test.tsx::renders immutable attendance writer and founder attendance_record alias through the same v1 contract"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-item-card.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-item-card.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-CONNECTS-DURABLE-ORIGINAL-REPORT-RECOVERY-TO-ACTUAL-ADAPTERS-THROUGH-SDK-AUTH-503-AND-REFRESHES-NEWER-OWN-FACTS",
+      "domain": "parent-feed",
+      "description": "connects durable original report recovery to actual adapters through SDK auth 503 and refreshes newer own facts.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "connects durable original report recovery to actual adapters through SDK auth 503 and refreshes newer own facts"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/recovery.integration.test.tsx::connects durable original report recovery to actual adapters through SDK auth 503 and refreshes newer own facts"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/recovery.integration.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-REJECTS-A-REAL-FIRST-CHILD-ADAPTER-ACTOR-CHANGE-AFTER-SESSION-VERIFICATION-BEFORE-ANY-PROFILE-RPC",
+      "domain": "parent-feed",
+      "description": "rejects a real first-child adapter actor change after session verification before any profile RPC.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "rejects a real first-child adapter actor change after session verification before any profile RPC"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/recovery.integration.test.tsx::rejects a real first-child adapter actor change after session verification before any profile RPC"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/recovery.integration.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-PARENTCHILDRENPAGE-LINKS-PROFILES-BACK-TO-PARENT-HOME-WHILE-PRESERVING-REQUEST-GATED-MANAGEMENT",
+      "domain": "parent-feed",
+      "description": "links profiles back to parent home while preserving request-gated management.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "links profiles back to parent home while preserving request-gated management"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/page.test.tsx::ParentChildrenPage > links profiles back to parent home while preserving request-gated management"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/parent/children/page.test.tsx",
+        "apps/web/src/app/parent/children/page.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-RELEASES-RECOVERY-LOADING-OWNERSHIP-AFTER-SAME-SCOPE-REFRESH-INVALIDATES-AN-IN-FLIGHT-STATUS-CHECK",
+      "domain": "parent-feed",
+      "description": "releases recovery loading ownership after same-scope refresh invalidates an in-flight status check.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "releases recovery loading ownership after same-scope refresh invalidates an in-flight status check"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::releases recovery loading ownership after same-scope refresh invalidates an in-flight status check"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-REFRESHES-CLASS-BOOTSTRAP-WHEN-REFRESH-CANCELS-THE-FIRST-PENDING-BATCH-READ",
+      "domain": "parent-feed",
+      "description": "refreshes class bootstrap when Refresh cancels the first pending batch read.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "refreshes class bootstrap when Refresh cancels the first pending batch read"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::refreshes class bootstrap when Refresh cancels the first pending batch read"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "apps/web/src/modules/parent-feed/signal-center.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-PARENTFEED-RESOLVES-THE-FIRST-ENABLED-RECOVERY-CHECK-WHILE-AUTOMATIC-CLASS-BOOTSTRAP-CHANGES-THE-SELECTED-SCOPE",
+      "domain": "parent-feed",
+      "description": "resolves the first enabled recovery Check while automatic class bootstrap changes the selected scope.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "resolves the first enabled recovery Check while automatic class bootstrap changes the selected scope"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/parent-feed/parent-home.test.tsx::resolves the first enabled recovery Check while automatic class bootstrap changes the selected scope"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/parent-feed/parent-home.test.tsx",
+        "apps/web/src/modules/parent-feed/parent-home.tsx",
+        "apps/web/src/modules/parent-feed/signal-center.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
     }
   ]
 }

@@ -1,5 +1,42 @@
 # ParentPlus Build Progress
 
+## Parent Home and session reports — verified local slice, 10 November 2026
+
+Parents can navigate to real saved attendance, weekly facts and their own reports
+by child/academy/class/date. Four report types persist separately from attendance;
+correction, pause history, same-request recovery and cross-family denial are
+covered by signed local browser journeys. EN/HI navigation and safe unknown-item
+fallback are implemented. Local checks:528 frontend,602 DB,104 browser executions
+passed; the last Hindi action-report mapping has a passing focused retest.
+Final-head GitHub/report checks and exact360 capture remain pre-merge checks.
+See [checkpoint evidence](quality/2026-11-10-parent-attendance-checkpoint.md).
+
+Diary/media/AI/reminders/fees and broader family operations remain unfinished.
+This supersedes preparation statements below; no full-app or launch claim is made.
+
+
+## Parent attendance Home — reconstructed, verification in progress — 10 November 2026
+
+Published coach/database checkpoint PR6 is merged at c5f2d7a; main quality and
+browser workflows succeeded and Vercel reported success. Those results predate
+the new parent screen and do not verify its hosted journey.
+
+The replacement workspace initially lacked uncommitted parent work; it was
+reported missing, then reconstructed against c5f2d7a. Fresh526frontend cases,
+lint, types and build pass. The local Supabase stack is healthy with53migrations;
+this recovery made no hosted database changes. Parent Home now has saved
+attendance/week facts, own session reports, safe typed-item fallback, EN/HI copy
+and profile navigation. These changes remain uncommitted and under review.
+
+The first real-local parent diagnostic passed4/6 executions: complete signed
+coach/parent attendance and uncommitted retry passed on desktop/mobile. Committed
+report recovery after reload failed on both because the enabled first Check was
+invalidated during automatic scope loading. Independent review also found a
+Refresh-during-class-load dead end. Both are being fixed with regressions before
+current full-suite/browser evidence and publication. Diary, media, reminders,
+fees and the remaining founder catalogue are still incomplete.
+
+
 ## Coach attendance source verified; GitHub publication next — 10 November 2026
 
 Local code checkpoint e441a3e delivers real academy-local Today and explicit full
@@ -75,7 +112,7 @@ roadmap alongside this catalogue. The original documents remain unchanged.
 | M2-03 | Enrolment lifecycle (trial, active, paused, left) | P1 | 1 Class setup | Verified active/pause/resume/complete/withdraw with versioned recovery; final v6 gate passed and TEST052 applied with existing data preserved. Trial/re-entry remain; PR5 merged and main CI passed. |
 | M2-04 | Next-class reminder (auto-drafted) | P0 | 6 Reminders/schedules | Not implemented; queued in dependency order. |
 | M2-05 | Schedule changes (cancel, restore, move, extra class, holiday) | P0 | 6 Reminders/schedules | Not implemented; queued in dependency order. |
-| M2-06 | Parent quick signals (running late, missing today, dropped off) | P0 | 2 Attendance/Today | Private DB foundation applied to TEST053 and tested; parent quick-signal UI/full report journey remain. |
+| M2-06 | Parent quick signals (running late, missing today, dropped off) | P0 | 2 Attendance/Today | Parent quick-signal UI reconstructed with four report types and real local persistence; first-click reload recovery fix/review and final full regression remain. |
 | M2-07 | Holiday and break calendar | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
 | M2-08 | Rain check for outdoor classes | P2 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
 | M2-52 | Family calendar sync and clash flags | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
@@ -122,7 +159,7 @@ roadmap alongside this catalogue. The original documents remain unchanged.
 | M2-44 | Academy accounts, rooms and staff roles | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
 | M2-45 | Free-tier stack with swappable adapters | P0 | 5 AI/observations | Not implemented; queued in dependency order. |
 | M2-46 | Event bus and links to other modules | P0 | 3 Updates/feed | Not implemented; queued in dependency order. |
-| M2-58 | Typed parent items (UI-agnostic delivery contract) | P0 | 3 Updates/feed | Not implemented; queued in dependency order. |
+| M2-58 | Typed parent items (UI-agnostic delivery contract) | P0 | 3 Updates/feed | Partial: private attendance parcels and safe parent fallback reconstructed; broader diary parcels and final current verification remain. |
 | M2-53 | Trial requests: accept, suggest a time, enrol | P1 | 9 Extended features | Not implemented; queued in dependency order. |
 | M2-54 | Listing and live availability | P1 | 9 Extended features | Not implemented; queued in dependency order. |
 | M2-55 | Featured placement in Explore | P2 | 9 Extended features | Not implemented; queued in dependency order. |
