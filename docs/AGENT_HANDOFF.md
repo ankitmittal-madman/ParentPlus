@@ -1,5 +1,43 @@
 # ParentPlus — Agent Handoff
 
+## Current-source founder testing verification — 2026-11-10
+
+Implementation checkpoint: df2b976 (full SHA available from Git). The complete
+pre-commit snapshot passed the source-bound gate at fingerprint
+`ba19f7c9d4fd36e59d1a32a9f45553d213b6a4094b3d6591e03c57e9befb5930`.
+This following documentation update does not reuse those receipts as a new run.
+
+Verified results:316 frontend cases across37 files;425 isolated database cases
+(421 unit/integration +4 concurrency), zero failed/error/skipped cases;58 quality
+engine regressions;1 supplemental offline operations regression. Lint, TypeScript,
+normal production build and Vercel-style testing production build passed. Browser
+coverage:6 disabled-provider +6 isolated synthetic-provider +3 real local OTP
+journeys +1 dummy-OTP real local DB journey. The last two suites are supplemental
+to the v1 gate and are not silently counted in its frontend inventory.
+
+A production-build browser smoke check confirmed the founder banner, dummy-email
+request and wrong-code rejection. A server-key sentinel was absent from browser
+assets. This did not attempt hosted session exchange.
+
+Independent hosted-testing review found no critical/high defect. The missing
+receipt-directory defect was reproduced, fixed before hosted operations, and its
+offline regression passed. Obsolete separate-backend/marker documentation was
+reconciled to the latest founder instruction. Earlier reviews covered pagination
+and cross-tab recovery fixes.
+
+Ignored receipts/reports: `test-results/quality/hosted-founder-testing/` (plan,
+verification, source-bound reports, supplemental report hashes). Hosted migration
+receipt: `work/hosted-testing-upgrade-report.json`, status passed,49 migrations,
+original row fingerprints preserved. Private credentials are excluded from Git.
+
+Founder confirmed Vercel key in Preview/Production. Deployment is authorised and
+publication is next. Actual Vercel result, hosted login/session exchange and
+hosted CI are not established by these local checks. Workspace network policy
+currently blocks direct Vercel/project-API requests; GitHub deployment status can
+be inspected. Preserve the pre-recovery stash. Launch and unfinished product
+areas (enrollment, attendance, diary, fees) are not claimed complete.
+
+
 ## Hosted founder testing preparation — 2026-11-10
 
 The founder explicitly selected the EXISTING Supabase project

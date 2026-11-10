@@ -7,7 +7,7 @@ Spec: ../specs/2026-11-10-hosted-founder-testing.md
 - [x] Add Vercel non-secret testing defaults; retain an explicit later launch switch.
 - [x] Rehearse001–013-to-049 and apply missing hosted test migrations with per-file atomic receipts, preserving original rows.
 - [x] Enable implemented hosted test features and prepare exact manual Vercel key steps.
-- [ ] Finish current-source regression suites, hosted build checks and independent-review fixes.
+- [x] Finish current-source regression suites, hosted build checks and independent-review fixes.
 - [x] Founder confirms PARENTPLUS_TEST_SERVICE_KEY in Vercel Preview and Production.
 - [ ] Publish through GitHub and inspect actual deployment.
 
