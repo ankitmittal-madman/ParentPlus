@@ -1,5 +1,58 @@
 # ParentPlus — Agent Handoff
 
+## Founder-requested checkpoint before parent attendance UI — 10 November 2026
+
+User explicitly requested commit, push and merge of completed work, then resume.
+Observed baseline work HEAD34ed00f (PR5 main merge); original changes and stash
+remain preserved. Task1 DB053 and Task2 coach Today passed independent review,
+including their first fix rounds. Local Supabase053 is applied with original34
+public-table/Auth signatures preserved and no invented attendance/items/signals.
+Existing hosted TEST remains052 until the verified checkpoint upgrade executes.
+
+Current checkpoint scope: private053 contracts + real coach Today/explicit roster
+save/corrections/recovery; upgrade final audit, rollback/preservation rehearsal,
+five synthetic storage query plans;58-feature planning inventory in HTML/Excel;
+headless action-observer and signed coach browser scenarios. Root ops audit P2
+was reproduced and fixed with original-baseline-bound hashes; independent re-review
+passed. Full checkpoint regression and GitHub publication are still pending at
+this entry's preparation. Do not infer them from older run IDs below.
+
+Resume Task3 parent home/signals/safe fallback after this checkpoint publication;
+then finish full cross-persona attendance acceptance and continue diary/feed,
+consent/media, AI/manual observations, reminders and the58-founder-feature list.
+The larger attendance plan/ledger remains active; this checkpoint is not its
+completion. Dummy .test/123456 and existing testing-project authority remain.
+
+
+## Active attendance development after merged enrolment — 10 November 2026
+
+Observed local work HEAD34ed00f0bbc34b3b67ab411c0c19c1ebf13bba3f, the PR5 merge.
+PR5 head17ca3dc passed both independent quality runs42821826246/42821816340 and
+browser42821826139. Browser artifact13766628894 was uploaded/nonexpired; its bytes
+were not downloaded through the blocked artifact redirect. Existing hosted TEST
+backend is052 with preservation verified;053 is uncommitted local development only.
+Main runs42823121131/42823121370 passed; Vercel reported production deployment
+completed for34ed00f. Hosted browser use remains unverified here.
+
+Continue the entire-app loop without a go-ahead pause. Current canonical
+attendance053 spec/plan is integrated; four aggregate requirements are truthfully
+planned/missing while DB work proceeds. Sole implementer attendance_database owns
+migration053, new DB modules, necessary CI inventories and narrow DB mappings.
+Initial052 RED was15 unittest cases (27 failures including subtests). At this
+update101 focused new DB cases passed, including42 observed blocking histories
+and fixture-clock post-wait day rollover; full fresh595-case gate is running.
+No frontend implementation, shared local Supabase053 or hosted053 is claimed.
+Plan ledger .superpowers/sdd/2026-11-10-attendance-today/progress.md records scope
+and rulings; root coordinates independent reviews and publication. After DB review,
+continue strict coach Today/adapters, parent home/signals/fallback, real browser
+flows/full gate, then diary/feed and remaining founder feature catalogue.
+
+Preserve uncommitted053 work, original18 founder files, earlier stash and all data.
+Old exited parentplus-pg-test is untouched; worker owns only newly created
+parentplus-pg-ci-fresh for focus, to be cleaned before its full runner re-creates
+that approved fixture. Never run a competing DB owner or local browser lease.
+Existing Git/testing-backend authority persists; no new account/worktree/paid service.
+
 ## Continuous development loop — enrolment verified, 10 November 2026
 
 User requests entire-app development using founder kit for requirements and the

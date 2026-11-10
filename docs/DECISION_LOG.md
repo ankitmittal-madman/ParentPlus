@@ -310,3 +310,20 @@ This is a defined implementation direction, not a claim of deployment. Exact
 source, tests and delivered scope belong to the dated enrolment spec and quality
 record. Re-entry after terminal status, trial admission and sensitive historical
 access are separate explicit flows; do not silently restart a completed record.
+
+## DEC-024: Explicit attendance and report-only parent signals
+
+Date:2026-11-10. Founder kit interpreted as feature requirements under continuous
+build/testing authority. A coach explicitly confirms every enrolled child before
+one atomic save. Parent reports can suggest an absent mark for an unmarked child;
+they never save attendance or verify physical handover. Private current authority
+and connection checks remain; testing sign-in does not expand another family's
+permissions. Active roster candidates are capped200 before connection filtering;
+201 is honestly read-only. Receipt recovery binds actor, request and full canonical
+payload and reloads latest data rather than installing historical receipt state.
+
+A private always-real clock is used for execution-time day checks; deterministic
+rollover tests may replace it only inside an isolated owner-controlled fixture
+and restore it. This is synthetic boundary evidence, not a natural provider
+midnight observation. These choices preserve a usable testing app with real DB
+flows and explicit permissions; multi-guardian expansion is a separate flow.

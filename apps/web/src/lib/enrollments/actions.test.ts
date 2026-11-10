@@ -294,3 +294,22 @@ it("does not classify transport malformed output or non-allowlisted errors as de
   m.rpc.mockResolvedValue({ data: [], error: null });
   expect(await changeEnrollment(actor, change)).toEqual({ ok: false });
 });
+it("accepts fifty unique candidates and roster rows but rejects a fifty-first unique row", async () => {
+  const uniqueId = (i: number) => `00000000-0000-4000-8000-${String(i).padStart(12, "0")}`;
+  for (const c of [cases[1], cases[2]]) {
+    const data = Array.from({ length: 51 }, (_, i) => ({ ...c.row, child_id: uniqueId(i), enrollment_id: uniqueId(i) }));
+    m.rpc.mockResolvedValue({ data: data.slice(0, 50), error: null });
+    const accepted = await c.call();
+    expect(accepted.ok && Array.isArray(accepted.data) && accepted.data.length).toBe(50);
+    m.rpc.mockResolvedValue({ data, error: null });
+    expect(await c.call()).toEqual({ ok: false });
+  }
+});
+it("accepts one hundred unique parent enrolments but rejects the one hundred and first", async () => {
+  const data = Array.from({ length: 101 }, (_, i) => ({ ...cases[5].row, enrollment_id: `00000000-0000-4000-8000-${String(i).padStart(12, "0")}` }));
+  m.rpc.mockResolvedValue({ data: data.slice(0, 100), error: null });
+  const accepted = await cases[5].call();
+  expect(accepted.ok && Array.isArray(accepted.data) && accepted.data.length).toBe(100);
+  m.rpc.mockResolvedValue({ data, error: null });
+  expect(await cases[5].call()).toEqual({ ok: false });
+});

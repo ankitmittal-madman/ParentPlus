@@ -47,6 +47,13 @@ cleanup() {
     (SELECT count(*) FROM public.enrollments) +
     (SELECT count(*) FROM public.enrollment_request_receipts) +
     (SELECT count(*) FROM public.enrollment_events) +
+    (SELECT count(*) FROM public.attendance_sheets) +
+    (SELECT count(*) FROM public.attendance_records) +
+    (SELECT count(*) FROM public.attendance_record_events) +
+    (SELECT count(*) FROM public.attendance_request_receipts) +
+    (SELECT count(*) FROM public.parent_signals) +
+    (SELECT count(*) FROM public.parent_signal_request_receipts) +
+    (SELECT count(*) FROM public.parent_items) +
     (SELECT count(*) FROM public.courses) +
     (SELECT count(*) FROM public.batches) +
     (SELECT count(*) FROM public.batch_coach_assignments) +

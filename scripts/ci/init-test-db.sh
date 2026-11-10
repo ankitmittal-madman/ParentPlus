@@ -61,7 +61,7 @@ mapfile -t MIGRATIONS < <(
     -type f -name '*.sql' | sort
 )
 
-if [ "${#MIGRATIONS[@]}" -ne 52 ]; then
+if [ "${#MIGRATIONS[@]}" -ne 53 ]; then
   echo "STOP: Unexpected migration count"
   exit 1
 fi
@@ -118,10 +118,10 @@ BASELINE=$(docker exec "$CONTAINER" \
       CROSS JOIN (VALUES ('public.request_workspace_connection(uuid,uuid,uuid)'),('public.approve_guardian_connection(uuid)')) f(signature)
       WHERE has_function_privilege(r.role_name, f.signature, 'EXECUTE'));")
 
-if [ "$BASELINE" != "3:3:34:0:0:1:1:0:0" ]; then
+if [ "$BASELINE" != "3:3:41:0:0:1:1:0:0" ]; then
   echo "STOP: Unexpected database baseline: $BASELINE"
   exit 1
 fi
 
 echo "PASS: Database initialized successfully"
-echo "PASS: All 52 migrations applied"
+echo "PASS: All 53 migrations applied"

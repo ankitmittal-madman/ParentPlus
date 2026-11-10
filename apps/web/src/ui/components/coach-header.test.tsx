@@ -4,10 +4,15 @@ import { CoachHeader } from "./coach-header";
 
 describe("CoachHeader", () => {
   it("displays the application and academy names", () => {
-    render(<CoachHeader />);
+    render(<CoachHeader academyName="River Academy" />);
 
     expect(screen.getByText("Parent Plus Coach")).toBeInTheDocument();
-    expect(screen.getByText("The Creative Room")).toBeInTheDocument();
+    expect(screen.getByText("River Academy")).toBeInTheDocument();
+  });
+
+  it("does not invent an academy when none is selected", () => {
+    render(<CoachHeader />);
+    expect(screen.queryByText("The Creative Room")).not.toBeInTheDocument();
   });
 
   it("uses a semantic header element", () => {

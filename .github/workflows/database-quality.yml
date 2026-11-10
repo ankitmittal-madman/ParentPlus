@@ -23,6 +23,9 @@ jobs:
       - name: Run isolated database quality gate
         run: bash scripts/ci/database-quality.sh
 
+      - name: Rehearse attendance upgrade rollback, preservation and storage plans
+        run: python3 scripts/ci/rehearse-attendance-upgrade.py
+
       - name: Bind successful execution to source and report digests
         run: python3 scripts/quality/quality_gate.py attest --suite database --reports test-results/database
 

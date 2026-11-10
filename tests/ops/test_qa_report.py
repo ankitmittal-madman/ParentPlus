@@ -7,6 +7,7 @@ import sys
 import unittest
 import zipfile
 import xml.etree.ElementTree as ET
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -89,6 +90,36 @@ class BrowserReportTests(unittest.TestCase):
         self.assertEqual(summary['passed'], 1)
         self.assertEqual(summary['not_built'], 1)
         self.assertIn('not built', (self.out/'index.html').read_text())
+
+    def test_all_founder_features_are_planning_inventory_separate_from_runtime_totals(self):
+        summary=self.write()
+        self.assertEqual(summary['founder_features'],58)
+        self.assertEqual(summary['passed'],1)
+        self.assertEqual(summary['expected'],1)
+        html=(self.out/'index.html').read_text()
+        self.assertIn('Planning status is not a browser test result',html)
+        self.assertIn('M2-58',html)
+        with zipfile.ZipFile(self.out/'ParentPlus-Test-Scenarios.xlsx') as book:
+            self.assertIn(b'Founder feature inventory',book.read('xl/workbook.xml'))
+            self.assertIn(b'M2-58',book.read('xl/worksheets/sheet7.xml'))
+
+    def test_missing_duplicate_and_malformed_founder_rows_are_rejected(self):
+        source=(ROOT/'docs/BUILD_PROGRESS.md').read_text()
+        rows=self.report.founder_features(source)
+        self.assertEqual(len(rows),58)
+        line=next(line for line in source.splitlines() if line.startswith('| M2-58 |'))
+        for broken in (source.replace(line,''),source+'\n'+line,source.replace(line,line.replace(' | P0 |',' | INVALID |')),source.replace(line,'| M2-58 | broken |')):
+            with self.subTest(broken=broken[-40:]),self.assertRaisesRegex(ValueError,'Founder feature inventory'):
+                self.report.founder_features(broken)
+
+    def test_invalid_founder_inventory_keeps_reports_but_cannot_pass(self):
+        with patch.object(self.report,'founder_features',side_effect=ValueError('bad fixture')):
+            summary=self.write()
+        self.assertFalse(summary['ok'])
+        self.assertEqual(summary['passed'],1)
+        self.assertEqual(summary['founder_features'],0)
+        self.assertTrue((self.out/'ParentPlus-Test-Scenarios.xlsx').is_file())
+        self.assertIn('Founder feature inventory is missing or malformed',(self.out/'index.html').read_text())
 
     def test_observed_control_is_not_counted_as_exercised(self):
         self.catalog['actions']=[{'route':'/login','name':'Continue','scenarios':['AUTH-001']}]

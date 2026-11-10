@@ -1,5 +1,53 @@
 # ParentPlus — Quality Evidence Index
 
+## Coach attendance checkpoint — preparation evidence, 10 November 2026
+
+This is a partial checkpoint requested by the founder, not full053 feature
+completion. Task1 DB review/fix review and Task2 coach review/fix review passed.
+Task2 covering fix regression:91tests, lint/types passed; earlier full464-test
+build evidence predates9additional regressions (current collection473).
+Task1 current full local gate:598unit+4standalone=602,0fail/error/skip,53migrations,
+41tables and zero cleanup residue. These are previously executed scoped results;
+current source-bound checkpoint gates/publication remain pending at preparation.
+
+Root ops/report tranche passed independent re-review after fixing a false-green
+final-audit gap. Two new offline regressions first failed against prior source;
+25ops cases then passed. Owned network-none PostgreSQL17 actual052→053 rehearsal
+passed late injected failure rollback/schema/history preservation and successful
+retry, with four explicitly audited control-flag changes. Canonical hosted receipt
+unchanged, no hosted requests. Five extracted shipped storage SELECTs have actual
+EXPLAIN ANALYZE/BUFFERS with8fictional academies,800children,480sessions,
+48,000records/items and96,000signals; these are not RPC/provider latency or an SLA.
+Local evidence: test-results/database/attendance-upgrade/. It is not a hosted run.
+
+New signed coach scenarios and full local browser report are being verified.
+The parent attendance UI/full parent–coach journey remains unimplemented; planned
+aggregate requirements stay visible. HTML/Excel now reads all58 canonical feature
+rows in a separate planning section, outside browser result totals. Detailed
+current checkpoint execution/published IDs will follow verification.
+
+
+## Published enrolment: PR5 verified and merged — 10 November 2026
+
+PR5 head17ca3dc9c28e454d6515da1799fe55f581f6ddac passed GitHub quality runs
+[42821826246](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42821826246)
+and42821816340, plus browser
+[42821826139](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42821826139).
+[Artifact13766628894](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42821826139/artifacts/13766628894)
+was uploaded with5,908,695 bytes and not expired at inspection. Metadata was read;
+artifact bytes remain undownloaded because the storage redirect is blocked here.
+
+PR5 merged as34ed00f0bbc34b3b67ab411c0c19c1ebf13bba3f. Its tree exactly matched
+head17ca3dc before local fast-forward, preserving the next uncommitted053 work.
+Fresh wildcard fetch and GitHub branch API confirmed all four existing branch
+histories are included in main; no branch was deleted or force-pushed. Main
+quality[42823121131](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42823121131)
+andbrowser[42823121370](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42823121370)
+both passed. Its[artifact13769975088](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42823121370/artifacts/13769975088)
+was uploaded/nonexpired at5,896,158bytes. Vercel reported production deployment
+completed for34ed00f. This is deployment/workflow metadata, not personally read
+hosted report bytes or a tested hosted browser journey.
+
 ## Verified enrolment checkpoint — 10 November 2026
 
 Code commit `8f0ae0ef178e8e1909504fdb8c5d27430ac34c48` records the reviewed51-file

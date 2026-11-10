@@ -24,6 +24,7 @@ class UpgradeReceiptTests(unittest.TestCase):
             def fake_request(request,**kwargs):
                 sql=json.loads(request.data)['query']
                 if 'select version' in sql: result=[{'version':v} for v in versions]
+                elif 'bool_and(enabled)' in sql: result=[{'table_name':t,'records':1,'enabled':True} for t in ['parent_child_read_controls','child_creation_controls','class_setup_controls','workspace_creation_controls']]
                 elif 'column_name' in sql: result=[{'table_name':t,'columns':['id']} for t in ['profiles','workspaces','workspace_memberships','children','guardianships','connection_requests','workspace_children','connection_events']]
                 elif 'fingerprint' in sql:
                     import re

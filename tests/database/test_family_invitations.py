@@ -20,7 +20,7 @@ ACCEPT=f"SELECT public.app_accept_family_invite('{TOKEN}','{C}');\n"
 PARENT=f"SELECT set_config('request.jwt.claim.sub','{B}',true);\n"
 
 def denied(sql, error='insufficient_privilege'):
-    return f"DO $$ BEGIN BEGIN {sql} RAISE EXCEPTION 'unexpected success'; EXCEPTION WHEN {error} THEN NULL; END; END $$;\n"
+    return f"DO $$ DECLARE observed boolean:=false; BEGIN BEGIN {sql} EXCEPTION WHEN {error} THEN observed:=true; END; IF NOT observed THEN RAISE EXCEPTION 'unexpected success'; END IF; END $$;\n"
 
 class FamilyInvitationTests(unittest.TestCase):
     def test_issue_retry_is_payload_bound_and_hash_only(self):

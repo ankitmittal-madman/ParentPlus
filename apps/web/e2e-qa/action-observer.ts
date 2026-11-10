@@ -3,6 +3,10 @@ export type Action = { route: string; name: string; kind: string };
 export function installActionObserver() {
       const stableNames = new WeakMap<Element, string>();
       const name = (element: Element) => {
+        // Group repeated date/session/child controls by their authored action.
+        // Their contextual accessible names remain unchanged in the actual UI.
+        const action = element.getAttribute("data-qa-action")?.replace(/\s+/g, " ").trim();
+        if (action) { stableNames.set(element, action); return action; }
         const clone = element.cloneNode(true) as Element;
         clone.querySelectorAll('[aria-hidden="true"]').forEach(node => node.remove());
         const value = (element.getAttribute("aria-label") || clone.textContent || "").replace(/\s+/g, " ").trim();
@@ -26,7 +30,7 @@ export function installActionObserver() {
         let scheduled = false;
         new MutationObserver(() => {
           if (!scheduled) { scheduled = true; requestAnimationFrame(() => { scheduled = false; observe(); }); }
-        }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["style", "class", "hidden", "open", "disabled", "aria-hidden"] });
+        }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["style", "class", "hidden", "open", "disabled", "aria-hidden", "aria-label", "data-qa-action"] });
         observe();
       });
 }

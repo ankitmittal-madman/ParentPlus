@@ -1,5 +1,18 @@
 # ParentPlus Database Architecture
 
+## Local attendance053 contract — 10 November 2026
+
+Seven private tables add coherent attendance sheets/records/events/receipts,
+append-only parent reports/receipts and typed parent items. Session lifecycle
+columns and composite keys extend existing sessions/enrolments. Thirteen scoped
+RPCs expose bounded reads, atomic complete-roster saves, actor/full-payload receipt
+recovery and own-child parent read/report foundations. All private helpers/tables
+remain inaccessible directly to application roles.052 batch UPDATE ordering and
+current authority locks protect roster/permission changes. No invented records
+are backfilled. Local053 is applied; hosted TEST is052 at preparation.
+Exact definitions: migration053 and dated attendance spec. Parent UI is pending.
+
+
 Status: Draft for founder review
 Milestone: M2 Authentication and Data Foundation
 Reference decisions: DEC-005 through DEC-010
