@@ -13368,6 +13368,1315 @@
       "sources": [
         "docs/superpowers/specs/2026-11-10-family-invitations-design.md"
       ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-ADMISSION-FIRST-LOCKS-WORKSPACE-MEMBERSHIP-AND-CONNECTION",
+      "domain": "enrollment",
+      "description": "Admission first locks workspace membership and connection.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "admission first locks workspace membership and connection"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_admission_first_locks_workspace_membership_and_connection"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-ASSIGNMENT-REMOVED-FIRST-PREVENTS-COACH-READ",
+      "domain": "enrollment",
+      "description": "Assignment removed first prevents coach read.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "assignment removed first prevents coach read"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_assignment_removed_first_prevents_coach_read"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-CHANGE-FIRST-HOLDS-CONNECTION-UNTIL-COMMIT",
+      "domain": "enrollment",
+      "description": "Change first holds connection until commit.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "change first holds connection until commit"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_change_first_holds_connection_until_commit"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-COACH-READ-FIRST-HOLDS-ASSIGNMENT-UNTIL-COMMIT",
+      "domain": "enrollment",
+      "description": "Coach read first holds assignment until commit.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "coach read first holds assignment until commit"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_coach_read_first_holds_assignment_until_commit"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-CONCURRENT-ADMISSIONS-WITH-DIFFERENT-REQUESTS-WRITE-ONCE",
+      "domain": "enrollment",
+      "description": "Concurrent admissions with different requests write once.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "concurrent admissions with different requests write once"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_concurrent_admissions_with_different_requests_write_once"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-CONCURRENT-SAME-REQUEST-REPLAYS-ONE-RECEIPT",
+      "domain": "enrollment",
+      "description": "Concurrent same request replays one receipt.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "concurrent same request replays one receipt"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_concurrent_same_request_replays_one_receipt"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-CONCURRENT-STATUS-EDITS-REJECT-STALE-VERSION",
+      "domain": "enrollment",
+      "description": "Concurrent status edits reject stale version.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "concurrent status edits reject stale version"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_concurrent_status_edits_reject_stale_version"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-CONNECTION-REVOKED-FIRST-FILTERS-PARENT-READ",
+      "domain": "enrollment",
+      "description": "Connection revoked first filters parent read.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "connection revoked first filters parent read"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_connection_revoked_first_filters_parent_read"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-CONNECTION-REVOKED-FIRST-PREVENTS-CHANGE",
+      "domain": "enrollment",
+      "description": "Connection revoked first prevents change.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "connection revoked first prevents change"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_connection_revoked_first_prevents_change"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-GUARDIAN-REVOKED-FIRST-PREVENTS-PARENT-READ",
+      "domain": "enrollment",
+      "description": "Guardian revoked first prevents parent read.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "guardian revoked first prevents parent read"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_guardian_revoked_first_prevents_parent_read"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-PARENT-READ-FIRST-HOLDS-ACTIVE-CONNECTION-UNTIL-COMMIT",
+      "domain": "enrollment",
+      "description": "Parent read first holds active connection until commit.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "parent read first holds active connection until commit"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_parent_read_first_holds_active_connection_until_commit"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-PARENT-READ-FIRST-HOLDS-ACTIVE-WORKSPACE-UNTIL-COMMIT",
+      "domain": "enrollment",
+      "description": "Parent read first holds active workspace until commit.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "parent read first holds active workspace until commit"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_parent_read_first_holds_active_workspace_until_commit"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-PARENT-READ-FIRST-HOLDS-ELIGIBLE-GUARDIAN-UNTIL-COMMIT",
+      "domain": "enrollment",
+      "description": "Parent read first holds eligible guardian until commit.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "parent read first holds eligible guardian until commit"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_parent_read_first_holds_eligible_guardian_until_commit"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-REVOCATION-FIRST-PREVENTS-ADMISSION",
+      "domain": "enrollment",
+      "description": "Revocation first prevents admission.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "revocation first prevents admission"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_revocation_first_prevents_admission"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-WAITING-ADMISSION-CAN-SUCCEED-AFTER-FIRST-ROLLBACK",
+      "domain": "enrollment",
+      "description": "Waiting admission can succeed after first rollback.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "waiting admission can succeed after first rollback"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_waiting_admission_can_succeed_after_first_rollback"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTRACETESTS-TEST-WORKSPACE-REVOKED-FIRST-FILTERS-PARENT-READ",
+      "domain": "enrollment",
+      "description": "Workspace revoked first filters parent read.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "workspace revoked first filters parent read"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentRaceTests.test_workspace_revoked_first_filters_parent_read"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-ADMIN-CAN-ADMIT-AND-CHANGE-WITHOUT-BEING-OWNER",
+      "domain": "enrollment",
+      "description": "Admin can admit and change without being owner.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "admin can admit and change without being owner"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_admin_can_admit_and_change_without_being_owner"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-ANONYMOUS-AUTH-CLAIM-AND-PARENT-CANNOT-READ-MANAGER-DIRECTORY",
+      "domain": "enrollment",
+      "description": "Anonymous auth claim and parent cannot read manager directory.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "anonymous auth claim and parent cannot read manager directory"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_anonymous_auth_claim_and_parent_cannot_read_manager_directory"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-ASSIGNED-COACH-READS-ONLY-ASSIGNED-BATCH-METADATA-AND-ROSTER",
+      "domain": "enrollment",
+      "description": "Assigned coach reads only assigned batch metadata and roster.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "assigned coach reads only assigned batch metadata and roster"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_assigned_coach_reads_only_assigned_batch_metadata_and_roster"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-CANDIDATES-AND-ROSTER-PAGINATE-WITHOUT-OVERLAP-AT-FIFTY",
+      "domain": "enrollment",
+      "description": "Candidates and roster paginate without overlap at fifty.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "candidates and roster paginate without overlap at fifty"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_candidates_and_roster_paginate_without_overlap_at_fifty"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-CHANGE-EVENT-FAILURE-ROLLS-BACK-STATE-AND-RECEIPT",
+      "domain": "enrollment",
+      "description": "Change event failure rolls back state and receipt.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "change event failure rolls back state and receipt"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_change_event_failure_rolls_back_state_and_receipt"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-CHANGE-RECEIPT-FAILURE-ROLLS-BACK-STATE-AND-EVENT",
+      "domain": "enrollment",
+      "description": "Change receipt failure rolls back state and event.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "change receipt failure rolls back state and event"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_change_receipt_failure_rolls_back_state_and_event"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-CONNECTION-DOES-NOT-AUTO-ENROLL-AND-MANAGER-METADATA-IS-SCOPED",
+      "domain": "enrollment",
+      "description": "Connection does not auto enroll and manager metadata is scoped.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "connection does not auto enroll and manager metadata is scoped"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_connection_does_not_auto_enroll_and_manager_metadata_is_scoped"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-EVENT-HISTORY-RECORDS-ENUM-REASON-AND-ACTOR-WITHOUT-PERSONAL-NOTES",
+      "domain": "enrollment",
+      "description": "Event history records enum reason and actor without personal notes.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "event history records enum reason and actor without personal notes"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_event_history_records_enum_reason_and_actor_without_personal_notes"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-EXACT-RPC-INVENTORY-IS-AUTHENTICATED-ONLY-AND-PRIVATE-HELPER-IS-DENIED",
+      "domain": "enrollment",
+      "description": "Exact rpc inventory is authenticated only and private helper is denied.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "exact rpc inventory is authenticated only and private helper is denied"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_exact_rpc_inventory_is_authenticated_only_and_private_helper_is_denied"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-INVALID-STATUS-REASON-AND-VERSION-LEAVE-NO-RECEIPT",
+      "domain": "enrollment",
+      "description": "Invalid status reason and version leave no receipt.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "invalid status reason and version leave no receipt"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_invalid_status_reason_and_version_leave_no_receipt"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-MISSING-REQUEST-AND-CROSS-WORKSPACE-TARGET-ARE-REJECTED",
+      "domain": "enrollment",
+      "description": "Missing request and cross workspace target are rejected.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "missing request and cross workspace target are rejected"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_missing_request_and_cross_workspace_target_are_rejected"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-NULL-AND-MISSING-ENROLLMENT-CHANGE-ARE-REJECTED",
+      "domain": "enrollment",
+      "description": "Null and missing enrollment change are rejected.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "null and missing enrollment change are rejected"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_null_and_missing_enrollment_change_are_rejected"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-OLD-SAVE-AND-CHANGE-RECEIPTS-DO-NOT-REOPEN-TERMINAL-ENROLLMENT",
+      "domain": "enrollment",
+      "description": "Old save and change receipts do not reopen terminal enrollment.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "old save and change receipts do not reopen terminal enrollment"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_old_save_and_change_receipts_do_not_reopen_terminal_enrollment"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-ORIGINAL-RECEIPTS-RETURN-ORIGINAL-RESULT-AFTER-LATER-CHANGES",
+      "domain": "enrollment",
+      "description": "Original receipts return original result after later changes.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "original receipts return original result after later changes"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_original_receipts_return_original_result_after_later_changes"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-PARENT-AND-COACH-CANNOT-ADMIT-OR-CHANGE",
+      "domain": "enrollment",
+      "description": "Parent and coach cannot admit or change.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "parent and coach cannot admit or change"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_parent_and_coach_cannot_admit_or_change"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-PARENT-AND-ROSTER-HIDE-INACTIVE-CONNECTION",
+      "domain": "enrollment",
+      "description": "Parent and roster hide inactive connection.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "parent and roster hide inactive connection"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_parent_and_roster_hide_inactive_connection"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-PARENT-HIDES-SUSPENDED-ACADEMY-AND-OTHER-CHILD-DATA",
+      "domain": "enrollment",
+      "description": "Parent hides suspended academy and other child data.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "parent hides suspended academy and other child data"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_parent_hides_suspended_academy_and_other_child_data"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-PARENT-REQUIRES-OWN-CREATED-CHILD-AND-CURRENT-ELIGIBLE-GUARDIANSHIP",
+      "domain": "enrollment",
+      "description": "Parent requires own created child and current eligible guardianship.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "parent requires own created child and current eligible guardianship"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_parent_requires_own_created_child_and_current_eligible_guardianship"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-PARENT-RESULTS-ARE-BOUNDED-AT-ONE-HUNDRED",
+      "domain": "enrollment",
+      "description": "Parent results are bounded at one hundred.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "parent results are bounded at one hundred"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_parent_results_are_bounded_at_one_hundred"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-PAUSE-RESUME-COMPLETE-INCREMENT-VERSIONS-AND-EVENTS",
+      "domain": "enrollment",
+      "description": "Pause resume complete increment versions and events.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "pause resume complete increment versions and events"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_pause_resume_complete_increment_versions_and_events"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-PAUSED-ENROLLMENT-CAN-COMPLETE-OR-WITHDRAW",
+      "domain": "enrollment",
+      "description": "Paused enrollment can complete or withdraw.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "paused enrollment can complete or withdraw"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_paused_enrollment_can_complete_or_withdraw"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-PRIVATE-TABLES-HELPERS-AND-ANONYMOUS-EXECUTION-REMAIN-DENIED",
+      "domain": "enrollment",
+      "description": "Private tables helpers and anonymous execution remain denied.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "private tables helpers and anonymous execution remain denied"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_private_tables_helpers_and_anonymous_execution_remain_denied"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-READ-AND-RETRY-RECHECK-REVOKED-WORKSPACE-MANAGER-AND-CONNECTION",
+      "domain": "enrollment",
+      "description": "Read and retry recheck revoked workspace manager and connection.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "read and retry recheck revoked workspace manager and connection"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_read_and_retry_recheck_revoked_workspace_manager_and_connection"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-REQUEST-UUID-BINDS-CHANGE-PAYLOAD-AND-OPERATION",
+      "domain": "enrollment",
+      "description": "Request uuid binds change payload and operation.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "request uuid binds change payload and operation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_request_uuid_binds_change_payload_and_operation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-REQUEST-UUID-BINDS-ENTIRE-SAVE-PAYLOAD",
+      "domain": "enrollment",
+      "description": "Request uuid binds entire save payload.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "request uuid binds entire save payload"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_request_uuid_binds_entire_save_payload"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-REQUEST-UUID-CANNOT-BE-REUSED-BY-ANOTHER-MANAGER",
+      "domain": "enrollment",
+      "description": "Request uuid cannot be reused by another manager.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "request uuid cannot be reused by another manager"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_request_uuid_cannot_be_reused_by_another_manager"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-SAVE-DOES-NOT-SILENTLY-RESUME-OR-REOPEN",
+      "domain": "enrollment",
+      "description": "Save does not silently resume or reopen.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "save does not silently resume or reopen"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_save_does_not_silently_resume_or_reopen"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-SAVE-IS-VISIBLE-TO-MANAGER-AND-ELIGIBLE-PARENT",
+      "domain": "enrollment",
+      "description": "Save is visible to manager and eligible parent.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "save is visible to manager and eligible parent"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_save_is_visible_to_manager_and_eligible_parent"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-SAVE-RETRY-AND-NEW-REQUEST-SHARE-ONE-ENROLLMENT-AND-EVENT",
+      "domain": "enrollment",
+      "description": "Save retry and new request share one enrollment and event.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "save retry and new request share one enrollment and event"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_save_retry_and_new_request_share_one_enrollment_and_event"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-STALE-VERSION-CANNOT-OVERWRITE-NEWER-STATUS",
+      "domain": "enrollment",
+      "description": "Stale version cannot overwrite newer status.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "stale version cannot overwrite newer status"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_stale_version_cannot_overwrite_newer_status"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-SUSPENDED-COACH-CANNOT-READ-ASSIGNED-METADATA-OR-ROSTER",
+      "domain": "enrollment",
+      "description": "Suspended coach cannot read assigned metadata or roster.",
+      "status": "implemented",
+      "risk": "critical",
+      "coverage": "covered",
+      "scenarios": [
+        "suspended coach cannot read assigned metadata or roster"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_suspended_coach_cannot_read_assigned_metadata_or_roster"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-WITHDRAWAL-REQUIRES-ENUM-AND-TERMINAL-STATE-CANNOT-REOPEN",
+      "domain": "enrollment",
+      "description": "Withdrawal requires enum and terminal state cannot reopen.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "withdrawal requires enum and terminal state cannot reopen"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_withdrawal_requires_enum_and_terminal_state_cannot_reopen"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "DB-ENROLLMENTTESTS-TEST-WRITE-EVENT-FAILURE-ROLLS-BACK-ENROLLMENT-AND-RECEIPT",
+      "domain": "enrollment",
+      "description": "Write event failure rolls back enrollment and receipt.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "write event failure rolls back enrollment and receipt"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_enrollments.EnrollmentTests.test_write_event_failure_rolls_back_enrollment_and_receipt"
+        }
+      ],
+      "sources": [
+        "tests/database/test_enrollments.py",
+        "supabase/migrations/20261110005200_batch_enrollments.sql",
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "BATCH-ENROLMENTS-FRONTEND",
+      "domain": "enrollments",
+      "description": "Verified-session enrolment actions, automatic academy/batch roster and own-child class reads, explicit manager mutations, bounded paging, stable uncertain-request recovery and session privacy.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "All six RPC actions verify expected server identity, validate inputs and project only validated bounded rows.",
+        "Students preserves invitation controls and automatically loads permitted academies, saved batch chips and roster; explicit enrolment and enum-reason status changes retain uncertain request identity.",
+        "Session/focus changes clear private reads and invalidate late promises; retries require the original account and refresh the current roster rather than applying an old receipt.",
+        "Parent profiles automatically load own eligible child classes; EN/HI preference uses a distinct enrolment language selector."
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/(coach)/students/page.test.tsx::keeps invitation controls and includes the separate batch enrolment region"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/page.test.tsx::ParentChildrenPage > exposes creation only when both server controls are explicitly enabled"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/parent/children/page.test.tsx::ParentChildrenPage > exposes the read-only panel only when explicitly enabled"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::bounds paginated roster and candidates at fifty and parent classes at one hundred"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::passes non-null cursors and accepts null reasons for resume and complete"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::projects only validated app_batch_enrollments output and preserves RPC payload"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::projects only validated app_change_enrollment output and preserves RPC payload"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::projects only validated app_enrollment_batches output and preserves RPC payload"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::projects only validated app_enrollment_candidates output and preserves RPC payload"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::projects only validated app_parent_enrollments output and preserves RPC payload"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::projects only validated app_save_enrollment output and preserves RPC payload"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::rejects auth errors even with a matching user and invalid actor IDs"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::rejects bad IDs cursors versions statuses and reasons before creating a client"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::rejects empty write receipts and invalid returned state or version"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::rejects malformed duplicate and provider-error app_batch_enrollments output"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::rejects malformed duplicate and provider-error app_change_enrollment output"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::rejects malformed duplicate and provider-error app_enrollment_batches output"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::rejects malformed duplicate and provider-error app_enrollment_candidates output"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::rejects malformed duplicate and provider-error app_parent_enrollments output"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::rejects malformed duplicate and provider-error app_save_enrollment output"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::rejects object reasons without coercing untrusted input"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::requires verified expected actor for app_batch_enrollments"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::requires verified expected actor for app_change_enrollment"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::requires verified expected actor for app_enrollment_batches"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::requires verified expected actor for app_enrollment_candidates"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::requires verified expected actor for app_parent_enrollments"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::requires verified expected actor for app_save_enrollment"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/journey.integration.test.tsx::uses real panels and actions to recover an original receipt then show the current class to its parent"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::allows a pending request to recheck identity after a failed session without changing its payload"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::automatically loads own child saved classes and refreshes on child selection"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::automatically loads scoped academy batch chips and saved student cards without creating an enrolment"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::clears parent classes on session change and ignores a late parent response"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::clears private reads and ignores late responses when focus re-verifies a signed-out session"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::does not load private data when session monitoring cannot start"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::explicitly enrols the selected connected child then refreshes real roster instead of applying receipt state"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::freezes uncertain mutation payload UUID actor and version through retry and blocks double clicks"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::keeps an uncertain operation for the original account across session invalidation"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::remembers distinct enrolment language without replacing family copy"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::requires a reason for pause and withdrawal and offers resume and complete only for live states"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::resumes paused enrolments with null reason and no action can reopen terminal states"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::retains an uncertain save across focus with the original connected child and request UUID"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::retries only the current roster after a confirmed operation whose refresh failed"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::shows focused read retry and reachable candidate and roster pagination"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::shows honest empty classes and recovers from a parent read error with refresh"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::uses a fresh verified account before a write and does not replay into another account"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::does not classify transport malformed output or non-allowlisted errors as definite conflicts"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::keeps read failures unchanged even when the provider reports a conflict code"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::returns only fixed redacted mutation conflicts for structured 40001 and 23505 rejections"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/journey.integration.test.tsx::reconciles a paused natural-key save conflict without silently resuming the enrolment"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/journey.integration.test.tsx::reconciles a rejected stale edit and waits for an explicit action using the refreshed version and new UUID"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/journey.integration.test.tsx::reconciles a terminal natural-key save conflict without reopening the enrolment"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::rechecks the original actor before releasing a definitively rejected operation"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/enrollments/panels.test.tsx::retains rejected intent until roster access recovers and never replays the rejected write"
+        }
+      ],
+      "sources": [
+        "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
     }
   ]
 }

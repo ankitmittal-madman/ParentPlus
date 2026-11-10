@@ -1,5 +1,25 @@
 # ParentPlus — Agent Handoff
 
+## Continuous development loop — in progress, 10 November 2026
+
+Founder requests continued entire-app development with short updates, using the
+kit for requirements and Coach/Tutor HTML for primary visual direction. Codex
+chooses engineering. Do not stop after each slice or ask routine permission.
+Existing commit/push/merge/testing-backend authority persists. Preserve data/stash;
+no new worktree/account/paid service.
+
+Preparation HEAD9245349 onwork; enrolment052/UI/app-shell/ops changes are staged+
+unstaged deliberately. Task1 review PASS; Task2 I1 fix/scoped review PASS. Originals
+unchanged. Local052 is applied with original records preserved; hosted remains051.
+See Quality Evidence for focused results/limits and retained ignored
+.superpowers/sdd/2026-11-10-enrolment/progress.md for owners/reports. Full gate and
+publication remain pending; inspect actual Git state rather than older checkpoints.
+
+After verified enrolment publication CONTINUE Today/attendance/signals/typed items
+(planned design in docs/superpowers/specs). Deploy from immutable Git archive bundles
+of verified commits so later uncommitted migrations cannot enter an earlier upgrade.
+Continue engineering while independent CI runs once the preceding source is frozen.
+
 ## Verified academy invitation checkpoint — 2026-11-10
 
 Preparation branch `work`, feature commit `ed134cadaa83267ccfc9a9803bffd8d5a924617a`,

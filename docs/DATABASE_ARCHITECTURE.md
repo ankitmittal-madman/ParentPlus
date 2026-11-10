@@ -4,6 +4,16 @@ Status: Draft for founder review
 Milestone: M2 Authentication and Data Foundation
 Reference decisions: DEC-005 through DEC-010
 
+## Current enrolment contract — 10 November 2026
+
+Local migration052 adds private enrolments, actor/payload-bound receipts and events.
+Six scoped authenticated RPCs expose manager writes, manager/assigned-coach batch
+reads and own-child parent classes. Version checks prevent stale edits; natural
+keys prevent duplicate child/batch registration. Current connection/permissions are
+locked and checked. Pausing/ending participation does not delete the academy
+relationship/history. See DEC-023/design for transitions and Quality Evidence for
+verification/publication; this entry does not claim a completed milestone.
+
 ## Implementation reconciliation — 2026-11-03
 
 This document retains the original design contracts and historical status labels.
@@ -140,6 +150,7 @@ Design only. No Supabase project, migrations or database tables created.
 ### Enrollment
 - pending: registration initiated.
 - active: child is participating.
+- paused: reversible participation break; excluded from future attendance lists (DEC-023).
 - completed: course or batch successfully finished.
 - withdrawn: child left before completion.
 - cancelled: enrollment cancelled before participation.

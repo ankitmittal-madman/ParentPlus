@@ -50,6 +50,8 @@ test("creates and confirms a profile using a synthetic provider", async ({ page,
   await expect(page.getByText("Result confirmed")).toBeVisible();
   await page.getByRole("button", { name: "Load profiles" }).click();
   await expect(page.getByRole("listitem")).toHaveText("Asha");
+  await page.getByRole("button", { name: "Refresh classes" }).click();
+  await expect(page.getByText("No saved classes for this child.")).toBeVisible();
   const events = await (await request.get(fake + "/__test/events")).json();
   expect(events).toContain("app_begin_child_creation");
   expect(events).toContain("app_ack_child_creation");
@@ -171,10 +173,12 @@ test("keeps an unresolved request locked after an account switch", async ({ page
   await expect(page.getByText(/unable to confirm the profile\. Sign in to the original account/i)).toBeVisible();
   await expect(page.getByRole("button", { name: "Load profiles" })).toBeDisabled();
   await expect(page.getByText("Profile: Asha")).toHaveCount(0);
+  await expect(page.getByText("No eligible children available for classes.")).toBeVisible();
   expect(await page.evaluate(() => sessionStorage.getItem("parentplus.child-creation-recovery.v1"))).toBeTruthy();
   const after = await (await request.get(fake + "/__test/events")).json();
   expect(after.filter((event) => event === "app_current_child_creation")).toHaveLength(before.filter((event) => event === "app_current_child_creation").length);
   expect(after).toContain("user:" + other);
+  expect(after).toContain("other:app_list_created_children");
 });
 
 

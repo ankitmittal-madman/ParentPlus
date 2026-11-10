@@ -582,6 +582,102 @@
       "expected": "Hindi admission controls work and an unconnected child shows an honest empty state.",
       "status": "automated",
       "kind": "real local backend"
+    },
+    {
+      "id": "PWA-001",
+      "feature": "App installation metadata",
+      "persona": "Parent and Coach",
+      "title": "Public standalone manifest and brand icons load without private data",
+      "preconditions": "Browser app available on exact loopback; no sign-in required.",
+      "steps": [
+        "Open login and discover the install manifest",
+        "Read public standalone entry/scope metadata",
+        "Load192/512PNG icons and verify actual decoded dimensions",
+        "Check Apple home-screen capability metadata"
+      ],
+      "expected": "Browser receives valid standalone metadata and correct icons, with no account/session data in the manifest. Actual OS installation remains a manual device check.",
+      "status": "automated",
+      "kind": "real local browser; public metadata"
+    },
+    {
+      "id": "ENROL-001",
+      "feature": "Batch enrolment",
+      "persona": "Coach and Parent",
+      "title": "Explicit enrolment and parent-visible lifecycle",
+      "preconditions": "Checkout-owned local Supabase052; fresh fictional .test accounts and dummy OTP; real app writes only.",
+      "steps": [
+        "Create academy, class and a separately confirmed family connection",
+        "Verify connection alone creates no class",
+        "Enrol explicitly; pause, resume and withdraw",
+        "Reload parent classes and inspect saved status"
+      ],
+      "expected": "Exactly one enrolment persists; parent sees the saved class/status; withdrawal remains terminal.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "ENROL-002",
+      "feature": "Batch enrolment",
+      "persona": "Coach and Parent",
+      "title": "Interrupted enrolment reply recovery",
+      "preconditions": "Checkout-owned local Supabase052; fresh fictional .test accounts and dummy OTP; real app writes only.",
+      "steps": [
+        "Interrupt save request before server response",
+        "Keep actor/target/request frozen",
+        "Check same request and inspect refreshed roster"
+      ],
+      "expected": "Same request UUID is retried and one saved registration appears, without duplicate enrolments.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "ENROL-003",
+      "feature": "Batch enrolment",
+      "persona": "Coach and Parent",
+      "title": "Parent isolation and completed class",
+      "preconditions": "Checkout-owned local Supabase052; fresh fictional .test accounts and dummy OTP; real app writes only.",
+      "steps": [
+        "Enrol one family",
+        "Sign in as another parent and create their own child",
+        "Verify no other family class is visible",
+        "Complete original class and inspect original parent view"
+      ],
+      "expected": "Other parent sees no private class; original parent sees the saved completed enrolment.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "ENROL-004",
+      "feature": "Batch enrolment",
+      "persona": "Coach and Parent",
+      "title": "Hindi lifecycle and independent batch filters",
+      "preconditions": "Checkout-owned local Supabase052; fresh fictional .test accounts and dummy OTP; real app writes only.",
+      "steps": [
+        "Create two batches and one connected child",
+        "Abort the first Hindi enrolment request, check its uncertain status in Hindi, and verify the retry preserves the full payload and request UUID",
+        "Use Hindi enrolment/pause/resume/complete/withdraw controls",
+        "Filter batches with different saved states",
+        "Inspect both parent classes after refresh"
+      ],
+      "expected": "Hindi uncertain-write recovery retries the same payload and request UUID without duplicate enrolment; batch filters remain independent and saved Completed and Withdrawn statuses persist.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "ENROL-005",
+      "feature": "Batch enrolment",
+      "persona": "Two academy managers",
+      "title": "Stale concurrent edit refreshes safely and permits a new explicit action",
+      "preconditions": "Real localSupabase052; two separately signed-in manager accounts. Founder access controls establish the second test manager.",
+      "steps": [
+        "Both managers load active version1",
+        "Second manager pauses actual record in a background window",
+        "First manager submits a stale completion",
+        "First manager reviews refreshed Paused state and explicitly resumes with version2/new request"
+      ],
+      "expected": "Stale edit is rejected without a frozen panel; current roster is refreshed and a valid explicit next action succeeds. No mutation or response is stubbed.",
+      "status": "automated",
+      "kind": "real local backend; two browser contexts"
     }
   ],
   "actions": [
@@ -1200,13 +1296,142 @@
       "scenarios": [
         "INVITE-004"
       ]
+    },
+    {
+      "route": "/students",
+      "name": "QA Enrolment Batch A",
+      "scenarios": [
+        "ENROL-001",
+        "ENROL-004"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "QA Enrolment Batch B",
+      "scenarios": [
+        "ENROL-004"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Enrol child",
+      "scenarios": [
+        "ENROL-001",
+        "ENROL-002",
+        "ENROL-003"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Refresh enrolments",
+      "scenarios": [
+        "ENROL-001"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Check enrolment status",
+      "scenarios": [
+        "ENROL-002"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Pause enrolment",
+      "scenarios": [
+        "ENROL-001"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Resume enrolment",
+      "scenarios": [
+        "ENROL-001"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Withdraw enrolment",
+      "scenarios": [
+        "ENROL-001"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Complete enrolment",
+      "scenarios": [
+        "ENROL-003"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "बच्चे का नामांकन करें",
+      "scenarios": [
+        "ENROL-004"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "नामांकन रीफ़्रेश करें",
+      "scenarios": [
+        "ENROL-004"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "नामांकन रोकें",
+      "scenarios": [
+        "ENROL-004"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "नामांकन फिर शुरू करें",
+      "scenarios": [
+        "ENROL-004"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "नामांकन पूरा करें",
+      "scenarios": [
+        "ENROL-004"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "नामांकन वापस लें",
+      "scenarios": [
+        "ENROL-004"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "Refresh classes",
+      "scenarios": [
+        "ENROL-001"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "कक्षाएँ रीफ़्रेश करें",
+      "scenarios": [
+        "ENROL-004"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "नामांकन की स्थिति जाँचें",
+      "scenarios": [
+        "ENROL-004"
+      ]
     }
   ],
   "gaps": [
     {
-      "feature": "Batch enrolment and remaining family lifecycle",
+      "feature": "Remaining family lifecycle and full student snapshot",
       "status": "partly built",
-      "next": "Academy invitations/connections delivered in this slice; explicit batch enrolment, second guardians and full child snapshots remain."
+      "next": "Academy invitations and explicit batch lifecycle enrolment are implemented in this loop; second guardians, trial participation and full attendance/update snapshots remain."
     },
     {
       "feature": "Attendance",

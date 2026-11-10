@@ -110,7 +110,10 @@ test("[INVITE-001] coach invites a separate parent; connection persists in both 
     .getByRole("button", { name: "Load students", exact: true })
     .click();
   await expect(
-    page.getByText("Fictional Invited Child", { exact: true }),
+    page
+      .getByRole("region", { name: "Students", exact: true })
+      .getByRole("listitem")
+      .getByText("Fictional Invited Child", { exact: true }),
   ).toBeVisible();
 });
 test("[INVITE-002] missing and fake invitation refuse access and offer sign-in", async ({
@@ -144,23 +147,41 @@ test("[INVITE-003] interrupted issue retries the same request", async ({
   await login(page);
   const name = await workspace(page);
   await academy(page, name);
+  const students = page.getByRole("region", { name: "Students", exact: true });
   let injected = false;
+  const requests: string[] = [];
   await page.route("**/students", (route) => {
-    if (!injected && route.request().method() === "POST") {
-      injected = true;
-      return route.abort();
+    const request = route.request();
+    const body = request.postData() || "";
+    let payload: unknown;
+    try { payload = JSON.parse(body); } catch { /* Non-JSON reads are not invite writes. */ }
+    // issueFamilyInvite takes actor, workspace, request UUID and a 64-hex token.
+    // Scoped enrolment reads are also POSTs and must pass through unchanged.
+    if (
+      request.method() === "POST" &&
+      Array.isArray(payload) && payload.length === 4 &&
+      payload.slice(0, 3).every(value => typeof value === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value)) &&
+      typeof payload[3] === "string" && /^[0-9a-f]{64}$/.test(payload[3])
+    ) {
+      requests.push(body);
+      if (!injected) { injected = true; return route.abort(); }
     }
     return route.fallback();
   });
-  await page
+  await students
     .getByRole("button", { name: "Add a student", exact: true })
     .click();
-  await expect(page.locator('p[role="alert"]')).toContainText("unconfirmed");
+  await expect(students.getByRole("alert")).toContainText("unconfirmed");
   expect(injected).toBe(true);
-  await page
+  await students
     .getByRole("button", { name: "Retry invitation", exact: true })
     .click();
-  await expect(page.getByLabel("Family invite link")).toBeVisible();
+  await expect(students.getByLabel("Family invite link")).toBeVisible();
+  expect(requests).toHaveLength(2);
+  expect(requests[1]).toBe(requests[0]);
+  const payloads = requests.map(body => JSON.parse(body) as string[]);
+  expect(payloads[0][2]).toMatch(/^[0-9a-f-]{36}$/i);
+  expect(payloads[1][2]).toBe(payloads[0][2]);
 });
 test("[INVITE-004] Hindi admission controls and empty parent connections", async ({
   page,

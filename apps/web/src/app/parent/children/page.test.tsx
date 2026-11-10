@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ParentChildrenGate } from "./page";
+import ParentClassesPanel from "@/modules/enrollments/parent-classes-panel";
 import CreatedChildrenPanel from "./created-children-panel";
 import ChildCreationPanel from "./child-creation-panel";
 import ParentConnectionsPanel from "@/modules/families/parent-connections-panel";
@@ -8,7 +9,10 @@ const mocks = vi.hoisted(() => ({ connection: vi.fn() }));
 vi.mock("next/server", () => ({ connection: mocks.connection }));
 
 describe("ParentChildrenPage", () => {
-  afterEach(() => { vi.unstubAllEnvs(); vi.clearAllMocks(); });
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.clearAllMocks();
+  });
   it("uses request-time configuration and hides the panel by default", async () => {
     vi.stubEnv("PARENTPLUS_ENABLE_PARENT_CHILD_LIST", "false");
     const result = await ParentChildrenGate();
@@ -22,6 +26,7 @@ describe("ParentChildrenPage", () => {
     expect(mocks.connection).toHaveBeenCalledOnce();
     expect(result.props.children[0].type).toBe(CreatedChildrenPanel);
     expect(result.props.children[1].type).toBe(ParentConnectionsPanel);
+    expect(result.props.children[2].type).toBe(ParentClassesPanel);
   });
   it("exposes creation only when both server controls are explicitly enabled", async () => {
     vi.stubEnv("PARENTPLUS_ENABLE_PARENT_CHILD_LIST", "true");
@@ -29,6 +34,7 @@ describe("ParentChildrenPage", () => {
     const result = await ParentChildrenGate();
     expect(result.props.children[0].type).toBe(CreatedChildrenPanel);
     expect(result.props.children[1].type).toBe(ChildCreationPanel);
+    expect(result.props.children[3].type).toBe(ParentClassesPanel);
   });
   it("does not expose creation when the parent page is disabled", async () => {
     vi.stubEnv("PARENTPLUS_ENABLE_PARENT_CHILD_LIST", "false");
@@ -37,5 +43,4 @@ describe("ParentChildrenPage", () => {
     expect(result.type).not.toBe(ChildCreationPanel);
     expect(typeof result.props.children).toBe("string");
   });
-
 });

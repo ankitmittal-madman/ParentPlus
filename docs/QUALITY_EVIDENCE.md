@@ -1,5 +1,36 @@
 # ParentPlus — Quality Evidence Index
 
+## Enrolment loop — focused verification before full gate, 10 November 2026
+
+Backend:49 focused enrolment cases passed on fresh052, with observed blocking
+histories. Initial missing-RPC tests failed RED on051. Fresh initialization,
+001–013→052 rehearsal and own-fixture cleanup passed. Inventory490 unit+4 standalone
+cases;420s full-run budget accommodates new histories without reducing assertions.
+
+Frontend384 passed after I1 fix; covering55, lint/types/inventory passed. Independent
+DB review passed. UI review found definite stale/saved-state conflicts froze the
+screen; RED reproduction, allowlisted redacted conflict recovery and scoped review
+passed. Unknown writes still retain original actor/payload/UUID. M1 Minor remains:
+duplicate-row fixture does not independently prove50/100 bounds (code enforces them).
+
+Real local ENROL001–004 passed8 desktop/mobile executions pre-I1 fix; ENROL005
+passed2 post-fix with two managers and no stubbed mutation/response: staleversion1
+rejected after another actor advances to2; fresh explicit action uses version2/new
+UUID. Focused reports mark unselected scenarios NOT RUN; they are not full86-run proof.
+
+PWA001 passed2 browser executions; initial RED was missing manifest, then the obsolete
+Apple-meta assertion was aligned with installed Next16's mobile-web-app-capable.
+Real-device installation remains unverified. Existing navigation2 tests passed after
+SVG/raised-Post styling. Ops15 passed, including RED→GREEN later-table preservation
+and changed-record detection. Exact snapshot SQL also read31 local public tables+
+Auth successfully, including composite keys, without printing data values.
+
+Local052/history receipt were applied atomically; all31 original public-table/Auth
+fingerprints matched. Upgrade preservation now freezes all original public columns
+and snapshots canonical rows in one SELECT, then notifies the API schema cache.
+Hosted remains051 at preparation; no hosted052 execution is claimed. Full integrated
+source gate and publication are pending; earlier results below remain historical.
+
 ## Verified academy invitation checkpoint — 2026-11-10
 
 Feature code is committed locally as `ed134cadaa83267ccfc9a9803bffd8d5a924617a`;
