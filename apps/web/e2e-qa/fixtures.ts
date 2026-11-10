@@ -19,7 +19,7 @@ export const test = base.extend<{ evidence: void }>({
       await info.attach("ui-actions", { path: actionFile, contentType: "application/json" });
       if (!page.isClosed()) {
         const file = info.outputPath("outcome.png");
-        await page.screenshot({ path: file, fullPage: true, timeout: 10000, mask: [page.locator('input[autocomplete="one-time-code"]')] });
+        await page.screenshot({ path: file, fullPage: true, timeout: 10000, mask: [page.locator('input[autocomplete="one-time-code"], [data-private="invite-link"]')] });
         await info.attach("outcome", { path: file, contentType: "image/png" });
       }
     }

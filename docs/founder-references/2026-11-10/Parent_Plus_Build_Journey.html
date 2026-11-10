@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parent Plus build journey</title>
+<style>
+:root{
+  color-scheme: light;
+  --paper:#FAFCFF; --rule:#C9DAF3; --rule-soft:#E3ECF9; --margin:#DE4A4F;
+  --ink:#1D3F8F; --ink-soft:#E8EEFA; --graphite:#262A33; --mute:#5F6779; --crayon:#FFD45C;
+  --teal:#1F6F6B; --teal-soft:#E3F1EF;
+  --display:"Century Gothic","Avenir Next","Futura","URW Gothic","Trebuchet MS",sans-serif;
+  --body:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --pen:"Ink Free","Segoe Print","Bradley Hand","Marker Felt",cursive;
+  --gutter:168px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--graphite);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--ink)}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:2px}
+button{font:inherit;color:inherit}
+.page{position:relative;overflow-x:clip;max-width:1240px;margin:0 auto;padding:0 40px 120px calc(var(--gutter) + 40px)}
+.page::before{content:"";position:absolute;top:0;bottom:0;left:var(--gutter);width:2px;background:var(--margin);opacity:.85}
+.page::after{content:"";position:absolute;top:0;bottom:0;left:calc(var(--gutter) + 5px);width:1px;background:var(--margin);opacity:.35}
+.margin-nav{position:fixed;top:40px;width:calc(var(--gutter) - 28px);margin-left:calc(-1 * var(--gutter) - 40px + 18px)}
+.margin-nav a{display:block;font-family:var(--display);font-size:13px;line-height:1.3;color:var(--mute);text-decoration:none;padding:6px 0 6px 10px;border-left:2px solid transparent}
+.margin-nav a:hover{color:var(--ink)}
+.margin-nav a.on{color:var(--ink);border-left-color:var(--ink);font-weight:700}
+.margin-nav .pen{display:block;font-family:var(--pen);color:var(--margin);font-size:17px;line-height:1.2;margin:0 0 18px 10px;transform:rotate(-3deg);transform-origin:left}
+
+/* hero */
+.hero{padding:72px 0 30px}
+.copybook{margin:0 0 4px;font-family:var(--display);font-weight:400;font-size:clamp(40px,9vw,120px);line-height:1.32;letter-spacing:-.01em;color:var(--ink)}
+.cb-row{position:relative;display:block;white-space:nowrap}
+.cb-text{position:relative;z-index:1}
+.cb-probe{display:inline-block;width:0;height:0;vertical-align:baseline}
+.cb-row .ln{position:absolute;left:var(--to-margin,-38px);right:-40px;height:2px;top:0;opacity:0;transform-origin:left}
+.cb-row.ruled .ln{opacity:1;animation:draw 900ms cubic-bezier(.2,.7,.2,1) both}
+.cb-row .l1,.cb-row .l4{background:var(--margin)}
+.cb-row .l2,.cb-row .l3{background:#86ABE3;height:1.5px}
+.cb-row .l2{animation-delay:90ms !important}.cb-row .l3{animation-delay:180ms !important}.cb-row .l4{animation-delay:270ms !important}
+@keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero .sub{font-family:var(--display);font-size:22px;color:var(--margin);margin:4px 0 0}
+.hero .lede{max-width:44rem;font-size:21px;line-height:1.5;margin:18px 0 0}
+.here{margin-top:30px;display:grid;grid-template-columns:1.2fr 1fr;gap:0;max-width:60rem;border:1.5px solid var(--ink);background:#fff}
+.here > div{padding:18px 22px}
+.here > div + div{border-left:1.5px solid var(--rule)}
+.here .k{font-size:13px;color:var(--mute)}
+.here .v{font-family:var(--display);font-size:24px;font-weight:700;color:var(--ink);line-height:1.2;margin:2px 0 8px}
+.here .next{font-size:15.5px}
+.here .next b{font-family:var(--display)}
+.bar{height:8px;background:var(--rule-soft);margin:10px 0 6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--teal);width:0;transition:width .3s}
+.copybtn{margin-top:10px;font-family:var(--display);font-weight:700;font-size:14.5px;padding:9px 16px;border:1.5px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}
+.copybtn.ghost{background:#fff;color:var(--ink)}
+.copied{font-size:13.5px;color:var(--teal);margin-left:10px}
+.note{font-size:13px;color:var(--mute);margin-top:8px}
+
+section{padding:64px 0 8px;scroll-margin-top:12px}
+h2{font-family:var(--display);font-weight:700;font-size:34px;line-height:1.15;margin:0 0 10px;color:var(--graphite);letter-spacing:-.01em}
+h3{font-family:var(--display);font-weight:700;font-size:20px;line-height:1.25;margin:0 0 6px;color:var(--ink)}
+.section-lede{max-width:46rem;color:var(--mute);margin:0 0 28px;font-size:17px}
+
+/* together */
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1.5px solid var(--rule);margin-bottom:34px}
+.roles > div{padding:18px 24px 20px 0;border-bottom:1.5px solid var(--rule)}
+.roles > div + div{padding-left:24px;border-left:1.5px solid var(--rule)}
+.roles ul{margin:6px 0 0;padding-left:18px}
+.roles li{margin:3px 0}
+.loop{display:grid;grid-template-columns:repeat(6,1fr);gap:0;list-style:none;padding:0;margin:0 0 30px;counter-reset:lp;border-top:1.5px solid var(--rule)}
+.loop li{counter-increment:lp;position:relative;padding:44px 14px 16px 0;border-bottom:1.5px solid var(--rule);font-size:14px;color:var(--mute);line-height:1.45}
+.loop li + li{padding-left:14px;border-left:1.5px solid var(--rule)}
+.loop li::before{content:counter(lp);position:absolute;top:10px;font-family:var(--display);font-size:24px;color:var(--margin)}
+.loop li b{display:block;font-family:var(--display);color:var(--graphite);font-size:15.5px;margin-bottom:3px}
+.rhythm{width:100%;max-width:60rem;border-collapse:collapse;font-size:15px}
+.rhythm td{padding:9px 14px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.rhythm td:first-child{font-family:var(--display);font-weight:700;color:var(--ink);white-space:nowrap;width:22%}
+.rhythm td:last-child{color:var(--mute);white-space:nowrap;text-align:right}
+
+/* journey route */
+.route{position:relative;display:grid;grid-template-columns:repeat(10,minmax(92px,1fr));gap:0;margin:10px 0 8px;padding-top:6px;overflow-x:auto}
+.route::before{content:"";position:absolute;left:24px;right:24px;top:24px;height:3px;background:var(--rule)}
+.stn{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;background:none;border:none;cursor:pointer;padding:0 4px 8px}
+.stn .dot{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:16px;background:#fff;border:2.5px solid var(--rule);color:var(--mute)}
+.stn.current .dot{border-color:var(--ink);color:var(--ink);box-shadow:0 0 0 5px var(--ink-soft)}
+.stn.passed .dot{background:var(--teal);border-color:var(--teal);color:#fff}
+.stn .nm{font-family:var(--display);font-size:13.5px;line-height:1.25;margin-top:8px;color:var(--graphite)}
+.stn .wk{font-size:11.5px;color:var(--mute);margin-top:2px}
+.stn[aria-selected="true"] .nm{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:2px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--mute);margin-bottom:18px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:50%;display:inline-block;border:2px solid var(--rule);background:#fff}
+.legend i.p{background:var(--teal);border-color:var(--teal)}
+.legend i.c{border-color:var(--ink)}
+.swipe{display:none;font-size:12.5px;color:var(--mute);margin:2px 0 6px}
+.later{margin-top:6px;font-size:14px;color:var(--mute)}
+.later b{font-family:var(--display);color:var(--graphite)}
+.later span{display:inline-block;margin:4px 6px 0 0;padding:2px 10px;border:1.5px dashed #9AA2B2;border-radius:999px;font-size:13px}
+
+.panel{margin-top:22px;border:1.5px solid var(--ink);background:#fff}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:18px 22px 14px;border-bottom:1.5px solid var(--rule)}
+.ph h3{font-size:26px;color:var(--graphite);margin:0}
+.ph .meta{font-size:14px;color:var(--mute);margin-top:4px}
+.kind{font-size:12.5px;font-weight:700;padding:2px 10px;white-space:nowrap}
+.kind.founder{background:var(--crayon);color:#4A3700}
+.kind.build{background:var(--ink-soft);color:var(--ink)}
+.kind.launch{background:#FDECEC;color:#8A2D31}
+.kind.pilot{background:var(--teal-soft);color:var(--teal)}
+.tabs{display:flex;gap:0;border-bottom:1.5px solid var(--rule);overflow-x:auto}
+.tab{background:none;border:none;border-bottom:3px solid transparent;padding:11px 16px 9px;font-family:var(--display);font-size:14.5px;color:var(--mute);cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink);font-weight:700}
+.tp{padding:20px 22px 24px}
+.tp p{margin:0 0 12px;max-width:52rem}
+.tp ul{margin:0;padding-left:20px;max-width:56rem}
+.tp li{margin:5px 0}
+.why{padding:12px 16px;background:var(--ink-soft);max-width:52rem;margin:0 0 14px}
+.feats{margin-top:12px;font-size:13.5px;color:var(--mute)}
+.feats span{display:inline-block;font-family:var(--display);color:var(--ink);background:var(--ink-soft);padding:1px 8px;margin:3px 4px 0 0}
+.cost{margin-top:14px;font-size:14.5px}
+.cost b{font-family:var(--display)}
+.gate-top{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:10px}
+.gate-top .count{font-family:var(--display);font-size:18px}
+.gate-top .bar{flex:1;min-width:160px;margin:0}
+.checks{list-style:none;margin:0;padding:0;max-width:58rem}
+.checks li{border-bottom:1px solid var(--rule-soft);margin:0}
+.checks label{display:flex;gap:12px;align-items:flex-start;padding:10px 4px;cursor:pointer}
+.checks input{width:20px;height:20px;margin-top:2px;accent-color:var(--teal);flex:none}
+.checks input:checked + span{color:var(--mute);text-decoration:line-through;text-decoration-color:var(--teal)}
+.checks .hint{display:block;font-size:12.5px;color:var(--ink);margin:-6px 0 10px 36px}
+.checks input:disabled{cursor:not-allowed}
+.stamp{display:inline-block;margin-top:18px;font-family:var(--pen);color:var(--margin);font-size:24px;line-height:1.2;padding:8px 18px;border:3px double var(--margin);transform:rotate(-5deg);background:#fff}
+.stamp small{display:block;font-family:var(--body);font-size:12.5px;color:var(--margin)}
+.terms{margin:0;max-width:56rem}
+.terms dt{font-family:var(--display);font-weight:700;color:var(--ink);margin-top:12px}
+.terms dt:first-child{margin-top:0}
+.terms dd{margin:2px 0 0}
+
+/* prep */
+.prep-top{display:flex;align-items:center;gap:20px;margin-bottom:12px;max-width:60rem}
+.prep-top .bar{flex:1;margin:0}
+.prep{list-style:none;margin:0;padding:0;border-top:1.5px solid var(--rule);max-width:72rem}
+.step{display:grid;grid-template-columns:44px 1fr 110px;gap:16px;padding:16px 0;border-bottom:1.5px solid var(--rule)}
+.step .n{font-family:var(--display);font-size:24px;color:var(--margin);line-height:1}
+.step label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.step input{width:20px;height:20px;margin-top:4px;accent-color:var(--teal);flex:none}
+.step .t{font-family:var(--display);font-weight:700;font-size:17px}
+.step input:checked ~ .t{color:var(--mute);text-decoration:line-through;text-decoration-color:var(--teal)}
+.step .w{font-size:14.5px;color:var(--mute);margin:4px 0 6px 30px}
+.step ul{margin:0 0 0 30px;padding-left:18px;font-size:14.5px}
+.step li{margin:2px 0}
+.step .lk{margin:6px 0 0 30px;font-size:14px}
+.step .tm{font-size:13px;color:var(--mute);text-align:right;padding-top:4px}
+
+/* decisions */
+.dec-top{font-family:var(--display);font-size:17px;margin-bottom:14px}
+.decs{display:grid;grid-template-columns:1fr 1fr;gap:0 40px}
+fieldset.dec{border:none;border-top:1.5px solid var(--rule);margin:0;padding:16px 0 18px}
+fieldset.dec legend{padding:0;font-family:var(--display);font-weight:700;font-size:17px;color:var(--graphite)}
+fieldset.dec legend span{color:var(--margin);margin-right:8px}
+.dec .dw{font-size:14px;color:var(--mute);margin:4px 0 10px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;margin:4px 0;border:1.5px solid var(--rule-soft);cursor:pointer;background:#fff}
+.opt:hover{border-color:var(--rule)}
+.opt input{margin-top:4px;accent-color:var(--ink);flex:none}
+.opt.sel{border-color:var(--ink);background:var(--ink-soft)}
+.opt .ot{font-size:14.5px}
+.opt .oc{display:block;font-size:13px;color:var(--mute);margin-top:2px}
+.rec{font-family:var(--pen);color:var(--margin);font-size:15px;white-space:nowrap}
+
+/* architecture */
+.layers{border-top:1.5px solid var(--rule);margin-bottom:12px}
+.layer{display:grid;grid-template-columns:180px 1fr;gap:16px;padding:12px 0;border-bottom:1.5px solid var(--rule);align-items:center}
+.layer .ln2{font-family:var(--display);font-size:14px;color:var(--mute)}
+.comps{display:flex;flex-wrap:wrap;gap:8px}
+.comp{background:#fff;border:1.5px solid var(--rule);padding:8px 14px;cursor:pointer;font-family:var(--display);font-size:14.5px;font-weight:700;color:var(--ink)}
+.comp[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.cdetail{border:1.5px solid var(--ink);background:#fff;padding:18px 22px;margin:16px 0 34px;display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:20px}
+.cdetail h4{font-family:var(--display);font-size:20px;margin:0 0 6px;color:var(--graphite);grid-column:1/-1}
+.cdetail .lbl{font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.cdetail p{margin:0;font-size:14.5px}
+.cdetail .catch p{color:#8A2D31}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:10px 0 10px;padding:0;list-style:none;counter-reset:fl;border-top:1.5px solid var(--rule)}
+.flow li{counter-increment:fl;position:relative;padding:12px 16px 14px 46px;border-bottom:1.5px solid var(--rule);font-size:14px;line-height:1.4;color:var(--mute)}
+.flow li:not(:nth-child(4n+1)){border-left:1.5px solid var(--rule)}
+.flow li::before{content:counter(fl);position:absolute;left:14px;top:9px;font-family:var(--display);font-size:24px;line-height:1;color:var(--margin)}
+.flow li b{display:block;font-family:var(--display);color:var(--ink);font-size:15px}
+
+.promises{display:grid;grid-template-columns:1fr 1fr;gap:0 40px}
+.promises div{padding:13px 0;border-bottom:1.5px solid var(--rule)}
+.promises b{font-family:var(--display);font-size:16px;display:block;margin-bottom:2px}
+.promises p{margin:0;font-size:15px;color:var(--mute)}
+
+.tbl{width:100%;border-collapse:collapse;font-size:14.5px}
+.tbl th{text-align:left;font-family:var(--display);color:var(--ink);padding:8px 14px 8px 0;border-bottom:2px solid var(--ink);font-size:14px}
+.tbl td{padding:10px 14px 10px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.tbl td:first-child{font-weight:600}
+.tbl code{font-family:Consolas,"Cascadia Mono",monospace;font-size:13px;color:var(--ink)}
+
+.gloss{display:grid;grid-template-columns:1fr 1fr;gap:0 44px}
+.gloss div{padding:12px 0;border-bottom:1px solid var(--rule)}
+.gloss b{font-family:var(--display);color:var(--ink);font-size:16px}
+.gloss p{margin:3px 0 0;font-size:14.5px}
+.gloss .mm{color:var(--mute)}
+footer{margin-top:70px;padding-top:18px;border-top:1.5px solid var(--rule);color:var(--mute);font-size:13.5px}
+
+@media (max-width:1100px){
+  .loop{grid-template-columns:repeat(3,1fr)}
+  .loop li:nth-child(4){border-left:none;padding-left:0}
+  .cdetail{grid-template-columns:1fr 1fr}
+}
+@media (max-width:860px){
+  :root{--gutter:22px;--to-margin:-20px}
+  .page{padding:0 20px 80px 44px}
+  .margin-nav{display:none}
+  .hero{padding-top:40px}
+  .copybook{font-size:clamp(38px,12.5vw,80px)}
+  .here,.roles,.decs,.promises,.gloss,.cdetail{grid-template-columns:1fr}
+  .here > div + div,.roles > div + div{border-left:none;border-top:1.5px solid var(--rule);padding-left:22px}
+  .roles > div + div{padding-left:0}
+  .loop{grid-template-columns:1fr 1fr}
+  .loop li + li{border-left:none;padding-left:0}
+  .route{grid-template-columns:repeat(10,96px)}
+  .swipe{display:block}
+  .ph{flex-direction:column}
+  .step{grid-template-columns:34px 1fr}
+  .step .tm{grid-column:2;text-align:left;padding:0 0 0 30px}
+  .layer{grid-template-columns:1fr}
+  .flow{grid-template-columns:1fr}
+  .flow li:not(:nth-child(4n+1)){border-left:none}
+  .rhythm td:last-child{white-space:normal}
+  .tbl thead{display:none}
+  .tbl tr{display:block;padding:10px 0;border-bottom:1px solid var(--rule)}
+  .tbl td{display:block;border:none;padding:2px 0}
+}
+@media (prefers-reduced-motion:reduce){
+  .cb-row.ruled .ln{animation:none}
+  html{scroll-behavior:auto}
+  .bar i{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <nav class="margin-nav" aria-label="Sections">
+    <span class="pen">Build journey</span>
+    <a href="#top">Where we are</a>
+    <a href="#together">How we work</a>
+    <a href="#journey">The journey</a>
+    <a href="#prep">Your first week</a>
+    <a href="#decisions">Decisions</a>
+    <a href="#architecture">How it's built</a>
+    <a href="#promises">Quality bar</a>
+    <a href="#costs">Costs</a>
+    <a href="#docs">Document kit</a>
+    <a href="#words">Words you'll hear</a>
+  </nav>
+
+  <header class="hero" id="top">
+    <h1 class="copybook"><span class="cb-row"><span class="ln l1" aria-hidden="true"></span><span class="ln l2" aria-hidden="true"></span><span class="ln l3" aria-hidden="true"></span><span class="ln l4" aria-hidden="true"></span><span class="cb-text">Let's build it</span><span class="cb-probe"></span></span></h1>
+    <p class="sub">Parent Plus build journey</p>
+    <p class="lede" id="promise"></p>
+    <div class="here" aria-live="polite">
+      <div>
+        <div class="k">You are here</div>
+        <div class="v" id="hereStage"></div>
+        <div class="next" id="hereNext"></div>
+        <button class="copybtn" id="copyBtn" type="button">Copy my progress</button><span class="copied" id="copied"></span>
+        <div class="note" id="saveNote">Your ticks and choices are saved in this browser. Copy your progress and paste it into our chat whenever you want me to pick up from here.</div>
+      </div>
+      <div>
+        <div class="k">Gates passed</div>
+        <div class="v" id="gatesPassed"></div>
+        <div class="bar"><i id="gatesBar"></i></div>
+        <div class="k" id="toPilot"></div>
+      </div>
+    </div>
+  </header>
+
+  <section id="together">
+    <h2>How we'll work together</h2>
+    <p class="section-lede">You stay in charge of what we build and when it's ready. I do the building, and explain every step in plain words. You never need to read code.</p>
+    <div class="roles">
+      <div><h3>You, the founder</h3><ul><li>Decide priorities, scope and anything to do with money or families' data</li><li>Prepare accounts and pilot material (Stage 0)</li><li>Try every preview link and tell me what you expected</li><li>Approve each gate before we move on</li></ul></div>
+      <div><h3>Me, your AI co-founder</h3><ul><li>Plan each stage: what, why, demo script and gate</li><li>Build in small, tested pieces, to the standards of top product teams</li><li>Send a plain-language build diary after every session</li><li>Stop and ask before spending money, changing what data we collect, or skipping a check</li></ul></div>
+    </div>
+    <h3>Every change follows the same six steps</h3>
+    <ol class="loop" id="loop"></ol>
+    <h3>The weekly rhythm</h3>
+    <table class="rhythm"><tbody>
+      <tr><td>Monday</td><td>The stage plan: what we build this week, why, and the demo script</td><td>10 min</td></tr>
+      <tr><td>Each session</td><td>A build diary entry, plus preview links to try</td><td>10 min a day</td></tr>
+      <tr><td>Any time</td><td>A decision request, with my recommendation and a deadline</td><td>Reply within 48 h</td></tr>
+      <tr><td>Friday</td><td>A live demo, then we walk the gate checklist together</td><td>45 min</td></tr>
+    </tbody></table>
+  </section>
+
+  <section id="journey">
+    <h2>The journey, stage by stage</h2>
+    <p class="section-lede">Ten stages from accounts to fees. Each ends at a gate: a short checklist you tick yourself. When every box is ticked, the gate is passed and the next stage opens. Choose a stage to see what happens in it.</p>
+    <div class="legend"><span><i class="p"></i>Gate passed</span><span><i class="c"></i>Current stage</span><span><i></i>Coming up</span></div>
+    <div class="route" id="route" role="tablist" aria-label="Stages"></div>
+    <div class="swipe">Scroll sideways to see all ten stages.</div>
+    <div class="later" id="later"></div>
+    <div class="panel" id="panel"></div>
+  </section>
+
+  <section id="prep">
+    <h2>Your first week: get ready</h2>
+    <p class="section-lede">Stage 0, step by step. About 4 to 5 hours in total, spread over the week. Each step says why it matters and exactly what to do. Never paste passwords or keys into chat: they go in the password manager only.</p>
+    <div class="prep-top"><span class="dec-top" id="prepCount"></span><div class="bar"><i id="prepBar"></i></div></div>
+    <ol class="prep" id="prepList"></ol>
+  </section>
+
+  <section id="decisions">
+    <h2>Nine decisions before we start</h2>
+    <p class="section-lede">Each one changes what gets built first or what it costs. My recommendation is marked; you're free to choose differently. Your choices are saved, and included when you copy your progress.</p>
+    <div class="dec-top" id="decCount"></div>
+    <div class="decs" id="decs"></div>
+  </section>
+
+  <section id="architecture">
+    <h2>How it's built, in plain words</h2>
+    <p class="section-lede">Five layers, almost all on free plans. Choose any part to see what it does, why we chose it, what's free, what the catch is, and what we'd move to later. The free limits were checked on each provider's own page on 27 Oct 2026.</p>
+    <div class="layers" id="layers"></div>
+    <div class="cdetail" id="cdetail" aria-live="polite"></div>
+    <h3>How one class update travels</h3>
+    <ol class="flow" id="flow"></ol>
+  </section>
+
+  <section id="promises">
+    <h2>Our quality bar</h2>
+    <p class="section-lede">The standards I hold myself to on every change. Hold me to them.</p>
+    <div class="promises" id="promiseList"></div>
+  </section>
+
+  <section id="costs">
+    <h2>What it costs</h2>
+    <p class="section-lede">Built for a tight budget: free tiers everywhere, with an upgrade only when a limit is actually close.</p>
+    <table class="tbl"><thead><tr><th>Phase</th><th>Monthly cost</th><th>Details</th></tr></thead><tbody id="costRows"></tbody></table>
+  </section>
+
+  <section id="docs">
+    <h2>Your document kit</h2>
+    <p class="section-lede">Everything needed before development starts, in the <b>parentplus-dev-kit</b> folder that comes with this page. Each document opens with a plain-language summary. The technical ones are written for the AI builder, so you don't have to read them.</p>
+    <table class="tbl"><thead><tr><th>File</th><th>What it's for</th><th>Who reads it</th><th>When</th></tr></thead><tbody id="docRows"></tbody></table>
+  </section>
+
+  <section id="words">
+    <h2>Words you'll hear</h2>
+    <p class="section-lede">The vocabulary of the build, with a way to picture each term. You'll see one new word in every build diary too.</p>
+    <div class="gloss" id="gloss"></div>
+  </section>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+const D = {"meta": {"title": "Parent Plus build journey", "version": "v1.0", "date": "27 Oct 2026", "promise": "From approved specs to real families using Parent Plus, in small steps you can see, try and approve.", "to_pilot": "About 10 to 12 weeks to the first real families, if each gate passes first time."}, "stages": [{"id": 0, "name": "Get ready", "weeks": "1 week", "kind": "founder", "plain": "Before any code, we set up the accounts the product will live in, make nine decisions, and gather real pilot material. This stage is yours; I guide every click.", "why": "Code built on the wrong accounts or the wrong decisions has to be redone. One careful week here saves a month later.", "build": ["No code yet. You create the startup's accounts, all on free plans, owned by the startup and not by any one person's work account.", "You make the nine decisions on the Decisions board.", "You collect pilot material: real batches, families (with their permission), 10 real coach updates and 10 short voice notes."], "features": [], "see": "A 'control room' you own: GitHub for the code, Supabase for the data, Vercel for hosting, PostHog for usage, all with two-step login switched on.", "you": ["Work through the 14 steps in 'Your first week' below.", "Make the nine decisions.", "Book a weekly 45-minute demo slot."], "gate": ["All accounts are created under the startup's own Google account (not a work account), with two-step verification on", "Every password and key is saved in a password manager, never in chat, email or WhatsApp", "All nine decisions (D1 to D9) are made", "The pilot academy and coach have agreed to try it", "Batch details and the family list are collected, with the families' permission", "10 real coach updates and 10 short Hinglish voice notes are collected as test material", "A weekly 45-minute demo slot is in the calendar"], "decisions": ["D1", "D2", "D3", "D5", "D6", "D7", "D8", "D9"], "cost": "₹0, plus about ₹800 to ₹1,200 a year for a domain (recommended). Plus about $20 a month for the AI builder if you choose D1 option A.", "tech": [["Account", "A login with a company. We need about seven, all free."], ["Two-step verification", "A second check (a code on your phone) when you log in, so a stolen password isn't enough."], ["Password manager", "A locked vault for passwords and keys. Bitwarden is free."]]}, {"id": 1, "name": "Foundation", "weeks": "1 to 2 weeks", "kind": "build", "plain": "The empty shell of the app, built properly. You can open a link on your phone, install it like an app, and sign in as a coach or a parent. Nothing useful yet, but everything underneath is real: security, backups, automatic checks and error tracking.", "why": "Strong foundations are what make every later stage fast and safe. Product teams at Google call this a 'walking skeleton': thin, but connected end to end.", "build": ["The code repository with automatic checks on every change", "Two environments: 'staging' for trying things, 'production' for real families", "Sign-in (per decision D2), automatic profiles, and 'create your academy' for coaches", "The core database (19 tables) with access rules on every table and 55 security tests", "An installable app (PWA) with English and Hindi switching", "Nightly encrypted backups, error tracking and usage analytics (with no children's data)"], "features": ["M2-45", "M2-46", "M2-58"], "see": "A staging link you can install on your phone. Sign in, create 'FitKids Gym', switch to Hindi. Every change I make also gets its own preview link, so you can try it before it goes live.", "you": ["Follow the demo script on an Android phone and an iPhone", "Read the build diary (10 minutes a day)", "Approve the gate in the Friday demo"], "gate": ["You installed the app on an Android phone and an iPhone, and signed in as a coach and as a parent", "Every change shows a green 'all checks passed' tick before you are asked to look at it", "Every change comes with its own preview link that you can try", "All database security tests pass (55 today; more are added every stage)", "Last night's backup exists, and one restore drill into staging worked", "A test error appears in PostHog within a minute, and no child's name appears anywhere in analytics", "The first screen loads in under 3 seconds on a mid-range Android phone on 4G"], "decisions": ["D4"], "cost": "₹0", "tech": [["Repository", "The folder in GitHub where all code lives, with a full history of every change."], ["CI (continuous integration)", "Robots that run every test on every change and show a green tick or a red cross."], ["Preview deployment", "A private copy of the app for one change, so you can try it before it goes live."], ["PWA", "A website that installs on the phone like an app: no app store needed."], ["RLS (row-level security)", "Rules inside the database that decide which rows each person may see."]]}, {"id": 2, "name": "Class setup", "weeks": "1 week", "kind": "build", "plain": "Coaches set up each batch once and the calendar fills itself. They add children and send each family an invite link on WhatsApp; the parent opens it and sees their child's class.", "why": "Everything else (attendance, updates, reminders, fees) hangs off 'this class on this date'. Getting it right, and easy, comes first.", "build": ["Batches with repeating schedules, rooms and fees (M2-01)", "Sessions created automatically 4 weeks ahead, skipping holidays", "Add a child, invite the family by link, add a second guardian (M2-02)", "A simple student list (M2-49)", "Edit or cancel a single session"], "features": ["M2-01", "M2-02", "M2-49"], "see": "Your pilot coach's real batches, set up in minutes. A parent joins from a WhatsApp invite and sees Gym class on Mon, Wed and Fri.", "you": ["Sit with the pilot coach while they set up their batches (don't help!)", "Join as a parent from an invite on your own phone"], "gate": ["The pilot coach set up all their real batches without help, in under 10 minutes (you watched)", "Sessions appear for the next 4 weeks at the right India times", "An invite link sent on WhatsApp lets a parent join in under 1 minute", "A second guardian (for example a grandparent) can join from their own invite", "With two phones side by side, each parent sees only their own child"], "decisions": [], "cost": "₹0", "tech": [["Recurring rule", "A pattern like 'Mon, Wed, Fri at 5:30 pm' that creates sessions automatically."], ["Invite token", "A long random code inside the link; it works once and expires in 14 days."]]}, {"id": 3, "name": "Attendance loop", "weeks": "1 week", "kind": "build", "plain": "The first real loop. A parent sends 'missing today'; the coach confirms attendance in one action; the parent sees it straight away.", "why": "This is the smallest loop that gives both sides real value, and the first habit we want coaches to form.", "build": ["Parent quick signals: running late, missing today, dropped off (M2-06)", "Fast attendance with smart defaults (M2-09)", "Attendance reaches parents as a typed item; parent week view", "A first 'Today' list for coaches (M2-41, basic)"], "features": ["M2-06", "M2-09", "M2-41"], "see": "The coach confirms 12 children in a few seconds; the parent's phone shows 'Rudraansh attended Wednesday's class'.", "you": ["Ask the pilot coach to use it for three real classes", "Check from a parent phone"], "gate": ["Marking attendance for a class of 12 takes under 10 seconds", "The parent sees attendance within 5 seconds of the coach saving it", "A 'missing today' signal marks the child absent in advance", "It still works on a slow connection (tested at 3G speed)", "The pilot coach used it for three real classes in a row"], "decisions": [], "cost": "₹0", "tech": [["Realtime", "The database tells the app the moment something changes, so nobody has to refresh."], ["Typed item", "A standard 'parcel' (here: attendance_record) that any parent app knows how to show."]]}, {"id": 4, "name": "Class updates and moments", "weeks": "2 weeks", "kind": "build", "plain": "The heart of Parent Plus. After class the coach posts what happened, adds photos, a 'try at home' idea or a milestone moment, previews exactly what parents will see, and sends. Photos reach only families who agreed.", "why": "This is the value parents feel every day, and where trust is won or lost, so consent is built in from the first photo.", "build": ["Class updates and personal notes, with a parent preview (M2-13, M2-16, M2-20)", "Consent choices for each family (M2-25)", "Quick photo, video and audio capture; tagging; safe sharing (M2-26, M2-27)", "Try-at-home activities and milestone moments (M2-47, M2-48)", "Class announcements (M2-50)", "The parent feed showing each item type, with the simple fallback (M2-58)"], "features": ["M2-13", "M2-16", "M2-20", "M2-25", "M2-26", "M2-27", "M2-47", "M2-48", "M2-50", "M2-58"], "see": "The coach posts an update with 3 photos in under a minute. One parent sees it with photos; another parent, who said no to group photos, never receives the group picture.", "you": ["Run the two-phone consent test yourself", "Score 5 real updates: would you be proud to send this?"], "gate": ["Posting an update with photos takes under 1 minute", "The two-phone consent test passes: a family that said no never receives the group photo", "Every item type looks right in the parent app, and an unknown type shows the simple fallback", "Photos are under 300 KB each and open in under 2 seconds", "A parent can share an update with family without exposing other children"], "decisions": [], "cost": "₹0 (photos fit inside the 1 GB free storage for the pilot)", "tech": [["Signed link", "A private link to a photo that stops working after an hour."], ["Fallback", "If an older app meets a new item type, it shows a simple title and text instead of breaking."]]}, {"id": 5, "name": "AI assist", "weeks": "2 weeks", "kind": "build", "plain": "Now we make it effortless. The coach speaks for 10 seconds in Hinglish, and the app writes the update and personal notes for them to approve. Children's names are removed before anything is sent to the AI.", "why": "Daily posting only becomes realistic when it takes under 2 minutes. This is the promise that makes Parent Plus different.", "build": ["Voice to update (M2-14)", "The prefill-and-approve AI engine behind a swappable adapter (M2-37)", "Name removal before every AI call (M2-38)", "AI polish and tone checks (M2-16)", "Spotlight rotation, quick observations and AI personal notes (M2-18, M2-19, M2-20)"], "features": ["M2-14", "M2-37", "M2-38", "M2-16", "M2-18", "M2-19", "M2-20"], "see": "Your own 10 test voice notes turned into drafts you'd be happy to send.", "you": ["Score the 10 AI drafts from 1 to 5", "Try it in a real class with the pilot coach"], "gate": ["On your 10 test voice notes, at least 8 drafts are good enough to send with small or no edits (you score them)", "The logs prove no child's name or phone number was sent to the AI", "From class end to published update takes the coach under 2 minutes (median)", "AI use stays inside the free tier, with a spending cap in place", "The coach can always switch AI off and write by hand"], "decisions": ["D5"], "cost": "₹0 on the free AI tier (see D5 about data terms)", "tech": [["Adapter", "One internal plug for the AI, so we can switch providers in a day."], ["Pseudonymisation", "Swapping 'Rudraansh' for 'Child A' before the AI sees the text, then swapping back."], ["Prompt", "The written instruction we give the AI; versioned and tested like code."]]}, {"id": 6, "name": "Reminders and changes", "weeks": "1 to 2 weeks", "kind": "build", "plain": "Parents get the right message at the right time: the get-ready reminder the evening before, instant notice when a class is cancelled or moved, and announcements. Never at night.", "why": "Reminders are what bring parents back between classes, and what save the coach from twenty 'is class on today?' messages.", "build": ["One outbox for every message: web push, with ready-to-send WhatsApp messages as the fallback (M2-40)", "The evening-before get-ready reminder (M2-04)", "Cancel, restore, move, extra class and holiday, with parent RSVP (M2-05)", "Quiet hours and message caps", "The full 'Needs you' list (M2-41)"], "features": ["M2-40", "M2-04", "M2-05", "M2-41"], "see": "Cancel Friday's class: only that batch's families get a polite message within a minute, and their week view updates.", "you": ["Install the app on an iPhone and allow notifications", "Try a cancellation and an extra class"], "gate": ["The evening-before reminder arrives on Android, and on an iPhone with the app installed", "Nothing is sent between 8:30 pm and 9 am", "A cancellation reaches only the affected families, within 1 minute", "Families without notifications get a ready-to-send WhatsApp message instead", "Parents can answer yes or no to an extra class, and the coach sees the count"], "decisions": [], "cost": "₹0", "tech": [["Web push", "Free notifications through the browser. On iPhone, only after the app is added to the home screen."], ["Outbox", "A queue every message passes through, so quiet hours and limits are applied in one place."], ["Cron job", "A task the system runs on a timetable, for example every evening at 7 pm."]]}, {"id": 7, "name": "Pilot launch readiness", "weeks": "1 week", "kind": "launch", "plain": "We stop adding features and get ready for real families: privacy wording, consent screens, a support channel, coach training, and a full rehearsal of a class day.", "why": "First impressions with real parents are hard to repeat. Every top product team runs a launch review before going live.", "build": ["Privacy policy, consent wording and a 'delete my data' request flow", "End-to-end tests for every key journey on the live environment", "The north-star dashboard (update within 1 hour; coach time under 2 minutes)", "Production environment, hosting decision carried out, rollback plan", "A known-issues list and a support WhatsApp number"], "features": [], "see": "A full rehearsal: you play the coach and a friend plays the parent, through a whole class day.", "you": ["Get the privacy wording reviewed (ideally by a lawyer)", "Train the pilot coach (20 minutes)", "Sign off the launch"], "gate": ["Privacy policy and consent wording are reviewed and live in the app", "Every key journey passes automated end-to-end tests on the live environment", "A restore drill worked on production backups", "The north-star dashboard is live", "The pilot coach was trained in under 20 minutes and can run a class day alone", "Hosting is on a plan that allows commercial use (per D4)", "You can honestly say: 'I'd be proud to show this to a parent'"], "decisions": ["D4"], "cost": "₹0 to about $20 a month, depending on D4", "tech": [["End-to-end test", "A robot that uses the app like a person: signs in, marks attendance, posts, checks the parent's phone."], ["Rollback", "Going back to the previous version in one click if something breaks."]]}, {"id": 8, "name": "Pilot with real families", "weeks": "4 weeks", "kind": "pilot", "plain": "One academy, 20 to 30 families, four weeks. We watch the numbers, fix the top issues every week, and decide what comes next from real use.", "why": "Real use beats opinions. The pilot tells us whether the daily habit forms before we add fees.", "build": ["Weekly fixes for the top reported issues", "Small improvements only; no big new features", "A weekly pilot report in plain words"], "features": [], "see": "A weekly pilot report: posting rate, parent opens, coach time, issues fixed.", "you": ["Talk to the coach weekly", "Collect issues from parents in the support chat", "Decide the next priorities with me"], "gate": ["Coaches post on at least 4 of every 5 class days, two weeks running (your pilot rule)", "At least 60% of families open updates each week", "No privacy or data incidents", "The top 5 reported issues are fixed", "The coach says they'd be upset if the app went away"], "decisions": [], "cost": "₹0 within free limits (we watch storage, emails and the Supabase pause rule)", "tech": [["North-star metric", "The single number that shows the product is working: updates reaching parents within an hour."], ["Guardrail metric", "A number that must not get worse, such as privacy incidents or crashes."]]}, {"id": 9, "name": "Fees, done gently", "weeks": "2 weeks", "kind": "build", "plain": "Only once the daily habit is proven: fee plans, a clear tracker, pay-by-UPI links, the gentle reminder ladder and automatic receipts.", "why": "Asking for money works best once parents already see value every day. That's your pilot rule, and it's right.", "build": ["Fee plans and automatic dues (M2-31)", "Fee tracker (M2-32)", "Pay by UPI link or QR, with money going straight to the coach (M2-33)", "The gentle reminder ladder (M2-34)", "Automatic receipts (M2-35)"], "features": ["M2-31", "M2-32", "M2-33", "M2-34", "M2-35"], "see": "On the 1st, every family gets a value-first fee note and can pay by UPI in under 30 seconds.", "you": ["Test UPI payment on GPay, PhonePe and Paytm with small amounts", "Approve the reminder wording"], "gate": ["Dues are created automatically for every family on the 1st", "A parent can pay by UPI in under 30 seconds on GPay, PhonePe and Paytm (tested)", "Reminders follow the gentle ladder: at most 3 automatic messages, never at night", "Receipts arrive automatically once the coach confirms", "In the first cycle, 85% of fees are paid within 5 days of the due date"], "decisions": [], "cost": "₹0 (UPI goes straight to the coach; no gateway fees)", "tech": [["UPI deep link", "A link that opens the parent's UPI app with the amount and the coach's UPI ID already filled in."], ["Reconciliation", "Matching each payment to the right due. Manual confirmation for now; automatic later with a payment gateway."]]}], "later": [["Course design (Module 1)", "Templates, skills and milestones that pre-fill updates and observations"], ["Progress timeline and monthly reports", "M2-21, M2-23"], ["Memory book and 'then and now'", "M2-28, M2-29"], ["Academy accounts and roles", "M2-44"], ["Trials, listings and Explore", "M2-53, M2-54, M2-55"], ["Coach insights and plan billing", "M2-56, M2-57"], ["Safe pick-up and auto-attendance", "M2-10, M2-11"], ["In-app chat and calendar sync", "M2-51, M2-52"]], "prep": [{"n": 1, "title": "Create the startup's own Google account", "time": "15 min", "why": "Everything the company owns hangs off this account. If it's a personal or work account, ownership gets messy later.", "how": ["Create a new Gmail account just for the startup (for example team.parentplus@gmail.com)", "Turn on 2-step verification (Google Account, then Security)", "Don't use your work email or work laptop for the startup: check your employment terms about side projects, because work systems can create ownership questions"], "link": "https://accounts.google.com/signup"}, {"n": 2, "title": "Set up a password manager", "time": "10 min", "why": "We'll create about a dozen passwords and secret keys. They must never travel by chat, email or WhatsApp.", "how": ["Install Bitwarden (free) on your phone and laptop", "Create a vault called 'Parent Plus'", "Share it with your co-founder (Bitwarden's free organisation supports 2 people)"], "link": "https://bitwarden.com"}, {"n": 3, "title": "Buy a domain (if D3 = yes)", "time": "15 min", "why": "Sign-in emails to parents need a real domain, and links like parentplus.in look trustworthy.", "how": ["Search for a short name (for example parentplus.in or getparentplus.com)", "Buy it for 1 year with the startup Google account (about ₹800 to ₹1,200)", "Don't add hosting or email extras; we don't need them"], "link": "https://www.cloudflare.com/products/registrar/"}, {"n": 4, "title": "Create GitHub (where the code lives)", "time": "10 min", "why": "GitHub stores every line of code and its full history, runs our automatic checks, and keeps our nightly backups.", "how": ["Sign up with the startup email; turn on two-factor authentication", "Create a free organisation called 'parentplus'", "Inside it, create a private repository called 'parentplus-app' (tick 'Add a README')"], "link": "https://github.com/signup"}, {"n": 5, "title": "Create Supabase (database, sign-in, files)", "time": "15 min", "why": "Supabase holds all the data with access rules on every table, and handles sign-in, photos and live updates.", "how": ["Sign up using 'Continue with GitHub'", "Create two free projects: 'parentplus-staging' and 'parentplus-prod'", "Choose region 'South Asia (Mumbai)' for both", "Save each database password in Bitwarden. Never paste keys into chat"], "link": "https://supabase.com/dashboard"}, {"n": 6, "title": "Create Vercel (hosting)", "time": "5 min", "why": "Vercel turns each code change into a preview link you can try, and hosts the live app.", "how": ["Sign up with 'Continue with GitHub' on the free Hobby plan", "Don't import anything yet; I'll do that with you in Stage 1"], "link": "https://vercel.com/signup"}, {"n": 7, "title": "Get a Google AI Studio key (AI drafts)", "time": "5 min", "why": "This powers voice-to-update and drafting in Stage 5, on the free tier.", "how": ["Sign in with the startup Google account", "Click 'Get API key', create one, and save it in Bitwarden", "Don't use it anywhere yet"], "link": "https://aistudio.google.com"}, {"n": 8, "title": "Create PostHog (usage, errors, feature switches)", "time": "5 min", "why": "One free tool tells us how the app is used, catches errors, and lets us switch features on for a few users first.", "how": ["Sign up for the free plan (no card needed)", "Create a project called 'Parent Plus'"], "link": "https://posthog.com"}, {"n": 9, "title": "Create Resend (sign-in emails, if D3 = yes)", "time": "10 min", "why": "Supabase's built-in email only sends to your own team, so parents need this to receive sign-in codes. Free: 3,000 emails a month, 100 a day.", "how": ["Sign up for the free plan", "Add your domain; I'll guide you through the DNS records in Stage 1"], "link": "https://resend.com"}, {"n": 10, "title": "Set up the AI builder (if D1 = A)", "time": "15 min", "why": "The AI coding agent writes, tests and proposes each change inside your GitHub, so you never need to install developer tools.", "how": ["Subscribe to Claude Pro with the startup email (about $20 a month), or choose the free Gemini CLI", "That's all for now; in Stage 1 we open a free GitHub Codespace (a browser-based workspace) together and start the agent there"], "link": "https://claude.ai"}, {"n": 11, "title": "Make the nine decisions", "time": "30 min", "why": "Each one changes what gets built first, or what it costs.", "how": ["Go to the Decisions board below", "Read the recommendation, then pick an option", "Note any questions for our Friday call"], "link": ""}, {"n": 12, "title": "Prepare the pilot material", "time": "2 to 3 hours over the week", "why": "Real data and real examples are how we test properly, and how we know the AI drafts are good enough.", "how": ["Get the pilot academy's OK to try Parent Plus", "List each batch: name, days, times, venue, room, monthly fee", "List children (first names) with one parent contact each, with the parents' permission", "Collect 10 real updates the coach has sent on WhatsApp", "Record 10 voice notes of 10 to 20 seconds each, describing a class in Hinglish", "Optional: a logo; we'll use the prototype's colours"], "link": ""}, {"n": 13, "title": "Line up test phones", "time": "5 min", "why": "Android and iPhone behave differently, especially for notifications.", "how": ["One Android phone and one iPhone you can borrow for 30 minutes at each stage"], "link": ""}, {"n": 14, "title": "Book the rhythm", "time": "5 min", "why": "Small, regular check-ins keep the build on track and you in control.", "how": ["Book a weekly 45-minute demo slot (Fridays work well)", "Block 10 minutes a day to read the build diary and try preview links"], "link": ""}], "decisions": [{"id": "D1", "q": "How does the code get written?", "why": "Speed and reliability of every stage.", "options": [["A", "An AI coding agent works inside your GitHub (Claude Code in a free GitHub Codespace). It writes, tests and proposes every change for your review.", "About $20 a month (Claude Pro). Gemini CLI is a free alternative.", true], ["B", "I write the code here in chat, and you upload each package to GitHub through the website.", "₹0, but slower, with more copy-paste and more room for mistakes.", false]]}, {"id": "D2", "q": "How do people sign in during the pilot?", "why": "The first thing every parent sees; it also affects cost and paperwork.", "options": [["A", "Google sign-in, plus a one-time code by email.", "Free. Needs a domain for the emails (D3).", true], ["B", "Phone number with an SMS code.", "Familiar to Indian parents, but needs DLT registration as a business and costs money per SMS.", false], ["C", "Google sign-in only.", "Simplest and free, but leaves out parents without a Google account.", false]]}, {"id": "D3", "q": "Do we buy a domain now?", "why": "Needed for sign-in emails, and makes links look trustworthy.", "options": [["A", "Yes, for example parentplus.in.", "About ₹800 to ₹1,200 a year.", true], ["B", "Not yet.", "₹0. Then sign-in must be Google only (D2 = C).", false]]}, {"id": "D4", "q": "Where do we host once real families use it (Stage 7)?", "why": "Vercel's free Hobby plan is for non-commercial use only, which is fine while we build but not for a business.", "options": [["A", "Move to Vercel Pro: the same setup we build on, with no conversion work.", "About $20 a month.", false], ["B", "Move to Cloudflare's free plan, which allows commercial use. Needs a small conversion step and re-testing.", "₹0.", false], ["C", "Decide at Stage 7: try Cloudflare first, and if the conversion isn't clean within a day, pay for Vercel Pro.", "₹0 or about $20 a month.", true]]}, {"id": "D5", "q": "Which AI writes the drafts?", "why": "Draft quality, cost, and what happens to the text we send.", "options": [["A", "Google Gemini's free tier, with children's names removed before anything is sent.", "₹0. Free tiers may use submitted text to improve their products, which is why names are removed.", true], ["B", "A paid AI plan whose terms say it won't train on your data.", "Roughly ₹500 to ₹1,500 a month at pilot volume.", false]]}, {"id": "D6", "q": "Which languages at launch?", "why": "Every word in the app is translated and tested.", "options": [["A", "English and Hindi.", "Small extra effort per stage.", true], ["B", "English only.", "Fastest, but excludes many home tutors.", false], ["C", "English, Hindi and Marathi.", "More effort; useful if the pilot is in Maharashtra.", false]]}, {"id": "D7", "q": "Who approves each gate?", "why": "Clear ownership keeps decisions fast.", "options": [["A", "One named approver decides; the other founder reviews.", "Fast, with clear accountability.", true], ["B", "Both founders must approve.", "Slower, but shared.", false]]}, {"id": "D8", "q": "How big is the pilot?", "why": "Small enough to support personally, big enough to learn from.", "options": [["A", "1 academy, 1 to 3 coaches, 20 to 30 families.", "Manageable within free limits.", true], ["B", "2 to 3 academies.", "More learning, but more support load and closer to free limits.", false]]}, {"id": "D9", "q": "Which progress scale do coaches use?", "why": "Shared by Module 1 and Module 2; hard to change once parents are used to it.", "options": [["A", "Started / Practising / Confident (as in your prototype).", "Already in the design.", true], ["B", "Getting there / Almost / Got it (Module 1 draft).", "Friendlier for very young children.", false]]}], "arch": [{"layer": "Where people use it", "items": [{"name": "Coach and parent apps", "plain": "One installable web app (PWA) with two experiences: coach and parent. No app store needed.", "why": "One codebase, instant updates, works on any phone.", "free": "Free", "catch": "On iPhone, notifications only work once the app is added to the home screen.", "up": "A native app later, using the same backend."}]}, {"layer": "The app's brain", "items": [{"name": "Next.js on Vercel", "plain": "The code that draws the screens and runs the app's logic, hosted by Vercel.", "why": "The most widely used setup, which AI builders know best; preview links for every change.", "free": "Hobby plan: free", "catch": "Hobby is for non-commercial use only (checked on Vercel's fair-use page). We decide at Stage 7 (D4).", "up": "Vercel Pro, or Cloudflare's free plan."}, {"name": "Feature modules", "plain": "Classes, attendance, updates, media, consent, typed items, messages, AI and fees, each in its own folder with its own tests.", "why": "Each module can change without breaking the others.", "free": "Free", "catch": "None.", "up": "Split into separate services only if we ever need to."}]}, {"layer": "The safe", "items": [{"name": "Supabase database", "plain": "Where all the data lives, with access rules on every table (proven by 55 tests).", "why": "Proper relational data, security built into the database, Mumbai region.", "free": "500 MB database, 50,000 monthly users", "catch": "Free projects pause after 1 week without use, and include no automatic backups, so we run our own nightly ones.", "up": "Supabase Pro ($25 a month) for daily backups and no pausing."}, {"name": "Sign-in", "plain": "Google sign-in and email codes (D2).", "why": "Free, familiar, secure.", "free": "Included", "catch": "The built-in email only reaches your own team, so we connect Resend for parents.", "up": "Phone or WhatsApp codes later."}, {"name": "Files (photos, clips)", "plain": "Private storage; parents get short-lived links only after the consent check.", "why": "Children's media is never public.", "free": "1 GB storage", "catch": "Video fills it quickly, so we compress on the phone.", "up": "Cloudflare R2 (10 GB free, no download fees)."}, {"name": "Scheduled jobs and live updates", "plain": "Timed tasks (reminders, new sessions) and instant updates on screen.", "why": "Reminders and real-time attendance without extra tools.", "free": "Included", "catch": "Usage limits on the free tier.", "up": "Same tools on a paid plan."}]}, {"layer": "Helpers", "items": [{"name": "AI (Gemini)", "plain": "Writes drafts from voice notes and picks; behind one adapter.", "why": "A good free tier; easy to swap.", "free": "Free tier", "catch": "Free tiers may use submitted text, so names are removed first (M2-38).", "up": "A paid tier with no-training terms."}, {"name": "Notifications", "plain": "Free web push, with ready-to-send WhatsApp messages as the fallback.", "why": "₹0 messaging during the pilot.", "free": "Free", "catch": "WhatsApp links need the coach to press send.", "up": "WhatsApp Business API (paid per conversation)."}, {"name": "Email (Resend)", "plain": "Sends sign-in codes to parents.", "why": "Supabase's built-in email can't reach parents.", "free": "3,000 a month, 100 a day", "catch": "Needs a domain.", "up": "Resend Pro ($20 a month)."}, {"name": "UPI links", "plain": "Opens the parent's UPI app with the amount filled in; money goes straight to the coach.", "why": "Zero fees, no payment licence needed.", "free": "Free", "catch": "No automatic confirmation; some apps limit link payments to personal UPI IDs.", "up": "A payment gateway with webhooks."}, {"name": "PostHog", "plain": "Usage analytics, error tracking and feature switches in one free tool.", "why": "One tool instead of three.", "free": "1M events and 100K errors a month", "catch": "Session replay stays off or fully masked: children's data must never be recorded.", "up": "Paid tier at scale."}]}, {"layer": "The workshop", "items": [{"name": "GitHub", "plain": "Holds the code, runs every test on every change, and stores the nightly encrypted backups.", "why": "Industry standard; free for private code.", "free": "2,000 check-minutes a month", "catch": "Backup files are kept for 14 days.", "up": "GitHub Team if the team grows."}, {"name": "Codespaces + AI agent", "plain": "A workspace in the browser where the AI builder writes code. Nothing to install on your laptop.", "why": "Zero setup for a non-technical founder.", "free": "120 core-hours a month (about 60 hours on the basic machine)", "catch": "Stop the workspace when not in use.", "up": "GitHub Pro if needed."}]}], "flow": [["Coach", "Finishes class and approves the drafted update"], ["App (Next.js)", "Sends it to the database through a secure action"], ["Database rules", "Check this coach runs this class"], ["publish_post", "Creates one typed item per child in the class"], ["Consent check", "Photos are linked only for families who agreed"], ["Outbox", "Queues a notification, respecting quiet hours"], ["Web push / WhatsApp", "Reaches each parent's phone"], ["Parent app", "Shows the item by its type, with the fallback for anything new"]], "promises": [["Small steps", "Every change is small enough to explain in a paragraph and try in five minutes."], ["Nothing reaches you untested", "Automatic checks (code style, types, unit tests, database security tests, build) must be green first."], ["You try it before it's live", "Every change has its own preview link. Nothing goes live without your approval at the gate."], ["Security lives in the database", "Every table has access rules, proven by tests: 55 today, more every stage."], ["Children first", "Consent is checked by the database, names are removed before AI, photos travel only by private expiring links, and analytics never record children's data."], ["Nothing gets lost", "Nightly encrypted backups, and a restore drill at every stage gate."], ["Built to change", "Features don't depend on screens (typed items); every outside service sits behind an adapter; risky changes ship behind a feature switch."], ["Fast on budget phones", "The first screen loads in under 3 seconds on a mid-range Android on 4G; photos are shrunk on the phone."], ["Easy for everyone", "Readable text, good contrast, screen-reader labels, one-handed use, English and Hindi."], ["You're always in the loop", "A plain-language build diary after every working session; every decision logged with its reason."], ["Measured from day one", "The north-star and guardrail numbers are wired in before the first family arrives."], ["No surprise costs", "No paid tool without your yes, and a usage check against free limits at every gate."]], "loop": [["I plan", "A one-page plan for the stage: what, why, the demo script and the gate."], ["I build a small change", "One feature slice at a time, with its tests."], ["Robots check it", "Style, types, unit tests and 55+ database security tests. Green tick or it doesn't move."], ["You get a preview link", "A private copy of the app with just this change."], ["You try it", "Follow the 3-step 'try it' note. Tell me what you expected in plain words."], ["It goes live", "Approved changes join the live app; the stage gate decides when families see them."]], "costs": [["Building (Stages 0 to 6)", "₹0 for services", "Domain about ₹800 to ₹1,200 a year (D3). AI builder about $20 a month if D1 = A."], ["Pilot (Stages 7 and 8)", "₹0 to about $20 a month", "Hosting per D4. Everything else stays inside free limits for 20 to 30 families."], ["Fees (Stage 9)", "₹0", "UPI goes straight to the coach; no gateway fees."], ["When to start paying", "Only when a limit is near", "Supabase Pro ($25 a month) when we need automatic backups, no pausing, or more than 500 MB of data or 1 GB of files. Resend Pro ($20 a month) beyond 100 emails a day."]], "docs": [["README.md", "Start here: what's in the kit and the order to read it", "Founder, AI builder", "Now"], ["docs/00_working_agreement.md", "How we work together: roles, rhythm, stop rules", "Founder", "Now"], ["docs/01_pilot_prd.md", "What Pilot v1 includes and excludes, and how we'll measure it", "Founder, AI builder", "Now"], ["docs/02_roadmap_and_gates.md", "Every stage, its demo and its gate criteria", "Founder", "Every Friday"], ["docs/03_architecture.md", "How the system fits together, and why", "AI builder (founder: the summary)", "Stage 1"], ["docs/04_data_model.md", "Tables, links and access rules", "AI builder", "Every stage"], ["docs/05_parent_items_contract.md", "The typed items parents receive (UI-agnostic)", "AI builder, designers", "Stage 3 onward"], ["docs/06_engineering_standards.md", "Code structure, testing, reviews, migrations, secrets", "AI builder", "Every change"], ["docs/07_definition_of_ready_and_done.md", "When work can start, and when it counts as finished", "Both", "Every story"], ["docs/08_privacy_and_security.md", "Children's data rules, DPDP checklist, security basics", "Both", "Every gate"], ["docs/09_founder_prep_checklist.md", "Your first week, step by step", "Founder", "Now"], ["docs/10_backlog_stage1_stage2.md", "The first stories, each with acceptance criteria", "Both", "Stage 1"], ["docs/11_launch_readiness_checklist.md", "Everything checked before real families arrive", "Founder", "Stage 7"], ["docs/12_risk_register.md", "Product and technical risks, with mitigations", "Both", "Every gate"], ["docs/13_build_diary_template.md", "The plain-language update you get after every session", "Founder", "Daily"], ["docs/14_decision_log.md", "Architecture decisions and their reasons (ADRs)", "Both", "When decisions change"], ["CLAUDE.md", "The rulebook the AI builder follows", "AI builder", "Every session"], ["supabase/migrations/0001_core_schema.sql", "The core database, with access rules on every table", "AI builder", "Stage 1"], ["supabase/tests/*", "55 automated security and behaviour tests (all passing)", "AI builder, CI", "Every change"], [".github/workflows/*", "Automatic checks on every change, and nightly encrypted backups", "AI builder", "Stage 1"]], "glossary": [["Repository (repo)", "The folder in GitHub that holds all the code and its full history.", "A shared notebook where every edit is dated and signed."], ["Commit", "One saved change to the code, with a note explaining it.", "A dated entry in that notebook."], ["Pull request (PR)", "A proposed change, waiting for checks and approval before it joins the main code.", "A draft submitted for review before it's printed."], ["CI (continuous integration)", "Robots that run every test on every change.", "A quality inspector at the factory door."], ["Preview deployment", "A private copy of the app with one change, for you to try.", "A dress rehearsal before opening night."], ["Staging vs production", "Staging is the practice copy; production is the real one families use.", "The practice pitch vs the match ground."], ["Migration", "A numbered script that changes the database's structure, applied once, in order.", "Building-plan amendments, each one stamped and filed."], ["RLS (row-level security)", "Rules inside the database that decide which rows each user can see.", "Each family's key opens only their own locker."], ["API", "The agreed way the app asks the backend for data or actions.", "A restaurant menu: order in a fixed way; the kitchen does the work."], ["PWA (Progressive Web App)", "A website that installs on the phone like an app and can send notifications.", "A website that moved into an app's body."], ["Edge function", "A small piece of backend code that runs on demand, for example to call the AI.", "A specialist you call in for one job."], ["Cron job", "A task that runs on a timetable.", "An alarm that does a chore when it rings."], ["Feature flag", "A switch to turn a feature on for some users without a new release.", "A dimmer switch for features."], ["Unit test vs end-to-end test", "A unit test checks one small piece; an end-to-end test uses the whole app like a person would.", "Checking each brick vs walking through the finished house."], ["Backup and restore drill", "A copy of the data, and a practice run proving we can bring it back.", "A fire drill for your data."], ["Secret / API key", "A password that lets our app use a service. Kept in vaults, never in code or chat.", "The key to the shop, kept on your keyring, not under the mat."], ["Adapter", "One internal plug in front of an outside service, so we can switch providers easily.", "A travel plug adaptor."], ["Walking skeleton", "The thinnest version of the system connected end to end, built first.", "The frame of a house, with the plumbing connected, before any furniture."], ["Acceptance criteria", "The exact checks that decide whether a story is done.", "The marking scheme agreed before the exam."], ["Definition of done", "The checklist every piece of work must pass, every time.", "The 'before you leave the kitchen' checklist."], ["North-star metric", "The one number that shows the product is working.", "The one dial you'd check first."], ["Rollback", "Returning to the previous version quickly if something breaks.", "Undo, for the whole app."]]};
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const KEY = "pp_build_journey_v1";
+
+/* ---------- state ---------- */
+let canSave = true;
+let S = {gates: {}, prep: [], decisions: {}, sel: null, tab: "plain", comp: "0-0"};
+try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) { canSave = false; }
+if (!canSave) $("#saveNote").textContent = "This view can't save ticks between visits. Use 'Copy my progress' and paste it into our chat to keep your place.";
+D.stages.forEach(st => { if (!S.gates[st.id] || S.gates[st.id].length !== st.gate.length) S.gates[st.id] = st.gate.map((_, i) => (S.gates[st.id] || [])[i] || false); });
+if (S.prep.length !== D.prep.length) S.prep = D.prep.map((_, i) => S.prep[i] || false);
+const DEC_IDX = D.stages[0].gate.findIndex(g => /nine decisions/.test(g));
+function syncDecisionGate() { if (DEC_IDX >= 0) S.gates[0][DEC_IDX] = D.decisions.every(d => S.decisions[d.id]); }
+syncDecisionGate();
+function save() { if (!canSave) return; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { canSave = false; } }
+
+const passed = id => S.gates[id].every(Boolean);
+const currentId = () => { const s = D.stages.find(st => !passed(st.id)); return s ? s.id : null; };
+const status = id => passed(id) ? "passed" : (id === currentId() ? "current" : "upcoming");
+const nDecided = () => D.decisions.filter(d => S.decisions[d.id]).length;
+
+/* ---------- hero ---------- */
+$("#promise").textContent = D.meta.promise;
+$("#toPilot").textContent = D.meta.to_pilot;
+function renderHere() {
+  const cid = currentId();
+  const nPassed = D.stages.filter(st => passed(st.id)).length;
+  $("#gatesPassed").textContent = `${nPassed} of ${D.stages.length}`;
+  $("#gatesBar").style.width = (nPassed / D.stages.length * 100) + "%";
+  if (cid === null) { $("#hereStage").textContent = "All stages passed"; $("#hereNext").innerHTML = "Time to plan the next horizon together."; return; }
+  const st = D.stages[cid];
+  $("#hereStage").textContent = `Stage ${st.id}: ${st.name}`;
+  let next;
+  if (st.id === 0) {
+    const i = S.prep.findIndex(x => !x);
+    next = i >= 0 ? `<b>Your next step:</b> step ${D.prep[i].n}, ${esc(D.prep[i].title[0].toLowerCase() + D.prep[i].title.slice(1))} (${esc(D.prep[i].time)}).` : (nDecided() < D.decisions.length ? `<b>Your next step:</b> make the remaining ${D.decisions.length - nDecided()} decisions.` : `<b>Your next step:</b> tick the Stage 0 gate checklist.`);
+  } else {
+    const i = S.gates[st.id].findIndex(x => !x);
+    next = `<b>Next gate check:</b> ${esc(st.gate[i])}.`;
+  }
+  $("#hereNext").innerHTML = next;
+}
+
+/* ---------- loop ---------- */
+$("#loop").innerHTML = D.loop.map(([a, b]) => `<li><b>${esc(a)}</b>${esc(b)}</li>`).join("");
+
+/* ---------- route + panel ---------- */
+function renderRoute() {
+  $("#route").innerHTML = D.stages.map(st => `<button class="stn ${status(st.id)}" role="tab" id="stn-${st.id}" aria-controls="panel" aria-selected="${S.sel === st.id}" data-id="${st.id}">
+      <span class="dot">${passed(st.id) ? "✓" : st.id}</span><span class="nm">${esc(st.name)}</span><span class="wk">${esc(st.weeks)}</span></button>`).join("");
+  $("#route").querySelectorAll(".stn").forEach(b => b.onclick = () => { S.sel = +b.dataset.id; save(); renderRoute(); renderPanel(); });
+}
+$("#later").innerHTML = `<b>After that:</b> ` + D.later.map(([a, b]) => `<span title="${esc(b)}">${esc(a)}</span>`).join("");
+
+const TABS = [["plain", "In plain words"], ["build", "What we build"], ["see", "What you'll see and do"], ["gate", "Gate check"], ["tech", "Under the hood"]];
+function renderPanel() {
+  const st = D.stages[S.sel];
+  const kindLabel = {founder: "Your stage", build: "Build stage", launch: "Launch stage", pilot: "Real families"}[st.kind];
+  const done = S.gates[st.id].filter(Boolean).length;
+  const decs = st.decisions.map(id => D.decisions.find(d => d.id === id)).filter(Boolean);
+  let body = "";
+  if (S.tab === "plain") {
+    body = `<p style="font-size:18px">${esc(st.plain)}</p><div class="why"><b>Why now:</b> ${esc(st.why)}</div><div class="cost"><b>Cost:</b> ${esc(st.cost)}</div>`;
+  } else if (S.tab === "build") {
+    body = `<ul>${st.build.map(x => `<li>${esc(x)}</li>`).join("")}</ul>${st.features.length ? `<div class="feats">Module 2 features: ${st.features.map(f => `<span>${f}</span>`).join("")}</div>` : ""}`;
+  } else if (S.tab === "see") {
+    body = `<p><b>What you'll see:</b> ${esc(st.see)}</p><p><b>Your part:</b></p><ul>${st.you.map(x => `<li>${esc(x)}</li>`).join("")}</ul>${decs.length ? `<p style="margin-top:14px"><b>Decisions at this stage:</b> ${decs.map(d => `${d.id} ${esc(d.q)} <i>(${S.decisions[d.id] ? "chosen: " + S.decisions[d.id] : "not decided yet"})</i>`).join("; ")}</p>` : ""}`;
+  } else if (S.tab === "gate") {
+    body = `<div class="gate-top"><span class="count">${done} of ${st.gate.length} checked</span><div class="bar"><i style="width:${done / st.gate.length * 100}%"></i></div></div>
+      <ul class="checks">${st.gate.map((g, i) => { const auto = st.id === 0 && i === DEC_IDX; return `<li><label><input type="checkbox" data-g="${i}" ${S.gates[st.id][i] ? "checked" : ""} ${auto ? 'disabled aria-describedby="dechint"' : ""}><span>${esc(g)}</span></label>${auto ? `<span class="hint" id="dechint">This one ticks itself when all nine are chosen on the Decisions board (${nDecided()} of ${D.decisions.length} so far).</span>` : ""}</li>`; }).join("")}</ul>
+      ${passed(st.id) ? `<div class="stamp">Gate passed ✓<small>${st.id < 9 ? "Stage " + (st.id + 1) + " is open" : "The pilot journey is complete"}</small></div>` : `<p class="note" style="margin-top:14px">Tick a box only when you've seen it yourself. If something isn't true yet, tell me in the Friday demo and I'll fix it before we move on.</p>`}`;
+  } else {
+    body = `<dl class="terms">${st.tech.map(([t, d]) => `<dt>${esc(t)}</dt><dd>${esc(d)}</dd>`).join("")}</dl>`;
+  }
+  $("#panel").innerHTML = `<div class="ph"><div><h3>Stage ${st.id}: ${esc(st.name)}</h3><div class="meta">${esc(st.weeks)}. ${status(st.id) === "passed" ? "Gate passed." : status(st.id) === "current" ? "This is the current stage." : "Coming up."}</div></div><span class="kind ${st.kind}">${kindLabel}</span></div>
+    <div class="tabs" role="tablist" aria-label="Stage details">${TABS.map(([k, l]) => `<button class="tab" role="tab" aria-selected="${S.tab === k}" data-tab="${k}">${l}${k === "gate" ? ` (${done}/${st.gate.length})` : ""}</button>`).join("")}</div>
+    <div class="tp" role="tabpanel">${body}</div>`;
+  $("#panel").querySelectorAll(".tab").forEach(b => b.onclick = () => { S.tab = b.dataset.tab; save(); renderPanel(); });
+  $("#panel").querySelectorAll("input[data-g]").forEach(cb => cb.onchange = () => { S.gates[st.id][+cb.dataset.g] = cb.checked; save(); renderAll(); });
+}
+
+/* ---------- prep ---------- */
+function renderPrep() {
+  const n = S.prep.filter(Boolean).length;
+  $("#prepCount").textContent = `${n} of ${D.prep.length} steps done`;
+  $("#prepBar").style.width = (n / D.prep.length * 100) + "%";
+  $("#prepList").innerHTML = D.prep.map((p, i) => `<li class="step"><span class="n">${p.n}</span>
+    <div><label><input type="checkbox" data-p="${i}" ${S.prep[i] ? "checked" : ""}><span class="t">${esc(p.title)}</span></label>
+      <div class="w">${esc(p.why)}</div><ul>${p.how.map(h => `<li>${esc(h)}</li>`).join("")}</ul>
+      ${p.link ? `<div class="lk"><a href="${p.link}" target="_blank" rel="noopener">${esc(p.link.replace(/^https:\/\//, ""))}</a></div>` : ""}</div>
+    <div class="tm">${esc(p.time)}</div></li>`).join("");
+  $("#prepList").querySelectorAll("input[data-p]").forEach(cb => cb.onchange = () => { S.prep[+cb.dataset.p] = cb.checked; save(); renderPrep(); renderHere(); });
+}
+
+/* ---------- decisions ---------- */
+function renderDecisions() {
+  $("#decCount").textContent = `${nDecided()} of ${D.decisions.length} decided`;
+  $("#decs").innerHTML = D.decisions.map(d => `<fieldset class="dec"><legend><span>${d.id}</span>${esc(d.q)}</legend><div class="dw">${esc(d.why)}</div>
+    ${d.options.map(([k, t, c, rec]) => `<label class="opt ${S.decisions[d.id] === k ? "sel" : ""}"><input type="radio" name="${d.id}" value="${k}" ${S.decisions[d.id] === k ? "checked" : ""}>
+      <span class="ot"><b>${k}.</b> ${esc(t)}<span class="oc">${esc(c)}</span></span>${rec ? `<span class="rec">my pick</span>` : ""}</label>`).join("")}</fieldset>`).join("");
+  $("#decs").querySelectorAll("input[type=radio]").forEach(r => r.onchange = () => { S.decisions[r.name] = r.value; syncDecisionGate(); save(); renderDecisions(); renderHere(); renderRoute(); if (S.sel === 0) renderPanel(); });
+}
+
+/* ---------- architecture ---------- */
+function renderArch() {
+  $("#layers").innerHTML = D.arch.map((L, li) => `<div class="layer"><div class="ln2">${esc(L.layer)}</div><div class="comps">${L.items.map((c, ci) => `<button class="comp" aria-pressed="${S.comp === li + "-" + ci}" data-c="${li}-${ci}" type="button">${esc(c.name)}</button>`).join("")}</div></div>`).join("");
+  $("#layers").querySelectorAll(".comp").forEach(b => b.onclick = () => { S.comp = b.dataset.c; save(); renderArch(); });
+  const [li, ci] = S.comp.split("-").map(Number); const c = D.arch[li].items[ci];
+  $("#cdetail").innerHTML = `<h4>${esc(c.name)}</h4><div><div class="lbl">What it does</div><p>${esc(c.plain)}</p><div class="lbl" style="margin-top:10px">Why we chose it</div><p>${esc(c.why)}</p></div>
+    <div><div class="lbl">Free allowance</div><p>${esc(c.free)}</p><div class="lbl" style="margin-top:10px">Later, if needed</div><p>${esc(c.up)}</p></div>
+    <div class="catch"><div class="lbl">The catch</div><p>${esc(c.catch)}</p></div>`;
+}
+$("#flow").innerHTML = D.flow.map(([a, b]) => `<li><b>${esc(a)}</b>${esc(b)}</li>`).join("");
+$("#promiseList").innerHTML = D.promises.map(([a, b]) => `<div><b>${esc(a)}</b><p>${esc(b)}</p></div>`).join("");
+$("#costRows").innerHTML = D.costs.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join("")}</tr>`).join("");
+$("#docRows").innerHTML = D.docs.map(([f, w, who, when]) => `<tr><td><code>${esc(f)}</code></td><td>${esc(w)}</td><td>${esc(who)}</td><td>${esc(when)}</td></tr>`).join("");
+$("#gloss").innerHTML = D.glossary.map(([a, b, c]) => `<div><b>${esc(a)}</b><p>${esc(b)}</p><p class="mm"><strong>Picture it as:</strong> ${esc(c)}</p></div>`).join("");
+$("#foot").textContent = `${D.meta.title} ${D.meta.version}, ${D.meta.date}. Generated from the same plan as docs/02_roadmap_and_gates.md and docs/09_founder_prep_checklist.md, so they always match.`;
+
+/* ---------- copy progress ---------- */
+function progressText() {
+  const cid = currentId();
+  const lines = [`Parent Plus build progress (${new Date().toLocaleDateString("en-IN")})`,
+    `Current stage: ${cid === null ? "all passed" : "Stage " + cid + " " + D.stages[cid].name}`,
+    `Gates passed: ${D.stages.filter(st => passed(st.id)).map(st => st.id).join(", ") || "none"}`,
+    `Stage 0 steps done: ${S.prep.filter(Boolean).length} of ${D.prep.length}${S.prep.some(x => !x) ? " (open: " + D.prep.filter((_, i) => !S.prep[i]).map(p => p.n).join(", ") + ")" : ""}`,
+    `Decisions: ${D.decisions.map(d => d.id + "=" + (S.decisions[d.id] || "?")).join(", ")}`];
+  if (cid !== null) { const st = D.stages[cid]; const open = st.gate.filter((_, i) => !S.gates[cid][i]); lines.push(`Open gate checks for Stage ${cid}:`); open.forEach(g => lines.push(`- ${g}`)); }
+  return lines.join("\n");
+}
+$("#copyBtn").onclick = async () => {
+  const t = progressText();
+  try { await navigator.clipboard.writeText(t); $("#copied").textContent = "Copied. Paste it into our chat."; }
+  catch (e) {
+    const ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly", ""); ta.style.position = "absolute"; ta.style.left = "-9999px"; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); $("#copied").textContent = "Copied. Paste it into our chat."; } catch (e2) { $("#copied").textContent = "Couldn't copy here; your progress is shown below."; ta.style.position = "static"; ta.style.width = "100%"; ta.style.height = "160px"; $("#copied").after(ta); return; }
+    ta.remove();
+  }
+  setTimeout(() => $("#copied").textContent = "", 4000);
+};
+
+function renderAll() { if (S.sel === null || S.sel === undefined) S.sel = currentId() ?? 0; renderHere(); renderRoute(); renderPanel(); renderPrep(); renderDecisions(); renderArch(); }
+renderAll();
+
+/* ---------- copybook ruling ---------- */
+function ruleCopybook() {
+  document.querySelectorAll(".cb-row").forEach(row => {
+    const t = row.querySelector(".cb-text"), cs = getComputedStyle(t);
+    const ctx = document.createElement("canvas").getContext("2d");
+    ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+    const asc = ctx.measureText("dlh").actualBoundingBoxAscent, xh = ctx.measureText("xvw").actualBoundingBoxAscent, desc = ctx.measureText("gpy").actualBoundingBoxDescent;
+    const base = row.querySelector(".cb-probe").getBoundingClientRect().top - row.getBoundingClientRect().top;
+    [base - asc, base - xh, base, base + desc].forEach((y, i) => { row.querySelectorAll(".ln")[i].style.top = (y - 1) + "px"; });
+    row.classList.add("ruled");
+  });
+}
+ruleCopybook();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(ruleCopybook);
+window.addEventListener("resize", ruleCopybook);
+
+const links = [...document.querySelectorAll(".margin-nav a")];
+const io = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) links.forEach(l => l.classList.toggle("on", l.getAttribute("href") === "#" + e.target.id)); }); }, {rootMargin: "-30% 0px -60% 0px"});
+document.querySelectorAll("section[id], header[id]").forEach(s => io.observe(s));
+</script>
+</body>
+</html>

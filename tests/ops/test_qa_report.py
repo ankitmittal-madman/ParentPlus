@@ -26,6 +26,19 @@ class BrowserReportTests(unittest.TestCase):
     def write(self, payload=None):
         return self.report.write_report(self.catalog, self.payload if payload is None else payload, self.out, {'projects': ['desktop'], 'commit': 'fixture', 'environment': 'synthetic unit fixture'}, [])
 
+    def test_failed_invitation_navigation_redacts_secret_in_all_shareable_reports(self):
+        secret='bc'*32
+        result=self.payload['suites'][0]['specs'][0]['tests'][0]['results'][0]
+        result['status']='failed'
+        result['errors']=[{'message':'Navigation failed: http://127.0.0.1:3193/join#'+secret}]
+        summary=self.write()
+        self.assertFalse(summary['ok'])
+        for name in ['index.html','summary.json']:
+            self.assertNotIn(secret,(self.out/name).read_text())
+        with zipfile.ZipFile(self.out/'ParentPlus-Test-Scenarios.xlsx') as book:
+            self.assertNotIn(secret,b''.join(book.read(n) for n in book.namelist()).decode())
+        self.assertNotIn(secret,self.report.redact('goto join#'+secret+' failed'))
+
     def test_generates_escaped_self_contained_html_and_real_inline_string_xlsx(self):
         summary = self.write()
         self.assertTrue(summary['ok'])

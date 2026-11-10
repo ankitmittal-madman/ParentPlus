@@ -1,5 +1,22 @@
 # ParentPlus automated browser testing
 
+## Invitation scenarios added — 10 November 2026
+
+Verified local run `run-20261110T095841Z-4cf29f` passed74/74 with zero action gaps
+and74 embedded screenshots. It covers81 mapped route/control pairs. The current
+register adds four family-invitation scenarios (37 scenarios total,
+74 desktop/mobile executions): separate coach/parent connection with persisted
+roster, missing/fake links, interrupted issue recovery, and Hindi controls/empty
+parent connections. See `quality/browser-scenarios.json` for exact control mappings.
+The Students route now tests the real connection interface, replacing the older
+Coming soon expectation. Pagination and adversarial database histories have SQL/
+component coverage; this does not claim every possible UI state or full M2-49.
+
+HTML and Excel reports must distinguish successful scenarios from observed or
+unclicked controls. Invitation inputs are masked, textual invite secrets redacted,
+and raw diagnostics excluded from upload. Later results must be checked against
+their recorded source fingerprint; earlier 33-scenario evidence below is historical.
+
 The founder confirmed the deployed parent and coach entry journeys work for an
 initial manual check. This system adds repeatable headless testing of the code
 against a real, checkout-owned local Supabase stack. It does not test the deployed

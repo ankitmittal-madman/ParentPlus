@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { ParentChildrenGate } from "./page";
 import CreatedChildrenPanel from "./created-children-panel";
 import ChildCreationPanel from "./child-creation-panel";
+import ParentConnectionsPanel from "@/modules/families/parent-connections-panel";
 
 const mocks = vi.hoisted(() => ({ connection: vi.fn() }));
 vi.mock("next/server", () => ({ connection: mocks.connection }));
@@ -19,7 +20,8 @@ describe("ParentChildrenPage", () => {
     vi.stubEnv("PARENTPLUS_ENABLE_CHILD_CREATION", "false");
     const result = await ParentChildrenGate();
     expect(mocks.connection).toHaveBeenCalledOnce();
-    expect(result.type).toBe(CreatedChildrenPanel);
+    expect(result.props.children[0].type).toBe(CreatedChildrenPanel);
+    expect(result.props.children[1].type).toBe(ParentConnectionsPanel);
   });
   it("exposes creation only when both server controls are explicitly enabled", async () => {
     vi.stubEnv("PARENTPLUS_ENABLE_PARENT_CHILD_LIST", "true");

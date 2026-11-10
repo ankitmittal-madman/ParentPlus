@@ -30,10 +30,10 @@ def identifier(value):
     if not re.fullmatch('[a-z_][a-z0-9_]*',value): raise ValueError('Unexpected schema identifier')
     return '"'+value+'"'
 migrations=sorted((ROOT/'supabase/migrations').glob('*.sql'))
-if len(migrations)!=50: raise SystemExit('STOP: migration inventory changed; review before applying')
+if len(migrations)!=51: raise SystemExit('STOP: migration inventory changed; review before applying')
 versions=[p.name.split('_',1)[0] for p in migrations]
 history=[r['version'] for r in query('select version from supabase_migrations.schema_migrations order by version')]
-if not 13 <= len(history) <=50 or history!=versions[:len(history)]: raise SystemExit('STOP: hosted history differs from the reviewed ordered baseline')
+if not 13 <= len(history) <=51 or history!=versions[:len(history)]: raise SystemExit('STOP: hosted history differs from the reviewed ordered baseline')
 columns={t:[r['column_name'] for r in query(f"select column_name from information_schema.columns where table_schema='public' and table_name={literal(t)} order by ordinal_position")] for t in BASE_TABLES}
 if any(not c for c in columns.values()): raise SystemExit('STOP: expected baseline tables are missing')
 def snapshot():
@@ -47,7 +47,7 @@ def snapshot():
 before=snapshot()
 report={'project_ref':PROJECT,'baseline_versions':history,'baseline_records':before,'migrations':[],'executed':args.execute}
 print('Target: founder-selected existing TEST project',PROJECT,flush=True)
-print('Current migration count:',len(history),'pending:',50-len(history),flush=True)
+print('Current migration count:',len(history),'pending:',51-len(history),flush=True)
 print('Original row counts:',{k:v['records'] for k,v in before.items()},flush=True)
 if args.execute:
     try:
@@ -65,7 +65,7 @@ if args.execute:
         if final!=versions: raise RuntimeError('Migration history did not reach the reviewed version set')
         query('begin; update public.parent_child_read_controls set enabled=true where id; update public.child_creation_controls set enabled=true where id; update public.class_setup_controls set enabled=true where id; update public.workspace_creation_controls set enabled=true where id; commit;')
         report['status']='passed';report['final_versions']=final
-        print('PASS: all50 migrations recorded; original row fingerprints preserved; founder feature controls enabled',flush=True)
+        print('PASS: all51 migrations recorded; original row fingerprints preserved; founder feature controls enabled',flush=True)
     finally:
         (ROOT/'work/hosted-testing-upgrade-report.json').write_text(json.dumps(report,indent=2)+'\n')
 else: print('Inspection only: use --execute only with the founder-approved testing target',flush=True)

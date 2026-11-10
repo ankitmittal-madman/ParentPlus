@@ -237,7 +237,8 @@ test("[NAV-001] bottom navigation and menu", async ({ page }) => {
       await page.goto(origin);
       await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name, exact: true }).click();
       await expect(page).toHaveURL(new RegExp(route === "/" ? "/$" : route + "$"));
-      if (["/students", "/post", "/fees"].includes(route)) await expect(page.getByRole("main").getByText("Coming soon", { exact: true })).toBeVisible();
+      if (route === "/students") await expect(page.getByRole("button", { name: "Load academies", exact: true })).toBeVisible();
+      if (["/post", "/fees"].includes(route)) await expect(page.getByRole("main").getByText("Coming soon", { exact: true })).toBeVisible();
     }
   }
   await page.goto("/");
@@ -248,7 +249,7 @@ test("[NAV-001] bottom navigation and menu", async ({ page }) => {
 });
 test("[LAYOUT-001] key screens fit viewport", async ({ page }) => {
   await login(page);await workspace(page);
-  for (const route of ["/login","/parent/children","/coach-onboarding","/founder","/schedule"]) {
+  for (const route of ["/login","/parent/children","/coach-onboarding","/founder","/schedule","/students","/join"]) {
     await page.goto(route);await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }

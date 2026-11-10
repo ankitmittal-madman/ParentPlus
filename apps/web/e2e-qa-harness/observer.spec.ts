@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { test, expect } from "@playwright/test";
 import { installActionObserver, type Action } from "../e2e-qa/action-observer";
 
@@ -27,4 +28,14 @@ test("records action names without field values and keeps busy button identity",
   await page.locator("#save").evaluate(element => { element.textContent = "Verifying..."; });
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   expect(seen.some(a => a.name === "Verifying...")).toBe(false);
+});
+
+test("redacts an invitation from an actual failed navigation diagnostic", async ({ page }) => {
+  const secret="bd".repeat(32);
+  let failure="";
+  try { await page.goto("http://127.0.0.1:1/join#"+secret); } catch(error) { failure=String(error); }
+  expect(failure.includes(secret)).toBe(true);
+  const sanitised=execFileSync("python3",["-c","import sys; sys.path.insert(0, '../../scripts/qa'); from report import redact; print(redact(sys.stdin.read()))"],{input:failure,encoding:"utf8"});
+  expect(sanitised.includes(secret)).toBe(false);
+  expect(sanitised).toContain("[redacted invite]");
 });

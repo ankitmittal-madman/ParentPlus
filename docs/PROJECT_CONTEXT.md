@@ -8,6 +8,14 @@ GitHub is the intended durable store for reviewed and published project context.
 Local commits and drafts are not automatically visible there. Every reader must
 identify the branch/commit or explicitly supplied snapshot it can actually access.
 
+## Founder-supplied development kit
+
+The [18 original founder references](founder-references/2026-11-10/README.md)
+were received on 10 November 2026, including the pilot PRD, stage gates and three
+HTML prototypes. The index explains reconciliation with the current schema and
+founder testing instructions. Preserve originals; checklist statements are not
+current test evidence.
+
 ## Product purpose and personas
 
 ParentPlus is a parent companion platform for parents/guardians, independent

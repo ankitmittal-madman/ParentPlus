@@ -1,5 +1,82 @@
 # ParentPlus — Quality Evidence Index
 
+## Verified academy invitation checkpoint — 2026-11-10
+
+Feature code is committed locally as `ed134cadaa83267ccfc9a9803bffd8d5a924617a`;
+original references are in `e3a8c716160b582473f9e61ac5133bdd167b43b7`.
+This entry records the verified code checkpoint, not live branch/deployment status.
+
+Owners/admins can share a 14-day single-use invitation from Students. A separate
+parent uses the existing dummy OTP, selects an eligible profile they created and
+explicitly confirms the academy connection. Both accounts can reload and inspect
+the saved relationship through Supabase. New feature controls support EN/HI with
+remembered preference. This is the first M2-02/S2-04 and M2-49 slice, not their
+full completion: batch enrolment/filtering, second guardians, attendance, diary,
+contact permissions, fees and full child snapshots remain future work. A connection
+never implies legal verification or media/pickup/fee permission.
+
+Final local source fingerprint:
+`66bb44de036e3e61f44b944955479a39905afc4656769c02b8d0946eea14a358`.
+The complete quality gate passed with333 frontend,441 database unit and4 standalone
+concurrency cases,6 disabled and6 isolated synthetic-provider browser cases,
+lint/typecheck/build, and zero residual database records. The source-matched
+founder report passed74/74 scenario/viewports (37 scenarios,81 mapped controls)
+with zero action gaps and74 embedded screenshots. Its genuine Excel workbook has
+six sheets. Operations regressions13, instrumentation browser regressions3 and
+quality engine regressions58 also passed. A baseline001–013 upgrade rehearsal
+through051 preserved its fictional records. Registry coverage is executable;
+future product gaps are kept explicit.
+
+Ignored local evidence: `test-results/quality/family-invitations-cleanup/`,
+`test-results/qa/run-20261110T095841Z-4cf29f/` and `/tmp/parentplus-family-*.log`.
+These may not survive another workspace; hosted evidence must be checked separately.
+The separate founder dummy journey1 and real-local-OTP journeys3 passed before
+the final test-fixture-only correction; those reports are historical to their
+source and are not re-attested to the final fingerprint.
+
+Independent review found no Critical defect. Its two Important findings were
+closed: added observed lock histories for expiry, restriction and different-invite
+same-child concurrency; redacted invitation secrets in shareable failure text and
+console logs, with an actual failed-navigation harness and HTML/Excel regression.
+Additional component tests cover double clicks, uncertain acceptance arguments
+and late auth/focus responses. The first complete DB run passed cases but failed
+cleanup because14 race fixtures left workspace tombstone receipts. A focused
+assertion reproduced RED; fixture-only cleanup corrected it; the fresh full gate
+passed with cleanup0. No app data or hosted records were reset by that correction.
+
+The founder authorised commit, push, merge and existing TEST-backend use. The
+pre-recovery stash remains preserved. The existing hosted TEST project was upgraded through051 with atomic history
+receipt and unchanged original fingerprints across eight application tables plus
+Auth. This is not hosted browser evidence. Publication/deployment outcomes are
+recorded separately after inspection; a local green gate is not deployed proof.
+
+## Family invitation review and focused checks — 2026-11-10
+
+Fresh independent source review found no Critical defect and identified missing
+concurrency histories plus possible invitation-token leakage in failure reports.
+The implementation now has 18 isolated SQL cases including observed blocking for
+revocation/restriction in both orders, same-token retries, different-invite
+same-child acceptance, four expiry lock positions and paginated roster reads.
+Focused executions passed. New component/server tests cover identity changes,
+late replies, real double clicks and uncertain retry arguments. A rejected
+server-action transport was reproduced RED and corrected to preserve explicit
+same-request recovery rather than a generic failure message.
+
+The first full database run passed all445 cases but FAILED its cleanup audit:
+14 synthetic workspace tombstone receipts remained after the14 new race histories.
+A focused reproduction showed one deleted workspace leaving one receipt; an added
+cleanup assertion failed RED. The fixture now deletes only its own receipt, and
+that regression passes GREEN. This changes test cleanup, not application behaviour.
+A complete fresh database gate is required after this fix; no passing gate is
+claimed for the first run.
+
+The reporter and console runner redact 64-hex invitation secrets in textual
+browser failures. A new offline regression checks HTML, Excel and summary output;
+the browser instrumentation harness reproduces a failed navigation diagnostic.
+Invite inputs are masked in QA screenshots. Raw Playwright diagnostics stay private
+and excluded from upload. Full-suite evidence for the final source is pending;
+see the later execution receipt rather than treating these checks as hosted proof.
+
 ## Published browser quality checkpoint — 2026-11-10
 
 The founder approved committing/pushing the reviewed testing package and publishing

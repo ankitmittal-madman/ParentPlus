@@ -13196,6 +13196,178 @@
         "scripts/deploy/upgrade-testing-backend.py",
         "docs/superpowers/specs/2026-11-10-hosted-founder-testing.md"
       ]
+    },
+    {
+      "id": "FAMILY-INVITATIONS-DATABASE",
+      "domain": "family-invitations",
+      "description": "Single-use academy invitation and scoped persisted family connection; separate from batch enrolment.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "Owner/admin issues hash-only expiring invitation; eligible parent explicitly confirms own child; retries and concurrent revocation preserve isolation; roster is DB-backed."
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationRaceTests.test_acceptance_commits_before_revocation"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationRaceTests.test_concurrent_acceptance_retries_write_one_relationship_and_event"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationRaceTests.test_different_invitations_for_same_child_serialize_one_relationship"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationRaceTests.test_expiry_is_rechecked_after_relationship_advisory_lock_wait"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationRaceTests.test_revocation_commits_before_acceptance"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationTests.test_accept_failure_rolls_back_invite_and_connection"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationTests.test_accept_is_atomic_idempotent_and_separate_from_enrolment"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationTests.test_direct_and_anonymous_access_denied_and_legacy_grants_unchanged"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationTests.test_fake_expired_and_wrong_child_are_refused"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationTests.test_issue_retry_is_payload_bound_and_hash_only"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationTests.test_issuer_workspace_and_guardian_revocations_are_respected"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationTests.test_malformed_tokens_are_rejected"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationTests.test_normal_coach_and_wrong_workspace_cannot_issue"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationTests.test_preview_contains_academy_only_and_used_state"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationTests.test_restricted_relationship_is_never_reactivated"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationTests.test_roster_and_parent_connections_are_scoped"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationTests.test_roster_paginates_more_than_fifty_saved_connections"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_family_invitations.FamilyInvitationTests.test_used_invite_cannot_be_claimed_by_other_actor_or_child"
+        }
+      ],
+      "sources": [
+        "docs/superpowers/specs/2026-11-10-family-invitations-design.md"
+      ]
+    },
+    {
+      "id": "FAMILY-INVITATIONS-FRONTEND",
+      "domain": "family-invitations",
+      "description": "Single-use academy invitation and scoped persisted family connection; separate from batch enrolment.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "Owner/admin issues hash-only expiring invitation; eligible parent explicitly confirms own child; retries and concurrent revocation preserve isolation; roster is DB-backed."
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/families/actions.test.ts::passes stable request and token unchanged and validates response"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/families/actions.test.ts::projects only academy name, expiry and state from preview"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/families/actions.test.ts::redacts provider errors and thrown exceptions"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/families/actions.test.ts::rejects account switch before reading or writing"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/families/actions.test.ts::rejects malformed or duplicate database rows"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/families/actions.test.ts::rejects malformed token, IDs and cursor without RPC"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/families/actions.test.ts::requires verified server identity"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/families/actions.test.ts::validates accepted relationship and parent read model"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/families/panels.test.tsx::blocks a real double click while invite issuance is unresolved"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/families/panels.test.tsx::hides roster and ignores a response arriving after account change"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/families/panels.test.tsx::ignores invitation details arriving after a session change"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/families/panels.test.tsx::ignores parent connection profiles arriving after focus invalidation"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/families/panels.test.tsx::keeps invite request/token stable after uncertain response and double click"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/families/panels.test.tsx::loads saved students only after explicit academy selection"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/families/panels.test.tsx::offers the new feature in Hindi"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/families/panels.test.tsx::retains the selected child for an uncertain acceptance retry"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/families/panels.test.tsx::strips the fragment and requires explicit parent confirmation"
+        }
+      ],
+      "sources": [
+        "docs/superpowers/specs/2026-11-10-family-invitations-design.md"
+      ]
     }
   ]
 }
