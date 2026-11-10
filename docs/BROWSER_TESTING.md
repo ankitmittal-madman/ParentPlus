@@ -2,7 +2,9 @@
 
 ## Invitation scenarios added — 10 November 2026
 
-The current register adds four family-invitation scenarios (37 scenarios total,
+Verified local run `run-20261110T095841Z-4cf29f` passed74/74 with zero action gaps
+and74 embedded screenshots. It covers81 mapped route/control pairs. The current
+register adds four family-invitation scenarios (37 scenarios total,
 74 desktop/mobile executions): separate coach/parent connection with persisted
 roster, missing/fake links, interrupted issue recovery, and Hindi controls/empty
 parent connections. See `quality/browser-scenarios.json` for exact control mappings.

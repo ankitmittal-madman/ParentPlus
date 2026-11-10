@@ -1,5 +1,27 @@
 # ParentPlus — Agent Handoff
 
+## Verified academy invitation checkpoint — 2026-11-10
+
+Preparation branch `work`, feature commit `ed134cadaa83267ccfc9a9803bffd8d5a924617a`,
+reference archive `e3a8c716160b582473f9e61ac5133bdd167b43b7`; documentation follow-up
+is being prepared. This is an observation, not live Git state. The earlier
+pre-recovery stash is preserved. User authorises commit/push/merge and existing
+TEST-backend use; do not ask again for routine publication or create new accounts.
+
+Local full gate and source-matched founder report passed; see
+[Quality Evidence](QUALITY_EVIDENCE.md#verified-academy-invitation-checkpoint--2026-11-10)
+for exact source/results and the corrected fixture cleanup failure. Migration051
+was applied to the selected existing TEST project; all51 history entries and
+original row fingerprints were verified. The prior upgrade receipt is preserved
+under ignored `work/`; current receipt is `work/hosted-testing-upgrade-report.json`.
+
+Next operation at preparation: push work, inspect the PR's actual GitHub quality/
+browser runs, merge authorised work and inspect Vercel commit status. Existing
+old branch histories are already included in main; retain branch names/stash.
+Vercel integration remains disabled—use native Git/GitHub status, not that connector.
+Current product scope and next batch-enrolment gap are in
+[Build Progress](BUILD_PROGRESS.md#verified-academy-invitation-checkpoint--2026-11-10).
+
 ## Academy family invitations — implementation checkpoint, 2026-11-10
 
 The 18 founder reference originals are archived in

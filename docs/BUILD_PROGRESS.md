@@ -1,5 +1,28 @@
 # ParentPlus Build Progress
 
+## Verified academy invitation checkpoint — 2026-11-10
+
+Feature checkpoint `ed134cadaa83267ccfc9a9803bffd8d5a924617a` delivers the first
+M2-02/S2-04 and M2-49 slice using real Supabase: manager issues a14-day single-use
+invite → a separate parent selects their own eligible child and confirms → both
+accounts reload the saved academy connection. Students uses the coach prototype's
+colours/rounded cards without invented attendance/fee data. New feature copy is
+EN/HI with remembered preference; older screens remain English.
+
+Migration051 is applied to the existing founder-selected TEST project. The upgrade
+verified all51 history entries and unchanged original application/Auth row
+fingerprints. No reset occurred. This is schema/record-preservation evidence;
+hosted invitation browser behaviour remains to be tested.
+
+Batch enrolment/filtering, second guardians, attendance, diary, contact permissions,
+fees and full child snapshots remain future. Academy connection never implies
+legal verification or media/pickup/fee permission. M3 is in progress, not complete.
+
+See [Quality Evidence](QUALITY_EVIDENCE.md#verified-academy-invitation-checkpoint--2026-11-10)
+for exact local results, review fixes and source fingerprint. Publication/deployment
+outcomes must be inspected separately. The18 original references are archived at
+[the founder reference index](founder-references/2026-11-10/README.md).
+
 ## Academy family invitations — implementation checkpoint, 2026-11-10
 
 The 18 founder reference originals are archived in
