@@ -1,5 +1,106 @@
 # ParentPlus Build Progress
 
+## Enrolment and app-shell loop — verified checkpoint, 10 November 2026
+
+This loop adds migration052 and explicit child-to-batch enrolment, pause/resume/
+completion/withdrawal, parent class visibility and a batch-filtered manager list.
+Connection alone creates no enrolment. Trial/re-entry and full child snapshots
+remain. New copy is EN/HI; founder dummy sign-in/invitation flows remain working.
+
+The visual foundation uses Coach/Tutor outline icons, a raised teal Post action,
+rounded cards and batch chips. Public standalone manifest/PNG/Apple metadata load
+in desktop/mobile tests. No service worker/private-data cache is added; real-device
+installation and offline capture remain separate verification/features.
+
+Code8f0ae0e passed the full source-bound gate and86/86 real-local browser
+executions with zero action gaps. Migration052 is applied locally and to the
+existing founder-selected TEST backend with original records preserved. See
+Quality Evidence for exact reports/limits. GitHub publication remains pending at
+preparation. Continue Today, attendance, parent signals and typed parent items;
+that next design is planned only.
+
+## Continuous development loop — founder direction, 10 November 2026
+
+The founder requested continued development across the app, using the references
+primarily as feature requirements and the Coach/Tutor HTML as the main visual
+reference. Codex chooses sound engineering implementation and continues routine
+loops without approval pauses. Existing approval/engineering rules and prior
+commit/push/merge/testing-backend authorisation remain in force.
+
+Each loop: requirements → real DB contract → working frontend → automated
+scenarios/screenshots → independent review → required regression → publish
+verified checkpoint → next dependent feature. A provider-dependent capability is
+not labelled delivered until its integration is exercised; continue independent
+features while the concrete missing account action is requested.
+
+All58 Class Diary feature IDs are tracked below, including later-stage features.
+Pilot requirements determine build order; an older P0 fee label does not move fees
+ahead of the core attendance/update journey. This is a requirements inventory,
+not a completion percentage or assertion that every prototype button works.
+Foundation PWA/language/onboarding and test infrastructure remain part of the
+roadmap alongside this catalogue. The original documents remain unchanged.
+
+| ID | Founder feature requirement | Reference priority | Build group | Current evidence/status |
+|---|---|---|---|---|
+| M2-01 | Batches and recurring schedule | P0 | 1 Class setup | Partial: course, batch and one-weekday series saved; richer recurrence/venue/holiday management remains. |
+| M2-02 | Guardians and multi-child families | P0 | 1 Class setup | Partial: own child profiles and single-use academy invitations; second guardians and full permissions remain. |
+| M2-03 | Enrolment lifecycle (trial, active, paused, left) | P1 | 1 Class setup | Verified active/pause/resume/complete/withdraw with versioned recovery; final v6 gate passed and TEST052 applied with existing data preserved. Trial/re-entry remain; GitHub publication pending at preparation. |
+| M2-04 | Next-class reminder (auto-drafted) | P0 | 6 Reminders/schedules | Not implemented; queued in dependency order. |
+| M2-05 | Schedule changes (cancel, restore, move, extra class, holiday) | P0 | 6 Reminders/schedules | Not implemented; queued in dependency order. |
+| M2-06 | Parent quick signals (running late, missing today, dropped off) | P0 | 2 Attendance/Today | Not implemented; queued in dependency order. |
+| M2-07 | Holiday and break calendar | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-08 | Rain check for outdoor classes | P2 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-52 | Family calendar sync and clash flags | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-09 | Fast attendance with smart defaults | P0 | 2 Attendance/Today | Not implemented; queued in dependency order. |
+| M2-10 | Auto-attendance from signals (suggest, coach confirms) | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-11 | Safe drop-off and pick-up log | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-12 | Attendance patterns and drop-out alerts | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-13 | Auto-drafted class update (from the session plan) | P0 | 3 Updates/feed | Not implemented; queued in dependency order. |
+| M2-14 | Voice-to-update (speak, don't type) | P0 | 5 AI/observations | Not implemented; queued in dependency order. |
+| M2-15 | Photo captions from the session plan | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-16 | AI polish and parent preview | P0 | 3 Updates/feed | Not implemented; queued in dependency order. |
+| M2-17 | End-of-day review queue | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-47 | Try-at-home activity | P0 | 3 Updates/feed | Not implemented; queued in dependency order. |
+| M2-18 | Spotlight rotation (who to observe today) | P0 | 5 AI/observations | Not implemented; queued in dependency order. |
+| M2-19 | Quick child observations | P0 | 5 AI/observations | Not implemented; queued in dependency order. |
+| M2-20 | AI-written personal note for each parent | P0 | 3 Updates/feed | Not implemented; queued in dependency order. |
+| M2-21 | Child progress timeline | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-22 | Focus and growth-area patterns | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-23 | Monthly progress report | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-24 | Parent reactions and check-ins | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-49 | Student directory and child snapshot | P0 | 1 Class setup | Partial: connected-child roster plus local batch enrolment/filtering; attendance/update/fee snapshots remain. |
+| M2-25 | Consent manager (per child, per media type) | P0 | 4 Consent/media | Not implemented; queued in dependency order. |
+| M2-26 | Quick capture during class | P0 | 4 Consent/media | Not implemented; queued in dependency order. |
+| M2-27 | Tag children and share safely | P0 | 4 Consent/media | Not implemented; queued in dependency order. |
+| M2-28 | 'Then and now' comparisons | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-29 | Memory book | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-30 | Media storage and retention rules | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-48 | Milestone moments ('firsts') | P0 | 3 Updates/feed | Not implemented; queued in dependency order. |
+| M2-31 | Fee plans and automatic dues | P0 | 8 Fees | Not implemented; queued in dependency order. |
+| M2-32 | Fee tracker and earnings view | P0 | 8 Fees | Not implemented; queued in dependency order. |
+| M2-33 | Pay by UPI link or QR (no fees) | P0 | 8 Fees | Not implemented; queued in dependency order. |
+| M2-34 | Gentle reminder ladder (professional, not greedy) | P0 | 8 Fees | Not implemented; queued in dependency order. |
+| M2-35 | Digital receipts and fee statements | P0 | 8 Fees | Not implemented; queued in dependency order. |
+| M2-36 | Fair adjustments and make-up credits | P1 | 8 Fees | Not implemented; queued in dependency order. |
+| M2-37 | Prefill-and-approve engine (AI drafting) | P0 | 5 AI/observations | Not implemented; queued in dependency order. |
+| M2-38 | Privacy-safe AI (names removed before sending) | P0 | 5 AI/observations | Not implemented; queued in dependency order. |
+| M2-39 | Parent message helper (AI inbox) | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-40 | Notification engine and channels | P0 | 6 Reminders/schedules | Not implemented; queued in dependency order. |
+| M2-41 | Coach 'Today' and 'Needs you' list | P0 | 2 Attendance/Today | Not implemented; queued in dependency order. |
+| M2-50 | Class announcements | P0 | 3 Updates/feed | Not implemented; queued in dependency order. |
+| M2-51 | Parent messaging with quick replies | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-42 | Offline capture and sync | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-43 | Child safety and health notes | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-44 | Academy accounts, rooms and staff roles | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
+| M2-45 | Free-tier stack with swappable adapters | P0 | 5 AI/observations | Not implemented; queued in dependency order. |
+| M2-46 | Event bus and links to other modules | P0 | 3 Updates/feed | Not implemented; queued in dependency order. |
+| M2-58 | Typed parent items (UI-agnostic delivery contract) | P0 | 3 Updates/feed | Not implemented; queued in dependency order. |
+| M2-53 | Trial requests: accept, suggest a time, enrol | P1 | 9 Extended features | Not implemented; queued in dependency order. |
+| M2-54 | Listing and live availability | P1 | 9 Extended features | Not implemented; queued in dependency order. |
+| M2-55 | Featured placement in Explore | P2 | 9 Extended features | Not implemented; queued in dependency order. |
+| M2-56 | Coach insights | P1 | 9 Extended features | Not implemented; queued in dependency order. |
+| M2-57 | Coach plan and billing | P1 | 9 Extended features | Not implemented; queued in dependency order. |
+
 ## Verified academy invitation checkpoint — 2026-11-10
 
 Feature checkpoint `ed134cadaa83267ccfc9a9803bffd8d5a924617a` delivers the first

@@ -1,5 +1,33 @@
 # ParentPlus — Agent Handoff
 
+## Continuous development loop — enrolment verified, 10 November 2026
+
+User requests entire-app development using founder kit for requirements and the
+Coach/Tutor HTML for visual direction. Continue routine loops autonomously; do not
+stop after this slice. Commit/push/merge/existing TEST-backend authorisation persists.
+Preserve all data, originals and pre-recovery stash; no new worktree/account/paid service.
+
+Local code commit8f0ae0ef178e8e1909504fdb8c5d27430ac34c48 records51 reviewed files.
+Full final-v6 gate and source-matched86/86 browser report passed (see Quality
+Evidence); M1 minor fixture improvement remains. Local/hosted schemas are052.
+Hosted original31 public-table/Auth snapshots preserved, including a post-control
+activation check;52 ordered receipts/34 tables verified. Private current upgrade
+receipt includes immutable code commit; previous receipt preserved. This following
+documentation commit is separate evidence. Push/PR/CI/merge/Vercel still pending at
+preparation; inspect actual Git state and hosted outcomes, never infer deployment.
+
+Next: publish frozen checkpoint through work→main after actual checks; old remote
+branch histories were already contained in main, retain branch names/stash.
+Use native git/gh; Vercel connector remains disabled. Immutable052 deployment
+bundle is ignored work/deploy-8f0ae0ef178e8e1909504fdb8c5d27430ac34c48/ so later053
+source cannot enter this upgrade. After documentation/push, implement Today/
+attendance/signals/typed parent items while CI runs, then continue diary/feed,
+media/consent and remaining founder features. Do not end merely to ask go-ahead.
+
+The expanded next-loop planning drafts are ignored work/attendance-planning/;
+integrate canonical spec/plan and preflight before implementation. Source ledger
+.superpowers/sdd/2026-11-10-enrolment/progress.md retains owners/reviews/failure logs.
+
 ## Verified academy invitation checkpoint — 2026-11-10
 
 Preparation branch `work`, feature commit `ed134cadaa83267ccfc9a9803bffd8d5a924617a`,

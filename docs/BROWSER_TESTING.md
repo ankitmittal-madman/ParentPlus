@@ -1,5 +1,25 @@
 # ParentPlus automated browser testing
 
+## Enrolment report — verified 10 November 2026
+
+The current catalogue has43 scenarios and99 route/control mappings. Local run
+`run-20261110T125133Z-daf7fd` passed86/86 desktop/mobile executions with zero action
+gaps and86 embedded screenshots, matching the final-v6 source fingerprint in
+Quality Evidence. It adds five enrolment scenarios plus public install metadata:
+explicit admission, parent reload/lifecycle, same-request interruption recovery,
+Hindi/two-batch states and two-manager stale-edit reconciliation. This does not
+claim every possible interaction, physical-device installation or unbuilt features.
+Five future-feature gap groups remain explicit; the complete founder catalogue
+is tracked in Build Progress. Earlier37/33-scenario entries below are historical.
+
+**What the e2e folders mean:** E2E means end-to-end: testing a journey through its
+actual boundaries. `apps/web/e2e-qa/` drives the browser against real local Supabase
+and produces Excel/HTML/screenshots. `e2e/` checks signed-out/disabled-provider
+behaviour; `e2e-enabled/` uses a deliberately synthetic isolated provider;
+`e2e-local/` checks actual local email OTP; `e2e-founder/` checks dummy OTP with the
+real local database; `e2e-qa-harness/` checks reporting/control discovery. Their
+names do not make synthetic checks equivalent to real-provider or deployed tests.
+
 ## Invitation scenarios added — 10 November 2026
 
 Verified local run `run-20261110T095841Z-4cf29f` passed74/74 with zero action gaps

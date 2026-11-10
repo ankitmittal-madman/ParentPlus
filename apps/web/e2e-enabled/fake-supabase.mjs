@@ -21,11 +21,21 @@ const server=http.createServer(async(req,res)=>{
   const identity=[actor,other].find(id=>req.headers.authorization==='Bearer '+tokenFor(id));
   if(!identity||req.headers.apikey!=='synthetic-public-key'){res.writeHead(401);return res.end('{}');}
   if(req.url==='/auth/v1/user'&&req.method==='GET'){events.push('user:'+identity);return res.end(JSON.stringify({...user,id:identity}));}
+  // The independent classes panel can read the newly signed-in account while
+  // profile creation recovery stays bound to the original account. Never expose
+  // the original account's children to that read or permit its creation RPCs.
+  if(identity===other&&req.method==='POST'&&req.url==='/rest/v1/rpc/app_list_created_children'){
+    events.push('other:app_list_created_children');return res.end('[]');
+  }
   if(identity!==actor){events.push('unexpected-other-rpc');res.writeHead(403);return res.end('{}');}
   if(req.method!=='POST'||!req.url?.startsWith('/rest/v1/rpc/')){events.push('unexpected-endpoint');res.writeHead(404);return res.end('{}');}
   const op=req.url.slice('/rest/v1/rpc/'.length);events.push(op);
   if(op==='app_current_child_creation')return res.end(JSON.stringify(current?[current]:[]));
   if(op==='app_list_created_children')return res.end(JSON.stringify([...history,...(current?[current]:[])].map(x=>({child_id:x.child_id,display_name:x.display_name}))));
+  if(op==='app_parent_enrollments'){
+    if(![...history,...(current?[current]:[])].some(x=>x.child_id===args.p_child_id)){res.writeHead(403);return res.end('{}');}
+    return res.end('[]');
+  }
   if(op==='app_begin_child_creation'){
     if(failBefore){failBefore=false;res.writeHead(503);return res.end(JSON.stringify({message:'synthetic request not committed'}));}
     if(fenced.has(args.p_request_id)){res.writeHead(409);return res.end('{}');}

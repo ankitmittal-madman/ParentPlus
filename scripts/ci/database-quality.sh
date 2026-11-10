@@ -44,6 +44,9 @@ cleanup() {
     (SELECT count(*) FROM public.connection_requests) +
           (SELECT count(*) FROM public.connection_events) +
     (SELECT count(*) FROM public.family_invites) +
+    (SELECT count(*) FROM public.enrollments) +
+    (SELECT count(*) FROM public.enrollment_request_receipts) +
+    (SELECT count(*) FROM public.enrollment_events) +
     (SELECT count(*) FROM public.courses) +
     (SELECT count(*) FROM public.batches) +
     (SELECT count(*) FROM public.batch_coach_assignments) +
@@ -147,7 +150,7 @@ echo "=== EXECUTE DATABASE TESTS ==="
 STAGE='database test execution'
 
 if PARENTPLUS_TEST_CONTAINER="$CONTAINER" \
-  timeout 300s bash scripts/ci/run-db-tests.sh \
+  timeout 420s bash scripts/ci/run-db-tests.sh \
   2>&1 | tee "$EVIDENCE/database-tests.log"; then
   TEST_EXIT=0
 else

@@ -1,5 +1,77 @@
 # ParentPlus — Quality Evidence Index
 
+## Verified enrolment checkpoint — 10 November 2026
+
+Code commit `8f0ae0ef178e8e1909504fdb8c5d27430ac34c48` records the reviewed51-file
+change. Pre-commit final-v6 source fingerprint
+`3055e142afc0d08958b7e6d95633fce549995bc07f41aaf16db0084e83b52a0c`
+passed the combined source-bound gate; this documentation follow-up is separate.
+Reports: ignored `test-results/quality/enrolment-final-v6/` (plan),
+`enrolment-verified-v6/` (passed gate) and
+`test-results/evidence/enrolment-final-v6/` (current reports/receipts).
+
+| Executed check | Result |
+|---|---|
+| Frontend |384 cases/43 files; lint, TypeScript and production build passed|
+| Isolated PostgreSQL |490 unit/integration +4 standalone =494; zero failed/error/skipped; cleanup verified|
+| Complete real-local browser report |43 scenarios ×2 viewports =86/86;99 mapped controls; zero action gaps;86 embedded screenshots|
+| Other browsers |6 signed-out +6 isolated synthetic-provider +3 real-local email OTP +1 dummy-OTP founder journey passed|
+| Tooling |58 engine,17 offline operations,3 browser observer cases passed; workbook ZIP/XML integrity passed|
+
+Full founder report `run-20261110T125133Z-daf7fd` has the same source fingerprint
+as final-v6; HTML/Excel/summary copies are in ignored
+`work/deliverables/parentplus-enrolment/`. Prior83/86 and85/86 reports remain failed
+evidence. Their defects were ambiguous student text, premature founder navigation
+and a first-POST fault targeting a background read; the corrected tests retain
+actual clicks and immutable retry payload/UUID assertions. Namespace failures
+were corrected with an exact synthetic-provider read allowlist and explicit class
+refresh. Actual hosted metadata preflight stopped before writes because PG arrays
+arrived as text; jsonb_agg plus strict validation reproduced RED and passed17 ops
+and a fresh read-only hosted inspect. No assertions, case minima or skips were
+weakened. Independent final/scoped reviews passed with no blocking finding.
+M1 remains a nonblocking frontend fixture improvement: use unique IDs to isolate
+50/100 output-limit proof; SQL bounds are covered and production guards remain.
+
+Migration052 was deployed from an immutable archive of code8f0ae0e to the existing
+founder-selected TEST project. All52 history entries and34 public tables were
+verified. Original31 public-table and Auth(id/email/created_at) snapshots matched
+before/after and again after feature-control activation. Prior receipt preserved;
+current private receipt `work/hosted-testing-upgrade-report.json` includes source
+commit and post-activation preservation. No reset or existing record rewrite.
+GitHub push/CI/merge/Vercel are pending at this entry's preparation; no hosted
+browser, real-device install, offline cache or full-app completion is claimed.
+
+## Enrolment loop — focused verification before full gate, 10 November 2026
+
+Backend:49 focused enrolment cases passed on fresh052, with observed blocking
+histories. Initial missing-RPC tests failed RED on051. Fresh initialization,
+001–013→052 rehearsal and own-fixture cleanup passed. Inventory490 unit+4 standalone
+cases;420s full-run budget accommodates new histories without reducing assertions.
+
+Frontend384 passed after I1 fix; covering55, lint/types/inventory passed. Independent
+DB review passed. UI review found definite stale/saved-state conflicts froze the
+screen; RED reproduction, allowlisted redacted conflict recovery and scoped review
+passed. Unknown writes still retain original actor/payload/UUID. M1 Minor remains:
+duplicate-row fixture does not independently prove50/100 bounds (code enforces them).
+
+Real local ENROL001–004 passed8 desktop/mobile executions pre-I1 fix; ENROL005
+passed2 post-fix with two managers and no stubbed mutation/response: staleversion1
+rejected after another actor advances to2; fresh explicit action uses version2/new
+UUID. Focused reports mark unselected scenarios NOT RUN; they are not full86-run proof.
+
+PWA001 passed2 browser executions; initial RED was missing manifest, then the obsolete
+Apple-meta assertion was aligned with installed Next16's mobile-web-app-capable.
+Real-device installation remains unverified. Existing navigation2 tests passed after
+SVG/raised-Post styling. Ops15 passed, including RED→GREEN later-table preservation
+and changed-record detection. Exact snapshot SQL also read31 local public tables+
+Auth successfully, including composite keys, without printing data values.
+
+Local052/history receipt were applied atomically; all31 original public-table/Auth
+fingerprints matched. Upgrade preservation now freezes all original public columns
+and snapshots canonical rows in one SELECT, then notifies the API schema cache.
+Hosted remains051 at preparation; no hosted052 execution is claimed. Full integrated
+source gate and publication are pending; earlier results below remain historical.
+
 ## Verified academy invitation checkpoint — 2026-11-10
 
 Feature code is committed locally as `ed134cadaa83267ccfc9a9803bffd8d5a924617a`;

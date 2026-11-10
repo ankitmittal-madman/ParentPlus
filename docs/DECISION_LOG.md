@@ -292,3 +292,21 @@ instruction and implementation/verification; a production Next build is not that
 instruction. Preserve existing records, keep private credentials server-side and
 retain normal persona database policies. Direct deployment through existing
 GitHub→Vercel is authorised. A launch-stage build disables forced testing defaults.
+
+## DEC-023: Reversible enrolment pause during continuous app development
+
+Date: 2026-11-10. Engineering interpretation of founder S2-07/M2-03 under the
+instruction to use the kit as feature requirements and continue routine decisions.
+
+Add `paused` without removing the existing pending/active/completed/withdrawn/
+cancelled contract. Pause is reversible; withdrawal and completion are terminal
+in the first implementation. Future attendance lists include active enrolments
+only. Ending or pausing an enrolment does not delete the academy connection or
+learning history. Pause/withdraw reasons are bounded operational choices, not
+free-form personal or health notes. Version checks and payload-bound request
+receipts prevent stale retries from changing a newer enrolment state.
+
+This is a defined implementation direction, not a claim of deployment. Exact
+source, tests and delivered scope belong to the dated enrolment spec and quality
+record. Re-entry after terminal status, trial admission and sensitive historical
+access are separate explicit flows; do not silently restart a completed record.

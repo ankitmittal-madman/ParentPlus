@@ -24,8 +24,11 @@ class UpgradeReceiptTests(unittest.TestCase):
             def fake_request(request,**kwargs):
                 sql=json.loads(request.data)['query']
                 if 'select version' in sql: result=[{'version':v} for v in versions]
-                elif 'column_name' in sql: result=[{'column_name':'id'}]
-                elif 'fingerprint' in sql: result=[{'records':1,'fingerprint':'unchanged'}]
+                elif 'column_name' in sql: result=[{'table_name':t,'columns':['id']} for t in ['profiles','workspaces','workspace_memberships','children','guardianships','connection_requests','workspace_children','connection_events']]
+                elif 'fingerprint' in sql:
+                    import re
+                    tables=re.findall(r'FROM public\."([a-z_]+)"',sql)
+                    result=[{'table_name':t,'records':1,'fingerprint':'unchanged'} for t in tables+['auth_users']]
                 else: result=[]
                 return Response(json.dumps(result).encode())
             with patch('urllib.request.urlopen',side_effect=fake_request),patch.dict('os.environ',{'SUPABASE_ACCESS_TOKEN':'offline-test-token'}),patch('sys.argv',[str(script),'--execute']),contextlib.redirect_stdout(io.StringIO()):

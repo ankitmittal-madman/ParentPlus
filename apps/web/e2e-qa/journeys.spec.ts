@@ -206,7 +206,13 @@ test("[ACCESS-002] role and removed access", async ({ page }) => {
   await membership(page,email,name,"removed","coach");await page.goto("/schedule");await expect(page).toHaveURL(/\/coach-access$/);
 });
 test("[FOUNDER-001] counts and console links", async ({ page }) => {
-  await page.goto("/login");await page.getByRole("link", { name: "Open founder controls" }).click();
+  await page.goto("/login");
+  // The link renders before the asynchronous session check and client hydration settle.
+  await expect(page.getByLabel("Email address")).toBeVisible();
+  await Promise.all([
+    page.waitForURL(/\/founder$/),
+    page.getByRole("link", { name: "Open founder controls", exact: true }).click(),
+  ]);
   await page.getByRole("button", { name: "Refresh test records" }).click();
   await expect(page.getByText("children", { exact: true })).toBeVisible();
   await page.getByRole("link", { name: "Parent profiles", exact: true }).click();await expect(page).toHaveURL(/\/parent\/children$/);
