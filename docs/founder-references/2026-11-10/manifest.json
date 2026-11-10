@@ -1,0 +1,96 @@
+{
+  "received_date": "2026-11-10",
+  "source": "Founder-supplied attachments in this conversation",
+  "files": [
+    {
+      "file": "Parent_Plus_Module2_Class_Diary_v0.2.html",
+      "bytes": 155679,
+      "sha256": "3f3371905815119e80608e48b1b4582d89a1e6bb2e3212db7f0b134ba483febd"
+    },
+    {
+      "file": "ParentPlus_Coach_Tutor_App.html",
+      "bytes": 53876,
+      "sha256": "a36a976720794ea2bb4fdd5fec6dcb9504d05e7a0928166dcf879483e3979890"
+    },
+    {
+      "file": "Parent_Plus_Build_Journey.html",
+      "bytes": 77851,
+      "sha256": "f552e4c7fee81ce2f34f91d4c22409acb4b28c7ce95d4af83244e46bae2ccb16"
+    },
+    {
+      "file": "00_working_agreement.md",
+      "bytes": 2345,
+      "sha256": "89a45fb8619595a3cc401d1d356aa0281a98eea7de80174c5c36879b6ea45c64"
+    },
+    {
+      "file": "01_pilot_prd.md",
+      "bytes": 3242,
+      "sha256": "d802dc0e12f31a3eccf272bed85f21d9d77ea0222d83c3a5fee4152140004dc2"
+    },
+    {
+      "file": "02_roadmap_and_gates.md",
+      "bytes": 16582,
+      "sha256": "05fc2fd8a7a647ef62f4c1d67db9e7d80a0bc4ebdb6381575f43cdaabc3fbd98"
+    },
+    {
+      "file": "03_architecture.md",
+      "bytes": 4362,
+      "sha256": "afebe4a919c39b2aba2269b3b0f8d053680738da7be6cea7401ccb5c73beceb2"
+    },
+    {
+      "file": "04_data_model.md",
+      "bytes": 4296,
+      "sha256": "ffce43570d288762bc48fdc915ed81dc00f73ecdb084fe220ec9096e5fe5607e"
+    },
+    {
+      "file": "05_parent_items_contract.md",
+      "bytes": 2454,
+      "sha256": "7f43d012bb053c18bbb84b1fb9335ed051f9660c0ac0bc2e2a70f3abf6065a8f"
+    },
+    {
+      "file": "06_engineering_standards.md",
+      "bytes": 3399,
+      "sha256": "7f5557d737f10d9f1d00fb0d02c583dfbbb2fd87464db90e9d7e095504071110"
+    },
+    {
+      "file": "07_definition_of_ready_and_done.md",
+      "bytes": 1480,
+      "sha256": "6133a2799d4f9b626c08cde2bf461a589c2f0a0aa618f3038e1f45b285e24f03"
+    },
+    {
+      "file": "08_privacy_and_security.md",
+      "bytes": 3222,
+      "sha256": "d776cfbf44e431bccea9ceef0ca0cf16d74fe55ccb5762df41bc0c33a13cabc2"
+    },
+    {
+      "file": "09_founder_prep_checklist.md",
+      "bytes": 9701,
+      "sha256": "4c4a4066332411a3b67a81943c1988146ac4d6f4cfa284334395667e909fd177"
+    },
+    {
+      "file": "10_backlog_stage1_stage2.md",
+      "bytes": 4901,
+      "sha256": "67fdc210badb7f66a66ea115ea07d78658316276000773a6e15ab474477829f0"
+    },
+    {
+      "file": "11_launch_readiness_checklist.md",
+      "bytes": 1901,
+      "sha256": "0ab5632990328bfc52614c7b781d1846f7a7d2ca830e60feb1fb66a2c3e7ec7e"
+    },
+    {
+      "file": "12_risk_register.md",
+      "bytes": 2372,
+      "sha256": "8393d8377c4a4bdc91a1025a8c1f264fd126fa0ee230d40fc8708b5b9b9a1053"
+    },
+    {
+      "file": "13_build_diary_template.md",
+      "bytes": 930,
+      "sha256": "06d94f50aa73d5d2dc71d84e96b9e11d728a2cde069a7d11070c549f15ba46de"
+    },
+    {
+      "file": "14_decision_log.md",
+      "bytes": 3149,
+      "sha256": "4600b32751d7a6ffd0debb6aa672f0c1f3591f5dbbf0d5172b5aaba13a309c53"
+    }
+  ]
+}

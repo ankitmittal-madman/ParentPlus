@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#F3F5F1">
+<title>Parent Plus Coach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F3F5F1;--card:#FFFFFF;--line:#E3E8E2;--soft:#EDF1EC;--ink:#22303A;--mut:#5C6B73;--dim:#8A979D;--teal:#1F6F6B;--teal2:#DCEDEA;
+--sun:#F2D58A;--rose:#F1B9C7;--sky:#AFD5F0;--mint:#AEDEC6;--grape:#CBBDEB;--tang:#F5C6A2}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#E7ECE6;font-family:"Bricolage Grotesque",system-ui,sans-serif;color:var(--ink)}
+button,input,textarea,select{font-family:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;gap:40px;padding:28px 16px}
+.side{max-width:330px;color:var(--ink)}
+.side h1{font-size:34px;line-height:1.05;letter-spacing:-1.2px;margin:0 0 12px}
+.side p{color:var(--mut);font-size:14px;line-height:1.55;margin:0 0 16px}
+.side .map{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px}
+.side .map b{display:block;font-size:13px;margin-bottom:8px}
+.side .map div{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:7px 0;border-top:1px solid var(--soft)}
+.side .map div span:last-child{color:var(--mut);text-align:right}
+.frame{width:410px;border-radius:52px;padding:11px;background:linear-gradient(145deg,#D9DFD7,#BCC5BB);box-shadow:0 26px 60px #3a4a4033}
+.phone{position:relative;height:860px;border-radius:42px;overflow:hidden;background:var(--paper)}
+.scroll{position:absolute;inset:0;overflow-y:auto;padding-bottom:110px;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+.status{display:flex;justify-content:space-between;padding:14px 26px 0;font-size:13px;font-weight:700}
+/* Header */
+.top{padding:12px 18px 6px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px}
+.brand i{width:30px;height:30px;border-radius:10px;background:var(--teal);display:grid;place-items:center;color:#fff;font-style:normal}
+.brand small{display:block;font-size:10.5px;color:var(--mut);font-weight:700}
+.top-actions{display:flex;gap:8px}
+.icon-btn{position:relative;height:40px;width:40px;border-radius:14px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;padding:0}
+.icon-btn .n{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:9px;background:var(--tang);font-size:10.5px;font-weight:800;display:grid;place-items:center;padding:0 4px;box-shadow:0 0 0 2px var(--paper)}
+.title{padding:10px 18px 2px}
+.title h2{font-size:28px;letter-spacing:-1px;margin:0;line-height:1.05}
+.title p{margin:5px 0 0;font-size:13px;color:var(--mut)}
+.content{padding:8px 18px 20px}
+.sec{margin-top:20px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
+.sec-h h3{font-size:15.5px;margin:0;letter-spacing:-.2px}
+.sec-h button{border:0;background:none;color:var(--teal);font-size:12px;font-weight:800;padding:0}
+/* Generic */
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px}
+.list{background:#fff;border:1px solid var(--line);border-radius:18px;padding:2px 14px}
+.row{display:flex;align-items:center;gap:11px;padding:11px 0;border-top:1px solid var(--soft);width:100%;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left}
+.row:first-child{border-top:0}
+.row .tx{flex:1;min-width:0}.row .tx b{display:block;font-size:13.5px}.row .tx small{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
+.dot{height:36px;width:36px;border-radius:12px;display:grid;place-items:center;flex:none;background:var(--c,var(--soft))}
+.av{height:34px;width:34px;border-radius:50%;display:grid;place-items:center;flex:none;font-size:12px;font-weight:800;background:var(--c,var(--soft))}
+.pill{font-size:10.5px;font-weight:800;border-radius:999px;padding:4px 9px;background:var(--c,var(--soft));white-space:nowrap}
+.btn{border:0;border-radius:14px;background:var(--teal);color:#fff;font-weight:800;font-size:13.5px;padding:13px 16px}
+.btn.full{width:100%}
+.btn.soft{background:var(--soft);color:var(--ink)}
+.btn.sm{font-size:11.5px;padding:8px 11px;border-radius:11px}
+.chips{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font-size:12px;font-weight:750;white-space:nowrap}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+/* Today */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{border-radius:14px;padding:9px 10px 10px;background:var(--c);text-align:left;border:0}
+.stat b{display:block;font-size:19px;letter-spacing:-.6px;line-height:1.1}
+.stat span{font-size:10.5px;font-weight:750;color:#2d3a42}
+.next{display:flex;align-items:center;gap:12px;border-radius:16px;background:var(--teal);color:#fff;padding:11px 12px 11px 15px;margin-top:12px;width:100%;border:0;text-align:left}
+.next small{display:block;font-size:10.5px;opacity:.82;font-weight:700}
+.next b{display:block;font-size:16px;margin-top:1px}
+.next .go{margin-left:auto;background:#fff;color:var(--teal);border-radius:11px;padding:8px 11px;font-size:12px;font-weight:850;white-space:nowrap}
+.agenda .row .time{width:58px;font-size:12px;color:var(--mut);flex:none}
+.stripe{width:4px;align-self:stretch;border-radius:4px;background:var(--c)}
+/* Live class */
+.att{display:flex;gap:6px}
+.att button{height:34px;width:34px;border-radius:11px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:850;padding:0}
+.att button.on.p{background:var(--mint);border-color:var(--mint)}
+.att button.on.a{background:var(--rose);border-color:var(--rose)}
+.att button.on.l{background:var(--sun);border-color:var(--sun)}
+.live-bar{display:flex;gap:8px;margin-top:12px}
+.live-bar .btn{flex:1}
+.capture{display:flex;gap:8px;margin-top:10px}
+.capture label{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;border:1px dashed #C9D3C8;border-radius:14px;padding:12px;font-size:12.5px;font-weight:800;background:#fff}
+.capture input{display:none}
+.thumbs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.thumbs span{font-size:11px;background:var(--soft);border-radius:8px;padding:5px 8px}
+/* Composer */
+.step{margin-top:16px}
+.step>b{display:block;font-size:13px;margin-bottom:7px}
+.ta{width:100%;min-height:78px;border:1px solid var(--line);border-radius:14px;padding:11px;font-size:13.5px;background:#fff;resize:vertical}
+.in{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 11px;font-size:13px;background:#fff}
+.skills{display:flex;flex-wrap:wrap;gap:6px}
+.skills button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:750}
+.skills button.on{background:var(--grape);border-color:var(--grape)}
+.level{display:flex;gap:6px}
+.level button{flex:1;border:1px solid var(--line);background:#fff;border-radius:11px;padding:9px 4px;font-size:11.5px;font-weight:800}
+.level button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.addon{border:1px solid var(--line);background:#fff;border-radius:16px;padding:11px 12px;margin-top:8px}
+.addon-h{display:flex;align-items:center;gap:10px}
+.addon-h .tx{flex:1}.addon-h b{display:block;font-size:13px}.addon-h small{display:block;font-size:11px;color:var(--mut);margin-top:1px}
+.switch{width:42px;height:25px;border-radius:13px;background:#D5DCD4;border:0;position:relative;padding:0;flex:none}
+.switch:after{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;transition:left .2s}
+.switch.on{background:var(--teal)}.switch.on:after{left:20px}
+.addon-body{margin-top:10px}
+.preview{margin-top:18px;border-radius:24px;background:linear-gradient(180deg,#E6EEF8,#F1ECF6 60%,#FBF8F3);padding:14px;border:1px solid #E3DCD2}
+.preview>small{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:#6E6A77;margin-bottom:9px}
+.pcard{background:#fff;border-radius:16px;border:1px solid #ECE5DB;padding:11px 12px;margin-top:7px;display:flex;gap:10px;align-items:flex-start;color:#2E2C35}
+.pcard .k{font-size:10px;font-weight:800;color:#6E6A77}
+.pcard b{display:block;font-size:13px;margin-top:2px}
+.pcard p{margin:3px 0 0;font-size:11.5px;color:#5E5A66;line-height:1.4}
+.pcard .ic{height:30px;width:30px;border-radius:10px;display:grid;place-items:center;flex:none;background:var(--c)}
+/* Fees */
+.feebar{height:8px;border-radius:5px;background:var(--soft);overflow:hidden;margin:10px 0 6px;display:flex}
+.feebar i{display:block;height:100%}
+.legend{display:flex;gap:12px;font-size:11px;color:var(--mut)}
+.legend span{display:flex;align-items:center;gap:5px}.legend i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+/* Student */
+.dots{display:flex;gap:4px;margin-top:4px}
+.dots i{width:14px;height:14px;border-radius:5px;background:var(--c)}
+.bar{height:7px;border-radius:4px;background:var(--soft);overflow:hidden;margin-top:5px}
+.bar i{display:block;height:100%;background:var(--teal)}
+/* Schedule */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.wd{border:1px solid var(--line);background:#fff;border-radius:13px;padding:7px 0;text-align:center}
+.wd small{display:block;font-size:10.5px;color:var(--mut);font-weight:700}
+.wd b{display:block;font-size:16px;margin-top:1px}
+.wd .ds{display:flex;gap:2px;justify-content:center;margin-top:3px;height:5px}
+.wd .ds i{width:5px;height:5px;border-radius:50%;background:var(--c)}
+.wd.on{background:var(--ink);border-color:var(--ink);color:#fff}.wd.on small{color:#cdd6db}
+.cancelled{text-decoration:line-through;color:var(--dim)}
+/* Nav */
+.nav{position:absolute;left:12px;right:12px;bottom:14px;height:70px;border-radius:24px;background:#fffffff0;border:1px solid var(--line);box-shadow:0 8px 24px #2a3a3214;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;z-index:5}
+.nb{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:750;color:var(--dim)}
+.nb.on{color:var(--ink)}
+.nb.post{margin-top:-24px}
+.nb.post span.p{height:56px;width:56px;border-radius:19px;background:var(--teal);color:#fff;display:grid;place-items:center;box-shadow:0 8px 18px #1f6f6b44}
+.nb.post{color:var(--teal)}
+/* Sheet */
+.back{position:absolute;inset:0;background:#22303a55;z-index:20;display:flex;align-items:flex-end}
+.sheet{width:100%;max-height:88%;overflow-y:auto;background:#fff;border-radius:26px 26px 0 0;padding:10px 18px 26px;animation:up .25s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:.6}}
+.grab{width:40px;height:4px;border-radius:2px;background:#D5DCD4;margin:0 auto 12px}
+.sh-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sh-top h4{font-size:19px;margin:0;letter-spacing:-.4px}.sh-top p{margin:3px 0 0;font-size:12.5px;color:var(--mut)}
+.x{height:34px;width:34px;border-radius:11px;border:0;background:var(--soft);display:grid;place-items:center;flex:none}
+.toast{position:absolute;left:50%;bottom:100px;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:12.5px;font-weight:750;padding:10px 14px;border-radius:12px;z-index:30;white-space:nowrap;max-width:92%;overflow:hidden;text-overflow:ellipsis}
+.done{text-align:center;padding:16px 0 4px}
+.done span{display:grid;place-items:center;height:56px;width:56px;border-radius:50%;background:var(--mint);margin:0 auto 10px}
+.done b{display:block;font-size:17px}.done small{display:block;font-size:12.5px;color:var(--mut);margin-top:4px}
+.kv{display:flex;justify-content:space-between;font-size:12.5px;padding:8px 0;border-top:1px solid var(--soft)}
+.kv span:last-child{font-weight:800}
+.stepper{display:flex;align-items:center;gap:10px}
+.stepper button{height:32px;width:32px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:16px;font-weight:800;padding:0}
+.stepper b{min-width:24px;text-align:center;font-size:16px}
+@media(max-width:860px){.side{display:none}}
+@media(max-width:530px){.stage{padding:0;display:block}.frame{width:100%;padding:0;border-radius:0;background:none;box-shadow:none}.phone{height:100vh;height:100dvh;border-radius:0}.status{display:none}.top{padding-top:16px}}
+@media(prefers-reduced-motion:reduce){.sheet{animation:none}.switch:after{transition:none}}
+</style></head><body>
+<div class="stage">
+ <div class="side">
+  <h1>Parent Plus Coach</h1>
+  <p>The tutor and academy side. Everything a coach does here shows up in the parent's Parent Plus app.</p>
+  <div class="map"><b>What reaches parents</b>
+   <div><span>Attendance</span><span>Classes count, This week</span></div>
+   <div><span>Class post</span><span>Coach insight card, Memories</span></div>
+   <div><span>Milestone</span><span>Memories, Milestones</span></div>
+   <div><span>Try at home</span><span>Ring card, focused activity</span></div>
+   <div><span>Get ready items</span><span>Bell, Get ready list</span></div>
+   <div><span>Fee reminder</span><span>Fee due card</span></div>
+   <div><span>Schedule change</span><span>This week, clash flags</span></div>
+   <div><span>Trial reply, spots left</span><span>Explore, outside cards</span></div>
+  </div>
+ </div>
+ <div class="frame"><div class="phone" id="phone"><div class="scroll" id="scroll"></div><div id="nav"></div><div id="sheet"></div><div id="toast"></div></div></div>
+</div>
+<script>
+const I={
+ home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+ cal:'<rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>',
+ users:'<circle cx="9" cy="8" r="3.2"/><path d="M3 19c.6-3.3 3-5 6-5s5.4 1.7 6 5"/><path d="M15.5 4.8a3 3 0 0 1 0 5.9M17.5 14.3c1.8.6 3 2.2 3.4 4.7"/>',
+ wallet:'<rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 10h18M16 15h2"/>',
+ bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+ menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+ x:'<path d="M6 6l12 12M18 6L6 18"/>',
+ chev:'<path d="M9 5l7 7-7 7"/>',
+ back:'<path d="M15 5l-7 7 7 7"/>',
+ check:'<path d="M5 12.5l4.5 4.5L19 7"/>',
+ cam:'<path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13.5" r="3.5"/>',
+ vid:'<rect x="3" y="6" width="13" height="12" rx="3"/><path d="M16 10.5l5-3v9l-5-3"/>',
+ mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
+ star:'<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/>',
+ heart:'<path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 3c0 5.4-7.5 10-7.5 10z"/>',
+ bag:'<path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 0 1 6 0"/>',
+ img:'<rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="M20.5 16l-5-5-8 8.5"/>',
+ msg:'<path d="M4 5h16v11H9l-5 4z"/>',
+ chart:'<path d="M5 20V11M12 20V5M19 20v-7"/>',
+ tag:'<path d="M3.5 12.5V4.5h8l9 9-8 8z"/><circle cx="8" cy="9" r="1.4"/>',
+ phone:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/>',
+ wa:'<path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c.5 2 2.5 4 4.5 4.5l1-1.2 1.8.8c-.2 1.2-1.2 2-2.3 1.8-3-.5-5.6-3.1-6-6-.2-1.1.6-2.1 1.8-2.3l.8 1.8z"/>',
+ clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+ pin:'<path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15 12 21 12 21z"/><circle cx="12" cy="10" r="2.3"/>'};
+function ic(n,s=20,w=1.9){return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]||''}</svg>`}
+const C={sun:'#F2D58A',rose:'#F1B9C7',sky:'#AFD5F0',mint:'#AEDEC6',grape:'#CBBDEB',tang:'#F5C6A2'};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rs=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+const DN=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+/* ---------- Data ---------- */
+const BATCHES=[
+ {id:'clay',name:'Clay Juniors',age:'Ages 4–6',days:[1,3],time:'5:00 pm',end:'6:00 pm',room:'Room 2',fee:2500,c:'grape'},
+ {id:'colour',name:'Colour Explorers',age:'Ages 6–8',days:[0,2],time:'4:00 pm',end:'5:00 pm',room:'Room 1',fee:2200,c:'sky'},
+ {id:'weekend',name:'Weekend Makers',age:'Ages 5–8',days:[5],time:'11:00 am',end:'12:30 pm',room:'Room 2',fee:2800,c:'tang'}];
+const NAMES={clay:['Ria','Aarav','Kiara','Vihaan','Myra','Arjun','Saanvi','Kabir'],colour:['Anaya','Reyansh','Ira','Dhruv','Navya','Shaurya'],weekend:['Ria','Aditi','Krish','Zoya','Ayaan','Meher']};
+const PARENTS={Ria:'Manu (Papa)',Aarav:'Neha (Mom)',Kiara:'Rohan (Papa)',Vihaan:'Pooja (Mom)',Myra:'Sameer (Papa)',Arjun:'Divya (Mom)',Saanvi:'Karan (Papa)',Kabir:'Isha (Mom)'};
+const AV=[C.sun,C.rose,C.sky,C.mint,C.grape,C.tang];
+const STUDENTS=[];let sid=0;
+for(const b of BATCHES)for(const n of NAMES[b.id]){const i=sid++;STUDENTS.push({id:'s'+i,name:n,batch:b.id,age:b.id==='colour'?7:5,parent:PARENTS[n]||'Parent',att:[1,1,1,0,1,1,1,1].map((v,k)=>(i+k)%7===3?0:v),skills:{'Colour mixing':1+(i%3),'Fine motor':1+((i+1)%3),'Focus':1+((i+2)%3)},fee:i%5===2?'overdue':i%4===1?'due':'paid',lastPost:i%3===0?'Today':i%3===1?'Tue':'Last week',c:AV[i%6]})}
+const ACTIVITIES=['Paper boat race','Mirror the moves','Colour detective','Story detective','Garden treasure hunt'];
+const T={screen:'today',day:todayIdx(),batchFilter:'all',feeFilter:'all',live:null,att:{},media:[],
+ post:null,posts:[{batch:'clay',title:'Ria mixed her own colours',when:'Today 6:05 pm',to:8}],
+ trials:[{id:'t1',child:'Aditya',age:5,parent:'Sneha',batch:'clay',slot:'Thu 5:00 pm',status:'new'},{id:'t2',child:'Ishita',age:7,parent:'Rahul',batch:'colour',slot:'Tue 4:00 pm',status:'new'}],
+ listing:{spots:2,featured:false,price:2500},
+ threads:[{id:'m1',from:'Manu (Ria’s Papa)',text:'Will Ria need an apron on Thursday?',unread:true,replies:[]},{id:'m2',from:'Neha (Aarav’s Mom)',text:'Aarav will miss Tuesday, family function.',unread:true,replies:[]}],
+ cancelled:{},reminded:{},sheet:null};
+
+/* ---------- Helpers ---------- */
+const B=id=>BATCHES.find(b=>b.id===id);
+const kids=id=>STUDENTS.filter(s=>s.batch===id);
+function todayIdx(){return(new Date().getDay()+6)%7}
+function dateOf(i){const d=new Date();d.setDate(d.getDate()+(i-todayIdx()));return d.getDate()}
+function classesOn(d){return BATCHES.filter(b=>b.days.includes(d)).sort((a,b)=>tm(a.time)-tm(b.time))}
+function tm(t){let[h,m]=t.split(/[: ]/);h=+h%12;if(/pm/.test(t))h+=12;return h*60+(+m||0)}
+function nowMin(){const d=new Date();return d.getHours()*60+d.getMinutes()}
+function feeStats(){let p=0,d=0,o=0;STUDENTS.forEach(s=>{const f=B(s.batch).fee;if(s.fee==='paid')p+=f;else if(s.fee==='due')d+=f;else o+=f});return{p,d,o,t:p+d+o}}
+function needsFeedback(){return STUDENTS.filter(s=>s.lastPost==='Last week')}
+function toast(t){const r=document.getElementById('toast');r.innerHTML=`<div class="toast" role="status">${esc(t)}</div>`;clearTimeout(toast.h);toast.h=setTimeout(()=>r.innerHTML='',2400)}
+function sheet(h){document.getElementById('sheet').innerHTML=`<div class="back" data-close="1"><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${h}</div></div>`}
+function closeSheet(){document.getElementById('sheet').innerHTML=''}
+const shTop=(h,p)=>`<div class="sh-top"><div><h4>${h}</h4>${p?`<p>${p}</p>`:''}</div><button class="x" data-act="close" aria-label="Close">${ic('x',17)}</button></div>`;
+function header(title,sub){const unread=T.threads.filter(t=>t.unread).length+T.trials.filter(t=>t.status==='new').length;
+ return `<div class="status"><span>9:41</span><span>5G</span></div><div class="top"><div class="brand"><i>${ic('star',16,2.2)}</i><span>Parent Plus Coach<small>The Creative Room</small></span></div><div class="top-actions"><button class="icon-btn" data-act="inbox" aria-label="Requests and messages">${ic('bell',19)}${unread?`<span class="n">${unread}</span>`:''}</button><button class="icon-btn" data-act="more" aria-label="More">${ic('menu',19)}</button></div></div><div class="title"><h2>${title}</h2>${sub?`<p>${sub}</p>`:''}</div>`}
+
+/* ---------- Screens ---------- */
+function today(){const d=todayIdx(),list=classesOn(d),now=nowMin(),f=feeStats();
+ const next=classesOn(d).find(b=>tm(b.time)>now-60&&!T.cancelled[b.id+d])||null;
+ let ahead=null;if(!next){for(let k=1;k<8;k++){const dd=(d+k)%7,l=classesOn(dd);if(l.length){ahead={dd,b:l[0],k};break}}}
+ const DL=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+ const nf=needsFeedback().length,ov=STUDENTS.filter(s=>s.fee==='overdue').length,tr=T.trials.filter(t=>t.status==='new').length,ms=T.threads.filter(t=>t.unread).length;
+ const h=new Date().getHours(),greet=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+ return header(`${greet}, Meera`,new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'}))+`<div class="content">
+ <div class="stats"><button class="stat" style="--c:${C.mint}" data-go="fees"><b>${Math.round(f.p/f.t*100)}%</b><span>Fees collected</span></button><button class="stat" style="--c:${C.sky}" data-go="students"><b>91%</b><span>Attendance</span></button><button class="stat" style="--c:${C.sun}" data-act="insights"><b>86%</b><span>Parents engaged</span></button></div>
+ ${next?`<button class="next" data-live="${next.id}"><span><small>Next class · ${next.time} · ${next.room}</small><b>${next.name}</b></span><span class="go">Start class</span></button>`:(ahead?`<button class="next" data-go="schedule" data-showday="${ahead.dd}"><span><small>Next class · ${ahead.k===1?'Tomorrow':DL[ahead.dd]} ${ahead.b.time} · ${ahead.b.room}</small><b>${ahead.b.name}</b></span><span class="go">See plan</span></button>`:'')}
+ <div class="sec"><div class="sec-h"><h3>Needs you</h3></div><div class="list">
+ ${tr?`<button class="row" data-act="trials"><span class="dot" style="--c:${C.tang}">${ic('users',17)}</span><span class="tx"><b>${tr} trial request${tr>1?'s':''}</b><small>From parents nearby</small></span>${ic('chev',16)}</button>`:''}
+ ${nf?`<button class="row" data-act="feedbackdue"><span class="dot" style="--c:${C.grape}">${ic('star',17)}</span><span class="tx"><b>${nf} children need feedback</b><small>No update for over a week</small></span>${ic('chev',16)}</button>`:''}
+ ${ov?`<button class="row" data-go="fees" data-fee="overdue"><span class="dot" style="--c:${C.rose}">${ic('wallet',17)}</span><span class="tx"><b>${ov} fees overdue</b><small>${rs(f.o)} pending</small></span>${ic('chev',16)}</button>`:''}
+ ${ms?`<button class="row" data-act="messages"><span class="dot" style="--c:${C.sky}">${ic('msg',17)}</span><span class="tx"><b>${ms} parent message${ms>1?'s':''}</b><small>${esc(T.threads.find(t=>t.unread).from)}</small></span>${ic('chev',16)}</button>`:''}
+ ${!tr&&!nf&&!ov&&!ms?`<div class="row"><span class="tx"><b>All caught up</b><small>New requests will show here</small></span></div>`:''}
+ </div></div>
+ <div class="sec"><div class="sec-h"><h3>${list.length||!ahead?'Today’s classes':'Next: '+(ahead.k===1?'Tomorrow':DL[ahead.dd])}</h3><button data-go="schedule">Full week</button></div><div class="list agenda">
+ ${list.length?list.map(b=>{const can=T.cancelled[b.id+d],posted=T.posts.some(p=>p.batch===b.id&&/^Today/.test(p.when)),past=tm(b.time)+60<=now;
+  return `<div class="row"><span class="time">${b.time}</span><span class="stripe" style="--c:${C[b.c]}"></span><span class="tx"><b class="${can?'cancelled':''}">${b.name}</b><small>${kids(b.id).length} children · ${b.room}</small></span>${can?'<span class="pill">Cancelled</span>':posted?`<span class="pill" style="--c:${C.mint}">Posted</span>`:past?`<button class="btn sm" data-compose="${b.id}">Post update</button>`:`<button class="btn sm soft" data-live="${b.id}">Start</button>`}</div>`}).join(''):(ahead?classesOn(ahead.dd).map(b=>`<div class="row"><span class="time">${b.time}</span><span class="stripe" style="--c:${C[b.c]}"></span><span class="tx"><b>${b.name}</b><small>${kids(b.id).length} children · ${b.room}</small></span><span class="pill">${ahead.k===1?'Tomorrow':DN[ahead.dd]}</span></div>`).join(''):`<div class="row"><span class="tx"><b>No classes today</b><small>Enjoy the day off</small></span></div>`)}
+ </div></div></div>`}
+
+function live(){const b=B(T.live),list=kids(b.id),a=T.att[b.id]||(T.att[b.id]={});const marked=Object.keys(a).length;
+ return header(b.name,`${b.time} · ${b.room} · ${marked}/${list.length} marked`)+`<div class="content">
+ <div class="sec-h"><h3>Attendance</h3><button data-act="allp">Mark all present</button></div>
+ <div class="list">${list.map(s=>`<div class="row"><span class="av" style="--c:${s.c}">${s.name[0]}</span><span class="tx"><b>${s.name}</b><small>${s.parent}</small></span><span class="att">${[['p','P','Present'],['l','L','Late'],['a','A','Absent']].map(([k,t,l])=>`<button class="${k} ${a[s.id]===k?'on':''}" data-att="${s.id}" data-v="${k}" aria-label="${l}">${t}</button>`).join('')}</span></div>`).join('')}</div>
+ <div class="sec"><div class="sec-h"><h3>Capture moments</h3></div>
+ <div class="capture"><label>${ic('cam',17)} Photo<input type="file" accept="image/*" capture="environment" data-media="photo"></label><label>${ic('vid',17)} Video<input type="file" accept="video/*" capture="environment" data-media="video"></label></div>
+ ${T.media.length?`<div class="thumbs">${T.media.map(m=>`<span>${m}</span>`).join('')}</div>`:''}</div>
+ <div class="live-bar"><button class="btn soft" data-act="leave">Save for later</button><button class="btn" data-act="endclass">End class and post</button></div>
+ <p style="font-size:11.5px;color:var(--mut);margin:10px 2px 0">Attendance updates each parent’s class count and This week as soon as you save.</p></div>`}
+
+function compose(){const P=T.post,b=B(P.batch),list=kids(b.id),sel=P.who==='batch'?list:list.filter(s=>P.picked.includes(s.id));
+ const nm=sel.length===1?sel[0].name:sel.length===list.length?'the class':sel.length+' children';
+ return header('Post update',`${b.name} · goes to ${sel.length} famil${sel.length===1?'y':'ies'}`)+`<div class="content">
+ <div class="step"><b>Who is this for?</b><div class="chips"><button class="chip ${P.who==='batch'?'on':''}" data-who="batch">Whole class</button>${list.map(s=>`<button class="chip ${P.who!=='batch'&&P.picked.includes(s.id)?'on':''}" data-pick="${s.id}">${s.name}</button>`).join('')}</div></div>
+ <div class="step"><b>What happened today?</b><textarea class="ta" id="note" placeholder="e.g. ${nm==='the class'?'We made pinch pots':'Ria mixed her own colours'} …">${esc(P.note)}</textarea>
+ <div class="capture" style="margin-top:8px"><label>${ic('img',17)} Add photo or video<input type="file" accept="image/*,video/*" data-media="post"></label><label style="flex:0 0 auto;padding:12px 14px" data-act="voice">${ic('mic',17)}</label></div>${P.media.length?`<div class="thumbs">${P.media.map(m=>`<span>${m}</span>`).join('')}</div>`:''}</div>
+ <div class="step"><b>Skills worked on</b><div class="skills">${['Colour mixing','Fine motor','Focus','Sharing','Confidence','Following steps'].map(k=>`<button class="${P.skills.includes(k)?'on':''}" data-skill="${k}">${k}</button>`).join('')}</div></div>
+ ${sel.length===1?`<div class="step"><b>Where is ${sel[0].name} now?</b><div class="level">${['Started','Practising','Confident'].map((l,i)=>`<button class="${P.level===i?'on':''}" data-level="${i}">${l}</button>`).join('')}</div></div>`:''}
+ <div class="step"><b>Add to the parent app</b>
+ ${addon('home','Try at home','A short activity for this week',C.sun,'heart',`<div class="chips">${ACTIVITIES.map(a=>`<button class="chip ${P.home===a?'on':''}" data-homeact="${a}">${a}</button>`).join('')}</div>`)}
+ ${addon('milestone','Milestone',sel.length===1?`Something ${sel[0].name} did for the first time`:'Pick one child to add a milestone',C.grape,'star',sel.length===1?`<input class="in" id="ms" placeholder="e.g. Shaped her first clay pot" value="${esc(P.msText)}">`:'',sel.length!==1)}
+ ${addon('ready','Get ready for next class','Items parents should prepare',C.sky,'bag',`<input class="in" id="ready" placeholder="e.g. Bring an old T-shirt as an apron" value="${esc(P.readyText)}">`)}
+ </div>
+ <div class="preview" id="preview">${previewHTML()}</div>
+ <button class="btn full" style="margin-top:14px" data-act="publish">Post to ${sel.length} famil${sel.length===1?'y':'ies'}</button></div>`}
+function addon(k,t,sub,c,icn,body,disabled){const on=T.post.addons[k]&&!disabled;return `<div class="addon"><div class="addon-h"><span class="dot" style="--c:${c};height:32px;width:32px">${ic(icn,15)}</span><span class="tx"><b>${t}</b><small>${sub}</small></span><button class="switch ${on?'on':''}" data-addon="${k}" ${disabled?'disabled style="opacity:.4"':''} aria-label="${t}" aria-pressed="${on}"></button></div>${on&&body?`<div class="addon-body">${body}</div>`:''}</div>`}
+function previewHTML(){const P=T.post,b=B(P.batch),list=kids(b.id),sel=P.who==='batch'?list:list.filter(s=>P.picked.includes(s.id));const child=sel.length===1?sel[0].name:'Your child';
+ const note=P.note.trim()||'Your note will appear here.';const cards=[];
+ cards.push(`<div class="pcard"><span class="ic" style="--c:${C.sky}">${ic('star',15)}</span><span><span class="k">Coach insight · ${b.name}</span><b>${esc(note.split(/[.!?]/)[0].slice(0,48))}</b><p>${esc(note)}${P.skills.length?' · '+P.skills.join(', '):''}${P.media.length?' · '+P.media.length+' photo/video':''}</p></span></div>`);
+ if(P.addons.home&&P.home)cards.push(`<div class="pcard"><span class="ic" style="--c:${C.sun}">${ic('heart',15)}</span><span><span class="k">Try at home · ring card</span><b>${P.home}</b><p>Opens as a focused activity for ${esc(child)}</p></span></div>`);
+ if(P.addons.milestone&&sel.length===1)cards.push(`<div class="pcard"><span class="ic" style="--c:${C.grape}">${ic('star',15)}</span><span><span class="k">Milestone · Memories</span><b>${esc(P.msText||'Milestone text')}</b><p>Tagged Coach</p></span></div>`);
+ if(P.addons.ready)cards.push(`<div class="pcard"><span class="ic" style="--c:${C.sky}">${ic('bag',15)}</span><span><span class="k">Get ready · bell</span><b>${esc(P.readyText||'Item to prepare')}</b><p>Added to the parent’s Get ready list before the next class</p></span></div>`);
+ return `<small>${ic('phone',13)} What ${sel.length===1?esc(child)+'’s parent':'parents'} will see in Parent Plus</small>${cards.join('')}`}
+
+function schedule(){const d=T.day,list=classesOn(d);
+ return header('Schedule','Changes reach parents’ calendars instantly')+`<div class="content">
+ <div class="week">${DN.map((n,i)=>`<button class="wd ${i===d?'on':''}" data-day="${i}"><small>${n}</small><b>${dateOf(i)}</b><span class="ds">${classesOn(i).map(b=>`<i style="--c:${C[b.c]}"></i>`).join('')}</span></button>`).join('')}</div>
+ <div class="sec"><div class="sec-h"><h3>${['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'][d]}</h3></div><div class="list">
+ ${list.length?list.map(b=>{const can=T.cancelled[b.id+d];return `<button class="row" data-batchsheet="${b.id}"><span class="stripe" style="--c:${C[b.c]}"></span><span class="tx"><b class="${can?'cancelled':''}">${b.name}</b><small>${b.time}–${b.end} · ${b.room} · ${kids(b.id).length} children</small></span>${can?'<span class="pill">Cancelled</span>':ic('chev',16)}</button>`}).join(''):`<div class="row"><span class="tx"><b>No classes</b><small>Add an extra class or a holiday</small></span></div>`}
+ </div></div>
+ <div class="sec"><div class="sec-h"><h3>Batches</h3></div><div class="list">${BATCHES.map(b=>`<div class="row"><span class="dot" style="--c:${C[b.c]}">${ic('users',16)}</span><span class="tx"><b>${b.name}</b><small>${b.age} · ${b.days.map(x=>DN[x]).join(', ')} ${b.time} · ${rs(b.fee)}/month</small></span><span class="pill">${kids(b.id).length}</span></div>`).join('')}</div></div>
+ <div style="display:flex;gap:8px;margin-top:14px"><button class="btn soft" style="flex:1" data-act="holiday">Add holiday</button><button class="btn soft" style="flex:1" data-act="extra">Add extra class</button></div></div>`}
+
+function students(){const f=T.batchFilter,list=STUDENTS.filter(s=>f==='all'||s.batch===f);
+ return header('Students',`${STUDENTS.length} children across ${BATCHES.length} batches`)+`<div class="content">
+ <div class="chips"><button class="chip ${f==='all'?'on':''}" data-bf="all">All</button>${BATCHES.map(b=>`<button class="chip ${f===b.id?'on':''}" data-bf="${b.id}">${b.name}</button>`).join('')}</div>
+ <div class="list" style="margin-top:10px">${list.map(s=>{const pct=Math.round(s.att.filter(Boolean).length/s.att.length*100);return `<button class="row" data-student="${s.id}"><span class="av" style="--c:${s.c}">${s.name[0]}</span><span class="tx"><b>${s.name}</b><small>${B(s.batch).name} · ${pct}% attendance · update ${s.lastPost}</small></span>${s.fee!=='paid'?`<span class="pill" style="--c:${s.fee==='overdue'?C.rose:C.sun}">${s.fee==='overdue'?'Overdue':'Fee due'}</span>`:''}</button>`}).join('')}</div>
+ <button class="btn soft full" style="margin-top:12px" data-act="addstudent">Add a student</button></div>`}
+function studentSheet(id){const s=STUDENTS.find(x=>x.id===id),b=B(s.batch);
+ sheet(shTop(s.name,`${b.name} · age ${s.age} · ${esc(s.parent)}`)+`
+ <div class="sec" style="margin-top:14px"><b style="font-size:13px">Last 8 classes</b><div class="dots">${s.att.map(v=>`<i style="--c:${v?C.mint:C.rose}" title="${v?'Present':'Absent'}"></i>`).join('')}</div></div>
+ <div class="sec" style="margin-top:14px"><b style="font-size:13px">Skills</b>${Object.entries(s.skills).map(([k,v])=>`<div style="margin-top:8px"><div style="display:flex;justify-content:space-between;font-size:12px"><span>${k}</span><span style="color:var(--mut)">${['','Started','Practising','Confident'][v]}</span></div><div class="bar"><i style="width:${v/3*100}%"></i></div></div>`).join('')}</div>
+ <div class="kv" style="margin-top:14px"><span>Fee (${b.name})</span><span>${s.fee==='paid'?'Paid':s.fee==='due'?'Due 1 Nov':'Overdue'} · ${rs(b.fee)}</span></div>
+ <div class="kv"><span>Last update to parents</span><span>${s.lastPost}</span></div>
+ <div style="display:flex;gap:8px;margin-top:14px"><button class="btn soft" style="flex:1" data-act="call">${ic('phone',15)} Call</button><button class="btn soft" style="flex:1" data-act="wa">${ic('wa',15)} Message</button></div>
+ <button class="btn full" style="margin-top:8px" data-compose="${s.batch}" data-only="${s.id}">Write feedback for ${s.name}</button>`)}
+
+function fees(){const f=feeStats(),flt=T.feeFilter,list=STUDENTS.filter(s=>flt==='all'||s.fee===flt);
+ return header('Fees','November · collected through Parent Plus')+`<div class="content">
+ <div class="card" style="padding:14px"><div style="display:flex;justify-content:space-between;align-items:baseline"><b style="font-size:24px;letter-spacing:-.8px">${rs(f.p)}</b><span style="font-size:12px;color:var(--mut)">of ${rs(f.t)}</span></div>
+ <div class="feebar"><i style="width:${f.p/f.t*100}%;background:${C.mint}"></i><i style="width:${f.d/f.t*100}%;background:${C.sun}"></i><i style="width:${f.o/f.t*100}%;background:${C.rose}"></i></div>
+ <div class="legend"><span><i style="--c:${C.mint}"></i>Paid</span><span><i style="--c:${C.sun}"></i>Due ${rs(f.d)}</span><span><i style="--c:${C.rose}"></i>Overdue ${rs(f.o)}</span></div></div>
+ <div class="chips" style="margin-top:12px">${[['all','All'],['overdue','Overdue'],['due','Due'],['paid','Paid']].map(([k,n])=>`<button class="chip ${flt===k?'on':''}" data-ff="${k}">${n}</button>`).join('')}</div>
+ <div class="list" style="margin-top:10px">${list.map(s=>{const b=B(s.batch);return `<div class="row"><span class="av" style="--c:${s.c}">${s.name[0]}</span><span class="tx"><b>${s.name}</b><small>${b.name} · ${rs(b.fee)}${T.reminded[s.id]?' · reminder sent':''}</small></span>${s.fee==='paid'?`<span class="pill" style="--c:${C.mint}">Paid</span>`:`<button class="btn sm soft" data-markpaid="${s.id}">Mark paid</button><button class="btn sm" data-remind="${s.id}">Remind</button>`}</div>`}).join('')||`<div class="row"><span class="tx"><b>Nothing here</b><small>Try another filter</small></span></div>`}</div>
+ ${STUDENTS.some(s=>s.fee==='overdue')?`<button class="btn full" style="margin-top:12px" data-act="remindall">Remind all overdue</button>`:''}
+ <p style="font-size:11.5px;color:var(--mut);margin:10px 2px 0">A reminder shows as a “fee due” card in the parent’s app, with UPI payment. Receipts are sent automatically.</p></div>`}
+
+/* ---------- More menu sheets ---------- */
+function moreSheet(){sheet(shTop('More','The Creative Room')+`<div class="list" style="margin-top:12px">${[['trials','users','Trials and listing','What parents see in Explore',C.tang],['messages','msg','Messages','Parent chats and class announcements',C.sky],['insights','chart','Insights','Engagement, attendance and fees',C.sun],['plan','tag','Plan and billing','Your Parent Plus Coach plan',C.mint]].map(r=>`<button class="row" data-act="${r[0]}"><span class="dot" style="--c:${r[4]}">${ic(r[1],17)}</span><span class="tx"><b>${r[2]}</b><small>${r[3]}</small></span>${ic('chev',16)}</button>`).join('')}</div>`)}
+function trialsSheet(){const L=T.listing;sheet(shTop('Trials and listing','Requests come from parents in Explore')+`
+ <div class="list" style="margin-top:12px">${T.trials.map(t=>`<div class="row"><span class="av" style="--c:${C.tang}">${t.child[0]}</span><span class="tx"><b>${t.child}, ${t.age}</b><small>${B(t.batch).name} · ${t.slot} · ${t.parent}</small></span>${t.status==='new'?`<button class="btn sm soft" data-trialalt="${t.id}">Other time</button><button class="btn sm" data-trialok="${t.id}">Accept</button>`:t.status==='accepted'?`<button class="btn sm" data-enrol="${t.id}">Enrol</button>`:`<span class="pill" style="--c:${C.mint}">Enrolled</span>`}</div>`).join('')}</div>
+ <div class="sec" style="margin-top:18px"><b style="font-size:13px">Your listing</b>
+ <div class="kv"><span>Spots left in Clay Juniors</span><span class="stepper"><button data-spots="-1" aria-label="Fewer">−</button><b>${L.spots}</b><button data-spots="1" aria-label="More">+</button></span></div>
+ <div class="kv"><span>Monthly fee shown</span><span>${rs(L.price)}</span></div>
+ <div class="kv" style="align-items:center"><span>Featured in Explore<br><small style="color:var(--mut);font-weight:500">Shown first to parents nearby · ₹499/month</small></span><button class="switch ${L.featured?'on':''}" data-act="featured" aria-pressed="${L.featured}"></button></div>
+ <p style="font-size:11.5px;color:var(--mut);margin:8px 0 0">Parents see “${L.spots} spot${L.spots===1?'':'s'} left” on your card when 3 or fewer remain.</p></div>`)}
+function messagesSheet(){sheet(shTop('Messages','Parents reply in Parent Plus')+`
+ <div class="list" style="margin-top:12px">${T.threads.map(t=>`<button class="row" data-thread="${t.id}"><span class="av" style="--c:${C.sky}">${t.from[0]}</span><span class="tx"><b>${esc(t.from)}</b><small>${esc(t.replies.length?'You: '+t.replies.slice(-1)[0]:t.text)}</small></span>${t.unread?`<span class="pill" style="--c:${C.tang}">New</span>`:''}</button>`).join('')}</div>
+ <div class="sec" style="margin-top:18px"><b style="font-size:13px">Announcement to a class</b>
+ <div class="chips" style="margin-top:8px">${BATCHES.map((b,i)=>`<button class="chip ${i===0?'on':''}" data-annb="${b.id}">${b.name}</button>`).join('')}</div>
+ <textarea class="ta" id="ann" style="margin-top:8px;min-height:64px" placeholder="e.g. No class on Thursday for Diwali"></textarea>
+ <button class="btn full" style="margin-top:8px" data-act="announce">Send announcement</button></div>`)}
+function threadSheet(id){const t=T.threads.find(x=>x.id===id);t.unread=false;sheet(shTop(esc(t.from),'Private chat')+`
+ <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px"><div style="align-self:flex-start;background:var(--soft);border-radius:14px 14px 14px 4px;padding:10px 12px;font-size:13px;max-width:85%">${esc(t.text)}</div>${t.replies.map(r=>`<div style="align-self:flex-end;background:var(--teal2);border-radius:14px 14px 4px 14px;padding:10px 12px;font-size:13px;max-width:85%">${esc(r)}</div>`).join('')}</div>
+ <div class="chips" style="margin-top:12px">${['Yes, please bring one','Noted, thank you','I’ll share the plan'].map(q=>`<button class="chip" data-quick="${id}" data-q="${q}">${q}</button>`).join('')}</div>
+ <div style="display:flex;gap:8px;margin-top:8px"><input class="in" id="reply" placeholder="Write a reply"><button class="btn" data-reply="${id}">Send</button></div>`)}
+function insightsSheet(){sheet(shTop('Insights','Last 30 days')+`
+ ${[['Parents who saw your posts','86%',86,C.sun],['Attendance across batches','91%',91,C.mint],['Fees paid on time','72%',72,C.sky],['Children still enrolled after 3 months','94%',94,C.grape]].map(r=>`<div style="margin-top:14px"><div style="display:flex;justify-content:space-between;font-size:12.5px"><span>${r[0]}</span><b>${r[1]}</b></div><div class="bar"><i style="width:${r[2]}%;background:${r[3]}"></i></div></div>`).join('')}
+ <div class="kv" style="margin-top:16px"><span>Updates posted</span><span>${11+T.posts.length-1}</span></div><div class="kv"><span>Average time to post after class</span><span>34 min</span></div><div class="kv"><span>Trials booked from Explore</span><span>${T.trials.length+1}</span></div>
+ <button class="btn soft full" style="margin-top:14px" data-act="report">Share monthly report with parents</button>`)}
+function planSheet(){const n=STUDENTS.length,price=Math.max(399,n*40);sheet(shTop('Plan and billing','One plan for tutors and academies')+`
+ <div class="card" style="padding:14px;margin-top:12px;background:var(--soft);border:0"><small style="color:var(--mut)">${n} active children × ₹40</small><div style="font-size:26px;font-weight:850;letter-spacing:-1px">${rs(price)}<small style="font-size:12px;font-weight:700"> /month</small></div><small style="color:var(--mut)">Minimum ₹399 · billed on the 1st</small></div>
+ ${['Attendance and class posts','Fee reminders and UPI collection','Trial requests from Explore','Parent messages and announcements','Monthly insights report'].map(t=>`<div class="kv"><span>${t}</span><span style="color:var(--teal)">${ic('check',15,2.6)}</span></div>`).join('')}`)}
+function batchSheet(id){const b=B(id),d=T.day,can=T.cancelled[id+d];sheet(shTop(b.name,`${['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'][d]} · ${b.time}–${b.end} · ${b.room}`)+`
+ <div class="kv" style="margin-top:12px"><span>Children</span><span>${kids(id).length}</span></div><div class="kv"><span>Fee</span><span>${rs(b.fee)}/month</span></div>
+ <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px">${can?`<button class="btn full" data-restore="${id}">Restore this class</button>`:`<button class="btn soft full" data-resched="${id}">Move to another time</button><button class="btn soft full" data-cancel="${id}">Cancel this class</button><button class="btn full" data-live="${id}">Start class</button>`}</div>
+ <p style="font-size:11.5px;color:var(--mut);margin:10px 0 0">Parents get the change in their This week view, and any clash with their plans is flagged for them.</p>`)}
+function inboxSheet(){const tr=T.trials.filter(t=>t.status==='new'),ms=T.threads.filter(t=>t.unread);sheet(shTop('Requests and messages',tr.length+ms.length?`${tr.length+ms.length} waiting`:'All caught up')+`
+ <div class="list" style="margin-top:12px">${tr.map(t=>`<button class="row" data-act="trials"><span class="dot" style="--c:${C.tang}">${ic('users',16)}</span><span class="tx"><b>Trial: ${t.child}, ${t.age}</b><small>${B(t.batch).name} · ${t.slot}</small></span>${ic('chev',16)}</button>`).join('')}${ms.map(t=>`<button class="row" data-thread="${t.id}"><span class="dot" style="--c:${C.sky}">${ic('msg',16)}</span><span class="tx"><b>${esc(t.from)}</b><small>${esc(t.text)}</small></span>${ic('chev',16)}</button>`).join('')}${!tr.length&&!ms.length?'<div class="row"><span class="tx"><b>Nothing waiting</b><small>New trial requests and messages appear here</small></span></div>':''}</div>`)}
+
+/* ---------- Render ---------- */
+function nav(){const it=(id,label,icn)=>`<button class="nb ${T.screen===id||(id==='today'&&T.screen==='live')?'on':''}" data-go="${id}">${ic(icn,22)}<span>${label}</span></button>`;
+ return `<nav class="nav" aria-label="Main">${it('today','Today','home')}${it('schedule','Schedule','cal')}<button class="nb post ${T.screen==='compose'?'on':''}" data-act="newpost"><span class="p">${ic('plus',26,2.4)}</span><span>Post</span></button>${it('students','Students','users')}${it('fees','Fees','wallet')}</nav>`}
+function render(keep){const sc=document.getElementById('scroll'),y=keep?sc.scrollTop:0;
+ sc.innerHTML=({today,live,compose,schedule,students,fees})[T.screen]();document.getElementById('nav').innerHTML=nav();sc.scrollTop=y}
+function newPost(batch,only){const b=batch||(classesOn(todayIdx())[0]||BATCHES[0]).id;T.post={batch:b,who:only?'pick':'batch',picked:only?[only]:[],note:'',skills:[],level:null,media:T.media.slice(),addons:{home:false,milestone:false,ready:false},home:null,msText:'',readyText:''};T.screen='compose';render()}
+function syncInputs(){if(T.screen!=='compose')return;const n=document.getElementById('note'),m=document.getElementById('ms'),r=document.getElementById('ready');if(n)T.post.note=n.value;if(m)T.post.msText=m.value;if(r)T.post.readyText=r.value}
+
+document.addEventListener('input',e=>{if(T.screen==='compose'&&['note','ms','ready'].includes(e.target.id)){syncInputs();document.getElementById('preview').innerHTML=previewHTML()}});
+document.addEventListener('change',e=>{const k=e.target.dataset&&e.target.dataset.media;if(!k||!e.target.files[0])return;const name=(e.target.files[0].type.startsWith('video')?'Video: ':'Photo: ')+e.target.files[0].name.slice(0,18);
+ if(k==='post'){syncInputs();T.post.media.push(name)}else T.media.push(name);render(true);toast('Added '+name)});
+document.addEventListener('click',e=>{const el=e.target.closest('button,[data-close],label[data-act]');if(!el)return;const d=el.dataset;
+ if(d.close){if(e.target===el)closeSheet();return}
+ syncInputs();
+ if(d.go){closeSheet();T.screen=d.go;if(d.fee)T.feeFilter=d.fee;if(d.showday!==undefined)T.day=+d.showday;render();return}
+ if(d.live){closeSheet();T.live=d.live;T.media=[];T.screen='live';render();return}
+ if(d.att){(T.att[T.live]=T.att[T.live]||{})[d.att]=d.v;render(true);return}
+ if(d.compose){closeSheet();newPost(d.compose,d.only);return}
+ if(d.who){T.post.who='batch';T.post.picked=[];render(true);return}
+ if(d.pick){const P=T.post;if(P.who==='batch'){P.who='pick';P.picked=[]}P.picked.includes(d.pick)?P.picked=P.picked.filter(x=>x!==d.pick):P.picked.push(d.pick);if(!P.picked.length)P.who='batch';P.level=null;render(true);return}
+ if(d.skill){const s=T.post.skills;s.includes(d.skill)?T.post.skills=s.filter(x=>x!==d.skill):s.push(d.skill);render(true);return}
+ if(d.level!==undefined){T.post.level=+d.level;render(true);return}
+ if(d.addon){T.post.addons[d.addon]=!T.post.addons[d.addon];render(true);return}
+ if(d.homeact){T.post.home=d.homeact;render(true);return}
+ if(d.day!==undefined){T.day=+d.day;render(true);return}
+ if(d.bf){T.batchFilter=d.bf;render(true);return}
+ if(d.ff){T.feeFilter=d.ff;render(true);return}
+ if(d.student){studentSheet(d.student);return}
+ if(d.remind){T.reminded[d.remind]=true;render(true);toast('Reminder sent · shows as a fee card for the parent');return}
+ if(d.markpaid){STUDENTS.find(s=>s.id===d.markpaid).fee='paid';render(true);toast('Marked paid · receipt sent to the parent');return}
+ if(d.batchsheet){batchSheet(d.batchsheet);return}
+ if(d.cancel){T.cancelled[d.cancel+T.day]=true;closeSheet();render(true);toast(`Cancelled · ${kids(d.cancel).length} families notified`);return}
+ if(d.restore){delete T.cancelled[d.restore+T.day];closeSheet();render(true);toast('Class restored · families notified');return}
+ if(d.resched){sheet(shTop('Move class',B(d.resched).name)+`<div class="chips" style="margin-top:12px;flex-wrap:wrap">${['Fri 5:00 pm','Sat 10:00 am','Sat 4:00 pm','Sun 11:00 am'].map(s=>`<button class="chip" data-moveto="${s}" data-b="${d.resched}">${s}</button>`).join('')}</div>`);return}
+ if(d.moveto){closeSheet();toast(`Moved to ${d.moveto} · ${kids(d.b).length} families notified`);return}
+ if(d.trialok){T.trials.find(t=>t.id===d.trialok).status='accepted';trialsSheet();render(true);toast('Trial confirmed · parent sees it in Explore');return}
+ if(d.trialalt){sheet(shTop('Suggest another time','The parent can accept in one tap')+`<div class="chips" style="margin-top:12px;flex-wrap:wrap">${['Sat 11:00 am','Tue 4:00 pm','Thu 5:00 pm'].map(s=>`<button class="chip" data-altsend="${d.trialalt}" data-s="${s}">${s}</button>`).join('')}</div>`);return}
+ if(d.altsend){const t=T.trials.find(x=>x.id===d.altsend);t.slot=d.s;t.status='accepted';trialsSheet();render(true);toast('New time sent to '+t.parent);return}
+ if(d.enrol){const t=T.trials.find(x=>x.id===d.enrol);t.status='enrolled';const i=STUDENTS.length;STUDENTS.push({id:'s'+i,name:t.child,batch:t.batch,age:t.age,parent:t.parent,att:[1],skills:{'Colour mixing':1,'Fine motor':1,'Focus':1},fee:'due',lastPost:'New',c:AV[i%6]});if(T.listing.spots>0)T.listing.spots--;trialsSheet();render(true);toast(`${t.child} enrolled · fee card sent to ${t.parent}`);return}
+ if(d.spots){T.listing.spots=Math.max(0,Math.min(12,T.listing.spots+ +d.spots));trialsSheet();return}
+ if(d.thread){threadSheet(d.thread);render(true);return}
+ if(d.quick){const t=T.threads.find(x=>x.id===d.quick);t.replies.push(d.q);threadSheet(d.quick);toast('Sent');return}
+ if(d.reply){const v=document.getElementById('reply').value.trim();if(!v){toast('Write a reply first');return}T.threads.find(x=>x.id===d.reply).replies.push(v);threadSheet(d.reply);toast('Sent');return}
+ if(d.annb){el.parentNode.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c===el));return}
+ switch(d.act){
+  case 'close':closeSheet();break;
+  case 'more':moreSheet();break;
+  case 'inbox':inboxSheet();break;
+  case 'trials':trialsSheet();break;
+  case 'messages':messagesSheet();break;
+  case 'insights':insightsSheet();break;
+  case 'plan':planSheet();break;
+  case 'featured':T.listing.featured=!T.listing.featured;trialsSheet();toast(T.listing.featured?'Featured in Explore':'Featured turned off');break;
+  case 'newpost':newPost();break;
+  case 'feedbackdue':{const n=needsFeedback();sheet(shTop('Children who need feedback','No update for over a week')+`<div class="list" style="margin-top:12px">${n.map(s=>`<button class="row" data-compose="${s.batch}" data-only="${s.id}"><span class="av" style="--c:${s.c}">${s.name[0]}</span><span class="tx"><b>${s.name}</b><small>${B(s.batch).name}</small></span><span class="btn sm">Write</span></button>`).join('')}</div>`);break}
+  case 'allp':{const a=T.att[T.live]=T.att[T.live]||{};kids(T.live).forEach(s=>a[s.id]=a[s.id]||'p');render(true);break}
+  case 'leave':T.screen='today';render();toast('Attendance saved');break;
+  case 'endclass':{const a=T.att[T.live]||{},list=kids(T.live);if(Object.keys(a).length<list.length){toast(`Mark attendance for ${list.length-Object.keys(a).length} more`);break}const present=list.filter(s=>a[s.id]!=='a').map(s=>s.id);newPost(T.live);T.post.who=present.length===list.length?'batch':'pick';T.post.picked=present.length===list.length?[]:present;render();toast('Attendance saved · now post an update');break}
+  case 'voice':toast('Listening… speak your note');break;
+  case 'publish':{const P=T.post,list=kids(P.batch),sel=P.who==='batch'?list:list.filter(s=>P.picked.includes(s.id));if(!P.note.trim()){toast('Write what happened first');document.getElementById('note').focus();break}
+   if(P.addons.home&&!P.home){toast('Pick a Try at home activity');break}
+   sel.forEach(s=>s.lastPost='Today');T.posts.unshift({batch:P.batch,title:P.note.slice(0,40),when:'Today now',to:sel.length});T.posts[0].when='Today';
+   const extras=[P.addons.home&&P.home?'Try at home':'',P.addons.milestone&&sel.length===1?'milestone':'',P.addons.ready&&P.readyText?'Get ready item':''].filter(Boolean);
+   T.screen='today';render();sheet(`<div class="done"><span>${ic('check',26,2.6)}</span><b>Posted to ${sel.length} famil${sel.length===1?'y':'ies'}</b><small>${extras.length?'Included: '+extras.join(', '):'Shows as a coach insight in Parent Plus'}</small></div><button class="btn full" style="margin-top:14px" data-act="close">Done</button>`);break}
+  case 'remindall':STUDENTS.filter(s=>s.fee==='overdue').forEach(s=>T.reminded[s.id]=true);render(true);toast('Reminders sent to all overdue families');break;
+  case 'announce':{const v=document.getElementById('ann').value.trim();if(!v){toast('Write the announcement first');break}closeSheet();toast('Announcement sent · shows in parents’ bell');break}
+  case 'holiday':toast('Holiday added · parents notified');break;
+  case 'extra':toast('Extra class added · parents can accept');break;
+  case 'addstudent':toast('Invite link ready · share with the parent');break;
+  case 'report':closeSheet();toast('Monthly report shared with parents');break;
+  case 'call':toast('Calling parent');break;
+  case 'wa':toast('Opening chat with parent');break;}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+render();
+</script>
+</body></html>
