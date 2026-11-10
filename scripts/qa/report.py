@@ -18,6 +18,20 @@ def redact(text):
 
 ROOT = Path(__file__).resolve().parents[2]
 
+def founder_features(source):
+    """Read the single canonical feature catalogue; never infer test passes."""
+    rows=[]
+    for line in source.splitlines():
+        if not re.match(r'^\|\s*M2-',line): continue
+        fields=[field.strip() for field in line.strip().strip('|').split('|')]
+        if len(fields)!=5 or not all(fields) or not re.fullmatch(r'M2-\d{2}',fields[0]) or fields[2] not in {'P0','P1','P2'}:
+            raise ValueError('Founder feature inventory has a malformed row')
+        rows.append(fields)
+    ids=[row[0] for row in rows]
+    if len(ids)!=58 or set(ids)!={f'M2-{n:02d}' for n in range(1,59)}:
+        raise ValueError('Founder feature inventory must contain each M2-01 through M2-58 exactly once')
+    return sorted(rows,key=lambda row:row[0])
+
 def workbook(path, sheets):
     """OOXML inline strings: user text, including = formulas, stays literal text."""
     ns = 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'
@@ -57,6 +71,11 @@ def safe_attachment(att, out, png=False):
 def write_report(catalog, payload, out, metadata, inventory):
     out=Path(out);out.mkdir(parents=True,exist_ok=True)
     scenarios=catalog['scenarios']; errors=[]; pairs={}; rows=[]
+    try:
+        features=founder_features((ROOT/'docs/BUILD_PROGRESS.md').read_text())
+    except (OSError,ValueError):
+        features=[]
+        errors.append('Founder feature inventory is missing or malformed; inspect docs/BUILD_PROGRESS.md')
     ids=[s['id'] for s in scenarios]
     if len(ids)!=len(set(ids)): errors.append('Duplicate catalog IDs')
     projects=metadata.get('projects',[])
@@ -120,10 +139,12 @@ def write_report(catalog, payload, out, metadata, inventory):
     missing_actions=sum(a['state']!='EXERCISED' for a in action_rows)
     if missing_actions: errors.append(f'{missing_actions} controls lack mapped passing action evidence across all viewports')
     summary={'ok':not errors,'generated_at':datetime.now(timezone.utc).isoformat(),'metadata':metadata,'expected':len(scenarios)*len(projects),'passed':sum(r['state']=='PASSED' for r in rows),'failed':sum(r['state']=='FAILED' for r in rows),'not_run':sum(r['state']=='NOT RUN' for r in rows),'not_built':len(catalog.get('gaps',[])),'errors':errors,'action_gaps':sum(a['state']!='EXERCISED' for a in action_rows)}
+    summary['founder_features']=len(features)
     # Public result JSON intentionally excludes paths, raw errors, session material and image bodies.
     (out/'summary.json').write_text(json.dumps({**summary,'results':[{k:v for k,v in r.items() if k not in ['image','actions']} for r in rows],'actions':action_rows},indent=2)+'\n')
     sheet_scenarios=[['Scenario ID','Feature','Persona','Scenario','Preconditions','Steps','Expected result','Automation','Evidence kind']]+[[s['id'],s['feature'],s['persona'],s['title'],s['preconditions'],'\n'.join(f'{i}. {v}' for i,v in enumerate(s['steps'],1)),s['expected'],s['status'],s['kind']] for s in scenarios]
     sheets=[('Overview',[['Field','Value']]+[[k,str(v)] for k,v in summary.items() if k not in ['errors','metadata']]+[[k,str(v)] for k,v in metadata.items()]),('Browser scenarios',sheet_scenarios),('Browser results',[['Scenario','Viewport','Result','Actual outcome','Duration ms','Observed test steps']]+[[r['id'],r['project'],r['state'],r['message'],r['duration_ms'],'\n'.join(r['steps'])] for r in rows]),('Action coverage',[['Route','Control','Result','Scenario evidence']]+[[a['route'],a['name'],a['state'],a['evidence']] for a in action_rows]),('Regression inventory',[['Suite','Exact test identity','Requirement','Execution evidence']]+inventory),('Future feature gaps',[['Feature','Status','Next work']]+[[g['feature'],g['status'],g['next']] for g in catalog.get('gaps',[])])]
+    sheets.append(('Founder feature inventory',[['ID','Founder requirement','Priority','Build group','Planning status — not a test result']]+features))
     workbook(out/'ParentPlus-Test-Scenarios.xlsx',sheets)
     e=lambda value:escape(str(value),quote=True)
     cards=[]
@@ -137,6 +158,7 @@ def write_report(catalog, payload, out, metadata, inventory):
     html='''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ParentPlus browser quality report</title><style>body{font:16px system-ui;background:#f3f5f1;color:#22303a;max-width:1100px;margin:30px auto;padding:0 18px}h1{color:#1f6f6b}details,section{background:white;border-radius:12px;padding:18px;margin:14px 0}summary{cursor:pointer;line-height:1.8}.badge{font-size:12px;border-radius:8px;padding:5px;background:#fff0c0}.passed{background:#daf0df}.failed,.not-run{background:#ffe0df}img{display:block;max-width:100%;max-height:760px;object-fit:contain;object-position:left top;border:1px solid #ddd}table{border-collapse:collapse;width:100%;font-size:13px}td,th{padding:9px;border:1px solid #ddd;text-align:left;overflow-wrap:anywhere}dt{font-weight:bold}dd{margin:0 0 9px;overflow-wrap:anywhere}button,input,select{padding:10px;margin:4px}a{color:#1f6f6b}.scroll{overflow:auto}</style><h1>ParentPlus · browser quality report</h1>'''
     html+=f'<p><b>{"PASSED" if summary["ok"] else "ACTION NEEDED"}</b> · {summary["passed"]}/{summary["expected"]} scenario-viewports passed · {summary["failed"]} failed · {summary["not_run"]} not run · {summary["not_built"]} future feature gaps</p><p>Synthetic local testing. This report does not establish live deployment, every possible interaction, or launch readiness. Action coverage is separately reported; a green scenario total does not close action gaps.</p><p><a href="ParentPlus-Test-Scenarios.xlsx">Download Excel scenario register</a></p><section><h2>Run evidence</h2><dl>{metadata_html}</dl></section><section><h2>Scenario results</h2><label>Search <input id="search" type="search" placeholder="Scenario, feature or persona"></label><label>Result <select id="state"><option>ALL</option><option>PASSED</option><option>FAILED</option><option>NOT RUN</option></select></label><button id="expand">Expand visible scenarios</button></section>'+''.join(cards)+f'<section><h2>Action coverage · {summary["action_gaps"]} gaps</h2><p>EXERCISED means a mapped scenario passed and recorded this control action. Unobserved conditional states remain gaps. Visible controls without a mapping are listed explicitly.</p><div class="scroll"><table><tr><th>Route</th><th>Control</th><th>Status</th><th>Evidence</th></tr>{action_html}</table></div></section><section><h2>Product work remaining</h2><ul>{gaps}</ul></section>'
     if errors:html+='<section><h2>Evidence errors</h2><ul>'+''.join('<li>'+e(v)+'</li>' for v in errors)+'</ul></section>'
+    html+='<section><h2>Founder feature inventory · '+str(len(features))+' requirements</h2><p>Planning status is not a browser test result. Source: docs/BUILD_PROGRESS.md. Partial or future features remain development work even when all executed scenarios pass.</p><div class="scroll"><table><tr><th>ID</th><th>Requirement</th><th>Priority</th><th>Build group</th><th>Current planning status</th></tr>'+''.join('<tr>'+''.join('<td>'+e(field)+'</td>' for field in row)+'</tr>' for row in features)+'</table></div></section>'
     html+='''<script>const cards=[...document.querySelectorAll('.scenario')],search=document.getElementById('search'),state=document.getElementById('state');function filter(){cards.forEach(c=>c.hidden=!(c.textContent.toLowerCase().includes(search.value.toLowerCase())&&(state.value==='ALL'||c.dataset.state===state.value)))}search.addEventListener('input',filter);state.addEventListener('change',filter);document.getElementById('expand').onclick=()=>cards.filter(c=>!c.hidden).forEach(c=>c.open=true);</script></html>'''
     (out/'index.html').write_text(html)
     return summary

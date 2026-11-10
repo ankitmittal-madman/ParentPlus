@@ -12524,12 +12524,12 @@
     {
       "id": "FE-COACH-DASHBOARD-SAMPLE-DATA",
       "domain": "coach-dashboard",
-      "description": "Identify the coach dashboard as example data and avoid a nonfunctional class action.",
+      "description": "Load real coach Today and avoid invented records or nonfunctional class actions.",
       "status": "implemented",
       "risk": "medium",
       "coverage": "covered",
-      "scenarios": ["The dashboard identifies sample classes and records and does not offer a fake start action"],
-      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/(coach)/page.test.tsx::Coach dashboard > clearly identifies sample data and does not offer a fake class action"}],
+      "scenarios": ["Real Today replaces sample classes and invented records and offers only implemented attendance actions"],
+      "tests": [{"suite": "frontend", "ref": "apps/web/src/app/(coach)/page.test.tsx::Coach dashboard > opens real Today without demo records or fake class actions"}],
       "sources": ["apps/web/src/app/(coach)/page.tsx", "apps/web/src/app/(coach)/page.test.tsx"]
     },
     {
@@ -14676,6 +14676,4634 @@
       ],
       "sources": [
         "docs/superpowers/specs/2026-11-10-enrolment-design.md"
+      ]
+    },
+    {
+      "id": "ATTENDANCE-CORE",
+      "domain": "attendance",
+      "description": "Atomic coach-confirmed session attendance with coherent roster, explicit marks, corrections, scoped authorisation and actor/full-payload recovery.",
+      "status": "planned",
+      "risk": "high",
+      "coverage": "missing",
+      "scenarios": [
+        "AT01–AT08: exact roster and version, five states, retries, correction history, rollback and both concurrency orderings."
+      ],
+      "tests": [],
+      "sources": [
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md",
+        "docs/superpowers/plans/2026-11-10-attendance-today.md"
+      ]
+    },
+    {
+      "id": "TODAY-REAL-SESSIONS",
+      "domain": "today",
+      "description": "Prototype-aligned Today uses authorised academy-local dated sessions and actual enrolled-child facts, without demo statistics.",
+      "status": "planned",
+      "risk": "high",
+      "coverage": "missing",
+      "scenarios": [
+        "AT01/AT04/AT12: assigned coach visibility, local date, bounded pages and explicit empty/oversized/cancelled states."
+      ],
+      "tests": [],
+      "sources": [
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md",
+        "docs/superpowers/plans/2026-11-10-attendance-today.md"
+      ]
+    },
+    {
+      "id": "PARENT-SIGNALS-FEED",
+      "domain": "parent-feed",
+      "description": "Own-child parent home shows saved attendance and typed items; current-day quick signals remain reports until explicit coach confirmation.",
+      "status": "planned",
+      "risk": "high",
+      "coverage": "missing",
+      "scenarios": [
+        "AT09/AT10/AT13: creator and guardian/current connection access, retained history, signal recovery and complete signed journey."
+      ],
+      "tests": [],
+      "sources": [
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md",
+        "docs/superpowers/plans/2026-11-10-attendance-today.md"
+      ]
+    },
+    {
+      "id": "PARENT-ITEM-FALLBACK",
+      "domain": "parent-feed",
+      "description": "Unknown typed item/version renders escaped bounded fallback with at most one allowed own-child internal action.",
+      "status": "planned",
+      "risk": "high",
+      "coverage": "missing",
+      "scenarios": [
+        "AT11: malformed payload and hostile URL/type cases cannot bypass base access or navigate externally."
+      ],
+      "tests": [],
+      "sources": [
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md",
+        "docs/superpowers/plans/2026-11-10-attendance-today.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-ACADEMY-NAVIGATION-PAGES-50-1-AND-COACH-WITHOUT-ASSIGNMENTS",
+      "domain": "attendance",
+      "description": "Academy navigation pages 50 1 and coach without assignments.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "academy navigation pages 50 1 and coach without assignments"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_academy_navigation_pages_50_1_and_coach_without_assignments"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-ALL-FIVE-STATUSES-ARE-EXPLICITLY-SAVED",
+      "domain": "attendance",
+      "description": "All five statuses are explicitly saved.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "all five statuses are explicitly saved"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_all_five_statuses_are_explicitly_saved"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-ANOTHER-AUTHORIZED-ACTOR-CANNOT-REUSE-REQUEST",
+      "domain": "attendance",
+      "description": "Another authorized actor cannot reuse request.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "another authorized actor cannot reuse request"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_another_authorized_actor_cannot_reuse_request"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-ASSIGNED-COACH-AND-ADMIN-HAVE-ACCESS-UNASSIGNED-COACH-DOES-NOT",
+      "domain": "attendance",
+      "description": "Assigned coach and admin have access unassigned coach does not.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "assigned coach and admin have access unassigned coach does not"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_assigned_coach_and_admin_have_access_unassigned_coach_does_not"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-CANCELLED-SESSION-ALLOWS-HISTORICAL-RECEIPT-BUT-NOT-NEW-SAVE",
+      "domain": "attendance",
+      "description": "Cancelled session allows historical receipt but not new save.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "cancelled session allows historical receipt but not new save"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_cancelled_session_allows_historical_receipt_but_not_new_save"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-CLOCK-HELPER-IS-REAL-TIME-INVOKER-AND-FULLY-PRIVATE",
+      "domain": "attendance",
+      "description": "Clock helper is real time invoker and fully private.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "clock helper is real time invoker and fully private"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_clock_helper_is_real_time_invoker_and_fully_private"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-CREATOR-GUARDIAN-AND-CONNECTION-SCOPE-IS-NOT-STAFF-SCOPE",
+      "domain": "attendance",
+      "description": "Creator guardian and connection scope is not staff scope.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "creator guardian and connection scope is not staff scope"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_creator_guardian_and_connection_scope_is_not_staff_scope"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-CURRENT-AUTHORITY-REQUIRED-FOR-OLD-RECEIPT",
+      "domain": "attendance",
+      "description": "Current authority required for old receipt.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "current authority required for old receipt"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_current_authority_required_for_old_receipt"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-DST-SEPARATE-MIDNIGHTS-AND-CROSS-MIDNIGHT-APPEARS-ONCE",
+      "domain": "attendance",
+      "description": "Dst separate midnights and cross midnight appears once.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "dst separate midnights and cross midnight appears once"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_dst_separate_midnights_and_cross_midnight_appears_once"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-DUPLICATE-NORMALIZED-CHILD-OR-ENROLLMENT-REJECTED",
+      "domain": "attendance",
+      "description": "Duplicate normalized child or enrollment rejected.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "duplicate normalized child or enrollment rejected"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_duplicate_normalized_child_or_enrollment_rejected"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-EACH-TRANSACTION-STAGE-FAILURE-ROLLS-BACK-EVERYTHING",
+      "domain": "attendance",
+      "description": "Each transaction stage failure rolls back everything.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "each transaction stage failure rolls back everything"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_each_transaction_stage_failure_rolls_back_everything"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-EXACT-PUBLIC-RPC-INVENTORY-AND-PRIVATE-HELPERS",
+      "domain": "attendance",
+      "description": "Exact public rpc inventory and private helpers.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "exact public rpc inventory and private helpers"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_exact_public_rpc_inventory_and_private_helpers"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-INVALID-DATES-AND-HALF-CURSOR-AND-ZONE-FAIL-CLOSED",
+      "domain": "attendance",
+      "description": "Invalid dates and half cursor and zone fail closed.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "invalid dates and half cursor and zone fail closed"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_invalid_dates_and_half_cursor_and_zone_fail_closed"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-INVALID-PAYLOAD-OPERATION-NULL-IS-REJECTED",
+      "domain": "attendance",
+      "description": "Invalid payload operation null is rejected.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "invalid payload operation null is rejected"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_invalid_payload_operation_null_is_rejected"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-MALFORMED-RECORDS-FAIL-CLOSED",
+      "domain": "attendance",
+      "description": "Malformed records fail closed.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "malformed records fail closed"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_malformed_records_fail_closed"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-OLD-RECEIPT-DOES-NOT-RETURN-LATEST-SHEET",
+      "domain": "attendance",
+      "description": "Old receipt does not return latest sheet.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "old receipt does not return latest sheet"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_old_receipt_does_not_return_latest_sheet"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-PAUSE-RESUME-ABA-CHANGES-TOKEN-AND-RETAINS-HISTORICAL-RECORD",
+      "domain": "attendance",
+      "description": "Pause resume aba changes token and retains historical record.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "pause resume aba changes token and retains historical record"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_pause_resume_aba_changes_token_and_retains_historical_record"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-PAYLOAD-REORDERED-KEYS-AND-UPPERCASE-UUIDS-NORMALIZE-ON-RETRY",
+      "domain": "attendance",
+      "description": "Payload reordered keys and uppercase uuids normalize on retry.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "payload reordered keys and uppercase uuids normalize on retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_payload_reordered_keys_and_uppercase_uuids_normalize_on_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-PRIVATE-TABLES-HAVE-RLS-AND-NO-CLIENT-GRANTS",
+      "domain": "attendance",
+      "description": "Private tables have rls and no client grants.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "private tables have rls and no client grants"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_private_tables_have_rls_and_no_client_grants"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-REPEATABLE-READ-WRITE-AND-STATUS-ARE-REJECTED",
+      "domain": "attendance",
+      "description": "Repeatable read write and status are rejected.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "repeatable read write and status are rejected"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_repeatable_read_write_and_status_are_rejected"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-REQUEST-COLLISION-COMPARES-ENTIRE-PAYLOAD",
+      "domain": "attendance",
+      "description": "Request collision compares entire payload.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "request collision compares entire payload"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_request_collision_compares_entire_payload"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-RESPONSE-TIMESTAMPS-ARE-UTC-EVEN-WHEN-CALLER-ZONE-DIFFERS",
+      "domain": "attendance",
+      "description": "Response timestamps are utc even when caller zone differs.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "response timestamps are utc even when caller zone differs"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_response_timestamps_are_utc_even_when_caller_zone_differs"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-ROSTER-200-CONNECTED-ROWS-IS-COMPLETE",
+      "domain": "attendance",
+      "description": "Roster 200 connected rows is complete.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "roster 200 connected rows is complete"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_roster_200_connected_rows_is_complete"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-ROSTER-CAP-IS-BEFORE-INACTIVE-CONNECTION-FILTER",
+      "domain": "attendance",
+      "description": "Roster cap is before inactive connection filter.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "roster cap is before inactive connection filter"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_roster_cap_is_before_inactive_connection_filter"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-ROSTER-EXACT-PAIRS-AND-EMPTY-ROSTER-CANNOT-CREATE-SHEET",
+      "domain": "attendance",
+      "description": "Roster exact pairs and empty roster cannot create sheet.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "roster exact pairs and empty roster cannot create sheet"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_roster_exact_pairs_and_empty_roster_cannot_create_sheet"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-SAVE-RECEIPT-RECORDS-AUDIT-AND-STABLE-ITEM-CORRECTION",
+      "domain": "attendance",
+      "description": "Save receipt records audit and stable item correction.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "save receipt records audit and stable item correction"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_save_receipt_records_audit_and_stable_item_correction"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-SESSION-VERSION-IS-OWNED-BY-LIFECYCLE-TRIGGER",
+      "domain": "attendance",
+      "description": "Session version is owned by lifecycle trigger.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "session version is owned by lifecycle trigger"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_session_version_is_owned_by_lifecycle_trigger"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-SESSIONS-TIED-CURSOR-50-1-AND-LOCAL-DAY-BOUNDARIES",
+      "domain": "attendance",
+      "description": "Sessions tied cursor 50 1 and local day boundaries.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "sessions tied cursor 50 1 and local day boundaries"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_sessions_tied_cursor_50_1_and_local_day_boundaries"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-STALE-SHEET-OR-TOKEN-FAILS-WITHOUT-RECEIPT",
+      "domain": "attendance",
+      "description": "Stale sheet or token fails without receipt.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "stale sheet or token fails without receipt"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_stale_sheet_or_token_fails_without_receipt"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-STATUS-UNKNOWN-AND-KNOWN-USE-FULL-NORMALIZED-PAYLOAD",
+      "domain": "attendance",
+      "description": "Status unknown and known use full normalized payload.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "status unknown and known use full normalized payload"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_status_unknown_and_known_use_full_normalized_payload"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-UNSAVED-SHEET-IS-UNMARKED-AND-READ-DOES-NOT-CREATE-SHEET",
+      "domain": "attendance",
+      "description": "Unsaved sheet is unmarked and read does not create sheet.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "unsaved sheet is unmarked and read does not create sheet"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_unsaved_sheet_is_unmarked_and_read_does_not_create_sheet"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-ACTUAL052-ADMISSION-FIRST-INVALIDATES-ROSTER",
+      "domain": "attendance",
+      "description": "Actual052 admission first invalidates roster.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "actual052 admission first invalidates roster"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_actual052_admission_first_invalidates_roster"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-ACTUAL052-PAUSE-FIRST-REJECTS-WAITING-SAVE",
+      "domain": "attendance",
+      "description": "Actual052 pause first rejects waiting save.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "actual052 pause first rejects waiting save"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_actual052_pause_first_rejects_waiting_save"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-ACTUAL052-RESUME-FIRST-INVALIDATES-OLD-ACTIVE-TOKEN",
+      "domain": "attendance",
+      "description": "Actual052 resume first invalidates old active token.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "actual052 resume first invalidates old active token"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_actual052_resume_first_invalidates_old_active_token"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-ACTUAL052-WITHDRAWAL-FIRST-REJECTS-WAITING-SAVE",
+      "domain": "attendance",
+      "description": "Actual052 withdrawal first rejects waiting save.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "actual052 withdrawal first rejects waiting save"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_actual052_withdrawal_first_rejects_waiting_save"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-ASSIGNMENT-REVOKED-FIRST-DENIES-SAVE",
+      "domain": "attendance",
+      "description": "Assignment revoked first denies save.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "assignment revoked first denies save"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_assignment_revoked_first_denies_save"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-ASSIGNMENT-REVOKED-FIRST-DENIES-WAITING-TODAY-SUMMARY",
+      "domain": "attendance",
+      "description": "Assignment revoked first denies waiting today summary.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "assignment revoked first denies waiting today summary"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_assignment_revoked_first_denies_waiting_today_summary"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-CANCEL-FIRST-REJECTS-SIGNAL",
+      "domain": "attendance",
+      "description": "Cancel first rejects signal.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "cancel first rejects signal"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_cancel_first_rejects_signal"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-CANCEL-FIRST-REJECTS-WAITING-SAVE",
+      "domain": "attendance",
+      "description": "Cancel first rejects waiting save.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "cancel first rejects waiting save"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_cancel_first_rejects_waiting_save"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-CONNECTION-REVOKED-FIRST-DENIES-SAVE",
+      "domain": "attendance",
+      "description": "Connection revoked first denies save.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "connection revoked first denies save"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_connection_revoked_first_denies_save"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-CONNECTION-REVOKED-FIRST-DENIES-SIGNAL",
+      "domain": "attendance",
+      "description": "Connection revoked first denies signal.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "connection revoked first denies signal"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_connection_revoked_first_denies_signal"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-DUPLICATE-SAVE-REQUESTS-SERIALIZE-WITHOUT-SHARE-UPGRADE",
+      "domain": "attendance",
+      "description": "Duplicate save requests serialize without share upgrade.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "duplicate save requests serialize without share upgrade"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_duplicate_save_requests_serialize_without_share_upgrade"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-DUPLICATE-SIGNAL-REQUESTS-WRITE-ONE-APPEND",
+      "domain": "attendance",
+      "description": "Duplicate signal requests write one append.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "duplicate signal requests write one append"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_duplicate_signal_requests_write_one_append"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-GUARDIAN-REVOKED-FIRST-DENIES-SIGNAL",
+      "domain": "attendance",
+      "description": "Guardian revoked first denies signal.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "guardian revoked first denies signal"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_guardian_revoked_first_denies_signal"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-HIDDEN-CONNECTION-REACTIVATED-FIRST-INVALIDATES-ROSTER",
+      "domain": "attendance",
+      "description": "Hidden connection reactivated first invalidates roster.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "hidden connection reactivated first invalidates roster"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_hidden_connection_reactivated_first_invalidates_roster"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-LOCKED-PAUSED-SHEET-READ-FIRST-BLOCKS-ACTUAL052-RESUME",
+      "domain": "attendance",
+      "description": "Locked paused sheet read first blocks actual052 resume.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "locked paused sheet read first blocks actual052 resume"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_locked_paused_sheet_read_first_blocks_actual052_resume"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-MEMBERSHIP-REVOKED-FIRST-DENIES-SAVE",
+      "domain": "attendance",
+      "description": "Membership revoked first denies save.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "membership revoked first denies save"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_membership_revoked_first_denies_save"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-MOVE-FIRST-REJECTS-WAITING-SAVE-VERSION",
+      "domain": "attendance",
+      "description": "Move first rejects waiting save version.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "move first rejects waiting save version"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_move_first_rejects_waiting_save_version"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-PAUSE-FIRST-REJECTS-SIGNAL",
+      "domain": "attendance",
+      "description": "Pause first rejects signal.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "pause first rejects signal"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_pause_first_rejects_signal"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-PAUSE-RESUME-ABA-FIRST-REJECTS-OLD-TOKEN",
+      "domain": "attendance",
+      "description": "Pause resume aba first rejects old token.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "pause resume aba first rejects old token"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_pause_resume_aba_first_rejects_old_token"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-RESTORE-ABA-FIRST-REJECTS-OLD-SESSION-VERSION",
+      "domain": "attendance",
+      "description": "Restore aba first rejects old session version.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "restore aba first rejects old session version"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_restore_aba_first_rejects_old_session_version"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SAVE-FIRST-BLOCKS-ACTUAL052-ADMISSION",
+      "domain": "attendance",
+      "description": "Save first blocks actual052 admission.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "save first blocks actual052 admission"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_save_first_blocks_actual052_admission"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SAVE-FIRST-BLOCKS-ACTUAL052-PAUSE",
+      "domain": "attendance",
+      "description": "Save first blocks actual052 pause.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "save first blocks actual052 pause"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_save_first_blocks_actual052_pause"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SAVE-FIRST-BLOCKS-ACTUAL052-WITHDRAWAL",
+      "domain": "attendance",
+      "description": "Save first blocks actual052 withdrawal.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "save first blocks actual052 withdrawal"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_save_first_blocks_actual052_withdrawal"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SAVE-FIRST-BLOCKS-CANCEL",
+      "domain": "attendance",
+      "description": "Save first blocks cancel.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "save first blocks cancel"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_save_first_blocks_cancel"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SAVE-FIRST-BLOCKS-CANCEL-RESTORE-ABA",
+      "domain": "attendance",
+      "description": "Save first blocks cancel restore aba.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "save first blocks cancel restore aba"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_save_first_blocks_cancel_restore_aba"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SAVE-FIRST-BLOCKS-MOVE",
+      "domain": "attendance",
+      "description": "Save first blocks move.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "save first blocks move"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_save_first_blocks_move"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SAVE-FIRST-BLOCKS-PAUSE-RESUME-ABA",
+      "domain": "attendance",
+      "description": "Save first blocks pause resume aba.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "save first blocks pause resume aba"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_save_first_blocks_pause_resume_aba"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SAVE-FIRST-HOLDS-ASSIGNMENT",
+      "domain": "attendance",
+      "description": "Save first holds assignment.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "save first holds assignment"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_save_first_holds_assignment"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SAVE-FIRST-HOLDS-CONNECTION",
+      "domain": "attendance",
+      "description": "Save first holds connection.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "save first holds connection"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_save_first_holds_connection"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SAVE-FIRST-HOLDS-MEMBERSHIP",
+      "domain": "attendance",
+      "description": "Save first holds membership.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "save first holds membership"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_save_first_holds_membership"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SAVE-FIRST-HOLDS-WORKSPACE",
+      "domain": "attendance",
+      "description": "Save first holds workspace.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "save first holds workspace"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_save_first_holds_workspace"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SAVE-FIRST-LOCKS-INITIALLY-HIDDEN-CONNECTION-AGAINST-REACTIVATION",
+      "domain": "attendance",
+      "description": "Save first locks initially hidden connection against reactivation.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "save first locks initially hidden connection against reactivation"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_save_first_locks_initially_hidden_connection_against_reactivation"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SIGNAL-FIRST-BLOCKS-CANCEL",
+      "domain": "attendance",
+      "description": "Signal first blocks cancel.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal first blocks cancel"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_signal_first_blocks_cancel"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SIGNAL-FIRST-BLOCKS-PAUSE",
+      "domain": "attendance",
+      "description": "Signal first blocks pause.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal first blocks pause"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_signal_first_blocks_pause"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SIGNAL-FIRST-HOLDS-CONNECTION",
+      "domain": "attendance",
+      "description": "Signal first holds connection.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal first holds connection"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_signal_first_holds_connection"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SIGNAL-FIRST-HOLDS-GUARDIAN",
+      "domain": "attendance",
+      "description": "Signal first holds guardian.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal first holds guardian"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_signal_first_holds_guardian"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SIGNAL-FIRST-HOLDS-WORKSPACE",
+      "domain": "attendance",
+      "description": "Signal first holds workspace.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal first holds workspace"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_signal_first_holds_workspace"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SIGNAL-RECEIPT-REPLAYS-ON-LATER-LOCAL-DAY-WITHOUT-NEW-APPEND",
+      "domain": "attendance",
+      "description": "Signal receipt replays on later local day without new append.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal receipt replays on later local day without new append"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_signal_receipt_replays_on_later_local_day_without_new_append"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SIGNAL-RECHECKS-LOCAL-DAY-AFTER-OBSERVED-REQUEST-LOCK-WAIT",
+      "domain": "attendance",
+      "description": "Signal rechecks local day after observed request lock wait.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal rechecks local day after observed request lock wait"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_signal_rechecks_local_day_after_observed_request_lock_wait"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SIGNAL-SAME-LOCAL-DAY-AFTER-OBSERVED-REQUEST-LOCK-WAIT-SUCCEEDS",
+      "domain": "attendance",
+      "description": "Signal same local day after observed request lock wait succeeds.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal same local day after observed request lock wait succeeds"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_signal_same_local_day_after_observed_request_lock_wait_succeeds"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-SIGNAL-STATUS-WAITS-FOR-COMMIT",
+      "domain": "attendance",
+      "description": "Signal status waits for commit.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal status waits for commit"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_signal_status_waits_for_commit"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-STATUS-WAITS-FOR-SAVE-COMMIT-AND-RETURNS-KNOWN",
+      "domain": "attendance",
+      "description": "Status waits for save commit and returns known.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "status waits for save commit and returns known"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_status_waits_for_save_commit_and_returns_known"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-STATUS-WAITS-FOR-SAVE-ROLLBACK-AND-RETURNS-UNKNOWN",
+      "domain": "attendance",
+      "description": "Status waits for save rollback and returns unknown.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "status waits for save rollback and returns unknown"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_status_waits_for_save_rollback_and_returns_unknown"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-TODAY-READ-FIRST-HOLDS-COACH-ASSIGNMENT",
+      "domain": "attendance",
+      "description": "Today read first holds coach assignment.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "today read first holds coach assignment"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_today_read_first_holds_coach_assignment"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-WAITING-SAVE-AFTER-ROLLBACK-WRITES-ONCE",
+      "domain": "attendance",
+      "description": "Waiting save after rollback writes once.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "waiting save after rollback writes once"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_waiting_save_after_rollback_writes_once"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-WORKSPACE-REVOKED-FIRST-DENIES-SAVE",
+      "domain": "attendance",
+      "description": "Workspace revoked first denies save.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "workspace revoked first denies save"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_workspace_revoked_first_denies_save"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCECONCURRENCYTESTS-TEST-WORKSPACE-REVOKED-FIRST-DENIES-SIGNAL",
+      "domain": "attendance",
+      "description": "Workspace revoked first denies signal.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "workspace revoked first denies signal"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance_concurrency.AttendanceConcurrencyTests.test_workspace_revoked_first_denies_signal"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance_concurrency.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-ALL-FOUR-ENUMS-AND-MISSING-REASON-CONTRACT",
+      "domain": "attendance",
+      "description": "All four enums and missing reason contract.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "all four enums and missing reason contract"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_all_four_enums_and_missing_reason_contract"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-COACH-SIGNAL-CURSOR-TIES-50-1",
+      "domain": "attendance",
+      "description": "Coach signal cursor ties 50 1.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "coach signal cursor ties 50 1"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_coach_signal_cursor_ties_50_1"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-HISTORY-APPENDS-AND-COACH-SEES-LATEST-REPORT",
+      "domain": "attendance",
+      "description": "History appends and coach sees latest report.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "history appends and coach sees latest report"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_history_appends_and_coach_sees_latest_report"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-INVALID-REASON-IS-NOT-STORED",
+      "domain": "attendance",
+      "description": "Invalid reason is not stored.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "invalid reason is not stored"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_invalid_reason_is_not_stored"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-OTHER-ACTOR-CANNOT-RECOVER-SIGNAL-AND-GUARDIAN-REVOCATION-DENIES-REPLAY",
+      "domain": "attendance",
+      "description": "Other actor cannot recover signal and guardian revocation denies replay.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "other actor cannot recover signal and guardian revocation denies replay"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_other_actor_cannot_recover_signal_and_guardian_revocation_denies_replay"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-PARENT-SESSIONS-CURSOR-TIES-50-1",
+      "domain": "attendance",
+      "description": "Parent sessions cursor ties 50 1.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "parent sessions cursor ties 50 1"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_parent_sessions_cursor_ties_50_1"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-PARENT-SESSIONS-ONLY-INCLUDE-OWN-LATEST-SIGNAL-AND-SAVED-ATTENDANCE",
+      "domain": "attendance",
+      "description": "Parent sessions only include own latest signal and saved attendance.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "parent sessions only include own latest signal and saved attendance"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_parent_sessions_only_include_own_latest_signal_and_saved_attendance"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-PAUSED-CHILD-CANNOT-SEND-BUT-CAN-RECOVER-SAVED-SIGNAL",
+      "domain": "attendance",
+      "description": "Paused child cannot send but can recover saved signal.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "paused child cannot send but can recover saved signal"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_paused_child_cannot_send_but_can_recover_saved_signal"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-SIGNAL-IS-REPORT-ONLY-AND-IDENTICAL-REQUEST-REPLAYS",
+      "domain": "attendance",
+      "description": "Signal is report only and identical request replays.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal is report only and identical request replays"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_signal_is_report_only_and_identical_request_replays"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-SIGNAL-RECEIPT-FAILURE-ROLLS-BACK-APPEND",
+      "domain": "attendance",
+      "description": "Signal receipt failure rolls back append.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal receipt failure rolls back append"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_signal_receipt_failure_rolls_back_append"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-SIGNAL-REQUEST-CHANGED-PAYLOAD-IS-COLLISION",
+      "domain": "attendance",
+      "description": "Signal request changed payload is collision.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal request changed payload is collision"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_signal_request_changed_payload_is_collision"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-SIGNAL-STATUS-UNKNOWN-AND-KNOWN-FULL-PAYLOAD",
+      "domain": "attendance",
+      "description": "Signal status unknown and known full payload.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal status unknown and known full payload"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_signal_status_unknown_and_known_full_payload"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-SIGNAL-WRONG-LOCAL-DAY-IS-REJECTED-WITHOUT-HISTORY",
+      "domain": "attendance",
+      "description": "Signal wrong local day is rejected without history.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal wrong local day is rejected without history"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_signal_wrong_local_day_is_rejected_without_history"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTITEMTESTS-TEST-EXPIRED-ITEMS-ARE-EXCLUDED",
+      "domain": "attendance",
+      "description": "Expired items are excluded.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "expired items are excluded"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_items.ParentItemTests.test_expired_items_are_excluded"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_items.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTITEMTESTS-TEST-INVALID-WEEK-DATE-CURSOR-AND-BATCH-FAIL-CLOSED",
+      "domain": "attendance",
+      "description": "Invalid week date cursor and batch fail closed.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "invalid week date cursor and batch fail closed"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_items.ParentItemTests.test_invalid_week_date_cursor_and_batch_fail_closed"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_items.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTITEMTESTS-TEST-ITEMS-CURSOR-TIES-AND-ENVELOPE-EXACT-KEYS",
+      "domain": "attendance",
+      "description": "Items cursor ties and envelope exact keys.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "items cursor ties and envelope exact keys"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_items.ParentItemTests.test_items_cursor_ties_and_envelope_exact_keys"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_items.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTITEMTESTS-TEST-OTHER-PARENT-DENIED-EVEN-FOR-UNKNOWN-ITEM-TYPE",
+      "domain": "attendance",
+      "description": "Other parent denied even for unknown item type.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "other parent denied even for unknown item type"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_items.ParentItemTests.test_other_parent_denied_even_for_unknown_item_type"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_items.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTITEMTESTS-TEST-PARENT-ACADEMY-NAVIGATION-PAGES-50-1",
+      "domain": "attendance",
+      "description": "Parent academy navigation pages 50 1.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "parent academy navigation pages 50 1"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_items.ParentItemTests.test_parent_academy_navigation_pages_50_1"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_items.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTITEMTESTS-TEST-PARENT-BATCH-CURSOR-HAS-50-1-SPLIT-AND-NO-ENROLLMENT-ID-SUBSTITUTION",
+      "domain": "attendance",
+      "description": "Parent batch cursor has 50 1 split and no enrollment id substitution.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "parent batch cursor has 50 1 split and no enrollment id substitution"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_items.ParentItemTests.test_parent_batch_cursor_has_50_1_split_and_no_enrollment_id_substitution"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_items.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTITEMTESTS-TEST-PARENT-NAVIGATION-RETURNS-WORKSPACE-AND-BATCH-IDS",
+      "domain": "attendance",
+      "description": "Parent navigation returns workspace and batch ids.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "parent navigation returns workspace and batch ids"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_items.ParentItemTests.test_parent_navigation_returns_workspace_and_batch_ids"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_items.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTITEMTESTS-TEST-SAVED-ITEM-ENVELOPE-AND-WEEK-FACTS",
+      "domain": "attendance",
+      "description": "Saved item envelope and week facts.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "saved item envelope and week facts"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_items.ParentItemTests.test_saved_item_envelope_and_week_facts"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_items.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTITEMTESTS-TEST-UNKNOWN-ITEM-BASE-AUTHORITY-CANNOT-BYPASS-REVOKED-GUARDIAN",
+      "domain": "attendance",
+      "description": "Unknown item base authority cannot bypass revoked guardian.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "unknown item base authority cannot bypass revoked guardian"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_items.ParentItemTests.test_unknown_item_base_authority_cannot_bypass_revoked_guardian"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_items.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTITEMTESTS-TEST-WEEK-EXACT-COUNTS-BEYOND-FIFTY-DETAIL-ROWS",
+      "domain": "attendance",
+      "description": "Week exact counts beyond fifty detail rows.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "week exact counts beyond fifty detail rows"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_items.ParentItemTests.test_week_exact_counts_beyond_fifty_detail_rows"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_items.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-FAILED-MULTIROW-CORRECTION-PRESERVES-FULL-SNAPSHOTS-AND-SAME-KEY-RETRY",
+      "domain": "attendance",
+      "description": "Failed multirow correction preserves full snapshots and same key retry.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "failed multirow correction preserves full snapshots and same key retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_failed_multirow_correction_preserves_full_snapshots_and_same_key_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-SESSION-SHEET-AND-SAVE-REJECT-DATES-OUTSIDE-ACADEMY-LOCAL-RANGE",
+      "domain": "attendance",
+      "description": "Session sheet and save reject dates outside academy local range.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "session sheet and save reject dates outside academy local range"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_session_sheet_and_save_reject_dates_outside_academy_local_range"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-VALID-EXTREME-ACADEMY-LOCAL-DATES-OPEN-AND-SAVE-SHEET",
+      "domain": "attendance",
+      "description": "Valid extreme academy local dates open and save sheet.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "valid extreme academy local dates open and save sheet"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_valid_extreme_academy_local_dates_open_and_save_sheet"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-SIGNAL-ACCEPTS-SUPPORTED-EXTREME-LOCAL-DATES-WITH-OWNER-TEST-CLOCK",
+      "domain": "attendance",
+      "description": "Signal accepts supported extreme local dates with owner test clock.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal accepts supported extreme local dates with owner test clock"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_signal_accepts_supported_extreme_local_dates_with_owner_test_clock"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-SIGNAL-INSERT-FAILURE-PRESERVES-SNAPSHOTS-AND-SAME-KEY-RETRY",
+      "domain": "attendance",
+      "description": "Signal insert failure preserves snapshots and same key retry.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal insert failure preserves snapshots and same key retry"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_signal_insert_failure_preserves_snapshots_and_same_key_retry"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-PARENTSIGNALTESTS-TEST-SIGNAL-REJECTS-SESSION-DATES-OUTSIDE-ACADEMY-LOCAL-RANGE",
+      "domain": "attendance",
+      "description": "Signal rejects session dates outside academy local range.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "signal rejects session dates outside academy local range"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_parent_signals.ParentSignalTests.test_signal_rejects_session_dates_outside_academy_local_range"
+        }
+      ],
+      "sources": [
+        "tests/database/test_parent_signals.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "DB-ATTENDANCETESTS-TEST-SHARED-DENIAL-HELPER-REJECTS-SUCCESS-WHEN-EXPECT-RAISE-EXCEPTION",
+      "domain": "attendance",
+      "description": "Shared denial helper rejects success when expect raise exception.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "shared denial helper rejects success when expect raise exception"
+      ],
+      "tests": [
+        {
+          "suite": "database",
+          "ref": "tests.database.test_attendance.AttendanceTests.test_shared_denial_helper_rejects_success_when_expect_raise_exception"
+        }
+      ],
+      "sources": [
+        "tests/database/test_attendance.py",
+        "tests/database/test_family_invitations.py",
+        "supabase/migrations/20261110005300_attendance_today.sql",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-MAPS-APP-TODAY-ACADEMIES-EXACT-JSON-OBJECT-AND-ARGUMENTS",
+      "domain": "attendance",
+      "description": "maps app_today_academies exact JSON object and arguments.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "maps app_today_academies exact JSON object and arguments"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::maps app_today_academies exact JSON object and arguments"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-MAPS-APP-TODAY-SESSIONS-EXACT-JSON-OBJECT-AND-ARGUMENTS",
+      "domain": "attendance",
+      "description": "maps app_today_sessions exact JSON object and arguments.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "maps app_today_sessions exact JSON object and arguments"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::maps app_today_sessions exact JSON object and arguments"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-MAPS-APP-ATTENDANCE-SHEET-EXACT-JSON-OBJECT-AND-ARGUMENTS",
+      "domain": "attendance",
+      "description": "maps app_attendance_sheet exact JSON object and arguments.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "maps app_attendance_sheet exact JSON object and arguments"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::maps app_attendance_sheet exact JSON object and arguments"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-MAPS-APP-SAVE-ATTENDANCE-CANONICAL-RECORDS-AND-RECEIPT",
+      "domain": "attendance",
+      "description": "maps app_save_attendance canonical records and receipt.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "maps app_save_attendance canonical records and receipt"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::maps app_save_attendance canonical records and receipt"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-MAPS-APP-ATTENDANCE-REQUEST-STATUS-COMPLETE-PAYLOAD-AND-RECEIPT",
+      "domain": "attendance",
+      "description": "maps app_attendance_request_status complete payload and receipt.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "maps app_attendance_request_status complete payload and receipt"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::maps app_attendance_request_status complete payload and receipt"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-MAPS-APP-SESSION-PARENT-SIGNALS-CURSOR-AND-PROVENANCE",
+      "domain": "attendance",
+      "description": "maps app_session_parent_signals cursor and provenance.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "maps app_session_parent_signals cursor and provenance"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::maps app_session_parent_signals cursor and provenance"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-FENCES-APP-TODAY-ACADEMIES-EXPECTED-ACTOR-AGAINST-GETUSER",
+      "domain": "attendance",
+      "description": "fences app_today_academies expected actor against getUser.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "fences app_today_academies expected actor against getUser"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::fences app_today_academies expected actor against getUser"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-FENCES-APP-TODAY-SESSIONS-EXPECTED-ACTOR-AGAINST-GETUSER",
+      "domain": "attendance",
+      "description": "fences app_today_sessions expected actor against getUser.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "fences app_today_sessions expected actor against getUser"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::fences app_today_sessions expected actor against getUser"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-FENCES-APP-ATTENDANCE-SHEET-EXPECTED-ACTOR-AGAINST-GETUSER",
+      "domain": "attendance",
+      "description": "fences app_attendance_sheet expected actor against getUser.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "fences app_attendance_sheet expected actor against getUser"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::fences app_attendance_sheet expected actor against getUser"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-FENCES-APP-SAVE-ATTENDANCE-EXPECTED-ACTOR-AGAINST-GETUSER",
+      "domain": "attendance",
+      "description": "fences app_save_attendance expected actor against getUser.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "fences app_save_attendance expected actor against getUser"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::fences app_save_attendance expected actor against getUser"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-FENCES-APP-ATTENDANCE-REQUEST-STATUS-EXPECTED-ACTOR-AGAINST-GETUSER",
+      "domain": "attendance",
+      "description": "fences app_attendance_request_status expected actor against getUser.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "fences app_attendance_request_status expected actor against getUser"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::fences app_attendance_request_status expected actor against getUser"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-FENCES-APP-SESSION-PARENT-SIGNALS-EXPECTED-ACTOR-AGAINST-GETUSER",
+      "domain": "attendance",
+      "description": "fences app_session_parent_signals expected actor against getUser.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "fences app_session_parent_signals expected actor against getUser"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::fences app_session_parent_signals expected actor against getUser"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-REJECTS-MALFORMED-APP-TODAY-ACADEMIES-AND-REDACTS-TRANSPORT-FAILURES",
+      "domain": "attendance",
+      "description": "rejects malformed app_today_academies and redacts transport failures.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "rejects malformed app_today_academies and redacts transport failures"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::rejects malformed app_today_academies and redacts transport failures"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-REJECTS-MALFORMED-APP-TODAY-SESSIONS-AND-REDACTS-TRANSPORT-FAILURES",
+      "domain": "attendance",
+      "description": "rejects malformed app_today_sessions and redacts transport failures.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "rejects malformed app_today_sessions and redacts transport failures"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::rejects malformed app_today_sessions and redacts transport failures"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-REJECTS-MALFORMED-APP-ATTENDANCE-SHEET-AND-REDACTS-TRANSPORT-FAILURES",
+      "domain": "attendance",
+      "description": "rejects malformed app_attendance_sheet and redacts transport failures.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "rejects malformed app_attendance_sheet and redacts transport failures"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::rejects malformed app_attendance_sheet and redacts transport failures"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-KEEPS-MALFORMED-APP-SAVE-ATTENDANCE-AND-THROWN-ERRORS-UNKNOWN",
+      "domain": "attendance",
+      "description": "keeps malformed app_save_attendance and thrown errors unknown.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "keeps malformed app_save_attendance and thrown errors unknown"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::keeps malformed app_save_attendance and thrown errors unknown"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-KEEPS-MALFORMED-APP-ATTENDANCE-REQUEST-STATUS-AND-THROWN-ERRORS-UNKNOWN",
+      "domain": "attendance",
+      "description": "keeps malformed app_attendance_request_status and thrown errors unknown.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "keeps malformed app_attendance_request_status and thrown errors unknown"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::keeps malformed app_attendance_request_status and thrown errors unknown"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-REJECTS-MALFORMED-APP-SESSION-PARENT-SIGNALS-AND-REDACTS-TRANSPORT-FAILURES",
+      "domain": "attendance",
+      "description": "rejects malformed app_session_parent_signals and redacts transport failures.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "rejects malformed app_session_parent_signals and redacts transport failures"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::rejects malformed app_session_parent_signals and redacts transport failures"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-CLASSIFIES-ONLY-DEFINITIVE-STRUCTURED-SQL-REJECTIONS-AND-NEVER-LEAKS-MESSAGES",
+      "domain": "attendance",
+      "description": "classifies only definitive structured SQL rejections and never leaks messages.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "classifies only definitive structured SQL rejections and never leaks messages"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::classifies only definitive structured SQL rejections and never leaks messages"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-VALIDATES-IDS-DATES-COMPLETE-CURSOR-PAIRS-AND-CANONICAL-BODIES-BEFORE-OPENING-A-CLIENT",
+      "domain": "attendance",
+      "description": "validates IDs dates complete cursor pairs and canonical bodies before opening a client.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "validates IDs dates complete cursor pairs and canonical bodies before opening a client"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::validates IDs dates complete cursor pairs and canonical bodies before opening a client"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-PASSES-BOTH-NON-NULL-SESSION-AND-SIGNAL-CURSOR-COMPONENTS",
+      "domain": "attendance",
+      "description": "passes both non-null session and signal cursor components.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "passes both non-null session and signal cursor components"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::passes both non-null session and signal cursor components"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-REJECTS-MISMATCHED-REQUEST-SESSION-COUNT-TOKEN-AND-VERSION-RECEIPTS",
+      "domain": "attendance",
+      "description": "rejects mismatched request session count token and version receipts.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "rejects mismatched request session count token and version receipts"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::rejects mismatched request session count token and version receipts"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-KEEPS-AN-UNKNOWN-RECOVERY-STATE-DISTINCT-FROM-SUCCESS-AND-REJECTS-WRONG-SCOPE-READS",
+      "domain": "attendance",
+      "description": "keeps an unknown recovery state distinct from success and rejects wrong-scope reads.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "keeps an unknown recovery state distinct from success and rejects wrong-scope reads"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::keeps an unknown recovery state distinct from success and rejects wrong-scope reads"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-REJECTS-AUTH-ERRORS-AND-REDACTS-CLIENT-CREATION-FAILURES",
+      "domain": "attendance",
+      "description": "rejects auth errors and redacts client creation failures.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "rejects auth errors and redacts client creation failures"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::rejects auth errors and redacts client creation failures"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-REJECTS-NON-ADVANCING-ACADEMY-SESSION-AND-REPORT-CURSOR-PAGES",
+      "domain": "attendance",
+      "description": "rejects non-advancing academy session and report cursor pages.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "rejects non-advancing academy session and report cursor pages"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::rejects non-advancing academy session and report cursor pages"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-ACCEPTS-FIFTY-UNIQUE-CANDIDATES-AND-ROSTER-ROWS-BUT-REJECTS-A-FIFTY-FIRST-UNIQUE-ROW",
+      "domain": "enrollment",
+      "description": "accepts fifty unique candidates and roster rows but rejects a fifty-first unique row.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "accepts fifty unique candidates and roster rows but rejects a fifty-first unique row"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::accepts fifty unique candidates and roster rows but rejects a fifty-first unique row"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/enrollments/actions.test.ts",
+        "apps/web/src/lib/enrollments/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-ACCEPTS-ONE-HUNDRED-UNIQUE-PARENT-ENROLMENTS-BUT-REJECTS-THE-ONE-HUNDRED-AND-FIRST",
+      "domain": "enrollment",
+      "description": "accepts one hundred unique parent enrolments but rejects the one hundred and first.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "accepts one hundred unique parent enrolments but rejects the one hundred and first"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/enrollments/actions.test.ts::accepts one hundred unique parent enrolments but rejects the one hundred and first"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/enrollments/actions.test.ts",
+        "apps/web/src/lib/enrollments/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-AUTOLOADS-A-VERIFIED-COMPLETE-ROSTER-WITHOUT-IMPLICITLY-MARKING-ANY-CHILD",
+      "domain": "attendance",
+      "description": "autoloads a verified complete roster without implicitly marking any child.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "autoloads a verified complete roster without implicitly marking any child"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::autoloads a verified complete roster without implicitly marking any child"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-SUPPORTS-P-L-A-AND-MORE-MARKS-AND-REQUIRES-EVERY-ROW-BEFORE-SAVING",
+      "domain": "attendance",
+      "description": "supports P L A and More marks and requires every row before saving.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "supports P L A and More marks and requires every row before saving"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::supports P L A and More marks and requires every row before saving"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-MARK-ALL-PRESENT-FILLS-ONLY-UNMARKED-ROWS-PRESERVING-EXPLICITLY-SELECTED-EXCEPTIONS",
+      "domain": "attendance",
+      "description": "Mark all present fills only unmarked rows preserving explicitly selected exceptions.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "Mark all present fills only unmarked rows preserving explicitly selected exceptions"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::Mark all present fills only unmarked rows preserving explicitly selected exceptions"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-REVIEWS-PARENT-REPORTS-AND-APPLIES-ABSENCE-SUGGESTIONS-ONLY-TO-UNMARKED-MISSING-ROWS",
+      "domain": "attendance",
+      "description": "reviews parent reports and applies absence suggestions only to unmarked missing rows.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "reviews parent reports and applies absence suggestions only to unmarked missing rows"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::reviews parent reports and applies absence suggestions only to unmarked missing rows"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-PERSISTS-BEFORE-SENDING-AND-RETRIES-THE-EXACT-ORIGINAL-KEY-AND-FULL-BODY-AFTER-UNKNOWN-STATUS",
+      "domain": "attendance",
+      "description": "persists before sending and retries the exact original key and full body after unknown status.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "persists before sending and retries the exact original key and full body after unknown status"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::persists before sending and retries the exact original key and full body after unknown status"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-RESTORES-A-DROPPED-REPLY-AFTER-RELOAD-AND-RESOLVES-OLD-RECEIPT-BY-FETCHING-THE-CURRENT-SHEET",
+      "domain": "attendance",
+      "description": "restores a dropped reply after reload and resolves old receipt by fetching the current sheet.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "restores a dropped reply after reload and resolves old receipt by fetching the current sheet"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::restores a dropped reply after reload and resolves old receipt by fetching the current sheet"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-REFRESHES-A-DEFINITIVE-CONFLICT-AND-ASKS-FOR-REVIEW-WITHOUT-MERGING-EDITED-MARKS",
+      "domain": "attendance",
+      "description": "refreshes a definitive conflict and asks for review without merging edited marks.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "refreshes a definitive conflict and asks for review without merging edited marks"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::refreshes a definitive conflict and asks for review without merging edited marks"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-KEEPS-CORRUPT-RECOVERY-STATE-QUARANTINED-AND-BLOCKS-REPLACEMENT-WRITES",
+      "domain": "attendance",
+      "description": "keeps corrupt recovery state quarantined and blocks replacement writes.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "keeps corrupt recovery state quarantined and blocks replacement writes"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::keeps corrupt recovery state quarantined and blocks replacement writes"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-WARNS-AND-RETAINS-THE-ORIGINAL-OPERATION-IN-MEMORY-WHEN-STORAGE-IS-UNAVAILABLE",
+      "domain": "attendance",
+      "description": "warns and retains the original operation in memory when storage is unavailable.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "warns and retains the original operation in memory when storage is unavailable"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::warns and retains the original operation in memory when storage is unavailable"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-HIDES-PRIVATE-ROWS-ON-ACCOUNT-CHANGE-AND-IGNORES-LATE-SAVE-CALLBACKS-WHILE-RETAINING-RECOVERY",
+      "domain": "attendance",
+      "description": "hides private rows on account change and ignores late save callbacks while retaining recovery.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "hides private rows on account change and ignores late save callbacks while retaining recovery"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::hides private rows on account change and ignores late save callbacks while retaining recovery"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-IGNORES-LATE-ROSTER-PROMISES-AFTER-A-SESSION-SWITCH",
+      "domain": "attendance",
+      "description": "ignores late roster promises after a session switch.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "ignores late roster promises after a session switch"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::ignores late roster promises after a session switch"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-SHOWS-AN-HONEST-EMPTY-ROSTER-WITHOUT-OFFERING-AN-EMPTY-SAVE",
+      "domain": "attendance",
+      "description": "shows an honest empty roster without offering an empty save.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "shows an honest empty roster without offering an empty save"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::shows an honest empty roster without offering an empty save"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-SHOWS-CANCELLED-SESSIONS-READ-ONLY-AND-PRESERVES-SAVED-HISTORY",
+      "domain": "attendance",
+      "description": "shows cancelled sessions read only and preserves saved history.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "shows cancelled sessions read only and preserves saved history"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::shows cancelled sessions read only and preserves saved history"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-BLOCKS-A-ROSTER-ABOVE-TWO-HUNDRED-WITHOUT-DISPLAYING-A-PARTIAL-EDITABLE-LIST",
+      "domain": "attendance",
+      "description": "blocks a roster above two hundred without displaying a partial editable list.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "blocks a roster above two hundred without displaying a partial editable list"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::blocks a roster above two hundred without displaying a partial editable list"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-SAVES-THE-COMPLETE-TWO-HUNDRED-ROW-ROSTER-IN-ONE-EXPLICIT-OPERATION",
+      "domain": "attendance",
+      "description": "saves the complete two hundred row roster in one explicit operation.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "saves the complete two hundred row roster in one explicit operation"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::saves the complete two hundred row roster in one explicit operation"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-POLLS-SIGNALS-ONLY-WHILE-VISIBLE-WITHOUT-RESETTING-DIRTY-ATTENDANCE-MARKS",
+      "domain": "attendance",
+      "description": "polls signals only while visible without resetting dirty attendance marks.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "polls signals only while visible without resetting dirty attendance marks"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::polls signals only while visible without resetting dirty attendance marks"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-RELOADS-THE-SAVED-SHEET-AFTER-A-CONFIRMED-WRITE-AND-CLEARS-ONLY-ITS-ORIGINAL-PENDING-OPERATION",
+      "domain": "attendance",
+      "description": "reloads the saved sheet after a confirmed write and clears only its original pending operation.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "reloads the saved sheet after a confirmed write and clears only its original pending operation"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::reloads the saved sheet after a confirmed write and clears only its original pending operation"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-DOES-NOT-TURN-LATE-DROP-OR-PICKUP-REPORTS-INTO-ATTENDANCE-SUGGESTIONS",
+      "domain": "attendance",
+      "description": "does not turn late drop or pickup reports into attendance suggestions.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "does not turn late drop or pickup reports into attendance suggestions"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/attendance-panel.test.tsx::does not turn late drop or pickup reports into attendance suggestions"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/attendance-panel.test.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-NORMALIZES-EXACT-ATTENDANCE-PAYLOAD-UUIDS-AND-SORTED-RECORDS-WITHOUT-ACTOR-FIELDS",
+      "domain": "attendance",
+      "description": "normalizes exact attendance payload UUIDs and sorted records without actor fields.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "normalizes exact attendance payload UUIDs and sorted records without actor fields"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::normalizes exact attendance payload UUIDs and sorted records without actor fields"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-REJECTS-MALFORMED-DUPLICATE-OVERSIZED-ATTENDANCE-BODIES-AND-INVALID-VERSIONS",
+      "domain": "attendance",
+      "description": "rejects malformed duplicate oversized attendance bodies and invalid versions.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "rejects malformed duplicate oversized attendance bodies and invalid versions"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::rejects malformed duplicate oversized attendance bodies and invalid versions"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-NORMALIZES-THE-EXACT-SIGNAL-PAYLOAD-AND-ENFORCES-REASON-NULLABILITY-FOR-ALL-FOUR-REPORTS",
+      "domain": "attendance",
+      "description": "normalizes the exact signal payload and enforces reason nullability for all four reports.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "normalizes the exact signal payload and enforces reason nullability for all four reports"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::normalizes the exact signal payload and enforces reason nullability for all four reports"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-DECODES-JSON-OBJECTS-UTC-OFFSETS-AND-UNMARKED-COHERENT-SHEETS-INTO-CAMELCASE",
+      "domain": "attendance",
+      "description": "decodes JSON objects UTC offsets and unmarked coherent sheets into camelCase.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "decodes JSON objects UTC offsets and unmarked coherent sheets into camelCase"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::decodes JSON objects UTC offsets and unmarked coherent sheets into camelCase"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-ACCEPTS-EXACTLY-TWO-HUNDRED-ROSTER-ROWS-AND-BLOCKS-MALFORMED-OVERSIZED-OR-INCONSISTENT-SHEET-REPLIES",
+      "domain": "attendance",
+      "description": "accepts exactly two hundred roster rows and blocks malformed oversized or inconsistent sheet replies.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "accepts exactly two hundred roster rows and blocks malformed oversized or inconsistent sheet replies"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::accepts exactly two hundred roster rows and blocks malformed oversized or inconsistent sheet replies"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-VALIDATES-ATTENDANCE-RECEIPTS-AND-EXACT-KNOWN-UNKNOWN-RECOVERY-ENVELOPES",
+      "domain": "attendance",
+      "description": "validates attendance receipts and exact known unknown recovery envelopes.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "validates attendance receipts and exact known unknown recovery envelopes"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::validates attendance receipts and exact known unknown recovery envelopes"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-BOUNDS-ACADEMY-AND-SESSION-PAGES-VALIDATES-FINITE-DATES-ZONES-CURSORS-AND-DUPLICATE-IDS",
+      "domain": "attendance",
+      "description": "bounds academy and session pages validates finite dates zones cursors and duplicate IDs.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "bounds academy and session pages validates finite dates zones cursors and duplicate IDs"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::bounds academy and session pages validates finite dates zones cursors and duplicate IDs"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-VALIDATES-BOUNDED-LATEST-PARENT-REPORTS-REASON-PAIRS-ACTOR-IDENTITIES-AND-CURSORS",
+      "domain": "attendance",
+      "description": "validates bounded latest parent reports reason pairs actor identities and cursors.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "validates bounded latest parent reports reason pairs actor identities and cursors"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::validates bounded latest parent reports reason pairs actor identities and cursors"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-ACCEPTS-EXACT-FIFTY-ROW-PAGES-WITH-ADVANCING-CURSORS-AND-REJECTS-FIFTY-ONE-UNIQUE-ROWS",
+      "domain": "attendance",
+      "description": "accepts exact fifty-row pages with advancing cursors and rejects fifty-one unique rows.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "accepts exact fifty-row pages with advancing cursors and rejects fifty-one unique rows"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::accepts exact fifty-row pages with advancing cursors and rejects fifty-one unique rows"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-REJECTS-OUT-OF-ORDER-PAGES-IMPOSSIBLE-CURRENT-FLAGS-AND-SESSIONS-OUTSIDE-THE-RETURNED-LOCAL-DATE",
+      "domain": "attendance",
+      "description": "rejects out-of-order pages impossible current flags and sessions outside the returned local date.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "rejects out-of-order pages impossible current flags and sessions outside the returned local date"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::rejects out-of-order pages impossible current flags and sessions outside the returned local date"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-ACCEPTS-UTC-INSTANTS-ACROSS-THE-SUPPORTED-ACADEMY-LOCAL-DATE-BOUNDARIES",
+      "domain": "attendance",
+      "description": "accepts UTC instants across the supported academy-local date boundaries.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "accepts UTC instants across the supported academy-local date boundaries"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::accepts UTC instants across the supported academy-local date boundaries"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-FAILS-CLOSED-WHEN-ANY-REQUIRED-SHEET-SESSION-ROW-OR-RECEIPT-FIELD-IS-MISSING",
+      "domain": "attendance",
+      "description": "fails closed when any required sheet session row or receipt field is missing.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "fails closed when any required sheet session row or receipt field is missing"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::fails closed when any required sheet session row or receipt field is missing"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-KEEPS-ACADEMIES-WITH-AN-INVALID-CONFIGURED-ZONE-VISIBLE-AS-UNAVAILABLE-WITHOUT-INVENTING-A-ZONE",
+      "domain": "attendance",
+      "description": "keeps academies with an invalid configured zone visible as unavailable without inventing a zone.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "keeps academies with an invalid configured zone visible as unavailable without inventing a zone"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::keeps academies with an invalid configured zone visible as unavailable without inventing a zone"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-STORES-THE-IMMUTABLE-OPERATION-FOR-RELOAD-AND-ISOLATES-ACTOR-AND-OPERATION-SLOTS",
+      "domain": "attendance",
+      "description": "stores the immutable operation for reload and isolates actor and operation slots.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "stores the immutable operation for reload and isolates actor and operation slots"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/pending.test.ts::stores the immutable operation for reload and isolates actor and operation slots"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/pending.test.ts",
+        "apps/web/src/modules/attendance/pending.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-BLOCKS-REPLACEMENT-REQUESTS-AND-CHANGED-FULL-PAYLOAD-WITHOUT-LOSING-THE-ORIGINAL",
+      "domain": "attendance",
+      "description": "blocks replacement requests and changed full payload without losing the original.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "blocks replacement requests and changed full payload without losing the original"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/pending.test.ts::blocks replacement requests and changed full payload without losing the original"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/pending.test.ts",
+        "apps/web/src/modules/attendance/pending.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-CLEARS-ONLY-THE-COMPLETE-EXPECTED-ACTOR-OPERATION-KEY-AND-CANONICAL-BODY",
+      "domain": "attendance",
+      "description": "clears only the complete expected actor operation key and canonical body.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "clears only the complete expected actor operation key and canonical body"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/pending.test.ts::clears only the complete expected actor operation key and canonical body"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/pending.test.ts",
+        "apps/web/src/modules/attendance/pending.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-QUARANTINES-CORRUPT-WRONG-ACTOR-AND-WRONG-OPERATION-DATA-WITHOUT-OVERWRITING-IT",
+      "domain": "attendance",
+      "description": "quarantines corrupt wrong-actor and wrong-operation data without overwriting it.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "quarantines corrupt wrong-actor and wrong-operation data without overwriting it"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/pending.test.ts::quarantines corrupt wrong-actor and wrong-operation data without overwriting it"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/pending.test.ts",
+        "apps/web/src/modules/attendance/pending.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-DISTINGUISHES-UNAVAILABLE-STORAGE-FROM-ABSENT-AND-NEVER-CLAIMS-DURABLE-PERSISTENCE",
+      "domain": "attendance",
+      "description": "distinguishes unavailable storage from absent and never claims durable persistence.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "distinguishes unavailable storage from absent and never claims durable persistence"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/pending.test.ts::distinguishes unavailable storage from absent and never claims durable persistence"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/pending.test.ts",
+        "apps/web/src/modules/attendance/pending.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-REPORTS-FAILED-PERSISTENCE-AND-PRESERVES-THE-SLOT-WHEN-REMOVAL-IS-UNAVAILABLE",
+      "domain": "attendance",
+      "description": "reports failed persistence and preserves the slot when removal is unavailable.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "reports failed persistence and preserves the slot when removal is unavailable"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/pending.test.ts::reports failed persistence and preserves the slot when removal is unavailable"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/pending.test.ts",
+        "apps/web/src/modules/attendance/pending.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-RETAINS-IMMUTABLE-MEMORY-FALLBACK-THROUGH-VIEW-REMOUNTS-AND-CLEARS-BY-COMPLETE-IDENTITY",
+      "domain": "attendance",
+      "description": "retains immutable memory fallback through view remounts and clears by complete identity.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "retains immutable memory fallback through view remounts and clears by complete identity"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/pending.test.ts::retains immutable memory fallback through view remounts and clears by complete identity"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/pending.test.ts",
+        "apps/web/src/modules/attendance/pending.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-VERIFIES-ACTOR-AUTOMATICALLY-AND-FENCES-LATE-WORK-ON-SCOPE-FOCUS-AND-AUTH-CHANGES",
+      "domain": "attendance",
+      "description": "verifies actor automatically and fences late work on scope focus and auth changes.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "verifies actor automatically and fences late work on scope focus and auth changes"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/session-boundary.test.tsx::verifies actor automatically and fences late work on scope focus and auth changes"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/session-boundary.test.tsx",
+        "apps/web/src/modules/attendance/session-boundary.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-IGNORES-AN-OLDER-ACCOUNT-PROMISE-AND-CLEARS-PRIVATE-VIEW-BEFORE-AUTH-RECOVERY",
+      "domain": "attendance",
+      "description": "ignores an older account promise and clears private view before auth recovery.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "ignores an older account promise and clears private view before auth recovery"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/session-boundary.test.tsx::ignores an older account promise and clears private view before auth recovery"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/session-boundary.test.tsx",
+        "apps/web/src/modules/attendance/session-boundary.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-FAILS-CLOSED-WHEN-SESSION-OBSERVATION-OR-VERIFICATION-IS-UNAVAILABLE",
+      "domain": "attendance",
+      "description": "fails closed when session observation or verification is unavailable.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "fails closed when session observation or verification is unavailable"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/session-boundary.test.tsx::fails closed when session observation or verification is unavailable"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/session-boundary.test.tsx",
+        "apps/web/src/modules/attendance/session-boundary.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-CLEARS-HIDDEN-PRIVATE-VIEWS-AND-DEFERS-AUTHENTICATION-RELOAD-UNTIL-VISIBLE",
+      "domain": "attendance",
+      "description": "clears hidden private views and defers authentication reload until visible.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "clears hidden private views and defers authentication reload until visible"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/session-boundary.test.tsx::clears hidden private views and defers authentication reload until visible"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/session-boundary.test.tsx",
+        "apps/web/src/modules/attendance/session-boundary.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-AUTOLOADS-COACH-ACADEMIES-AND-SESSIONS-USING-ACADEMY-LOCAL-TODAY-AND-ACTUAL-HEADER",
+      "domain": "attendance",
+      "description": "autoloads coach academies and sessions using academy-local today and actual header.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "autoloads coach academies and sessions using academy-local today and actual header"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::autoloads coach academies and sessions using academy-local today and actual header"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/today/contracts.ts",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-SWITCHES-ACADEMY-AND-SEVEN-DATE-STRIP-WITHOUT-MUTATING-ATTENDANCE",
+      "domain": "attendance",
+      "description": "switches academy and seven-date strip without mutating attendance.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "switches academy and seven-date strip without mutating attendance"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::switches academy and seven-date strip without mutating attendance"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/today/contracts.ts",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-LOADS-BOUNDED-ADDITIONAL-ACADEMY-AND-SESSION-PAGES-USING-EXPLICIT-CURSORS",
+      "domain": "attendance",
+      "description": "loads bounded additional academy and session pages using explicit cursors.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "loads bounded additional academy and session pages using explicit cursors"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::loads bounded additional academy and session pages using explicit cursors"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/today/contracts.ts",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-OPENS-THE-SELECTED-REAL-ATTENDANCE-SHEET-AND-SUPPORTS-EXPLICIT-REFRESH",
+      "domain": "attendance",
+      "description": "opens the selected real attendance sheet and supports explicit refresh.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "opens the selected real attendance sheet and supports explicit refresh"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::opens the selected real attendance sheet and supports explicit refresh"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/today/contracts.ts",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-DISCARDS-LATE-DATE-PROMISES-AND-IMMEDIATELY-CLEARS-PRIVATE-DATA-ON-ACCOUNT-CHANGE",
+      "domain": "attendance",
+      "description": "discards late date promises and immediately clears private data on account change.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "discards late date promises and immediately clears private data on account change"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::discards late date promises and immediately clears private data on account change"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/today/contracts.ts",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-RENDERS-HONEST-EMPTY-NO-ASSIGNMENT-AND-UNAVAILABLE-ZONE-VIEWS",
+      "domain": "attendance",
+      "description": "renders honest empty no-assignment and unavailable-zone views.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "renders honest empty no-assignment and unavailable-zone views"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::renders honest empty no-assignment and unavailable-zone views"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/today/contracts.ts",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-RESTORES-AN-UNRESOLVED-SAVE-ON-RELOAD-EVEN-BEFORE-CHOOSING-A-CURRENT-SESSION",
+      "domain": "attendance",
+      "description": "restores an unresolved save on reload even before choosing a current session.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "restores an unresolved save on reload even before choosing a current session"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::restores an unresolved save on reload even before choosing a current session"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/today/contracts.ts",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-SWITCHES-ALL-TODAY-AND-ATTENDANCE-COPY-TO-HINDI-WITH-HYDRATION-SAFE-INITIAL-ENGLISH",
+      "domain": "attendance",
+      "description": "switches all Today and attendance copy to Hindi with hydration-safe initial English.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "switches all Today and attendance copy to Hindi with hydration-safe initial English"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::switches all Today and attendance copy to Hindi with hydration-safe initial English"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/today/contracts.ts",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-SHOWS-A-PERSISTENT-SUCCESS-CONFIRMATION-AFTER-AN-AUTOMATICALLY-RESTORED-SAVE-RESOLVES",
+      "domain": "attendance",
+      "description": "shows a persistent success confirmation after an automatically restored save resolves.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "shows a persistent success confirmation after an automatically restored save resolves"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::shows a persistent success confirmation after an automatically restored save resolves"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/today/contracts.ts",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-SHOWS-NO-ACADEMY-AND-REDACTED-READ-FAILURES-WITHOUT-EXAMPLE-FALLBACK",
+      "domain": "attendance",
+      "description": "shows no-academy and redacted read failures without example fallback.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "shows no-academy and redacted read failures without example fallback"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::shows no-academy and redacted read failures without example fallback"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/today/contracts.ts",
+        "apps/web/src/modules/attendance/copy.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-COACHHEADER-DOES-NOT-INVENT-AN-ACADEMY-WHEN-NONE-IS-SELECTED",
+      "domain": "attendance",
+      "description": "CoachHeader > does not invent an academy when none is selected.",
+      "status": "implemented",
+      "risk": "medium",
+      "coverage": "covered",
+      "scenarios": [
+        "CoachHeader > does not invent an academy when none is selected"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/ui/components/coach-header.test.tsx::CoachHeader > does not invent an academy when none is selected"
+        }
+      ],
+      "sources": [
+        "apps/web/src/ui/components/coach-header.test.tsx",
+        "apps/web/src/ui/components/coach-header.tsx",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-PRESERVES-SQL-MICROSECONDS-FOR-ADVANCING-AND-NONADVANCING-SESSION-CURSOR-PAGES",
+      "domain": "attendance",
+      "description": "preserves SQL microseconds for advancing and nonadvancing session cursor pages.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "preserves SQL microseconds for advancing and nonadvancing session cursor pages"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::preserves SQL microseconds for advancing and nonadvancing session cursor pages"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-PRESERVES-SQL-MICROSECONDS-WHEN-ORDERING-COMPLETE-SESSION-PAGES-DESPITE-REVERSE-UUID-ORDER",
+      "domain": "attendance",
+      "description": "preserves SQL microseconds when ordering complete session pages despite reverse UUID order.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "preserves SQL microseconds when ordering complete session pages despite reverse UUID order"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::preserves SQL microseconds when ordering complete session pages despite reverse UUID order"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-ACCEPTS-POSITIVE-SUBMILLISECOND-SESSION-DURATIONS-AND-REJECTS-EQUIVALENT-ZERO-LENGTH-UTC-INSTANTS",
+      "domain": "attendance",
+      "description": "accepts positive submillisecond session durations and rejects equivalent zero-length UTC instants.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "accepts positive submillisecond session durations and rejects equivalent zero-length UTC instants"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/contracts.test.ts::accepts positive submillisecond session durations and rejects equivalent zero-length UTC instants"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/contracts.test.ts",
+        "apps/web/src/modules/attendance/contracts.ts",
+        "apps/web/src/modules/attendance/validation.ts",
+        "apps/web/src/modules/today/contracts.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-RELEASES-RESTORED-CONFLICT-RECOVERY-BEFORE-OPENING-ANOTHER-REAL-SESSION-WITHOUT-CLAIMING-SUCCESS",
+      "domain": "attendance",
+      "description": "releases restored conflict recovery before opening another real session without claiming success.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "releases restored conflict recovery before opening another real session without claiming success"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::releases restored conflict recovery before opening another real session without claiming success"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/pending.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-RELEASES-RESTORED-FORBIDDEN-RECOVERY-BEFORE-OPENING-ANOTHER-ACADEMY-WITHOUT-CLAIMING-SUCCESS",
+      "domain": "attendance",
+      "description": "releases restored forbidden recovery before opening another academy without claiming success.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "releases restored forbidden recovery before opening another academy without claiming success"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::releases restored forbidden recovery before opening another academy without claiming success"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/pending.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-RELEASES-INITIAL-LOADING-OWNERSHIP-WHEN-ACADEMY-CHANGES-DURING-A-DELAYED-SESSION-READ",
+      "domain": "attendance",
+      "description": "releases initial loading ownership when academy changes during a delayed session read.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "releases initial loading ownership when academy changes during a delayed session read"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::releases initial loading ownership when academy changes during a delayed session read"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/pending.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-RELEASES-INITIAL-LOADING-OWNERSHIP-WHEN-DATE-CHANGES-DURING-A-DELAYED-SESSION-READ",
+      "domain": "attendance",
+      "description": "releases initial loading ownership when date changes during a delayed session read.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "releases initial loading ownership when date changes during a delayed session read"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::releases initial loading ownership when date changes during a delayed session read"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/pending.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-CANCELS-DELAYED-ACADEMY-PAGINATION-ON-SCOPE-CHANGE-WITHOUT-STRANDING-REFRESH-OR-LOADING",
+      "domain": "attendance",
+      "description": "cancels delayed academy pagination on scope change without stranding refresh or loading.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "cancels delayed academy pagination on scope change without stranding refresh or loading"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::cancels delayed academy pagination on scope change without stranding refresh or loading"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/pending.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-KEEPS-UNKNOWN-RESTORED-REQUESTS-BOUND-TO-THE-ORIGINAL-OPERATION-WHILE-ANOTHER-SESSION-IS-SELECTED",
+      "domain": "attendance",
+      "description": "keeps unknown restored requests bound to the original operation while another session is selected.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "keeps unknown restored requests bound to the original operation while another session is selected"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/today/today-panel.test.tsx::keeps unknown restored requests bound to the original operation while another session is selected"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/today/today-panel.test.tsx",
+        "apps/web/src/modules/today/today-panel.tsx",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/pending.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-PRESERVES-PENDING-BYTES-AND-UUID-THROUGH-RETRYABLE-AUTH-PREFLIGHT-FAILURE-THEN-RECOVERS-THE-SAME-REQUEST-ONCE",
+      "domain": "attendance",
+      "description": "preserves pending bytes and UUID through retryable auth preflight failure then recovers the same request once.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "preserves pending bytes and UUID through retryable auth preflight failure then recovers the same request once"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/modules/attendance/recovery.integration.test.tsx::preserves pending bytes and UUID through retryable auth preflight failure then recovers the same request once"
+        }
+      ],
+      "sources": [
+        "apps/web/src/modules/attendance/recovery.integration.test.tsx",
+        "apps/web/src/lib/attendance/actions.ts",
+        "apps/web/src/modules/attendance/attendance-panel.tsx",
+        "apps/web/src/modules/attendance/pending.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-KEEPS-THE-ACTUAL-SDK-RETURNED-RETRYABLE-503-VERIFICATION-RESULT-UNKNOWN-BEFORE-ANY-ATTENDANCE-RPC",
+      "domain": "attendance",
+      "description": "keeps the actual SDK returned retryable 503 verification result unknown before any attendance RPC.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "keeps the actual SDK returned retryable 503 verification result unknown before any attendance RPC"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::keeps the actual SDK returned retryable 503 verification result unknown before any attendance RPC"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-KEEPS-AMBIGUOUS-TIMEOUT-THROTTLING-UNKNOWN-AND-MALFORMED-AUTHENTICATION-FAILURES-NONDEFINITIVE",
+      "domain": "attendance",
+      "description": "keeps ambiguous timeout throttling unknown and malformed authentication failures nondefinitive.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "keeps ambiguous timeout throttling unknown and malformed authentication failures nondefinitive"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::keeps ambiguous timeout throttling unknown and malformed authentication failures nondefinitive"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
+      ]
+    },
+    {
+      "id": "FE-ATTENDANCE-RETAINS-DEFINITIVE-SDK-SESSION-DENIAL-AND-VERIFIED-ACTOR-MISMATCH-WITHOUT-CALLING-AN-RPC",
+      "domain": "attendance",
+      "description": "retains definitive SDK session denial and verified actor mismatch without calling an RPC.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "retains definitive SDK session denial and verified actor mismatch without calling an RPC"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/attendance/actions.test.ts::retains definitive SDK session denial and verified actor mismatch without calling an RPC"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/attendance/actions.test.ts",
+        "apps/web/src/lib/attendance/actions.ts",
+        "docs/superpowers/specs/2026-11-10-attendance-today-design.md"
       ]
     }
   ]

@@ -1,5 +1,28 @@
 # ParentPlus Database Architecture
 
+## TEST053 verified application — 10 November 2026
+
+The existing founder-selected TEST backend now has migration053 from immutable
+code e441a3e. All original34public-table and selectedAuth signatures matched after
+activation. Readonly catalogue checks verified41public tables, the7new privateRLS
+tables and13authenticated-only RPCs; no attendance/signals/items were invented.
+Current local and TEST schema are053. Parent UI and full hosted/browser feature
+acceptance remain pending; see Quality Evidence for scope and source provenance.
+
+
+## Local attendance053 contract — 10 November 2026
+
+Seven private tables add coherent attendance sheets/records/events/receipts,
+append-only parent reports/receipts and typed parent items. Session lifecycle
+columns and composite keys extend existing sessions/enrolments. Thirteen scoped
+RPCs expose bounded reads, atomic complete-roster saves, actor/full-payload receipt
+recovery and own-child parent read/report foundations. All private helpers/tables
+remain inaccessible directly to application roles.052 batch UPDATE ordering and
+current authority locks protect roster/permission changes. No invented records
+are backfilled. Local053 is applied; hosted TEST is052 at preparation.
+Exact definitions: migration053 and dated attendance spec. Parent UI is pending.
+
+
 Status: Draft for founder review
 Milestone: M2 Authentication and Data Foundation
 Reference decisions: DEC-005 through DEC-010

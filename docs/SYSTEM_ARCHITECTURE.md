@@ -1,5 +1,18 @@
 # ParentPlus — System Architecture
 
+## Coach attendance slice — 10 November 2026
+
+Real Today uses verified ordinary Supabase identity → strict server actions →
+private053 RPCs. The selected academy's time zone determines dates. A complete
+roster is explicitly marked/saved; scope/auth generations discard stale private
+views, while separate immutable actor-bound session storage preserves uncertain
+writes. Recovery resolves the original receipt then fetches the current sheet.
+Visible-session reports poll every15seconds without resetting coach edits.
+No parent report automatically writes attendance or asserts verified handover.
+The parent home/signals/fallback UI is the next dependent slice; its database
+foundation is present. Deployment status belongs to Quality Evidence.
+
+
 Status: current local foundation and intended boundaries, reconciled on 2026-11-03.
 Deployment and complete user journeys are not established by this document.
 [Build Progress](BUILD_PROGRESS.md) owns milestone status;

@@ -1,5 +1,99 @@
 # ParentPlus — Quality Evidence Index
 
+## Verified coach/database source checkpoint e441a3e — 10 November 2026
+
+Code commit `e441a3e365e13fd0a4c0b7901a527f7619305d74` contains59reviewed paths.
+Its bytes exactly match tested source fingerprint
+`47cfa4b552b0d1607392e2dcbfa09820ac28c380c7d809bb4cd5bb065d94bf28`.
+Local gate passed477frontend cases,602DB cases(598unit+4standalone), lint/types/build,
+6disabled and6network-isolated synthetic-provider browser cases,25ops and58engine
+checks. DBcleanup was0,53migrations/41tables. Five observer checks also passed.
+Receipts honestly retain the pre-commit baseline34ed00f; they were not reissued
+as new executions after committing. The commit/source equality proof is local.
+
+The final real-local founder run executed92/92 desktop/mobile cases once with no
+case failures/retries/skips. Initial reporting failed on one omitted catalogue
+mapping for the already-clicked fictional batch selector. All six actual
+ATTEND001/002/003 viewport click histories were verified, then the report was
+reconciled with a single mapping. It now reports92/92 and0actiongaps, retains the
+original runtime identity and explicitly labels the post-run catalogue change.
+Original failed reports/raw results remain preserved. Independent catalogue
+review passed;15report regressions passed. This is not a new browser execution on
+the follow-up catalogue/docs commit. Fresh GitHub checks on that head remain pending.
+Local HTML/Excel/screenshots: test-results/qa/run-20261110T150511Z-27697f/.
+
+Independent DB, coach, ops and complete-checkpoint reviews passed after fixes.
+Whole-checkpoint findings fixed: returned transient Auth503 no longer clears an
+uncertain original request; exclusive button variants restore rendered Save
+contrast and selected fills. New regressions first failed, then passed; actual
+computed desktop/mobile styles and screenshots were inspected. The earlier
+interrupted23/92 run is failed historical evidence, not the final run.
+
+Existing hosted TEST was upgraded052→053 from immutable e441a3e source. The audit
+compared all original34public-table signatures plus Auth(id,email,created_at)
+again after final control activation; all matched. No control flag changed in
+this invocation(they were already enabled). Readonly inspection verified53history,
+41tables,7privateRLS tables,13authenticated-only RPCs and0invented attendance,
+items or signals. Prior052receipt backed up. Local and hosted evidence are distinct;
+no hosted browser journey is claimed. Initial namespace setup failed inside the
+sandbox; approved execution retained network isolation and passed all6checks.
+
+Fresh copied-root CI rehearsal first reproduced a missing work-directory error;
+a one-line private-directory creation then passed the full isolated rehearsal and
+all five query plans in a separate clean copy. No application or SQL change.
+
+GitHub push/merge/new Vercel deployment remain pending at this entry's preparation.
+The parent attendance home/signals/fallback UI and fullAT13 remain next development.
+
+
+## Coach attendance checkpoint — preparation evidence, 10 November 2026
+
+This is a partial checkpoint requested by the founder, not full053 feature
+completion. Task1 DB review/fix review and Task2 coach review/fix review passed.
+Task2 covering fix regression:91tests, lint/types passed; earlier full464-test
+build evidence predates9additional regressions (current collection473).
+Task1 current full local gate:598unit+4standalone=602,0fail/error/skip,53migrations,
+41tables and zero cleanup residue. These are previously executed scoped results;
+current source-bound checkpoint gates/publication remain pending at preparation.
+
+Root ops/report tranche passed independent re-review after fixing a false-green
+final-audit gap. Two new offline regressions first failed against prior source;
+25ops cases then passed. Owned network-none PostgreSQL17 actual052→053 rehearsal
+passed late injected failure rollback/schema/history preservation and successful
+retry, with four explicitly audited control-flag changes. Canonical hosted receipt
+unchanged, no hosted requests. Five extracted shipped storage SELECTs have actual
+EXPLAIN ANALYZE/BUFFERS with8fictional academies,800children,480sessions,
+48,000records/items and96,000signals; these are not RPC/provider latency or an SLA.
+Local evidence: test-results/database/attendance-upgrade/. It is not a hosted run.
+
+New signed coach scenarios and full local browser report are being verified.
+The parent attendance UI/full parent–coach journey remains unimplemented; planned
+aggregate requirements stay visible. HTML/Excel now reads all58 canonical feature
+rows in a separate planning section, outside browser result totals. Detailed
+current checkpoint execution/published IDs will follow verification.
+
+
+## Published enrolment: PR5 verified and merged — 10 November 2026
+
+PR5 head17ca3dc9c28e454d6515da1799fe55f581f6ddac passed GitHub quality runs
+[42821826246](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42821826246)
+and42821816340, plus browser
+[42821826139](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42821826139).
+[Artifact13766628894](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42821826139/artifacts/13766628894)
+was uploaded with5,908,695 bytes and not expired at inspection. Metadata was read;
+artifact bytes remain undownloaded because the storage redirect is blocked here.
+
+PR5 merged as34ed00f0bbc34b3b67ab411c0c19c1ebf13bba3f. Its tree exactly matched
+head17ca3dc before local fast-forward, preserving the next uncommitted053 work.
+Fresh wildcard fetch and GitHub branch API confirmed all four existing branch
+histories are included in main; no branch was deleted or force-pushed. Main
+quality[42823121131](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42823121131)
+andbrowser[42823121370](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42823121370)
+both passed. Its[artifact13769975088](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42823121370/artifacts/13769975088)
+was uploaded/nonexpired at5,896,158bytes. Vercel reported production deployment
+completed for34ed00f. This is deployment/workflow metadata, not personally read
+hosted report bytes or a tested hosted browser journey.
+
 ## Verified enrolment checkpoint — 10 November 2026
 
 Code commit `8f0ae0ef178e8e1909504fdb8c5d27430ac34c48` records the reviewed51-file

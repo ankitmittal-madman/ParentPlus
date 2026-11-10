@@ -1,0 +1,63 @@
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, expect, it, vi } from "vitest";
+import { AuthRetryableFetchError } from "@supabase/supabase-js";
+import { AttendancePanel } from "./attendance-panel";
+import { writePending, type PendingOperation } from "./pending";
+
+const m = vi.hoisted(() => ({ create: vi.fn(), getUser: vi.fn(), rpc: vi.fn(), session: vi.fn(), observe: vi.fn() }));
+vi.mock("@/lib/supabase/server", () => ({ createClient: m.create }));
+vi.mock("@/lib/families/actions", () => ({ familySession: m.session }));
+vi.mock("@/lib/auth/session-observer", () => ({ observeSessionChanges: m.observe }));
+// Keep the actual attendance actions, decoders, recovery storage and editor connected.
+const a = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", b = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", c = "cccccccc-cccc-4ccc-8ccc-cccccccccccc", time = "2026-11-10T12:00:00Z", token = "a".repeat(64);
+const pending: PendingOperation = { format: 1, actorId: a, requestId: c, payload: { operation: "save_attendance", workspace_id: a, session_id: b, expected_session_version: 1, expected_sheet_version: 0, roster_token: token, records: [{ enrollment_id: a, child_id: b, status: "late" }] } };
+const receipt = { request_id: c, session_id: b, sheet_version: 1, session_version: 1, roster_token: token, saved_at: time, record_count: 1 };
+const sheet = { session: { id: b, batch_id: a, batch_name: "Morning", course_name: "Art", starts_at: time, ends_at: "2026-11-10T13:00:00Z", status: "scheduled", version: 1, sheet_version: 1, roster_size: 1, roster_too_large: false, marked_count: 1, attendance_current: true }, time_zone: "UTC", server_now: time, sheet_version: 1, saved_at: time, saved_roster_token: token, roster_token: token, roster_too_large: false, rows: [{ enrollment_id: a, enrollment_version: 1, child_id: b, child_name: "Asha", status: "late", confirmed_at: time }] };
+beforeEach(() => {
+  vi.resetAllMocks();
+  vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
+  sessionStorage.clear();
+  m.create.mockResolvedValue({ auth: { getUser: m.getUser }, rpc: m.rpc });
+  m.getUser.mockResolvedValue({ data: { user: { id: a } }, error: null });
+  m.session.mockResolvedValue({ ok: true, data: a });
+  m.observe.mockReturnValue(() => {});
+  m.rpc.mockImplementation(async (name: string) => {
+    if (name === "app_attendance_sheet") return { data: sheet, error: null };
+    if (name === "app_session_parent_signals") return { data: { signals: [], next: null, server_now: time }, error: null };
+    if (name === "app_attendance_request_status") return { data: { state: "known", receipt }, error: null };
+    throw Error("Unexpected mutation or unrelated RPC");
+  });
+});
+it("preserves pending bytes and UUID through retryable auth preflight failure then recovers the same request once", async () => {
+  expect(writePending(pending)).toBe("stored");
+  const key = `parentplus:attendance-pending:${a}`;
+  const original = sessionStorage.getItem(key);
+  const saved = vi.fn(), resolved = vi.fn();
+  render(<AttendancePanel actorId={a} workspaceId={a} sessionId={b} onSaved={saved} onResolved={resolved} />);
+  await screen.findByText("Asha");
+  await waitFor(() => expect(m.rpc).toHaveBeenCalledWith("app_session_parent_signals", { p_workspace_id: a, p_session_id: b, p_after_child: null, p_after_actor: null }));
+  const verifiedCalls = m.rpc.mock.calls.length;
+  m.getUser.mockResolvedValue({ data: { user: null }, error: new AuthRetryableFetchError("synthetic outage", 503) });
+  fireEvent.click(screen.getByRole("button", { name: "Check saved result" }));
+  await screen.findByText(/Save result is unconfirmed/);
+  expect(sessionStorage.getItem(key)).toBe(original);
+  expect(JSON.parse(sessionStorage.getItem(key)!).requestId).toBe(c);
+  expect(resolved).not.toHaveBeenCalled();
+  expect(saved).not.toHaveBeenCalled();
+  expect(screen.getByRole("button", { name: "Save attendance" })).toBeDisabled();
+  expect(screen.getByRole("button", { name: "Present for Asha" })).toBeDisabled();
+  fireEvent.click(screen.getByRole("button", { name: "Retry same request" }));
+  await screen.findByText(/Save result is unconfirmed/);
+  expect(sessionStorage.getItem(key)).toBe(original);
+  expect(m.rpc).toHaveBeenCalledTimes(verifiedCalls);
+  expect(resolved).not.toHaveBeenCalled();
+  m.getUser.mockResolvedValue({ data: { user: { id: a } }, error: null });
+  fireEvent.click(screen.getByRole("button", { name: "Check saved result" }));
+  await screen.findByText("Attendance saved.");
+  expect(sessionStorage.getItem(key)).toBeNull();
+  expect(m.rpc.mock.calls.filter(([name]) => name === "app_attendance_request_status")).toEqual([["app_attendance_request_status", { p_workspace_id: a, p_session_id: b, p_request_id: c, p_payload: pending.payload }]]);
+  expect(m.rpc.mock.calls.some(([name]) => name === "app_save_attendance")).toBe(false);
+  expect(resolved).toHaveBeenCalledExactlyOnceWith("saved");
+  expect(saved).toHaveBeenCalledTimes(1);
+  expect(screen.getByRole("button", { name: "Late for Asha" })).toHaveAttribute("aria-pressed", "true");
+});

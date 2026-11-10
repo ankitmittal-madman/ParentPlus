@@ -225,16 +225,25 @@ test("[FOUNDER-002] incomplete membership disabled", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Apply test access", exact: true })).toBeDisabled();
 });
 test("[NAV-001] bottom navigation and menu", async ({ page }) => {
-  await login(page);await workspace(page);await page.goto("/");
+  await login(page);const academy=await workspace(page);await page.goto("/");
   const openMenu = async () => {
     const menu = page.getByRole("navigation", { name: "Coach menu" });
-    await expect(page.getByRole("heading", { name: "Good morning, Meera", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Today", exact: true })).toBeVisible();
     const details = page.getByRole("main").locator("details");
     if (!await details.evaluate(element => element.hasAttribute("open"))) await details.locator("summary").click();
     await expect(details).toHaveAttribute("open", "");
     await expect(menu).toBeVisible();
   };
-  await expect(page.getByText("Example data only — these are not real classes or records.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Today", exact: true })).toBeVisible();
+  await expect(page.getByText(academy, { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "Refresh Today", exact: true })).toBeEnabled();
+  await expect(page.getByText("Good morning, Meera", { exact: true })).toHaveCount(0);
+  await page.getByRole("button", { name: "Refresh Today", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Refresh Today", exact: true })).toBeEnabled();
+  await page.getByRole("link", { name: "Set up classes", exact: true }).click();
+  await expect(page).toHaveURL(/\/schedule$/);
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Today", exact: true })).toBeVisible();
   await page.locator("summary").click();await expect(page.getByRole("navigation", { name: "Coach menu" })).toBeVisible();
   await page.locator("summary").click();
   const destinations = [["Schedule","/schedule"],["Students","/students"],["Post","/post"],["Fees","/fees"],["Today","/"]];

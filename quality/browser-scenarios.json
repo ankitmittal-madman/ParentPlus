@@ -104,7 +104,7 @@
         "Open parent profiles",
         "Load profiles"
       ],
-      "expected": "The list shows the empty state without another family’s records.",
+      "expected": "The list shows the empty state without another family\u2019s records.",
       "status": "automated",
       "kind": "real local backend"
     },
@@ -160,14 +160,14 @@
       "id": "PARENT-005",
       "feature": "Child profiles",
       "persona": "Parent",
-      "title": "Switching accounts does not expose another parent’s profiles",
+      "title": "Switching accounts does not expose another parent\u2019s profiles",
       "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
       "steps": [
         "Parent A creates a child",
         "Sign out and sign in as Parent B",
         "Load profiles"
       ],
-      "expected": "Parent B cannot see Parent A’s child.",
+      "expected": "Parent B cannot see Parent A\u2019s child.",
       "status": "automated",
       "kind": "real local backend"
     },
@@ -250,7 +250,7 @@
         "Create workspace",
         "Continue to class setup"
       ],
-      "expected": "The owner can open the new academy’s class setup.",
+      "expected": "The owner can open the new academy\u2019s class setup.",
       "status": "automated",
       "kind": "real local backend"
     },
@@ -295,7 +295,7 @@
         "Enter example course and batch",
         "Preview again"
       ],
-      "expected": "Validation appears first; the final result is explicitly Preview only — not saved.",
+      "expected": "Validation appears first; the final result is explicitly Preview only \u2014 not saved.",
       "status": "automated",
       "kind": "real local backend"
     },
@@ -424,9 +424,10 @@
         "Create a workspace and open Today",
         "Open and close coach menu",
         "Use Schedule, Students, Post, Fees and Today links",
-        "Use menu Schedule, Today and Sign in links"
+        "Use menu Schedule, Today and Sign in links",
+        "Refresh real Today and open class setup for an academy without a configured time zone"
       ],
-      "expected": "Each link reaches the expected route; roadmap screens remain clearly Coming soon and dashboard is labelled example data.",
+      "expected": "Each link reaches the expected route; roadmap screens remain Coming soon. Today shows the real academy and no fictional greeting.",
       "status": "automated",
       "kind": "real local backend"
     },
@@ -678,6 +679,57 @@
       "expected": "Stale edit is rejected without a frozen panel; current roster is refreshed and a valid explicit next action succeeds. No mutation or response is stubbed.",
       "status": "automated",
       "kind": "real local backend; two browser contexts"
+    },
+    {
+      "id": "ATTEND-001",
+      "feature": "Coach attendance",
+      "persona": "Coach and separate parent",
+      "title": "Current-date explicit attendance, corrections and reload",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Create an academy and session on its actual local today",
+        "Separate parent creates a child and confirms an invitation",
+        "Coach explicitly enrols the child",
+        "Open unmarked roster; preserve an absent exception during Mark all",
+        "Save Late and reload, review empty reports, exercise all five statuses",
+        "Refresh Today and verify the latest confirmed mark"
+      ],
+      "expected": "Real roster starts unmarked; explicit saves and corrections survive reload without fictional records.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "ATTEND-002",
+      "feature": "Coach attendance",
+      "persona": "Coach and separate parent",
+      "title": "Committed write with lost response recovers once after reload",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Create an actual dated enrolled roster",
+        "Allow the real server save to complete, then drop its response",
+        "Verify one receipt, event, parent item and sheet version directly in local DB",
+        "Reload durable pending request and check its saved result",
+        "Verify the original request resolves and row counts stay one"
+      ],
+      "expected": "The committed request is recovered without a duplicate write; latest saved mark is displayed.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "ATTEND-003",
+      "feature": "Coach attendance",
+      "persona": "Coach and separate parent",
+      "title": "Uncommitted lost request remains pending until same-request retry",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Create an actual dated enrolled roster",
+        "Drop the first save before forwarding",
+        "Check unknown saved result and compare complete pending bytes",
+        "Retry same request and reload saved attendance"
+      ],
+      "expected": "Unknown status preserves the full operation; retry persists the original request and clears pending only on confirmed success.",
+      "status": "automated",
+      "kind": "real local backend"
     }
   ],
   "actions": [
@@ -1205,35 +1257,35 @@
     },
     {
       "route": "/students",
-      "name": "अकादमियाँ लोड करें",
+      "name": "\u0905\u0915\u093e\u0926\u092e\u093f\u092f\u093e\u0901 \u0932\u094b\u0921 \u0915\u0930\u0947\u0902",
       "scenarios": [
         "INVITE-004"
       ]
     },
     {
       "route": "/students",
-      "name": "विद्यार्थी लोड करें",
+      "name": "\u0935\u093f\u0926\u094d\u092f\u093e\u0930\u094d\u0925\u0940 \u0932\u094b\u0921 \u0915\u0930\u0947\u0902",
       "scenarios": [
         "INVITE-004"
       ]
     },
     {
       "route": "/students",
-      "name": "विद्यार्थी जोड़ें",
+      "name": "\u0935\u093f\u0926\u094d\u092f\u093e\u0930\u094d\u0925\u0940 \u091c\u094b\u0921\u093c\u0947\u0902",
       "scenarios": [
         "INVITE-004"
       ]
     },
     {
       "route": "/students",
-      "name": "लिंक कॉपी करें",
+      "name": "\u0932\u093f\u0902\u0915 \u0915\u0949\u092a\u0940 \u0915\u0930\u0947\u0902",
       "scenarios": [
         "INVITE-004"
       ]
     },
     {
       "route": "/students",
-      "name": "निमंत्रण हटाएँ",
+      "name": "\u0928\u093f\u092e\u0902\u0924\u094d\u0930\u0923 \u0939\u091f\u093e\u090f\u0901",
       "scenarios": [
         "INVITE-004"
       ]
@@ -1285,14 +1337,14 @@
     },
     {
       "route": "/parent/children",
-      "name": "अपने बच्चे के प्रोफ़ाइल लोड करें",
+      "name": "\u0905\u092a\u0928\u0947 \u092c\u091a\u094d\u091a\u0947 \u0915\u0947 \u092a\u094d\u0930\u094b\u092b\u093c\u093e\u0907\u0932 \u0932\u094b\u0921 \u0915\u0930\u0947\u0902",
       "scenarios": [
         "INVITE-004"
       ]
     },
     {
       "route": "/parent/children",
-      "name": "अकादमी से संबंध लोड करें",
+      "name": "\u0905\u0915\u093e\u0926\u092e\u0940 \u0938\u0947 \u0938\u0902\u092c\u0902\u0927 \u0932\u094b\u0921 \u0915\u0930\u0947\u0902",
       "scenarios": [
         "INVITE-004"
       ]
@@ -1365,42 +1417,42 @@
     },
     {
       "route": "/students",
-      "name": "बच्चे का नामांकन करें",
+      "name": "\u092c\u091a\u094d\u091a\u0947 \u0915\u093e \u0928\u093e\u092e\u093e\u0902\u0915\u0928 \u0915\u0930\u0947\u0902",
       "scenarios": [
         "ENROL-004"
       ]
     },
     {
       "route": "/students",
-      "name": "नामांकन रीफ़्रेश करें",
+      "name": "\u0928\u093e\u092e\u093e\u0902\u0915\u0928 \u0930\u0940\u092b\u093c\u094d\u0930\u0947\u0936 \u0915\u0930\u0947\u0902",
       "scenarios": [
         "ENROL-004"
       ]
     },
     {
       "route": "/students",
-      "name": "नामांकन रोकें",
+      "name": "\u0928\u093e\u092e\u093e\u0902\u0915\u0928 \u0930\u094b\u0915\u0947\u0902",
       "scenarios": [
         "ENROL-004"
       ]
     },
     {
       "route": "/students",
-      "name": "नामांकन फिर शुरू करें",
+      "name": "\u0928\u093e\u092e\u093e\u0902\u0915\u0928 \u092b\u093f\u0930 \u0936\u0941\u0930\u0942 \u0915\u0930\u0947\u0902",
       "scenarios": [
         "ENROL-004"
       ]
     },
     {
       "route": "/students",
-      "name": "नामांकन पूरा करें",
+      "name": "\u0928\u093e\u092e\u093e\u0902\u0915\u0928 \u092a\u0942\u0930\u093e \u0915\u0930\u0947\u0902",
       "scenarios": [
         "ENROL-004"
       ]
     },
     {
       "route": "/students",
-      "name": "नामांकन वापस लें",
+      "name": "\u0928\u093e\u092e\u093e\u0902\u0915\u0928 \u0935\u093e\u092a\u0938 \u0932\u0947\u0902",
       "scenarios": [
         "ENROL-004"
       ]
@@ -1414,16 +1466,150 @@
     },
     {
       "route": "/parent/children",
-      "name": "कक्षाएँ रीफ़्रेश करें",
+      "name": "\u0915\u0915\u094d\u0937\u093e\u090f\u0901 \u0930\u0940\u092b\u093c\u094d\u0930\u0947\u0936 \u0915\u0930\u0947\u0902",
       "scenarios": [
         "ENROL-004"
       ]
     },
     {
       "route": "/students",
-      "name": "नामांकन की स्थिति जाँचें",
+      "name": "\u0928\u093e\u092e\u093e\u0902\u0915\u0928 \u0915\u0940 \u0938\u094d\u0925\u093f\u0924\u093f \u091c\u093e\u0901\u091a\u0947\u0902",
       "scenarios": [
         "ENROL-004"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Refresh Today",
+      "scenarios": [
+        "NAV-001",
+        "ATTEND-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Set up classes",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Select session date",
+      "scenarios": [
+        "ATTEND-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Open attendance",
+      "scenarios": [
+        "ATTEND-001",
+        "ATTEND-002",
+        "ATTEND-003"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Refresh attendance",
+      "scenarios": [
+        "ATTEND-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Mark all present",
+      "scenarios": [
+        "ATTEND-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Save attendance",
+      "scenarios": [
+        "ATTEND-001",
+        "ATTEND-002",
+        "ATTEND-003"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Review parent signals",
+      "scenarios": [
+        "ATTEND-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Apply absent suggestions",
+      "scenarios": [
+        "ATTEND-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "More attendance marks",
+      "scenarios": [
+        "ATTEND-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Check saved result",
+      "scenarios": [
+        "ATTEND-002",
+        "ATTEND-003"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Retry same request",
+      "scenarios": [
+        "ATTEND-003"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Mark present",
+      "scenarios": [
+        "ATTEND-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Mark late",
+      "scenarios": [
+        "ATTEND-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Mark absent",
+      "scenarios": [
+        "ATTEND-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Mark excused",
+      "scenarios": [
+        "ATTEND-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Mark make_up",
+      "scenarios": [
+        "ATTEND-001"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "QA Attendance Juniors",
+      "scenarios": [
+        "ATTEND-001",
+        "ATTEND-002",
+        "ATTEND-003"
       ]
     }
   ],
@@ -1435,8 +1621,8 @@
     },
     {
       "feature": "Attendance",
-      "status": "not built",
-      "next": "Record attendance for enrolled children and show authorised parent view."
+      "status": "partly built",
+      "next": "Coach saves/corrections/recovery and private backend implemented; parent home/signals/feed UI and full cross-persona attendance journey remain."
     },
     {
       "feature": "Diary and media",
@@ -1450,8 +1636,8 @@
     },
     {
       "feature": "Live dashboard",
-      "status": "not built",
-      "next": "Replace example dashboard records with saved operational data."
+      "status": "partly built",
+      "next": "Real academy-local Today replaces example records; richer Needs you workflow remains."
     }
   ]
 }
