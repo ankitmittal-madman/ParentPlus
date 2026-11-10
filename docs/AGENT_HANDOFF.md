@@ -1,5 +1,33 @@
 # ParentPlus — Agent Handoff
 
+## Academy family invitations — implementation checkpoint, 2026-11-10
+
+The 18 founder reference originals are archived in
+[the dated reference folder](founder-references/2026-11-10/README.md), committed as
+`e3a8c716160b582473f9e61ac5133bdd167b43b7`. Independent archive review verified
+manifest sizes/hashes and index links. The existing recovery stash is preserved.
+
+The current feature adds the first M2-02/S2-04 and M2-49 slice: owner/admin
+creates a 14-day single-use academy invite; a separate signed-in parent selects
+an eligible child profile they created and explicitly confirms; the saved
+academy-child connection appears in Students and the parent's connections panel.
+This uses real Supabase functions and relationship records. It creates no batch
+enrolment, legal verification, pickup/media/fee permission or second guardian.
+Those remaining features and full snapshots are not claimed complete.
+
+Migration051 is append-only, keeps invite hashes private and leaves legacy
+connection entrypoints revoked. Source guards cover issuer/academy suspension,
+guardian revocation, restricted relationships, idempotent retries and expiration
+after lock waits. New interface copy has EN/HI selectors and a remembered language
+preference; older screens remain English. No launch authentication change is made.
+The hosted TEST backend has not yet received this migration at preparation time.
+
+The reviewed design/plan are under `docs/superpowers/` dated2026-11-10. Full
+regression, report inspection and hosted Git/deployment verification remain to be
+recorded after execution. Earlier checkpoint evidence below is historical and
+must not be re-attested to this new source. Founder authorisation in this task
+covers commit/push/merge and continued use of the existing testing backend.
+
 ## Published browser quality checkpoint — 2026-11-10
 
 The founder approved committing/pushing the reviewed testing package and publishing

@@ -43,6 +43,7 @@ cleanup() {
           (SELECT count(*) FROM public.connection_request_receipts) +
     (SELECT count(*) FROM public.connection_requests) +
           (SELECT count(*) FROM public.connection_events) +
+    (SELECT count(*) FROM public.family_invites) +
     (SELECT count(*) FROM public.courses) +
     (SELECT count(*) FROM public.batches) +
     (SELECT count(*) FROM public.batch_coach_assignments) +

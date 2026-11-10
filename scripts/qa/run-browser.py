@@ -9,6 +9,7 @@ from pathlib import Path
 import subprocess
 import sys
 from uuid import uuid4
+from report import redact
 
 ROOT=Path(__file__).resolve().parents[2]
 parser=argparse.ArgumentParser()
@@ -30,7 +31,10 @@ try:
         inventory=subprocess.run([sys.executable,'scripts/quality/quality_gate.py','inventory'],cwd=ROOT,capture_output=True,text=True)
         if inventory.returncode == 0:
             (OUT/'inventory.json').write_text(inventory.stdout)
-            result=subprocess.run([sys.executable,'scripts/dev/founder-app.py','--qa']+(['--grep',args.grep] if args.grep else []),cwd=ROOT,env=env).returncode
+            process=subprocess.Popen([sys.executable,'scripts/dev/founder-app.py','--qa']+(['--grep',args.grep] if args.grep else []),cwd=ROOT,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
+            for line in process.stdout:
+                print(redact(line),end='',flush=True)
+            result=process.wait()
         else:
             print('Inventory setup failed; scenarios will be reported NOT RUN. No raw diagnostics uploaded.',flush=True)
 finally:

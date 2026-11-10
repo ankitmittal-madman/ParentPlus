@@ -1,5 +1,32 @@
 # ParentPlus — Quality Evidence Index
 
+## Family invitation review and focused checks — 2026-11-10
+
+Fresh independent source review found no Critical defect and identified missing
+concurrency histories plus possible invitation-token leakage in failure reports.
+The implementation now has 18 isolated SQL cases including observed blocking for
+revocation/restriction in both orders, same-token retries, different-invite
+same-child acceptance, four expiry lock positions and paginated roster reads.
+Focused executions passed. New component/server tests cover identity changes,
+late replies, real double clicks and uncertain retry arguments. A rejected
+server-action transport was reproduced RED and corrected to preserve explicit
+same-request recovery rather than a generic failure message.
+
+The first full database run passed all445 cases but FAILED its cleanup audit:
+14 synthetic workspace tombstone receipts remained after the14 new race histories.
+A focused reproduction showed one deleted workspace leaving one receipt; an added
+cleanup assertion failed RED. The fixture now deletes only its own receipt, and
+that regression passes GREEN. This changes test cleanup, not application behaviour.
+A complete fresh database gate is required after this fix; no passing gate is
+claimed for the first run.
+
+The reporter and console runner redact 64-hex invitation secrets in textual
+browser failures. A new offline regression checks HTML, Excel and summary output;
+the browser instrumentation harness reproduces a failed navigation diagnostic.
+Invite inputs are masked in QA screenshots. Raw Playwright diagnostics stay private
+and excluded from upload. Full-suite evidence for the final source is pending;
+see the later execution receipt rather than treating these checks as hosted proof.
+
 ## Published browser quality checkpoint — 2026-11-10
 
 The founder approved committing/pushing the reviewed testing package and publishing

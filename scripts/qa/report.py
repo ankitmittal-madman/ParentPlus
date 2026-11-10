@@ -10,6 +10,12 @@ import re
 import zipfile
 from xml.sax.saxutils import escape as xml_escape
 
+def redact(text):
+    """Invitation URLs can appear in browser errors; never share their secrets."""
+    text=re.sub(r'eyJ[\w-]+\.[\w-]+\.[\w-]+','[redacted token]',text)
+    return re.sub(r'(?i)(?<![0-9a-f])[0-9a-f]{64}(?![0-9a-f])','[redacted invite]',text)
+
+
 ROOT = Path(__file__).resolve().parents[2]
 
 def workbook(path, sheets):
@@ -81,7 +87,7 @@ def write_report(catalog, payload, out, metadata, inventory):
                     # stacks and request headers are deliberately excluded.
                     first=re.sub(r'\x1b\[[0-9;]*m','',str(failure)).splitlines()
                     if first:
-                        reason=re.sub(r'eyJ[\w-]+\.[\w-]+\.[\w-]+','[redacted token]',first[0])[:240]
+                        reason=redact(first[0])[:240]
                         message+=' '+reason
                 # Do not copy provider diagnostics or error stacks into shareable reports.
                 for att in result.get('attachments',[]):

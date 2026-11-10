@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { connection } from "next/server";
+import ParentConnectionsPanel from "@/modules/families/parent-connections-panel";
 import CreatedChildrenPanel from "./created-children-panel";
 import ChildCreationPanel from "./child-creation-panel";
 
@@ -9,8 +10,8 @@ export async function ParentChildrenGate() {
     return <p className="mt-4">Profiles are not available in this environment.</p>;
   }
   return process.env.PARENTPLUS_ENABLE_CHILD_CREATION === "true"
-    ? <><CreatedChildrenPanel /><ChildCreationPanel /></>
-    : <CreatedChildrenPanel />;
+    ? <><CreatedChildrenPanel /><ChildCreationPanel /><ParentConnectionsPanel /></>
+    : <><CreatedChildrenPanel /><ParentConnectionsPanel /></>;
 }
 
 export default function ParentChildrenPage() {

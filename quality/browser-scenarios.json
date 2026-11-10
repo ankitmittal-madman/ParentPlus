@@ -521,6 +521,67 @@
       "expected": "The same pending setup completes with three saved sessions.",
       "status": "automated",
       "kind": "local fault injection + real backend"
+    },
+    {
+      "id": "INVITE-001",
+      "feature": "Family invitations",
+      "persona": "Coach and Parent",
+      "title": "Family invitation persists across separate accounts",
+      "preconditions": "Healthy checkout-owned local Supabase; fictional .test accounts and dummy OTP; no hosted requests.",
+      "steps": [
+        "Coach creates invite and copies link",
+        "Parent signs in, creates child and confirms connection",
+        "Parent reloads used invitation and inspects connections",
+        "Coach signs back in and reloads Students"
+      ],
+      "expected": "Exactly one saved academy-child connection appears to both permitted accounts; no batch enrolment is claimed.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "INVITE-002",
+      "feature": "Family invitations",
+      "persona": "Parent",
+      "title": "Missing and fake invitations",
+      "preconditions": "Healthy checkout-owned local Supabase; fictional .test accounts and dummy OTP; no hosted requests.",
+      "steps": [
+        "Open missing invitation",
+        "Follow sign-in",
+        "Sign in and check fabricated token"
+      ],
+      "expected": "No child connection or private child information is exposed.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "INVITE-003",
+      "feature": "Family invitations",
+      "persona": "Coach",
+      "title": "Interrupted invitation request recovery",
+      "preconditions": "Healthy checkout-owned local Supabase; fictional .test accounts and dummy OTP; no hosted requests.",
+      "steps": [
+        "Create academy",
+        "Interrupt invite issue request",
+        "Retry same in-memory request"
+      ],
+      "expected": "Unconfirmed result has an explicit retry and the recovered invitation link is usable.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "INVITE-004",
+      "feature": "Family invitations",
+      "persona": "Coach and Parent",
+      "title": "Hindi controls and empty connection state",
+      "preconditions": "Healthy checkout-owned local Supabase; fictional .test accounts and dummy OTP; no hosted requests.",
+      "steps": [
+        "Use Hindi Students controls",
+        "Create, copy and clear an invite",
+        "Create an unconnected child and inspect academy connections"
+      ],
+      "expected": "Hindi admission controls work and an unconnected child shows an honest empty state.",
+      "status": "automated",
+      "kind": "real local backend"
     }
   ],
   "actions": [
@@ -1001,13 +1062,151 @@
       "scenarios": [
         "FOUNDER-001"
       ]
+    },
+    {
+      "route": "/students",
+      "name": "Load academies",
+      "scenarios": [
+        "INVITE-001",
+        "INVITE-003"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Load students",
+      "scenarios": [
+        "INVITE-001"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Add a student",
+      "scenarios": [
+        "INVITE-001",
+        "INVITE-003"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Retry invitation",
+      "scenarios": [
+        "INVITE-003"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Copy link",
+      "scenarios": [
+        "INVITE-001"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Clear invitation",
+      "scenarios": [
+        "INVITE-001"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "अकादमियाँ लोड करें",
+      "scenarios": [
+        "INVITE-004"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "विद्यार्थी लोड करें",
+      "scenarios": [
+        "INVITE-004"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "विद्यार्थी जोड़ें",
+      "scenarios": [
+        "INVITE-004"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "लिंक कॉपी करें",
+      "scenarios": [
+        "INVITE-004"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "निमंत्रण हटाएँ",
+      "scenarios": [
+        "INVITE-004"
+      ]
+    },
+    {
+      "route": "/join",
+      "name": "Check invitation",
+      "scenarios": [
+        "INVITE-001",
+        "INVITE-002"
+      ]
+    },
+    {
+      "route": "/join",
+      "name": "Confirm academy connection",
+      "scenarios": [
+        "INVITE-001"
+      ]
+    },
+    {
+      "route": "/join",
+      "name": "Sign in",
+      "scenarios": [
+        "INVITE-002"
+      ]
+    },
+    {
+      "route": "/join",
+      "name": "View or create your child profiles",
+      "scenarios": [
+        "INVITE-001"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "Load your child profiles",
+      "scenarios": [
+        "INVITE-001",
+        "INVITE-004"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "Load academy connections",
+      "scenarios": [
+        "INVITE-001",
+        "INVITE-004"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "अपने बच्चे के प्रोफ़ाइल लोड करें",
+      "scenarios": [
+        "INVITE-004"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "अकादमी से संबंध लोड करें",
+      "scenarios": [
+        "INVITE-004"
+      ]
     }
   ],
   "gaps": [
     {
-      "feature": "Connection and enrollment",
-      "status": "not built",
-      "next": "Connect parent/child to workspace and enroll separately in a batch."
+      "feature": "Batch enrolment and remaining family lifecycle",
+      "status": "partly built",
+      "next": "Academy invitations/connections delivered in this slice; explicit batch enrolment, second guardians and full child snapshots remain."
     },
     {
       "feature": "Attendance",
