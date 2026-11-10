@@ -1602,6 +1602,15 @@
       "scenarios": [
         "ATTEND-001"
       ]
+    },
+    {
+      "route": "/students",
+      "name": "QA Attendance Juniors",
+      "scenarios": [
+        "ATTEND-001",
+        "ATTEND-002",
+        "ATTEND-003"
+      ]
     }
   ],
   "gaps": [

@@ -1,5 +1,15 @@
 # ParentPlus Database Architecture
 
+## TEST053 verified application — 10 November 2026
+
+The existing founder-selected TEST backend now has migration053 from immutable
+code e441a3e. All original34public-table and selectedAuth signatures matched after
+activation. Readonly catalogue checks verified41public tables, the7new privateRLS
+tables and13authenticated-only RPCs; no attendance/signals/items were invented.
+Current local and TEST schema are053. Parent UI and full hosted/browser feature
+acceptance remain pending; see Quality Evidence for scope and source provenance.
+
+
 ## Local attendance053 contract — 10 November 2026
 
 Seven private tables add coherent attendance sheets/records/events/receipts,

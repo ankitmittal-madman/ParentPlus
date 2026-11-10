@@ -1,5 +1,17 @@
 # ParentPlus Build Progress
 
+## Coach attendance source verified; GitHub publication next — 10 November 2026
+
+Local code checkpoint e441a3e delivers real academy-local Today and explicit full
+roster marks/save/corrections/recovery.477frontend/602DB and92real-local browser
+cases passed; independent review fixes are verified. A report-only missing batch
+mapping was reconciled against real recorded clicks, with runtime provenance
+preserved. Follow-up catalogue/docs still require fresh GitHub checks before merge.
+Existing TEST Supabase is053 with original data signatures preserved. New frontend
+Vercel publication is pending. Parent home/quick signals/item fallback/fullAT13
+are still next; this is a partial slice of the larger attendance plan.
+
+
 ## Coach attendance checkpoint in preparation — 10 November 2026
 
 The founder requested commit, push and merge of the work completed so far, then
@@ -63,11 +75,11 @@ roadmap alongside this catalogue. The original documents remain unchanged.
 | M2-03 | Enrolment lifecycle (trial, active, paused, left) | P1 | 1 Class setup | Verified active/pause/resume/complete/withdraw with versioned recovery; final v6 gate passed and TEST052 applied with existing data preserved. Trial/re-entry remain; PR5 merged and main CI passed. |
 | M2-04 | Next-class reminder (auto-drafted) | P0 | 6 Reminders/schedules | Not implemented; queued in dependency order. |
 | M2-05 | Schedule changes (cancel, restore, move, extra class, holiday) | P0 | 6 Reminders/schedules | Not implemented; queued in dependency order. |
-| M2-06 | Parent quick signals (running late, missing today, dropped off) | P0 | 2 Attendance/Today | DB foundation tested; parent signal UI and full report journey remain. |
+| M2-06 | Parent quick signals (running late, missing today, dropped off) | P0 | 2 Attendance/Today | Private DB foundation applied to TEST053 and tested; parent quick-signal UI/full report journey remain. |
 | M2-07 | Holiday and break calendar | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
 | M2-08 | Rain check for outdoor classes | P2 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
 | M2-52 | Family calendar sync and clash flags | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
-| M2-09 | Fast attendance with smart defaults | P0 | 2 Attendance/Today | Partial local implementation: explicit coach marks/corrections/recovery and reviewed private DB; final checkpoint gate pending at preparation, parent UI remains. |
+| M2-09 | Fast attendance with smart defaults | P0 | 2 Attendance/Today | Partial verified slice: local coach marks/corrections/recovery,477frontend/602DB/92browser cases; TEST053 preserves original data. Parent home/fullAT13 and GitHub publication remain. |
 | M2-10 | Auto-attendance from signals (suggest, coach confirms) | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
 | M2-11 | Safe drop-off and pick-up log | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
 | M2-12 | Attendance patterns and drop-out alerts | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
@@ -102,7 +114,7 @@ roadmap alongside this catalogue. The original documents remain unchanged.
 | M2-38 | Privacy-safe AI (names removed before sending) | P0 | 5 AI/observations | Not implemented; queued in dependency order. |
 | M2-39 | Parent message helper (AI inbox) | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
 | M2-40 | Notification engine and channels | P0 | 6 Reminders/schedules | Not implemented; queued in dependency order. |
-| M2-41 | Coach 'Today' and 'Needs you' list | P0 | 2 Attendance/Today | Partial local implementation: real dated Today and enrolled-roster facts; richer Needs you workflow remains. |
+| M2-41 | Coach 'Today' and 'Needs you' list | P0 | 2 Attendance/Today | Partial verified slice: real dated Today and enrolled-roster facts; frontend publication and richer Needs you workflow remain. |
 | M2-50 | Class announcements | P0 | 3 Updates/feed | Not implemented; queued in dependency order. |
 | M2-51 | Parent messaging with quick replies | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |
 | M2-42 | Offline capture and sync | P1 | 7 Remaining family/operations features | Not implemented; queued in dependency order. |

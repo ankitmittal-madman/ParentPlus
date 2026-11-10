@@ -42,6 +42,7 @@ def docker(*args,check=True):
 
 
 def main():
+    (ROOT/'work').mkdir(mode=0o700,exist_ok=True)
     OUT.mkdir(parents=True,exist_ok=True)
     (OUT/'summary.json').write_text(json.dumps({'status':'running','scope':'local only; not release evidence'})+'\n')
     if docker('inspect',CONTAINER,check=False).returncode==0:

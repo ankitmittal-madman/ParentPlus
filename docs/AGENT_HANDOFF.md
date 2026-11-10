@@ -1,5 +1,29 @@
 # ParentPlus — Agent Handoff
 
+## Coach checkpoint committed; publication next — 10 November 2026
+
+Local work HEAD `e441a3e365e13fd0a4c0b7901a527f7619305d74` records59paths and
+matches tested fingerprint47cfa4b552b0d1607392e2dcbfa09820ac28c380c7d809bb4cd5bb065d94bf28.
+477frontend/602DB +lint/types/build +6disabled/6isolatedenabled +25ops/58engine pass.
+Final92real-local browser cases allpassed. A single missing batchbutton catalogue
+mapping was independently reviewed against6actualclicked histories; reconciled
+HTML/Excel retain original runtime identity and label catalogue revision,0actiongaps.
+Follow-up catalogue/evidence docs are being committed; its fresh GitHub CI is pending.
+
+Existing hosted TEST is now053, applied from immutable e441a3e bundle with all
+original34public/Auth signatures unchanged after activation.53history/41tables/
+7privateRLS/13RPC/0inventedrecords verified readonly. Canonical private hosted receipt
+advanced, prior052 backed up. Hosted browser and new Vercel build remain unverified.
+All independent checkpoint reviews passed, including transient Auth recovery and
+actual Save contrast fixes. Do not rerun already-complete Task1/2 implementation.
+
+Immediate: commit follow-up, pushwork, PR/inspectactualGitHub quality+92browser,
+merge normally(noadmin/force/deletion), verify main/Vercel, then resume Task3 via
+existing brief/integration notes/ledger. Keep active attendance plan workspace and
+stash; no worktree. Parent home, signals/fallback/fullAT13 remain unfinished.
+The founder explicitly requested this partialcheckpoint first, then continuedbuild.
+
+
 ## Founder-requested checkpoint before parent attendance UI — 10 November 2026
 
 User explicitly requested commit, push and merge of completed work, then resume.
