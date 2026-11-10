@@ -12933,6 +12933,14 @@
       ],
       "tests": [
         {"suite": "database", "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_weekly_class_setup_creates_course_batch_and_bounded_sessions_atomically"},
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_second_versioned_class_recovers_pending_completed_and_acknowledged"
+        },
+        {
+          "suite": "database",
+          "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_later_class_recovery_rejects_missing_or_mismatched_versioned_provenance"
+        },
         {"suite": "database", "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_weekly_class_setup_retry_returns_same_records_and_changed_schedule_fails"},
         {"suite": "database", "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_weekly_class_setup_rejects_daylight_saving_gap_and_rolls_back_timezone_and_class"},
         {"suite": "database", "ref": "tests.database.test_scheduling_foundation.SchedulingFoundationTests.test_weekly_class_setup_rejects_ambiguous_daylight_saving_time_and_rolls_back"},

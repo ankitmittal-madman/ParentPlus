@@ -19,7 +19,10 @@ except BlockingIOError:
     raise SystemExit('STOP: another local founder/test runner owns the feature controls; keep the existing app running or stop it before starting this runner')
 parser = argparse.ArgumentParser()
 parser.add_argument('--test', action='store_true', help='run the founder browser suite instead of the manual app')
+parser.add_argument('--qa', action='store_true', help='run the scenario/report browser suite against the local backend')
+parser.add_argument('--grep', help='diagnostic QA test filter; incomplete reports remain failures')
 args = parser.parse_args()
+if args.grep and not args.qa: parser.error('--grep requires --qa')
 if os.environ.get('NEXT_PUBLIC_SUPABASE_URL') not in (None, '', 'http://127.0.0.1:54321'):
     raise SystemExit('STOP: founder sandbox refuses hosted Supabase')
 for name in ['supabase_db_ParentPlus', 'supabase_auth_ParentPlus', 'supabase_kong_ParentPlus']:
@@ -35,6 +38,8 @@ for line in (ROOT / 'work/local-supabase.env').read_text().splitlines():
 if values.get('API_URL') != 'http://127.0.0.1:54321' or not values.get('SERVICE_ROLE_KEY'):
     raise SystemExit('STOP: local Supabase configuration is unavailable')
 env = {k: v for k, v in os.environ.items() if not k.startswith(('SUPABASE_', 'NEXT_PUBLIC_SUPABASE_', 'PARENTPLUS_LOCAL_'))}
+for key in ['VERCEL', 'PARENTPLUS_TEST_SERVICE_KEY', 'PARENTPLUS_APP_STAGE', 'NEXT_PUBLIC_FOUNDER_TEST_PROJECT_REF']:
+    env.pop(key, None)
 env.update({
     'NEXT_TELEMETRY_DISABLED': '1', 'XDG_CONFIG_HOME': str(ROOT / 'work/xdg-config'),
     'NEXT_PUBLIC_SUPABASE_URL': values['API_URL'], 'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY': values['ANON_KEY'],
@@ -57,15 +62,18 @@ def stop(_signum, _frame):
 signal.signal(signal.SIGTERM, stop)
 try:
     for table in tables: sql(f'update public.{table} set enabled=true where id')
-    command = ['node_modules/.bin/playwright', 'test', '--config', 'playwright.founder.config.ts'] if args.test else ['npm', 'run', 'dev', '--', '--hostname', '127.0.0.1', '--port', '3193']
+    command = ['node_modules/.bin/playwright', 'test', '--config', 'playwright.qa.config.ts' if args.qa else 'playwright.founder.config.ts'] if args.test or args.qa else ['npm', 'run', 'dev', '--', '--hostname', '127.0.0.1', '--port', '3193']
+    if args.grep: command.extend(['--grep', args.grep])
     print('Founder sandbox: http://127.0.0.1:3193/founder — fictional .test email, OTP 123456', flush=True)
     process = subprocess.Popen(command, cwd=ROOT / 'apps/web', env=env, start_new_session=True)
     result = process.wait()
 except KeyboardInterrupt:
-    result = 0
+    result = 130
 finally:
     if process and process.poll() is None:
-        os.killpg(process.pid, signal.SIGTERM)
+        # Playwright handles SIGINT by closing its separately grouped webserver
+        # and writing partial evidence. SIGTERM can leave that server orphaned.
+        os.killpg(process.pid, signal.SIGINT if args.test or args.qa else signal.SIGTERM)
         try: process.wait(timeout=10)
         except subprocess.TimeoutExpired:
             os.killpg(process.pid, signal.SIGKILL); process.wait()

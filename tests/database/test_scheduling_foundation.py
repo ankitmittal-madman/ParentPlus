@@ -34,6 +34,48 @@ SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111
 {call}
 """
 
+    def two_versioned_classes(self):
+        return SETUP + """
+UPDATE public.workspace_memberships SET role='owner' WHERE id='b0000000-0000-4000-8000-000000000001';
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SET ROLE authenticated;
+CREATE TEMP TABLE first_qa AS SELECT intent_id FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',1,gen_random_uuid(),'QA First','QA First Batch');
+SELECT count(*) FROM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM first_qa),'Asia/Kolkata','2026-11-09','17:30','2026-11-23',60);
+SELECT public.app_acknowledge_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM first_qa));
+CREATE TEMP TABLE second_qa AS SELECT intent_id FROM public.app_begin_class_setup_v2('a0000000-0000-4000-8000-000000000001',(SELECT generation FROM public.app_class_setup_generation('a0000000-0000-4000-8000-000000000001')),gen_random_uuid(),'QA Second','QA Second Batch');
+"""
+
+    def test_second_versioned_class_recovers_pending_completed_and_acknowledged(self):
+        out = run_sql(self.two_versioned_classes() + """
+SELECT state || ':' || (intent_id=(SELECT intent_id FROM second_qa)) || ':' || (prior_intent_id IS NULL AND request_id IS NULL)
+ FROM public.app_current_class_setup_v2('a0000000-0000-4000-8000-000000000001');
+SELECT count(*) FROM public.app_complete_class_setup_weekly('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM second_qa),'Asia/Kolkata','2026-11-09','18:30','2026-11-23',60);
+SELECT state || ':' || occurrence_count || ':' || acknowledged FROM public.app_current_class_setup_v2('a0000000-0000-4000-8000-000000000001');
+SELECT public.app_acknowledge_class_setup('a0000000-0000-4000-8000-000000000001',(SELECT intent_id FROM second_qa));
+SELECT state || ':' || acknowledged FROM public.app_current_class_setup_v2('a0000000-0000-4000-8000-000000000001');
+RESET ROLE;
+SELECT (SELECT count(*) FROM public.courses WHERE name IN ('QA First','QA Second')) || ':' || (SELECT count(*) FROM public.schedule_sessions) || ':' || (SELECT count(*) FROM public.class_setup_intent_history);
+ROLLBACK;
+""")
+        self.assertIn('pending:true:true',out.splitlines())
+        self.assertIn('completed:3:false',out.splitlines())
+        self.assertIn('completed:true',out.splitlines())
+        self.assertEqual(out.splitlines()[-1],'2:6:1')
+
+    def test_later_class_recovery_rejects_missing_or_mismatched_versioned_provenance(self):
+        for change in ["actor_id='22222222-2222-4222-8222-222222222222'", "workspace_id='a0000000-0000-4000-8000-000000000002'", "expected_generation=999", "course_name='Wrong course'", "batch_name='Wrong batch'", None]:
+            with self.subTest(change=change):
+                mutation = ("UPDATE public.class_setup_begin_requests SET " + change if change else "DELETE FROM public.class_setup_begin_requests") + " WHERE intent_id=(SELECT intent_id FROM second_qa);"
+                out = run_sql(self.two_versioned_classes() + "RESET ROLE;\n" + mutation + """
+SET ROLE authenticated;
+DO $$ BEGIN
+ BEGIN PERFORM * FROM public.app_current_class_setup_v2('a0000000-0000-4000-8000-000000000001'); RAISE EXCEPTION 'invalid v2 provenance accepted';
+ EXCEPTION WHEN object_not_in_prerequisite_state THEN NULL; END;
+END $$;
+SELECT 'rejected'; ROLLBACK;
+""")
+                self.assertEqual(out.splitlines()[-1],'rejected')
+
     def test_weekly_class_setup_creates_course_batch_and_bounded_sessions_atomically(self):
         out = run_sql(self.class_setup_weekly("""
 SET ROLE authenticated;

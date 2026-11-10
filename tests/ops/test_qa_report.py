@@ -1,0 +1,116 @@
+import importlib.util
+import json
+from pathlib import Path
+import tempfile
+import subprocess
+import sys
+import unittest
+import zipfile
+import xml.etree.ElementTree as ET
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+class BrowserReportTests(unittest.TestCase):
+    def setUp(self):
+        spec = importlib.util.spec_from_file_location('qa_report', ROOT / 'scripts/qa/report.py')
+        self.report = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(self.report)
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.out = Path(self.temp.name)
+        (self.out/'outcome.png').write_bytes(b'\x89PNG\r\n\x1a\nfixture')
+        self.catalog = {'projects': ['desktop'], 'scenarios': [{'id': 'AUTH-001', 'feature': 'Login', 'persona': 'Parent', 'title': '<script>bad()</script>', 'preconditions': 'Synthetic local account', 'steps': ['Click Continue'], 'expected': '=1+1', 'status': 'automated', 'kind': 'real local backend'}], 'actions': [], 'gaps': []}
+        self.payload = {'suites': [{'specs': [{'title': '[AUTH-001] Login', 'tests': [{'projectName': 'desktop', 'expectedStatus': 'passed', 'results': [{'status': 'passed', 'duration': 10, 'attachments': [{'name': 'outcome', 'path': str(self.out/'outcome.png')}]}]}]}]}]}
+
+    def write(self, payload=None):
+        return self.report.write_report(self.catalog, self.payload if payload is None else payload, self.out, {'projects': ['desktop'], 'commit': 'fixture', 'environment': 'synthetic unit fixture'}, [])
+
+    def test_generates_escaped_self_contained_html_and_real_inline_string_xlsx(self):
+        summary = self.write()
+        self.assertTrue(summary['ok'])
+        html = (self.out/'index.html').read_text()
+        self.assertNotIn('<script>bad()', html)
+        self.assertIn('&lt;script&gt;', html)
+        self.assertIn('data:image/png;base64,', html)
+        with zipfile.ZipFile(self.out/'ParentPlus-Test-Scenarios.xlsx') as z:
+            for name in z.namelist():
+                if name.endswith('.xml'): ET.fromstring(z.read(name))
+            self.assertIn(b'=1+1', z.read('xl/worksheets/sheet2.xml'))
+            self.assertNotIn(b'<f>', z.read('xl/worksheets/sheet2.xml'))
+
+    def test_zero_scenarios_and_mismatched_projects_never_pass(self):
+        self.catalog['scenarios']=[]
+        self.assertFalse(self.write({'suites':[]})['ok'])
+        self.setUp()
+        result=self.report.write_report(self.catalog,self.payload,self.out,{'projects':['desktop','mobile']},[])
+        self.assertFalse(result['ok'])
+
+    def test_missing_results_and_missing_project_cannot_pass(self):
+        self.assertFalse(self.write({'suites': []})['ok'])
+        self.assertIn('NOT RUN', (self.out/'index.html').read_text())
+
+    def test_skipped_and_flaky_results_cannot_pass(self):
+        case = self.payload['suites'][0]['specs'][0]['tests'][0]
+        case['results'][0]['status'] = 'skipped'
+        self.assertFalse(self.write()['ok'])
+        case['results'] = [{'status': 'failed'}, {'status': 'passed', 'attachments': [{'name': 'outcome', 'path': str(self.out/'outcome.png')}]}]
+        self.assertFalse(self.write()['ok'])
+
+    def test_missing_or_external_screenshot_cannot_pass_or_exfiltrate(self):
+        att = self.payload['suites'][0]['specs'][0]['tests'][0]['results'][0]['attachments'][0]
+        att['path'] = '/etc/hostname'
+        self.assertFalse(self.write()['ok'])
+        self.assertNotIn(Path('/etc/hostname').read_text().strip(), (self.out/'index.html').read_text())
+
+    def test_duplicate_and_unknown_scenarios_cannot_pass(self):
+        specs = self.payload['suites'][0]['specs']
+        specs.append(json.loads(json.dumps(specs[0])))
+        self.assertFalse(self.write()['ok'])
+        specs.pop(); specs[0]['title'] = '[AUTH-999] unexpected'
+        self.assertFalse(self.write()['ok'])
+
+    def test_future_feature_is_not_built_and_never_in_pass_total(self):
+        self.catalog['gaps'] = [{'feature': 'Attendance', 'status': 'not built', 'next': 'Implement enrolled-child attendance'}]
+        summary = self.write()
+        self.assertEqual(summary['passed'], 1)
+        self.assertEqual(summary['not_built'], 1)
+        self.assertIn('not built', (self.out/'index.html').read_text())
+
+    def test_observed_control_is_not_counted_as_exercised(self):
+        self.catalog['actions']=[{'route':'/login','name':'Continue','scenarios':['AUTH-001']}]
+        p=self.out/'actions.json'
+        p.write_text(json.dumps([{'route':'/login','name':'Continue','kind':'observed'}]))
+        self.payload['suites'][0]['specs'][0]['tests'][0]['results'][0]['attachments'].append({'name':'ui-actions','path':str(p)})
+        incomplete=self.write()
+        self.assertEqual(incomplete['action_gaps'],1)
+        self.assertFalse(incomplete['ok'])
+        p.write_text(json.dumps([{'route':'/login','name':'Continue','kind':'clicked'}]))
+        self.assertEqual(self.write()['action_gaps'],0)
+
+    def test_a_desktop_pass_does_not_cover_a_missing_mobile_run(self):
+        result=self.report.write_report(self.catalog,self.payload,self.out,{'projects':['desktop','mobile']},[])
+        self.assertFalse(result['ok'])
+        self.assertEqual(result['passed'],1)
+        self.assertEqual(result['not_run'],1)
+
+    def test_a_new_observed_control_without_mapping_fails_action_coverage(self):
+        p=self.out/'new-action.json'
+        p.write_text(json.dumps([{'route':'/login','name':'New untested action','kind':'observed'}]))
+        self.payload['suites'][0]['specs'][0]['tests'][0]['results'][0]['attachments'].append({'name':'ui-actions','path':str(p)})
+        result=self.write()
+        self.assertFalse(result['ok'])
+        self.assertEqual(result['action_gaps'],1)
+        self.assertIn('UNMAPPED CONTROL',(self.out/'index.html').read_text())
+
+    def test_interrupted_json_still_produces_failed_html_and_excel(self):
+        (self.out/'run-metadata.json').write_text(json.dumps({'projects':['desktop','mobile']}))
+        (self.out/'playwright.json').write_text('{incomplete')
+        result=subprocess.run([sys.executable,str(ROOT/'scripts/qa/report.py'),'--out',str(self.out)],capture_output=True,text=True)
+        self.assertEqual(result.returncode,1)
+        self.assertTrue((self.out/'ParentPlus-Test-Scenarios.xlsx').is_file())
+        self.assertIn('NOT RUN',(self.out/'index.html').read_text())
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,5 +1,42 @@
 # ParentPlus — Quality Evidence Index
 
+## Browser quality development — 2026-11-10
+
+Independent review identified two P2 reporting gaps: attribute-only control
+reveal could escape discovery, and an empty catalog could pass with zero results.
+Both were reproduced and corrected. Added standalone real-Chromium observer
+regressions plus empty/mismatched catalog, unmapped control and interrupted-JSON
+report checks. The observer now tracks visibility attributes and checks actual
+visibility; action coverage requires a mapped passing click on both viewports.
+A diagnostic NAV-001 rerun passed2/2 after checking native menu open state; its
+full-catalog report correctly remains failed with64 other cases NOT RUN. The
+earlier broader run passed64/66 with only that menu-test assumption failing.
+The second-class SQL regression and full427-case database suite passed before
+these report-only review fixes. Final complete source-bound reruns follow.
+
+
+Founder manually confirmed the deployed parent/coach entry journeys work for an
+initial check. GitHub quality run42761558562 for523efba completed successfully.
+New work adds33 catalogued browser scenarios across desktop/mobile (66 runs),
+Excel/HTML reports with synthetic screenshots and an additive daily/PR/push/manual
+GitHub workflow. See [Browser Testing](BROWSER_TESTING.md). Workflow publication
+and active scheduled execution are pending; this source remains uncommitted.
+
+The tests found a genuine second-class recovery defect. A forward-only050 fix
+recognises exact v2 provenance while retaining existing access/legacy checks. Its
+isolated SQL reproduction failed against029 and passed against050; missing or
+mismatched receipts remain rejected. Applied050 only to checkout-owned local
+Supabase. Hosted testing remains at the previously applied049 until a separate
+publish/upgrade step. No existing rows were rewritten or reset.
+
+Exploratory evidence includes a62/66 browser run; its four remaining test-harness
+assumptions were corrected. Final source-bound QA/full regression and independent
+review follow; those exploratory reports are not re-attested as current success.
+Prior commits and pre-recovery stash are preserved. Connection/enrollment remains
+the next product slice after this testing checkpoint; attendance, diary, fees and
+the live dashboard remain incomplete.
+
+
 ## Current-source founder testing verification — 2026-11-10
 
 Implementation checkpoint: df2b976 (full SHA available from Git). The complete

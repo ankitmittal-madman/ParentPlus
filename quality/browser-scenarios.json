@@ -1,0 +1,1033 @@
+{
+  "schema_version": 1,
+  "projects": [
+    "desktop",
+    "mobile"
+  ],
+  "scenarios": [
+    {
+      "id": "AUTH-001",
+      "feature": "Login",
+      "persona": "Parent",
+      "title": "Email validation prevents an empty or malformed request",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Open login",
+        "Submit an empty email",
+        "Submit malformed email text"
+      ],
+      "expected": "An accessible validation error appears; no session is established.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "AUTH-002",
+      "feature": "Login",
+      "persona": "Parent",
+      "title": "Fictional email rule rejects real-looking addresses",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Enter parent@example.com",
+        "Continue"
+      ],
+      "expected": "Founder verification rejects a non-.test address without sending email.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "AUTH-003",
+      "feature": "Login",
+      "persona": "Parent",
+      "title": "Wrong and incomplete codes are rejected; requesting again remains possible",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Request code for a unique .test email",
+        "Submit 12 then 000000",
+        "Request another code"
+      ],
+      "expected": "Incomplete and wrong codes show errors; another request returns a usable code form.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "AUTH-004",
+      "feature": "Login",
+      "persona": "Parent",
+      "title": "Create-account and sign-in controls complete dummy verification",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Choose Create account",
+        "Enter a unique .test email",
+        "Choose Sign in instead then Continue",
+        "Verify 123456"
+      ],
+      "expected": "A confirmed session exposes parent and coach navigation.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "AUTH-005",
+      "feature": "Login",
+      "persona": "Parent",
+      "title": "Sign-out removes signed-in links and protected access",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Sign in with 123456",
+        "Sign out",
+        "Open protected coach schedule"
+      ],
+      "expected": "Signed-in links disappear and schedule returns to login.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "AUTH-006",
+      "feature": "Route access",
+      "persona": "Anonymous",
+      "title": "All coach routes require a session",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Open Today, Schedule, Students, Post and Fees while signed out"
+      ],
+      "expected": "Every coach route redirects to login.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "PARENT-001",
+      "feature": "Child profiles",
+      "persona": "Parent",
+      "title": "A new parent starts with an empty saved-profile list",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Sign in to a new account",
+        "Open parent profiles",
+        "Load profiles"
+      ],
+      "expected": "The list shows the empty state without another family’s records.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "PARENT-002",
+      "feature": "Child profiles",
+      "persona": "Parent",
+      "title": "Blank and overlong names cannot create a profile",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Check creation status",
+        "Submit a blank child name",
+        "Submit 121 characters"
+      ],
+      "expected": "Both attempts show validation and create no result.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "PARENT-003",
+      "feature": "Child profiles",
+      "persona": "Parent",
+      "title": "Create, confirm, load and reload a child profile",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Check creation status",
+        "Create Fictional QA Child",
+        "Confirm result",
+        "Load profiles",
+        "Reload and load again"
+      ],
+      "expected": "Exactly one matching profile persists after reload.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "PARENT-004",
+      "feature": "Child profiles",
+      "persona": "Parent",
+      "title": "Add another profile after confirming the first",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Create and confirm the first child",
+        "Choose Add another profile",
+        "Create and confirm a different child",
+        "Load profiles"
+      ],
+      "expected": "Both distinct profiles are visible once each.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "PARENT-005",
+      "feature": "Child profiles",
+      "persona": "Parent",
+      "title": "Switching accounts does not expose another parent’s profiles",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Parent A creates a child",
+        "Sign out and sign in as Parent B",
+        "Load profiles"
+      ],
+      "expected": "Parent B cannot see Parent A’s child.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "PARENT-006",
+      "feature": "Child profiles",
+      "persona": "Parent",
+      "title": "Reload recovers a saved but unacknowledged profile",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Create a profile without confirming",
+        "Reload",
+        "Check creation status",
+        "Confirm result"
+      ],
+      "expected": "The existing profile is recovered and confirmed without duplicate creation.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "PARENT-007",
+      "feature": "Child recovery",
+      "persona": "Parent",
+      "title": "Interrupted creation can be safely fenced before another request",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Abort only the first creation RPC before it reaches the local API",
+        "Check creation status",
+        "Stop waiting for this request",
+        "Start a fresh request"
+      ],
+      "expected": "The interrupted request is fenced; a fresh profile can be saved once.",
+      "status": "automated",
+      "kind": "local fault injection + real backend"
+    },
+    {
+      "id": "WORKSPACE-001",
+      "feature": "Workspace access",
+      "persona": "Coach",
+      "title": "New coach sees setup guidance and can sign out",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Sign in without memberships",
+        "Open schedule",
+        "Follow Set up your own workspace",
+        "Return to access screen and sign out"
+      ],
+      "expected": "The guidance and setup links work; sign-out returns to login.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "WORKSPACE-002",
+      "feature": "Workspace setup",
+      "persona": "Independent coach",
+      "title": "Create and recover an independent workspace",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Check workspace setup",
+        "Select Independent coach",
+        "Enter unique workspace name",
+        "Create workspace",
+        "Reload and check the same setup",
+        "Continue to class setup"
+      ],
+      "expected": "The same workspace is recovered and coach schedule opens.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "WORKSPACE-003",
+      "feature": "Workspace setup",
+      "persona": "Academy owner",
+      "title": "Create an academy workspace",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Check workspace setup",
+        "Select Academy",
+        "Enter unique academy name",
+        "Create workspace",
+        "Continue to class setup"
+      ],
+      "expected": "The owner can open the new academy’s class setup.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "WORKSPACE-004",
+      "feature": "Workspace setup",
+      "persona": "Coach",
+      "title": "Workspace name validation blocks incomplete submission",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Check workspace setup",
+        "Attempt blank and one-character names"
+      ],
+      "expected": "Browser validation prevents submission and no continuation link appears.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "WORKSPACE-005",
+      "feature": "Workspace recovery",
+      "persona": "Coach",
+      "title": "Corrupt saved setup information gives recovery guidance",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Write an invalid synthetic workspace recovery marker",
+        "Check workspace setup"
+      ],
+      "expected": "The app shows saved-request guidance and does not create a workspace.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "CLASS-001",
+      "feature": "Class practice",
+      "persona": "Coach",
+      "title": "Practice setup validates input and makes its non-saving behaviour clear",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Create a workspace",
+        "Open Try class setup",
+        "Preview empty fields",
+        "Enter example course and batch",
+        "Preview again"
+      ],
+      "expected": "Validation appears first; the final result is explicitly Preview only — not saved.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "CLASS-002",
+      "feature": "Weekly classes",
+      "persona": "Academy owner",
+      "title": "Save, reload and acknowledge three weekly sessions",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Create an academy",
+        "Load academies and select it",
+        "Enter course, batch and Asia/Kolkata schedule",
+        "Save weekly sessions",
+        "Reload and select academy",
+        "Confirm course, batch and schedule"
+      ],
+      "expected": "Three saved weekly sessions and course/batch details survive reload and acknowledgement.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "CLASS-003",
+      "feature": "Weekly classes",
+      "persona": "Academy owner",
+      "title": "Invalid time zone and reversed dates do not save a class",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Open new class setup",
+        "Enter unknown time zone and try save",
+        "Enter valid zone but end date before start",
+        "Try save"
+      ],
+      "expected": "Validation messages appear and no saved weekly schedule is shown.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "CLASS-004",
+      "feature": "Weekly classes",
+      "persona": "Independent coach",
+      "title": "After acknowledgement a second course can be created",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Save and acknowledge a first class",
+        "Enter a new course and batch",
+        "Save a second weekly schedule"
+      ],
+      "expected": "The second distinct course is shown; the acknowledged setup does not block it.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "ACCESS-001",
+      "feature": "Founder access controls",
+      "persona": "Founder",
+      "title": "Suspend and restore a test owner membership",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Create an academy as owner",
+        "Refresh founder records",
+        "Select account/workspace and suspended owner status",
+        "Apply test access",
+        "Open schedule",
+        "Restore active owner status",
+        "Open schedule again"
+      ],
+      "expected": "Suspension blocks coach access; restoration enables the saved workspace again.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "ACCESS-002",
+      "feature": "Founder access controls",
+      "persona": "Founder",
+      "title": "Role changes and removed memberships affect access",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Create a workspace",
+        "Set membership to active admin and open schedule",
+        "Set active coach and load eligible academies",
+        "Set membership removed and open schedule"
+      ],
+      "expected": "Admin can set up classes; ordinary coach cannot administer classes; removal blocks coach area.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "FOUNDER-001",
+      "feature": "Founder console",
+      "persona": "Founder",
+      "title": "Record counts and navigation are available",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Open founder controls",
+        "Refresh test records",
+        "Follow Parent profiles",
+        "Return and follow Switch test account",
+        "Return and follow Create workspace and Coach classes"
+      ],
+      "expected": "Counts load and each navigation link reaches the intended screen or its access gate.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "FOUNDER-002",
+      "feature": "Founder console",
+      "persona": "Founder",
+      "title": "Membership update remains disabled until selections are complete",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Refresh test records",
+        "Leave account/workspace unselected"
+      ],
+      "expected": "Apply test access is disabled and cannot submit an incomplete change.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "NAV-001",
+      "feature": "Coach navigation",
+      "persona": "Coach",
+      "title": "All bottom navigation links and coach menu work",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Create a workspace and open Today",
+        "Open and close coach menu",
+        "Use Schedule, Students, Post, Fees and Today links",
+        "Use menu Schedule, Today and Sign in links"
+      ],
+      "expected": "Each link reaches the expected route; roadmap screens remain clearly Coming soon and dashboard is labelled example data.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "LAYOUT-001",
+      "feature": "Responsive layout",
+      "persona": "Parent and coach",
+      "title": "Key screens remain usable at the configured viewport",
+      "preconditions": "Healthy checkout-owned local Supabase; fresh synthetic .test account unless anonymous; implemented controls enabled by the runner.",
+      "steps": [
+        "Sign in and create a workspace",
+        "Visit login, parent profiles, onboarding, founder console and schedule",
+        "Check page width and visible headings"
+      ],
+      "expected": "All visited routes fit the viewport without horizontal overflow.",
+      "status": "automated",
+      "kind": "real local backend"
+    },
+    {
+      "id": "AUTH-007",
+      "feature": "Login recovery",
+      "persona": "Founder tester",
+      "title": "Retry an unavailable session check",
+      "preconditions": "Real local Supabase; fresh synthetic account; deterministic local network fault.",
+      "steps": [
+        "Sign in",
+        "Abort local user lookup and reload",
+        "Restore network and click Try again"
+      ],
+      "expected": "The existing session is confirmed again.",
+      "status": "automated",
+      "kind": "local fault injection + real backend"
+    },
+    {
+      "id": "AUTH-008",
+      "feature": "Login recovery",
+      "persona": "Founder tester",
+      "title": "Recover an uncertain sign-out",
+      "preconditions": "Real local Supabase; fresh synthetic account; deterministic local network fault.",
+      "steps": [
+        "Sign in",
+        "Fail the local logout request",
+        "Restore network and click Check session"
+      ],
+      "expected": "After the failed logout response, Check session confirms the SDK-cleared session and returns to the email form; signed-in links remain hidden.",
+      "status": "automated",
+      "kind": "local fault injection + real backend"
+    },
+    {
+      "id": "PARENT-008",
+      "feature": "Child recovery",
+      "persona": "Founder tester",
+      "title": "Retry the same interrupted creation",
+      "preconditions": "Real local Supabase; fresh synthetic account; deterministic local network fault.",
+      "steps": [
+        "Abort the first begin server action before backend access",
+        "Check creation status",
+        "Retry same request"
+      ],
+      "expected": "Exactly the original request is retried and its profile is visible.",
+      "status": "automated",
+      "kind": "local fault injection + real backend"
+    },
+    {
+      "id": "PARENT-009",
+      "feature": "Child recovery",
+      "persona": "Founder tester",
+      "title": "Retry an interrupted confirmation",
+      "preconditions": "Real local Supabase; fresh synthetic account; deterministic local network fault.",
+      "steps": [
+        "Create a profile",
+        "Abort the first acknowledgement server action",
+        "Check creation status",
+        "Retry confirmation"
+      ],
+      "expected": "The saved profile is acknowledged without creating another profile.",
+      "status": "automated",
+      "kind": "local fault injection + real backend"
+    },
+    {
+      "id": "CLASS-005",
+      "feature": "Class recovery",
+      "persona": "Founder tester",
+      "title": "Finish a saved pending class setup",
+      "preconditions": "Real local Supabase; fresh synthetic account; deterministic local network fault.",
+      "steps": [
+        "Reserve class details and interrupt completion",
+        "Reload and select academy",
+        "Re-enter weekly schedule",
+        "Finish course, batch and schedule"
+      ],
+      "expected": "The same pending setup completes with three saved sessions.",
+      "status": "automated",
+      "kind": "local fault injection + real backend"
+    }
+  ],
+  "actions": [
+    {
+      "route": "/login",
+      "name": "Continue",
+      "scenarios": [
+        "AUTH-003",
+        "AUTH-004",
+        "AUTH-005"
+      ]
+    },
+    {
+      "route": "/login",
+      "name": "Verify code",
+      "scenarios": [
+        "AUTH-003",
+        "AUTH-004",
+        "AUTH-005"
+      ]
+    },
+    {
+      "route": "/login",
+      "name": "Request another code",
+      "scenarios": [
+        "AUTH-003",
+        "AUTH-004",
+        "AUTH-005"
+      ]
+    },
+    {
+      "route": "/login",
+      "name": "Create account",
+      "scenarios": [
+        "AUTH-004"
+      ]
+    },
+    {
+      "route": "/login",
+      "name": "Sign in instead",
+      "scenarios": [
+        "AUTH-004"
+      ]
+    },
+    {
+      "route": "/login",
+      "name": "Sign out",
+      "scenarios": [
+        "AUTH-005",
+        "PARENT-005"
+      ]
+    },
+    {
+      "route": "/login",
+      "name": "View profiles you created",
+      "scenarios": [
+        "PARENT-001",
+        "PARENT-003"
+      ]
+    },
+    {
+      "route": "/login",
+      "name": "Continue to coach area",
+      "scenarios": [
+        "WORKSPACE-001"
+      ]
+    },
+    {
+      "route": "/login",
+      "name": "Open founder controls",
+      "scenarios": [
+        "FOUNDER-001"
+      ]
+    },
+    {
+      "route": "/login",
+      "name": "Check session",
+      "scenarios": [
+        "AUTH-008"
+      ]
+    },
+    {
+      "route": "/login",
+      "name": "Try again",
+      "scenarios": [
+        "AUTH-007"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "Check creation status",
+      "scenarios": [
+        "PARENT-002",
+        "PARENT-003",
+        "PARENT-004",
+        "PARENT-005",
+        "PARENT-006",
+        "PARENT-007"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "Create profile",
+      "scenarios": [
+        "PARENT-002",
+        "PARENT-003",
+        "PARENT-004",
+        "PARENT-005",
+        "PARENT-006",
+        "PARENT-007"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "Confirm result",
+      "scenarios": [
+        "PARENT-002",
+        "PARENT-003",
+        "PARENT-004",
+        "PARENT-005",
+        "PARENT-006",
+        "PARENT-007"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "Load profiles",
+      "scenarios": [
+        "PARENT-002",
+        "PARENT-003",
+        "PARENT-004",
+        "PARENT-005",
+        "PARENT-006",
+        "PARENT-007"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "Add another profile",
+      "scenarios": [
+        "PARENT-004"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "Stop waiting for this request",
+      "scenarios": [
+        "PARENT-007"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "Retry same request",
+      "scenarios": [
+        "PARENT-008"
+      ]
+    },
+    {
+      "route": "/parent/children",
+      "name": "Retry confirmation",
+      "scenarios": [
+        "PARENT-009"
+      ]
+    },
+    {
+      "route": "/coach-access",
+      "name": "Set up your own workspace",
+      "scenarios": [
+        "WORKSPACE-001"
+      ]
+    },
+    {
+      "route": "/coach-access",
+      "name": "Sign out",
+      "scenarios": [
+        "WORKSPACE-001"
+      ]
+    },
+    {
+      "route": "/coach-onboarding",
+      "name": "Check workspace setup",
+      "scenarios": [
+        "WORKSPACE-002",
+        "WORKSPACE-003"
+      ]
+    },
+    {
+      "route": "/coach-onboarding",
+      "name": "Create workspace",
+      "scenarios": [
+        "WORKSPACE-002",
+        "WORKSPACE-003"
+      ]
+    },
+    {
+      "route": "/coach-onboarding",
+      "name": "Continue to class setup",
+      "scenarios": [
+        "WORKSPACE-002",
+        "WORKSPACE-003"
+      ]
+    },
+    {
+      "route": "/schedule",
+      "name": "Load academies",
+      "scenarios": [
+        "CLASS-002",
+        "CLASS-003",
+        "CLASS-004",
+        "ACCESS-002"
+      ]
+    },
+    {
+      "route": "/schedule",
+      "name": "Create course, batch and weekly sessions",
+      "scenarios": [
+        "CLASS-002",
+        "CLASS-003",
+        "CLASS-004",
+        "ACCESS-002"
+      ]
+    },
+    {
+      "route": "/schedule",
+      "name": "Confirm course, batch and schedule",
+      "scenarios": [
+        "CLASS-002",
+        "CLASS-003",
+        "CLASS-004",
+        "ACCESS-002"
+      ]
+    },
+    {
+      "route": "/schedule",
+      "name": "Finish course, batch and schedule",
+      "scenarios": [
+        "CLASS-005"
+      ]
+    },
+    {
+      "route": "/schedule",
+      "name": "Preview class setup",
+      "scenarios": [
+        "CLASS-001"
+      ]
+    },
+    {
+      "route": "/founder",
+      "name": "Refresh test records",
+      "scenarios": [
+        "ACCESS-001",
+        "ACCESS-002",
+        "FOUNDER-001"
+      ]
+    },
+    {
+      "route": "/founder",
+      "name": "Apply test access",
+      "scenarios": [
+        "ACCESS-001",
+        "ACCESS-002",
+        "FOUNDER-001"
+      ]
+    },
+    {
+      "route": "/founder",
+      "name": "Switch test account",
+      "scenarios": [
+        "FOUNDER-001"
+      ]
+    },
+    {
+      "route": "/founder",
+      "name": "Parent profiles",
+      "scenarios": [
+        "FOUNDER-001"
+      ]
+    },
+    {
+      "route": "/founder",
+      "name": "Coach classes",
+      "scenarios": [
+        "FOUNDER-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Today",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Schedule",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Post",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Students",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Fees",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/schedule",
+      "name": "Today",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/schedule",
+      "name": "Schedule",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/schedule",
+      "name": "Post",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/schedule",
+      "name": "Students",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/schedule",
+      "name": "Fees",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Today",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Schedule",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Post",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Students",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/students",
+      "name": "Fees",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/post",
+      "name": "Today",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/post",
+      "name": "Schedule",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/post",
+      "name": "Post",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/post",
+      "name": "Students",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/post",
+      "name": "Fees",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/fees",
+      "name": "Today",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/fees",
+      "name": "Schedule",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/fees",
+      "name": "Post",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/fees",
+      "name": "Students",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/fees",
+      "name": "Fees",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Open menu",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/",
+      "name": "Sign in",
+      "scenarios": [
+        "NAV-001"
+      ]
+    },
+    {
+      "route": "/founder",
+      "name": "Create workspace",
+      "scenarios": [
+        "FOUNDER-001"
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "feature": "Connection and enrollment",
+      "status": "not built",
+      "next": "Connect parent/child to workspace and enroll separately in a batch."
+    },
+    {
+      "feature": "Attendance",
+      "status": "not built",
+      "next": "Record attendance for enrolled children and show authorised parent view."
+    },
+    {
+      "feature": "Diary and media",
+      "status": "not built",
+      "next": "Implement class updates, consent and parent feed."
+    },
+    {
+      "feature": "Fees",
+      "status": "not built",
+      "next": "Implement charge and payment records."
+    },
+    {
+      "feature": "Live dashboard",
+      "status": "not built",
+      "next": "Replace example dashboard records with saved operational data."
+    }
+  ]
+}

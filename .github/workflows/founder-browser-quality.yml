@@ -1,0 +1,82 @@
+name: ParentPlus Founder Browser Quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # 06:00 India time. GitHub may delay scheduled starts.
+    - cron: '30 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: founder-browser-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  journeys:
+    name: Parent and coach journeys with Excel and HTML evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - name: Install locked frontend dependencies
+        working-directory: apps/web
+        run: npm ci
+      - name: Install headless Chromium
+        working-directory: apps/web
+        run: npx playwright install --with-deps chromium
+      - name: Verify report generator regressions
+        run: python3 -m unittest discover -s tests/ops -v
+      - name: Verify control-discovery regressions
+        working-directory: apps/web
+        run: npx playwright test --config playwright.qa-harness.config.ts
+      - name: Start fresh local Supabase
+        run: bash scripts/dev/local-supabase.sh start
+      - name: Run desktop and mobile scenarios; generate reports even on test failure
+        id: browser
+        run: python3 scripts/qa/run-browser.py
+      - name: Report scenarios as NOT RUN when setup prevented execution
+        if: always() && steps.browser.outcome == 'skipped'
+        run: python3 scripts/qa/run-browser.py --not-run
+      - name: Upload founder-readable evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: parentplus-browser-report-${{ github.run_id }}-${{ github.run_attempt }}
+          # Never upload raw Playwright JSON, provider logs or environment files.
+          path: |
+            test-results/qa/run-*/index.html
+            test-results/qa/run-*/ParentPlus-Test-Scenarios.xlsx
+            test-results/qa/run-*/summary.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Stop local Supabase and retain no hosted credentials
+        if: always()
+        run: bash scripts/dev/local-supabase.sh stop
+      - name: Explain report location
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              out.write('## ParentPlus founder browser report\n\n')
+              out.write('Download this run’s **parentplus-browser-report** artifact, extract it, and open **index.html**. The Excel scenario register is in the same folder.\n\n')
+              out.write('Screenshots contain synthetic local test data. This run does not test the deployed Vercel app. Missing evidence or skipped scenarios fail the run.\n')
+          PY
