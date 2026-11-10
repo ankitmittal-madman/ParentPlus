@@ -1,5 +1,52 @@
 # ParentPlus — Quality Evidence Index
 
+## Published browser quality checkpoint — 2026-11-10
+
+The founder approved committing/pushing the reviewed testing package and publishing
+the testing fix. Code checkpoint `431c0e7d22ba4613a0d9e1542381740013a5978b` is on GitHub main.
+All27 approved files were committed; preceding work and the pre-recovery stash
+were preserved. Vercel reported deployment completed for this commit.
+
+First independent GitHub browser workflow
+[42783630419](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42783630419)
+completed successfully and uploaded
+[report artifact13747596711](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42783630419/artifacts/13747596711).
+The workflow enforces66 scenario/viewports and62 controls across both viewports.
+The separate full quality workflow
+[42783630836](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42783630836)
+passed its plan, frontend, database and final evidence jobs. The GitLab mirror
+also succeeded. These are inspected hosted outcomes, separate from local checks.
+Artifact metadata confirms the upload; this workspace cannot download the Azure
+artifact-storage redirect, so the hosted report bytes were not personally read.
+
+The published workflow is configured for PRs, main pushes, manual runs and daily
+00:30UTC/06:00IST. A scheduled trigger has not yet been observed; do not claim
+a nightly run occurred. Artifacts retain14days. Download/extract the report in
+GitHub to open index.html and ParentPlus-Test-Scenarios.xlsx together.
+
+Migration050 was applied to the EXISTING founder-selected hosted TEST project
+fmavpazczahxeusqbxuh. The atomic migration receipt and all50 history entries were
+verified. Original row fingerprints across the eight baseline application tables
+and Auth accounts matched before/after. A read-only check confirms exact v2
+receipt validation is installed, the app recovery RPC is available, and direct
+authenticated access to its private helper remains revoked. No reset or record
+rewrite occurred. Hosted browser use of the second-class fix remains untested
+from this network; the founder's earlier manual confirmation covered the entry
+journeys, not this new regression.
+
+Local pre-commit evidence at source fingerprint
+`f06d26d86f1a5f9eeacc7a0ae849ad50c42d6b78a335b5c999880041650af370`
+passed:316 frontend,427 database,66 new browser,16 existing browser,2 observer,
+12 offline operations and58 engine cases; lint/type/build, upgrade rehearsal
+and source-bound gate. Reports: ignored test-results/quality/browser-quality-v2/
+and work/deliverables/parentplus-browser-quality/. The following documentation
+checkpoint does not relabel those local reports as a new source execution.
+
+This remains founder testing. Connection/enrollment is the next product slice;
+attendance, diary, fees and the live dashboard remain incomplete. Earlier
+pre-publication notes below are historical records.
+
+
 ## Browser quality development — 2026-11-10
 
 Independent review identified two P2 reporting gaps: attribute-only control

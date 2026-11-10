@@ -55,10 +55,11 @@ inputs are masked in screenshots. Raw diagnostics stay local and are not uploade
 
 ## Regular GitHub workflow
 
-Prepared `.github/workflows/founder-browser-quality.yml` triggers on pull requests,
+Published `.github/workflows/founder-browser-quality.yml` triggers on pull requests,
 pushes to main, manual dispatch and daily00:30UTC (06:00IST). GitHub may delay
-scheduled starts. The schedule becomes active only after approved publishing to
-the default branch; code in an uncommitted checkout is not active automation.
+scheduled starts. The workflow is on the default branch and its first push run passed
+(run42783630419, code431c0e7). The daily schedule is configured; a scheduled
+execution has not yet been observed.
 
 Flow: checkout → locked dependencies/Chromium → report regression checks → fresh
 local Supabase → desktop/mobile journeys → HTML/Excel → artifact upload → stop
@@ -95,9 +96,10 @@ No record rewrite is needed. The returned legacy prior/request pair remains NULL
 
 The isolated SQL regression failed with the old recovery function and passed with
 050. Its companion checks reject missing receipts and mismatched actor, workspace,
-generation, course and batch. The fix is applied only to checkout-owned LOCAL
-Supabase during development. Applying050 to the hosted testing project and
-publishing code/workflows are separate pending operations. Existing scripts now
+generation, course and batch. The fix was first verified on checkout-owned LOCAL
+Supabase, then applied to the existing hosted TEST project after founder approval.
+Its migration receipt, preservation hashes and helper privileges were verified.
+Direct hosted-browser regression remains unrun from this restricted network. Existing scripts now
 expect50 migrations and423+4=427 database cases; no coverage minimum was lowered.
 
 Exploratory browser runs and failed reports are retained. The first setup run
@@ -113,3 +115,6 @@ controls and non-capture of field values; offline report tests include zero/miss
 evidence, project mismatch, unsafe screenshots, skipped/retried/duplicate results,
 unmapped controls, literal Excel cells and escaped HTML. Interrupted JSON still
 produces failed HTML/Excel. CI executes these checks before the app journeys.
+
+
+First hosted report: [run42783630419](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42783630419), [download artifact](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42783630419/artifacts/13747596711). Download/extract in your browser; this workspace cannot fetch the artifact-storage redirect. Full GitHub quality run42783630836 and Vercel deployment for431c0e7 passed.
