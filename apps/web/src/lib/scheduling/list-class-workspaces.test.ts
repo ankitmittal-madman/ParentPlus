@@ -31,6 +31,7 @@ describe("listClassWorkspaces", () => {
   it("filters own active manager memberships and active workspaces", async () => {
     expect(await listClassWorkspaces()).toEqual({ ok: true, actorId: actor, workspaces: [{ id: workspace, name: "Badminton Academy", timeZone: null }] });
     expect(mocks.from).toHaveBeenCalledWith("workspace_memberships");
+    expect(mocks.select).toHaveBeenCalledWith("workspace_id, workspaces!workspace_memberships_workspace_id_fkey!inner(id, name, status, scheduling_time_zone)");
     expect(mocks.eq).toHaveBeenCalledWith("user_id", actor);
     expect(mocks.eq).toHaveBeenCalledWith("status", "active");
     expect(mocks.eq).toHaveBeenCalledWith("workspaces.status", "active");

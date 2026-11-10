@@ -1,3 +1,4 @@
+import { verifyFounderOtp } from "../founder/auth";
 import { createClient } from "../supabase/browser";
 
 export async function verifyEmailOtp(email: string, token: string) {
@@ -16,6 +17,15 @@ export async function verifyEmailOtp(email: string, token: string) {
       success: false,
       error: "Enter the six-digit verification code.",
     };
+  }
+
+  if (process.env.NEXT_PUBLIC_FOUNDER_MODE === "true") {
+    try {
+      const result = await verifyFounderOtp(normalizedEmail, normalizedToken);
+      if (!result.success || !result.session) return { success: false, error: result.error };
+      const { error } = await createClient().auth.setSession(result.session);
+      return error ? { success: false, error: "Unable to establish the local test session." } : { success: true, error: null };
+    } catch { return { success: false, error: "Unable to establish the local test session." }; }
   }
 
   if (process.env.NEXT_PUBLIC_ENABLE_LIVE_OTP !== "true") {

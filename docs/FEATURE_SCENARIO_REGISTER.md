@@ -124,3 +124,14 @@ The registry currently contains 291 mapped entries: 281 marked implemented/cover
 | Maintaining this register | After each verified feature slice, update the relevant rows and evidence date; keep the roadmap, build progress and executable registry as canonical owners. Do not convert a local or mocked result into an E2E-complete claim. |
 
 **Next engineering action:** Finish the reservation recovery and acknowledgement protocol, including secure app-facing access and failure/concurrency checks, then integrate and test the real class setup journey end to end.
+
+## Real local first-use journeys — 2026-11-09
+
+`apps/web/e2e-local/journeys.spec.ts` executes parent signup/code rejection/profile
+creation/reload/isolation/sign-out, plus independent-coach and academy-owner
+workspace/course/batch/weekly-session creation, reload/acknowledgement and
+suspension. Run `python3 scripts/dev/local-e2e.py` after local stack startup.
+These are actual local Auth/PostgREST/database checks. The v1 selector does not
+collect this suite, so it remains an additional explicit acceptance command.
+Unit identities for workspace recovery, actor/control validation, marker races
+and loopback configuration are mapped in the requirements registry.

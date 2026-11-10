@@ -1,0 +1,56 @@
+import { afterEach, beforeEach, expect, it, vi } from "vitest";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import WorkspaceForm from "./workspace-form";
+const mocks = vi.hoisted(() => ({ check: vi.fn(), create: vi.fn(), observe: vi.fn() }));
+vi.mock("@/lib/workspace/first-use", () => ({ checkWorkspaceSetup: mocks.check, createFirstWorkspace: mocks.create }));
+vi.mock("@/lib/auth/session-observer", () => ({ observeSessionChanges: mocks.observe }));
+const actor = "11111111-1111-4111-8111-111111111111";
+const workspace = "33333333-3333-4333-8333-333333333333";
+const storage = "parentplus.workspace-first-use.v1";
+beforeEach(() => { Object.defineProperty(navigator, "locks", { configurable: true, value: { request: vi.fn((_name, callback) => Promise.resolve(callback())) } }); vi.resetAllMocks(); localStorage.clear(); vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true"); mocks.observe.mockReturnValue(() => {}); mocks.check.mockResolvedValue({ ok: true, actorId: actor, workspaceId: null }); });
+afterEach(() => vi.unstubAllEnvs());
+it("retains a request key after an uncertain write and recovers it after reload", async () => {
+  mocks.create.mockResolvedValue({ ok: false, error: "Workspace setup is unresolved." });
+  const view = render(<WorkspaceForm />);
+  fireEvent.click(await screen.findByRole("button", { name: "Check workspace setup" }));
+  fireEvent.change(await screen.findByLabelText("Workspace name"), { target: { value: "Fictional Coach" } });
+  const saved = localStorage.getItem(storage)!;
+  fireEvent.click(screen.getByRole("button", { name: "Create workspace" }));
+  expect(await screen.findByRole("status")).toHaveTextContent("unresolved");
+  const marker = JSON.parse(saved);
+  expect(mocks.create).toHaveBeenCalledWith({ expectedActorId: actor, requestId: marker.requestId, name: "Fictional Coach", type: "independent" });
+  expect(localStorage.getItem(storage)).toBe(saved);
+  view.unmount(); mocks.check.mockResolvedValue({ ok: true, actorId: actor, workspaceId: workspace });
+  render(<WorkspaceForm />);
+  fireEvent.click(await screen.findByRole("button", { name: "Check workspace setup" }));
+  expect(await screen.findByRole("link", { name: "Continue to class setup" })).toHaveAttribute("href", "/schedule");
+  expect(mocks.check).toHaveBeenLastCalledWith({ expectedActorId: actor, requestId: marker.requestId });
+  expect(screen.queryByRole("button", { name: "Create workspace" })).not.toBeInTheDocument();
+});
+it("blocks writes when the saved marker is corrupt", async () => {
+  localStorage.setItem(storage, "not-json"); render(<WorkspaceForm />);
+  fireEvent.click(await screen.findByRole("button", { name: "Check workspace setup" }));
+  expect(await screen.findByRole("status")).toHaveTextContent("Saved request information is unavailable");
+  expect(mocks.check).not.toHaveBeenCalled(); expect(mocks.create).not.toHaveBeenCalled();
+});
+it("hides a recovered workspace immediately when the session changes", async () => {
+  let change!: () => void; mocks.observe.mockImplementation(callback => { change = callback; return () => {}; });
+  mocks.check.mockResolvedValue({ ok: true, actorId: actor, workspaceId: workspace });
+  render(<WorkspaceForm />);
+  fireEvent.click(await screen.findByRole("button", { name: "Check workspace setup" }));
+  await screen.findByRole("link", { name: "Continue to class setup" });
+  act(() => change());
+  expect(screen.queryByRole("link", { name: "Continue to class setup" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Create workspace" })).not.toBeInTheDocument();
+});
+it("does not overwrite another tab request while an initial check is in flight", async () => {
+  let finish!: (value: { ok: true; actorId: string; workspaceId: null }) => void;
+  mocks.check.mockReturnValue(new Promise(resolve => { finish = resolve; }));
+  render(<WorkspaceForm />);
+  fireEvent.click(await screen.findByRole("button", { name: "Check workspace setup" }));
+  const otherTab = JSON.stringify({ version: 1, actorId: actor, requestId: workspace });
+  localStorage.setItem(storage, otherTab);
+  await act(async () => finish({ ok: true, actorId: actor, workspaceId: null }));
+  expect(localStorage.getItem(storage)).toBe(otherTab);
+  expect(screen.queryByRole("button", { name: "Create workspace" })).not.toBeInTheDocument();
+});

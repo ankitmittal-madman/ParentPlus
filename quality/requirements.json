@@ -12946,6 +12946,248 @@
         "tests/database/test_scheduling_foundation.py"
       ]
     },
-    {"id": "UI-COACH-HEADER-MENU-LINKS", "domain": "coach-navigation", "description": "Coach can open the header menu and access available pages.", "status": "implemented", "risk": "low", "coverage": "covered", "scenarios": ["Coach opens the menu and finds links to existing pages"], "tests": [{"suite": "frontend", "ref": "apps/web/src/ui/components/coach-header.test.tsx::CoachHeader > opens a menu with links to existing pages"}], "sources": ["apps/web/src/ui/components/coach-header.tsx", "apps/web/src/ui/components/coach-header.test.tsx"]}
+    {"id": "UI-COACH-HEADER-MENU-LINKS", "domain": "coach-navigation", "description": "Coach can open the header menu and access available pages.", "status": "implemented", "risk": "low", "coverage": "covered", "scenarios": ["Coach opens the menu and finds links to existing pages"], "tests": [{"suite": "frontend", "ref": "apps/web/src/ui/components/coach-header.test.tsx::CoachHeader > opens a menu with links to existing pages"}], "sources": ["apps/web/src/ui/components/coach-header.tsx", "apps/web/src/ui/components/coach-header.test.tsx"]},
+    {
+      "id": "AUTH-COACH-NAVIGATION",
+      "domain": "authentication",
+      "description": "Offer coach navigation only after a confirmed session and hide it throughout sign-out; server membership checks remain authoritative.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "confirmed session",
+        "signed-out and pending sign-out"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/login/page.test.tsx::LoginPage > offers the coach area only to a confirmed signed-in user and hides it during sign-out"
+        }
+      ],
+      "sources": [
+        "apps/web/src/app/login/page.tsx",
+        "apps/web/e2e-local/journeys.spec.ts"
+      ]
+    },
+    {
+      "id": "AUTH-PUBLIC-CONFIG-LOOPBACK",
+      "domain": "authentication",
+      "description": "Permit local HTTP only for exact loopback hosts; reject remote HTTP, other protocols and embedded credentials.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "local Supabase URL",
+        "unsafe URL rejection"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/supabase/config.test.ts::allows HTTP only for exact loopback hosts and allows HTTPS"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/supabase/config.test.ts::rejects remote HTTP, non-HTTP protocols and embedded credentials"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/supabase/config.ts"
+      ]
+    },
+    {
+      "id": "AUTH-FIRST-WORKSPACE-LOCAL",
+      "domain": "workspaces",
+      "description": "Default-off authenticated workspace onboarding with durable same-request retries, actor checks, current RLS-scoped recovery and invalidation on session changes. Lost-key cross-device discovery remains deferred.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "disabled controls",
+        "malformed input",
+        "identity change",
+        "lost response and reload",
+        "corrupt storage",
+        "unknown status does not prove absence",
+        "cross-tab request allocation serialized using browser locks"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/coach-onboarding/workspace-form.test.tsx::blocks writes when the saved marker is corrupt"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/coach-onboarding/workspace-form.test.tsx::does not overwrite another tab request while an initial check is in flight"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/coach-onboarding/workspace-form.test.tsx::hides a recovered workspace immediately when the session changes"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/app/coach-onboarding/workspace-form.test.tsx::retains a request key after an uncertain write and recovers it after reload"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/workspace/first-use.test.ts::does not contact the provider while workspace onboarding is disabled"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/workspace/first-use.test.ts::rejects a changed actor before any workspace mutation"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/workspace/first-use.test.ts::rejects malformed input without starting a provider request"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/workspace/first-use.test.ts::returns unknown for an empty RLS result without authorizing another request"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/workspace/first-use.test.ts::treats transport failure as unresolved and redacts provider errors"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/workspace/first-use.test.ts::uses the original request key and only existing controlled creation"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/workspace/first-use.ts",
+        "apps/web/src/app/coach-onboarding/workspace-form.tsx",
+        "docs/superpowers/specs/2026-11-09-local-first-use.md",
+        "apps/web/e2e-local/journeys.spec.ts"
+      ]
+    },
+    {
+      "id": "FOUNDER-LOCAL-TESTING",
+      "domain": "founder-testing",
+      "description": "Local founder testing accepts synthetic email/code and creates ordinary local sessions; founder can inspect records and override synthetic membership access. Hosted testing is covered separately by FOUNDER-DEPLOYED-TESTING.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "unconfigured production and hosted endpoint refusal",
+        "dummy code rejection",
+        "ordinary user-token exchange without email",
+        "provider error redaction",
+        "synthetic membership suspension and restoration",
+        "accounts and workspaces remain available beyond the first page"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/auth.test.ts::accepts fictional requests without sending any email"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/auth.test.ts::never creates an admin client in production or for hosted Supabase"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/auth.test.ts::redacts local admin errors and does not return partial credentials"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/auth.test.ts::rejects incorrect codes and real email addresses before provider access"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/auth.test.ts::returns only ordinary session tokens after the local exchange"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/controls.test.ts::keeps accounts and workspaces beyond the first page available to founder overrides"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/controls.test.ts::keeps founder read and override controls inaccessible in production"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/controls.test.ts::lets the founder restore or suspend a synthetic test membership"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/controls.test.ts::rejects a non-synthetic account without writing memberships"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/runtime.test.ts::enables explicitly configured local development"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/runtime.test.ts::refuses hosted endpoints and disabled server mode"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/runtime.test.ts::refuses production even with founder flags enabled"
+        }
+      ],
+      "sources": [
+        "apps/web/src/lib/founder/runtime.ts",
+        "apps/web/src/lib/founder/auth.ts",
+        "apps/web/src/lib/founder/controls.ts",
+        "apps/web/e2e-founder/founder.spec.ts",
+        "docs/superpowers/specs/2026-11-09-founder-testing.md"
+      ]
+    },
+    {
+      "id": "FOUNDER-DEPLOYED-TESTING",
+      "domain": "founder-testing",
+      "description": "Explicit Vercel testing builds support dummy verification against the founder-selected existing test backend, with runtime-only server credentials and an explicit later launch switch.",
+      "status": "implemented",
+      "risk": "high",
+      "coverage": "covered",
+      "scenarios": [
+        "selected hosted test backend pinning",
+        "dummy-login testing build defaults",
+        "launch-stage opt-out",
+        "no private credential in checked-in build defaults",
+        "nonpersistent server admin sessions"
+      ],
+      "tests": [
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/deployment-config.test.ts::contains only non-secret testing defaults and an anon-role public key"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/deployment-config.test.ts::does not force testing mode after an explicit launch-stage build"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/deployment-config.test.ts::enables dummy OTP and implemented features for Vercel testing builds"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/runtime.test.ts::does not mistake a launched build or mismatched backend for a testing app"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/runtime.test.ts::refuses an unrelated hosted project even in testing mode"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/runtime.test.ts::supports an explicitly configured hosted testing build with the selected backend"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/founder/server-admin.test.ts::uses the server credential without enabling persisted admin sessions"
+        },
+        {
+          "suite": "frontend",
+          "ref": "apps/web/src/lib/supabase/config.test.ts::blocks founder clients from using an unrelated project"
+        }
+      ],
+      "sources": [
+        "apps/web/next.config.ts",
+        "apps/web/founder-testing.config.json",
+        "apps/web/src/lib/founder/backend-boundary.ts",
+        "apps/web/src/lib/founder/server-admin.ts",
+        "scripts/deploy/upgrade-testing-backend.py",
+        "docs/superpowers/specs/2026-11-10-hosted-founder-testing.md"
+      ]
+    }
   ]
 }

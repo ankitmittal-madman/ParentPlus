@@ -1,5 +1,67 @@
 # ParentPlus Build Progress
 
+## Hosted founder testing preparation — 2026-11-10
+
+The founder explicitly selected the EXISTING Supabase project
+`fmavpazczahxeusqbxuh` as the testing backend, superseding the earlier instruction
+to leave hosted Supabase unchanged and the separate-project proposal. No new
+account or paid service is needed. The existing GitHub→Vercel route is authorised
+for deployment; unavailable Vercel integration must not be chased.
+
+The hosted test database was upgraded from001–013 through049 with atomic migration
+receipts after a synthetic upgrade rehearsal. Original row fingerprints across
+eight application tables and Auth accounts were unchanged. Four implemented-feature
+controls are enabled. No database reset, deletion or Auth provider change occurred.
+See ignored `work/hosted-testing-upgrade-report.json` for the operation receipt.
+
+Prepared Vercel testing defaults enable fictional .test email/123456 login and
+implemented parent/coach features. The selected backend is pinned. The private
+service credential remains runtime-only. The founder screenshot confirms
+`PARENTPLUS_TEST_SERVICE_KEY` exists in Preview and Production; its value has not
+been inspected. Current-source regression and actual deployment checks are pending.
+No claim of published login success is made. Earlier local-only evidence below is
+historical. Students/enrollment, attendance, diary and fees remain incomplete.
+
+
+## Founder-testable local access — 2026-11-09
+
+A local development sandbox now accepts dummy .test emails and code 123456,
+creates ordinary local sessions, enables implemented first-use features during
+manual testing and gives the founder record-count/membership override controls.
+One actual browser-to-database scenario passed child/workspace/course/batch/weekly
+session creation followed by suspension and restored access. Twelve new unit
+checks cover local-only configuration, wrong codes, safe session exchange and
+founder control restrictions. This is first-use testing availability; the full
+students/enrollment, attendance, diary and fees milestones remain incomplete.
+
+
+## Real local parent and coach first-use journeys — 2026-11-09
+
+Local Supabase applies migrations 001–049 and passes real-provider browser
+journeys for parent signup/child creation/reload/confirmation/isolation/sign-out,
+and independent-coach plus academy-owner workspace/course/batch/weekly-session
+creation, reload recovery, acknowledgement and membership suspension.
+The coach membership gate now uses an explicit PostgREST FK relationship.
+The new workspace-creation screen and its existing database control remain
+default off; uncertain outcomes retain the original request key. Browser Web
+Locks prevent overlapping tabs from replacing a newly established request.
+
+Local verification: 296 frontend cases, 421 isolated PostgreSQL cases plus four
+standalone concurrency scenarios, three real local browser journeys, six
+OTP-disabled browser checks, and six namespace-isolated synthetic-provider
+browser scenarios. Lint, TypeScript and production build passed. These are local
+results; M2/M3 as a whole, hosted rollout and production readiness are not complete.
+See [verification scope and limits](LOCAL_FIRST_USE_VERIFICATION.md).
+
+
+## Signed-in coach navigation — 2026-11-08
+
+The local sign-in page offers a coach-area link after a confirmed session and
+hides it during sign-out. The coach route still checks active workspace
+membership on the server. Local component tests cover the link and sign-out;
+they do not verify a live provider or hosted browser journey. New coach
+workspace creation remains unavailable and the link does not create access.
+
 ## Hosted database continuity — 2026-11-07
 
 The founder intends to retain the selected ParentPlus Supabase project for test

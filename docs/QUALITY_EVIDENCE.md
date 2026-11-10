@@ -1,9 +1,105 @@
 # ParentPlus — Quality Evidence Index
 
+## Hosted founder testing preparation — 2026-11-10
+
+The founder explicitly selected the EXISTING Supabase project
+`fmavpazczahxeusqbxuh` as the testing backend, superseding the earlier instruction
+to leave hosted Supabase unchanged and the separate-project proposal. No new
+account or paid service is needed. The existing GitHub→Vercel route is authorised
+for deployment; unavailable Vercel integration must not be chased.
+
+The hosted test database was upgraded from001–013 through049 with atomic migration
+receipts after a synthetic upgrade rehearsal. Original row fingerprints across
+eight application tables and Auth accounts were unchanged. Four implemented-feature
+controls are enabled. No database reset, deletion or Auth provider change occurred.
+See ignored `work/hosted-testing-upgrade-report.json` for the operation receipt.
+
+Prepared Vercel testing defaults enable fictional .test email/123456 login and
+implemented parent/coach features. The selected backend is pinned. The private
+service credential remains runtime-only. The founder screenshot confirms
+`PARENTPLUS_TEST_SERVICE_KEY` exists in Preview and Production; its value has not
+been inspected. Current-source regression and actual deployment checks are pending.
+No claim of published login success is made. Earlier local-only evidence below is
+historical. Students/enrollment, attendance, diary and fees remain incomplete.
+
+
+## Founder dummy-OTP sandbox — 2026-11-09
+
+The additional founder browser scenario passed against actual local Auth and
+PostgreSQL with dummy .test email/code 123456, UI-created child/workspace/weekly
+classes and founder-driven suspension/restoration. This avoids external identity
+verification and mailbox steps; it does not mock database persistence or ordinary
+user sessions. Twelve new unit cases plus focused existing auth regressions passed;
+lint and TypeScript passed. Full current-source reports/receipts use the separate
+`test-results/quality/founder-testing/` plan; previous first-use receipts are historical.
+Independent review found account/workspace selectors stopped after 100 rows. A
+new regression failed before pagination and passed afterward. The launcher now
+holds a shared feature-control lease; a competing launch was verified to fail
+before any control changes. Browser assertions read back the saved child and
+exactly three persisted weekly sessions after restored access.
+No hosted data/configuration was changed. Local founder controls are a deliberate
+development-only administrative capability authorised by DEC-021.
+
+
+## Real local first-use verification — 2026-11-09
+
+Recovery base: `010fd412d034f3e8e7545c235b824e9e6ac36bdb`, branch `work`, with
+uncommitted recovered and new scope. Current-source receipts/fingerprint are
+produced by the full final plan under `test-results/quality/local-first-use/`;
+reports are ignored and are not portable evidence simply because this doc exists.
+
+Observed local runs passed 296 frontend cases across 32 files, lint, TypeScript,
+production build, 421 isolated database cases, four standalone concurrency
+scenarios, all 425 database JUnit cases and cleanup. The recovered 001–013-to-049
+synthetic upgrade rehearsal passed. Actual local Supabase applied all 49 migrations.
+
+Three Chromium journeys passed with real local Auth emails, signed user sessions,
+Mailpit, PostgREST and PostgreSQL: parent, independent coach, academy owner. Six
+production-build browser checks with OTP disabled passed. The six synthetic-provider
+recovery scenarios passed inside their required loopback-only namespace after
+retrying outside the command sandbox; its isolation checks were retained.
+New E2E JUnit is `apps/web/test-results/local-e2e-junit.xml`; existing browser and
+unit reports retain their original names. The v1 quality gate does not collect the
+new local E2E scenarios automatically, so their separate invocation remains required.
+
+Independent read-only review found the cross-tab marker race; a regression failed
+before correction and passed with browser-lock allocation and a fresh marker
+comparison. The reviewer also noted missing academy-type coverage; the real suite
+now covers both workspace types. Fix verification was by the implementer, not a
+second independent reviewer. The real join ambiguity reproduced as PostgREST
+PGRST201 before the FK-qualified query correction.
+
+No hosted database or hosted CI was contacted for validation. Local feature
+controls were restored, synthetic rows remain for inspection, and no existing
+records/containers were reset. See [full scope and limits](LOCAL_FIRST_USE_VERIFICATION.md).
+
+
 This is the canonical index of verification provenance and known availability,
 not a replacement for raw results, the requirements registry or historical audits.
 Update after quality checks. Distinguish a plan, an execution, an approval, a local
 commit and a hosted result. No connector or CI result is inferred from a document.
+
+## Signed-in coach navigation — local verification, 2026-11-08
+
+The frontend suite passed 284 tests across 29 files. Focused login and coach
+access tests passed 57 tests across two files. ESLint on the modified login
+files and the application typecheck passed. The new login test verifies the
+coach-area link after a mocked confirmed session and its absence during and
+after sign-out; an existing signed-out test verifies that it is hidden. Server
+membership checks are exercised separately using mocks. This is not real
+provider, hosted or browser verification, and does not establish workspace
+creation or first-use journey completion.
+
+The isolated local PostgreSQL gate also applied all 49 migrations from an empty
+database, passed 421 database tests and four additional concurrency scenarios,
+validated 425 JUnit cases and verified cleanup. This is fresh-baseline evidence,
+not a rehearsal of the current hosted database upgrade or approval for rollout.
+
+Separately, a network-isolated PostgreSQL 17 rehearsal of the reported 001–013
+baseline with selected fictional workspace, membership, child and guardianship
+records applied 014–049 and checked those records survived with creation
+controls disabled. Auth was a synthetic fixture, not Supabase Auth. The hosted
+state, other data shapes, partial failure, backup and real JWTs were not tested.
 
 ## Class setup with weekly sessions — local verification, 2026-11-07
 

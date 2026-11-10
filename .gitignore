@@ -11,3 +11,7 @@ __pycache__/
 /test-results/quality/
 /test-results/evidence/
 /test-results/selection/
+
+# Task scratch and local Supabase browser evidence
+/work/
+/apps/web/playwright-report/

@@ -141,6 +141,19 @@ describe("LoginPage", () => {
     expect(screen.queryByRole("link", { name: "View profiles you created" })).not.toBeInTheDocument();
   });
 
+  it("offers the coach area only to a confirmed signed-in user and hides it during sign-out", async () => {
+    vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
+    mocks.getSessionStatus.mockResolvedValue({ state: "signed-in" });
+    let finish!: (result: { success: boolean; error: null }) => void;
+    mocks.signOut.mockReturnValue(new Promise((resolve) => { finish = resolve; }));
+    render(<LoginPage />);
+    expect(await screen.findByRole("link", { name: "Continue to coach area" })).toHaveAttribute("href", "/");
+    fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    expect(screen.queryByRole("link", { name: "Continue to coach area" })).not.toBeInTheDocument();
+    await act(async () => finish({ success: true, error: null }));
+    expect(screen.queryByRole("link", { name: "Continue to coach area" })).not.toBeInTheDocument();
+  });
+
   it("offers the parent profiles link only after a confirmed session", async () => {
     vi.stubEnv("NEXT_PUBLIC_ENABLE_LIVE_OTP", "true");
     vi.stubEnv("NEXT_PUBLIC_ENABLE_PARENT_PROFILE_LINK", "true");
@@ -148,6 +161,7 @@ describe("LoginPage", () => {
     render(<LoginPage />);
     expect(await screen.findByLabelText("Email address")).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "View profiles you created" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Continue to coach area" })).not.toBeInTheDocument();
   });
 
   it("links a confirmed signed-in user to parent profiles and removes the link on sign-out", async () => {

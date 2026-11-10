@@ -1,5 +1,19 @@
 # ParentPlus Database Security Review
 
+## Local signed-provider boundary checks — 2026-11-09
+
+Real local Supabase browser journeys now exercise Auth OTP/JWT sessions,
+parent-created profile isolation, workspace creation through the existing
+controlled function, class/session creation and loss of coach route access after
+membership suspension. No migration or database privilege was added by this slice.
+The existing isolated 421-case authorization/concurrency regression plus four
+standalone scenarios and the recovered upgrade rehearsal passed locally.
+These observations do not close the broader dispute, retention, revocation,
+hosted upgrade or real-family-data review. Cross-device lost-request-key discovery
+remains separate. All four local controls were restored after browser tests;
+hosted controls were neither read nor changed.
+
+
 ## Class setup workspace generation and weekly schedule — local draft, 2026-11-07
 
 Migration 048 adds a private workspace-version row and actor/request-key
@@ -231,3 +245,17 @@ review each claim against its exact evidence and unresolved product controls.
 - Verify function privileges and owner in the target environment.
 
 Status: Proposed security contract; not implemented or tested.
+
+
+### Current founder testing deployment boundary — 2026-11-10
+
+DEC-022 supersedes the earlier local-only founder restriction for this testing app.
+Vercel testing defaults pin existing Supabase fmavpazczahxeusqbxuh. Dummy .test/123456
+verification exchanges a server-generated hash for an ordinary user session; the
+service credential stays on the server. Founder test controls intentionally allow
+synthetic membership overrides without real identity verification. Anyone able to
+reach this testing app can use those controls; this matches the requested testing
+access and is not suitable for real family data or a launch claim. Normal persona
+RPC/RLS policies remain. Existing rows were preserved through the014–049 upgrade.
+The explicit launch-stage build stops forcing test defaults; a launch still needs
+its own implementation and verification. Actual hosted app verification is pending.

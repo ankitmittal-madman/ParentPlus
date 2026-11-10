@@ -300,6 +300,8 @@ export default function LoginPage() {
           Welcome to Parent Plus
         </h1>
 
+        {process.env.NEXT_PUBLIC_FOUNDER_MODE === "true" && <p className="mt-3 rounded-xl bg-amber-50 p-3 text-sm">Founder sandbox: use any fictional .test email and verification code <strong>123456</strong>. <Link href="/founder" className="underline">Open founder controls</Link></p>}
+
         <p className="mt-2 text-sm leading-6 text-muted">
           {accountMode === "sign-up" ? "Create an account with your email." : "Sign in with your email to continue."}
         </p>
@@ -419,6 +421,7 @@ export default function LoginPage() {
             {!signOutError && !signingOut && <p ref={successRef} tabIndex={-1} role="status" className="text-sm text-muted">Signed in.</p>}
             {signOutError && <p role="alert" className="text-sm text-red-700">{signOutError}</p>}
             {!signingOut && process.env.NEXT_PUBLIC_ENABLE_PARENT_PROFILE_LINK === "true" && <Link href="/parent/children" prefetch={false} className="block text-sm font-semibold text-brand underline">View profiles you created</Link>}
+            {!signingOut && <Link href="/" prefetch={false} className="block text-sm font-semibold text-brand underline">Continue to coach area</Link>}
             <button type="button" onClick={handleSignOut} disabled={signingOut} className="w-full rounded-xl bg-brand px-5 py-3 font-semibold text-white disabled:opacity-60">
               {signingOut ? "Signing out..." : "Sign out"}
             </button>

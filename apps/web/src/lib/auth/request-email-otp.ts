@@ -1,3 +1,4 @@
+import { requestFounderOtp } from "../founder/auth";
 import { createClient } from "../supabase/browser";
 
 export async function requestEmailOtp(email: string, purpose: "sign-in" | "sign-up" = "sign-in") {
@@ -11,6 +12,8 @@ export async function requestEmailOtp(email: string, purpose: "sign-in" | "sign-
       error: "Enter a valid email address.",
     };
   }
+
+  if (process.env.NEXT_PUBLIC_FOUNDER_MODE === "true") return requestFounderOtp(normalizedEmail);
 
   if (process.env.NEXT_PUBLIC_ENABLE_LIVE_OTP !== "true") {
     return {

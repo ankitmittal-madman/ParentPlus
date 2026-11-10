@@ -80,3 +80,37 @@ account lifecycle behavior remain the responsibility of their future specs and
 [roadmap](DEVELOPMENT_ROADMAP.md). Real auth, data access, consent and retention
 integration must be designed and verified before the corresponding release.
 No topology, hosting provider or live API endpoint is invented by this overview.
+
+## Local first-use workspace boundary — 2026-11-09
+
+The default-off `/coach-onboarding` view calls authenticated server actions in
+`src/lib/workspace/first-use.ts`. Actions verify the current Auth user and expected
+actor before using existing `create_workspace` or own, active-workspace RLS reads.
+Minimal browser request markers and a Web Lock coordinate same-device retries;
+empty reads stay unresolved. No service key or new database privilege is involved.
+The local-only runner uses Mailpit and synthetic records against local Supabase;
+this runtime boundary is separate from any hosted rollout.
+
+## Local founder test boundary
+
+`/founder` and the dummy-OTP server actions require development runtime, explicit
+private/public founder flags and exact loopback Supabase endpoint. Dummy OTP is
+exchanged server-side for an ordinary local user session; normal product actions
+then use their existing identity/RPC/RLS checks. Only founder administrative actions
+use the local service credential, which never enters public configuration or action
+results. The launcher verifies Docker checkout ownership and restores feature
+controls on normal shutdown. Production and hosted endpoints refuse this capability.
+
+
+### Current founder testing deployment boundary — 2026-11-10
+
+DEC-022 supersedes the earlier local-only founder restriction for this testing app.
+Vercel testing defaults pin existing Supabase fmavpazczahxeusqbxuh. Dummy .test/123456
+verification exchanges a server-generated hash for an ordinary user session; the
+service credential stays on the server. Founder test controls intentionally allow
+synthetic membership overrides without real identity verification. Anyone able to
+reach this testing app can use those controls; this matches the requested testing
+access and is not suitable for real family data or a launch claim. Normal persona
+RPC/RLS policies remain. Existing rows were preserved through the014–049 upgrade.
+The explicit launch-stage build stops forcing test defaults; a launch still needs
+its own implementation and verification. Actual hosted app verification is pending.

@@ -17,3 +17,7 @@ no automatic transfer of conversations or unpublished local changes.
 
 The [web README](apps/web/README.md) contains framework starter commands; it is not
 proof that live authentication, hosted data or the complete product is configured.
+
+For synthetic local Supabase and real parent/coach browser journeys, see
+[local development commands](scripts/dev/README.md). Hosted Supabase is outside
+these setup and verification commands.

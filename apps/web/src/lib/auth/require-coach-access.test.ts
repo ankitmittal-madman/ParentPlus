@@ -29,6 +29,7 @@ describe("requireCoachAccess", () => {
   it("allows only an active workspace membership", async () => {
     await expect(requireCoachAccess()).resolves.toEqual({ userId, workspaceIds: [workspaceId] });
     expect(mocks.from).toHaveBeenCalledWith("workspace_memberships");
+    expect(mocks.select).toHaveBeenCalledWith("workspace_id, workspaces!workspace_memberships_workspace_id_fkey!inner(id, status)");
     expect(mocks.eq).toHaveBeenCalledWith("user_id", userId);
     expect(mocks.eq).toHaveBeenCalledWith("status", "active");
     expect(mocks.eq).toHaveBeenCalledWith("workspaces.status", "active");

@@ -12,7 +12,7 @@ export async function requireCoachAccess(): Promise<{ userId: string; workspaceI
     if (!identityError && typeof identity.user?.id === "string" && UUID.test(identity.user.id)) {
       userId = identity.user.id;
       const { data, error } = await client.from("workspace_memberships")
-        .select("workspace_id, workspaces!inner(id, status)")
+        .select("workspace_id, workspaces!workspace_memberships_workspace_id_fkey!inner(id, status)")
         .eq("user_id", userId)
         .eq("status", "active")
         .eq("workspaces.status", "active")

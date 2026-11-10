@@ -19,7 +19,7 @@ export async function listClassWorkspaces(): Promise<Result> {
       return { ok: false, error: "Please sign in to continue." };
     }
     const { data, error } = await client.from("workspace_memberships")
-      .select("workspace_id, workspaces!inner(id, name, status, scheduling_time_zone)")
+      .select("workspace_id, workspaces!workspace_memberships_workspace_id_fkey!inner(id, name, status, scheduling_time_zone)")
       .eq("user_id", actorId)
       .eq("status", "active")
       .eq("workspaces.status", "active")

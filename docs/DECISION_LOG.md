@@ -266,3 +266,29 @@ Scope: ParentPlus hosted database
 - This decision does not establish that hosted migrations, identity, access
   policies or privacy controls have been verified, and does not authorise real
   family data before the applicable security and pilot readiness checks.
+
+## DEC-021: Founder-only local testing mode
+
+Date: 2026-11-09. Source: explicit founder instruction in this development session.
+Use dummy .test emails and OTP 123456 for local founder testing, with actual
+frontend/backend/database flows. Founder controls can override synthetic-account
+workspace access so policy testing does not prevent product testing. Existing
+parent/coach operations continue to exercise database policies; the local founder
+console is a separate administrative capability. Require development runtime,
+explicit server/public flags and exact local API endpoint. Never enable this mode
+against hosted Supabase or production. No external email or identity verification
+is implied. This does not change the production email-OTP direction in DEC-011.
+The founder asked routine implementation decisions to proceed autonomously.
+
+
+## DEC-022 — Existing backend and Vercel app are founder testing environments (2026-11-10)
+
+Explicit founder clarification supersedes DEC-021's local-only boundary for the
+current testing app. Use existing Supabase fmavpazczahxeusqbxuh; no separate project
+or account. Fictional .test email/123456 verification and founder membership
+overrides may run in Vercel's technically named Production environment. This is
+product testing, not launch. Real launch checks return only after explicit launch
+instruction and implementation/verification; a production Next build is not that
+instruction. Preserve existing records, keep private credentials server-side and
+retain normal persona database policies. Direct deployment through existing
+GitHub→Vercel is authorised. A launch-stage build disables forced testing defaults.

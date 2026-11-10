@@ -1,5 +1,103 @@
 # ParentPlus — Agent Handoff
 
+## Hosted founder testing preparation — 2026-11-10
+
+The founder explicitly selected the EXISTING Supabase project
+`fmavpazczahxeusqbxuh` as the testing backend, superseding the earlier instruction
+to leave hosted Supabase unchanged and the separate-project proposal. No new
+account or paid service is needed. The existing GitHub→Vercel route is authorised
+for deployment; unavailable Vercel integration must not be chased.
+
+The hosted test database was upgraded from001–013 through049 with atomic migration
+receipts after a synthetic upgrade rehearsal. Original row fingerprints across
+eight application tables and Auth accounts were unchanged. Four implemented-feature
+controls are enabled. No database reset, deletion or Auth provider change occurred.
+See ignored `work/hosted-testing-upgrade-report.json` for the operation receipt.
+
+Prepared Vercel testing defaults enable fictional .test email/123456 login and
+implemented parent/coach features. The selected backend is pinned. The private
+service credential remains runtime-only. The founder screenshot confirms
+`PARENTPLUS_TEST_SERVICE_KEY` exists in Preview and Production; its value has not
+been inspected. Current-source regression and actual deployment checks are pending.
+No claim of published login success is made. Earlier local-only evidence below is
+historical. Students/enrollment, attendance, diary and fees remain incomplete.
+
+
+## Founder sandbox continuation — 2026-11-09
+
+All preceding uncommitted recovery and first-use work remains present at HEAD
+010fd412. The founder explicitly requested dummy email/OTP and local founder
+access overrides. Added development-only .test email/code 123456 sign-in, actual
+local session exchange, `/founder` record counts/membership controls and a launcher
+that enables implemented features during founder testing. Existing persona RPC/RLS
+behavior and hosted Supabase are unchanged. Calibration remains ended at 5/5.
+
+Founder browser verification uses no mock provider, mailbox step or SQL fixtures:
+child/workspace/weekly classes are created through the UI, then founder controls
+suspend and restore membership. Normal local Auth browser coverage remains separate.
+See DEC-021 and scripts/dev/README.md. The previous quality receipt remains historical
+once these source changes are made; new evidence is recorded under the founder plan.
+Students/enrollment, attendance, diary and fees still require actual product work.
+
+
+## Recovered local first-use journeys — 2026-11-09
+
+Observed starting checkout: branch `work`, clean at
+`ff41e3bdeaa1f299d8eec7a631c13f798add3b44`, with no previous-task dirty files or
+stash. Inspected remote history, fetched the founder-supplied base and verified
+ancestry before fast-forwarding to `010fd412d034f3e8e7545c235b824e9e6ac36bdb`.
+The complete seven-file recovery patch was reconciled without overwriting newer
+source; reverse-apply validation confirmed all patch hunks were present. This
+session's preliminary edits on the older baseline remain preserved in a clearly
+named `stash@{0}` and were not applied over the recovered implementation.
+All current changes remain uncommitted; no push or hosted Supabase action occurred.
+
+Real local Supabase now runs with all 49 migrations. Pinned CLI 3.1.0 slim images
+avoid the full image's Docker VFS disk exhaustion. `public.ecr.aws` is explicitly
+allowed and reachable; its image CDN redirect was denied, but the slim/GHCR path
+worked without a policy change. Exact local Auth proxy/health handling and
+readable local OTP templates are covered by the setup scripts. Local service
+health is verified rather than inferred from ignored CLI startup health checks.
+
+Parent, independent-coach and academy-owner browser journeys pass against real
+local Auth, Mailpit, PostgREST and PostgreSQL. Workspace onboarding is default-off,
+uses the existing controlled RPC and RLS, and retains minimal same-request recovery
+markers. Fixed the real-provider ambiguous workspace join by naming its FK.
+Independent review found a cross-tab marker race; its failing regression now
+passes with Web Locks plus post-await storage comparison. Real academy creation
+was also added to cover the review's minor gap. Unsupported locking fails closed.
+
+See [local verification](LOCAL_FIRST_USE_VERIFICATION.md), the updated
+[first-use rollout preparation](FIRST_USE_ROLLOUT.md), and
+[local commands](../scripts/dev/README.md). The final gate records the current
+source fingerprint and fresh suite receipts under ignored `test-results/quality/`.
+The exact current dirty scope is available through `git status --short`; this
+handoff does not invent a future commit. Local fixture rows are retained, all four
+feature controls are restored to their prior disabled values, and the pre-existing
+`parentplus-pg-test` container is preserved. Hosted migration/rollout, sensitive
+family-data use, lifecycle/retention and cross-device lost-key discovery remain
+unapproved/unverified. No product/privacy decision was changed.
+
+
+## Local first-use stack and migration rehearsal — 2026-11-08
+
+Local Supabase startup was blocked when Docker received Forbidden from
+`public.ecr.aws` while pulling required Auth and API images. The managed network
+policy must permit that registry before a retry; no real local Supabase journey
+was tested. `scripts/ci/rehearse-first-use-upgrade.sh` passes a PostgreSQL-only
+001–013-to-049 upgrade with selected fictional records and a synthetic Auth
+fixture. This is not hosted data, real-JWT, partial-failure or rollout evidence.
+No hosted resources were modified. First-use development remains incomplete.
+
+## Signed-in coach navigation — 2026-11-08
+
+The local login page now links a confirmed session to the coach area, hiding the
+link during sign-out. The existing server membership gate remains authoritative.
+This does not provide first-time workspace creation or verify live sign-in.
+Coach onboarding, hosted rollout review and real-provider/browser checks remain
+open. The founder reported the hosted project has migrations 001–013; this
+session did not independently inspect hosted state.
+
 ## Class setup with bounded weekly sessions — 2026-11-07
 
 Current checkout is branch `work` with the weekly class setup commit and the
