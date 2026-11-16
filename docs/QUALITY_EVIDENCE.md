@@ -1,5 +1,35 @@
 # ParentPlus — Quality Evidence Index
 
+## Publication evidence reconciled — 16 November 2026
+
+Read-only GitHub inspection confirmed PR [#7](https://github.com/ankitmittal-madman/ParentPlus/pull/7)
+merged on 10 November at `aa29264c586d8b28993afaa9d933a8fdffdfac24`.
+The following completed GitHub runs all identify that exact main commit:
+
+| Check | Observed outcome | Evidence |
+| --- | --- | --- |
+| Intelligent Quality, 10 November | Success | [42883722972](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42883722972) |
+| Frontend Quality, 10 November | Success | [42884939021](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42884939021) |
+| Database Quality, 10 November | Success | [42884981512](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/42884981512) |
+| Scheduled Founder Browser Quality, 15 November | Success | [43687671359](https://github.com/ankitmittal-madman/ParentPlus/actions/runs/43687671359) |
+| Vercel commit status, 10 November | Deployment has completed | [Deployment](https://vercel.com/apv-erse/parent-plus/AH7wTcogLRHuRdMiXNGiniYW8wWQ) |
+
+These are observed existing outcomes, not newly executed tests. Browser workflow
+source starts local Supabase on its runner; green GitHub browser CI is not a test
+of the deployed Vercel application. Artifact bytes and individual case counts
+were not re-audited in this reconciliation.
+
+PR #7's description records supplementary 360×800 local captures on
+`1cf679b89cb3f415018c2f9fb3f5f98674504991`, including empty, populated EN/HI,
+selector, recovery, error/loading states and no page overflow. This is attributed
+historical evidence, not a fresh screenshot inspection. Do not carry exact-360
+forward as wholly unperformed, or equate those captures with physical-device QA.
+
+Hosted parent–coach journeys, real email delivery, physical-device/slow-network
+checks and pilot gates remain unverified here. The dated preparation entries
+below retain their original evidence identities and pending-at-the-time language;
+this section supersedes their publication-pending status only.
+
 ## Parent attendance checkpoint — 10 November 2026
 
 Current application code passed528 frontend/602 isolated DB cases, lint/types/build,

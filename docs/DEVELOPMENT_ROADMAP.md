@@ -4,7 +4,7 @@ Status: Working roadmap
 Repository: ParentPlus
 Original foundation branch: setup/parentplus-foundation
 
-Reconciled on 2026-11-03: this is the product milestone plan, not the live Git
+Reconciled on 2026-11-16: this is the product milestone plan, not the live Git
 state. See [Build Progress](BUILD_PROGRESS.md) for verified slices and
 [Agent Handoff](AGENT_HANDOFF.md) for the current operation/checkpoint. Local
 foundation code does not establish complete auth, hosted deployment or release.
@@ -25,8 +25,8 @@ foundation code does not establish complete auth, hosted deployment or release.
 | M0 | Development setup | Repository, Next.js, TypeScript, Tailwind, preview | App builds and preview works | Complete |
 | M1 | Frontend foundation | Components, design tokens, navigation, tests | Responsive preview and checks pass | Complete |
 | M2 | Authentication and data | Supabase, roles, core schema, consent, RLS | Access and security tests pass | Partial local foundation; exit criteria incomplete |
-| M3 | Classes and students | Batches, schedules, enrollment, student profiles | Core journeys pass end-to-end tests | In progress: saved weekly classes, academy connections and verified batch enrolment; attendance/remaining flows remain |
-| M4 | Attendance | Attendance capture and parent visibility | Attendance journey and security tests pass | Planned |
+| M3 | Classes and students | Batches, schedules, enrollment, student profiles | Core journeys pass end-to-end tests | In progress: saved weekly classes, academy connections and verified batch enrolment; broader scheduling/enrolment flows remain; attendance status is tracked in M4 |
+| M4 | Attendance | Attendance capture and parent visibility | Attendance journey and security tests pass | Implemented founder-testing slice published; local journeys and GitHub CI passed; hosted/device acceptance remains |
 | M5 | Class diary | Updates, media, consent, parent feed | Safe coach-to-parent publishing works | Planned |
 | M6 | AI and notifications | AI drafting, redaction, reminders | Quality, privacy and delivery checks pass | Planned |
 | M7 | Pilot readiness | Security, performance, monitoring, deployment | Founder approves pilot readiness gate | Planned |
@@ -49,9 +49,9 @@ and the existing testing backend; launch and real-family gates remain separate.
 | Coach / academy workspace | Independent coach or academy creates or accesses the right workspace | Saved first-use onboarding and workspace access tested locally; existing founder hosted entry flow previously manually confirmed | Owner/admin/coach roles, multiple workspaces, suspension and cross-workspace denial verified end to end |
 | Coach class management | Authorised coach creates and manages a course, batch and sessions | Saved course, batch and weekly sessions tested locally; broader scheduling lifecycle remains | Saved class and session journey, assigned-coach checks, retries and concurrent changes verified |
 | Parent and child | Parent creates and recovers a child profile and sees permitted records | Real local profile creation/recovery/list journey verified; legal verification and wider guardian lifecycle remain | Real identity, duplicate and interrupted requests, account change, revoked/disputed access and safe recovery verified |
-| Connection and enrollment | Parent and workspace establish an authorised connection; child is enrolled separately | Invitation-based connection plus explicit batch lifecycle/parent classes verified locally;052 applied to existing TEST; original data preserved; GitHub publication pending at preparation | Request/approval and enrollment work for authorised users; expiry, retry, revocation, wrong workspace and audit checks pass |
-| Coach attendance | Authorised coach records and corrects attendance for an enrolled child | Planned | Session, enrollment and coach authorization, concurrent edits and correction/audit scenarios pass |
-| Parent visibility | Authorised parent sees the agreed attendance or learning outcome | Planned | Correct guardian sees the correct child's permitted data; wrong/revoked guardian and cross-workspace access denied |
+| Connection and enrollment | Parent and workspace establish an authorised connection; child is enrolled separately | Invitation-based connection plus explicit batch lifecycle/parent classes verified locally;052 applied to existing TEST; original data preserved; published through PR5; broader hosted journey remains unverified | Request/approval and enrollment work for authorised users; expiry, retry, revocation, wrong workspace and audit checks pass |
+| Coach attendance | Authorised coach records and corrects attendance for an enrolled child | Implemented and published: explicit coach marks, correction and recovery; local/CI evidence, not hosted journey sign-off | Session, enrollment and coach authorization, concurrent edits and correction/audit scenarios pass |
+| Parent visibility | Authorised parent sees the agreed attendance or learning outcome | Attendance/weekly facts and own session reports published in PR7; local/CI evidence, not full learning-feed or hosted acceptance | Correct guardian sees the correct child's permitted data; wrong/revoked guardian and cross-workspace access denied |
 | Pilot operations | A controlled pilot works on real devices with support and recovery | Planned | Real-provider E2E, privacy/security review, mobile testing, monitoring, backup/restore and founder approval completed |
 
 Coach and academy workflows must be tested as complete user journeys, including
@@ -72,8 +72,21 @@ and approval before commits, with separate authorization for push/merge/deployme
 - Cleanup only after verifying a remote checkpoint.
 - Record milestone commit hashes in BUILD_PROGRESS.md.
 
-## Open engineering work
-- Resolve npm audit findings before deployment.
-- Review mobile navigation accessibility.
-- Establish automated end-to-end tests.
-- Finalize Supabase schema before handling real family data.
+## Next actions and remaining verification
+
+1. Close hosted parent–coach journey evidence using an authorised synthetic test
+   environment; deployment success alone does not close this gate.
+2. Build saved class drafts → parent preview → real publish, the next slice named
+   in the [attendance checkpoint](quality/2026-11-10-parent-attendance-checkpoint.md).
+3. Continue diary/feed, consent/media, manual observations/AI and reminders in
+   dependency order. Keep fees after the core daily-value pilot journey.
+4. Before real-family use, complete real email/recovery, device and slow-network
+   checks, privacy/consent/deletion, backup/restore, monitoring and founder sign-off.
+
+Automated browser E2E exists and scheduled GitHub execution has passed; extend
+coverage for new journeys rather than treating harness creation as unstarted.
+Review current dependency/security findings and mobile accessibility before pilot;
+older open-work bullets are not proof of an unresolved vulnerability today.
+See [Quality Evidence](QUALITY_EVIDENCE.md#publication-evidence-reconciled--16-november-2026)
+for publication and CI references. Real-family schema/security readiness remains
+separate from an implemented founder-testing slice.

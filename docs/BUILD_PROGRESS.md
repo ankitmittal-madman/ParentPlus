@@ -1,5 +1,24 @@
 # ParentPlus Build Progress
 
+## Current summary — reconciled 16 November 2026
+
+The attendance slice is published, not merely planned: PR #7 merged on
+10 November and the matching main commit has successful GitHub quality checks
+and a successful Vercel deployment status. Coach-confirmed attendance and parent
+Home/session reports have local journey evidence. See [Quality Evidence](QUALITY_EVIDENCE.md#publication-evidence-reconciled--16-november-2026)
+for exact commit, run links and the limits of these results.
+
+**Completed:** the implemented founder-testing attendance slice and its
+publication. **Now:** reconcile remaining hosted/device validation against the
+published baseline. **Next build slice:** saved class drafts → parent preview →
+real publish, as recorded in the [attendance checkpoint](quality/2026-11-10-parent-attendance-checkpoint.md).
+
+This does not close the entire attendance milestone or pilot: the deployed
+parent–coach journey and real email delivery remain unverified. Second guardians,
+diary/feed, consent/media, AI, reminders, fees and broader family operations remain.
+Historical dated entries below describe their preparation-time state; they do not
+mean PR #7 is still awaiting merge or that parent attendance must be rebuilt.
+
 ## Parent Home and session reports — verified local slice, 10 November 2026
 
 Parents can navigate to real saved attendance, weekly facts and their own reports

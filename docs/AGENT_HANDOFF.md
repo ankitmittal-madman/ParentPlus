@@ -1,5 +1,41 @@
 # ParentPlus — Agent Handoff
 
+## Documentation reconciliation — 16 November 2026
+
+Preparation baseline: clean cloned main
+`aa29264c586d8b28993afaa9d933a8fdffdfac24`; local branch
+`docs/reconcile-parentplus-status-2026-11-16`. This session changes only Build
+Progress, Development Roadmap, Quality Evidence and this handoff. No application,
+database, dependency, original founder reference or remote state is changed.
+The documentation draft remains uncommitted; this entry is not commit approval.
+
+PR #7 is merged. Matching main quality/frontend/database runs and the 15 November
+scheduled browser run succeeded; Vercel reports completed deployment. Exact links
+and evidence boundaries are in [Quality Evidence](QUALITY_EVIDENCE.md#publication-evidence-reconciled--16-november-2026).
+PR #7 records supplementary exact-360 local checks; the screenshots have not been
+re-inspected here. Old instructions below to merge this checkpoint or implement
+its already-shipped parent screen are historical, not current next actions.
+
+Next: review the documentation-only diff and its validation; obtain the specific
+checkpoint approval before committing. Then close the remaining hosted/device
+verification gaps and develop saved class drafts → parent preview → real publish.
+Do not infer current permission for production access, hosted test-data writes,
+commit/push/merge or deployment from historical user-authorisation notes below.
+
+The architecture, decisions, requirement registry and original founder references
+need no edits for this reconciliation: no product or security semantics changed.
+Documentation validation: 58 gate self-tests passed; exact-test inventory
+collection passed; `git diff --check` and relative-link file-target checks passed
+(anchors not automatically checked). Independent read-only review found no
+blocking issue; its minor M3 wording correction is included. Initial gate checks
+failed because the fresh checkout lacked Playwright; locked dependencies were
+installed with a writable temporary npm cache and both checks then passed.
+No product suites, hosted journey tests or new CI runs were executed.
+
+No prior local reports are re-attested. Full product suites are not rerun merely
+for this prose correction; current documentation checks and any unrun verification
+must be reported separately.
+
 ## Parent attendance Git checkpoint — 10 November 2026
 
 The founder explicitly requested commit, push, merge, branch synchronisation and
